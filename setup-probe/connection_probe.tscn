@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dx6j5enkx52iw"]
+
+[node name="connection_probe" type="Control" unique_id=78234066]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ConnectionStatus" type="Label" parent="." unique_id=412813838]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 100.0
+offset_right = 448.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 22
+text = "Godot MCP radi!
+Probna scena je napravljena
+i izmenjena preko MCP veze."
+horizontal_alignment = 1

@@ -1,0 +1,52 @@
+# Local machine configuration, reports and backups
+.local/
+.env
+.env.*
+!.env.example
+*.local.json
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vs/
+
+# Godot caches; keep source assets and .uid files
+**/.godot/
+**/.import/
+**/export_credentials.cfg
+**/.mono/
+setup-probe/probe_runs/
+
+# Dependencies and generated output
+**/node_modules/
+**/npm-cache/
+**/__pycache__/
+**/.venv/
+**/bin/
+**/obj/
+/build/
+/dist/
+/exports/
+*.apk
+*.aab
+*.ipa
+
+# Signing credentials
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.mobileprovision
+*.pem
+*.key
+
+# Vendor only the MCP server sources needed to reproduce the setup.
+# The patched Godot addon is tracked under setup-probe/addons/.
+/tools/godot-mcp/*
+!/tools/godot-mcp/LICENSE
+!/tools/godot-mcp/server/
+/tools/godot-mcp/server/*
+!/tools/godot-mcp/server/src/
+!/tools/godot-mcp/server/package.json
+!/tools/godot-mcp/server/package-lock.json
+!/tools/godot-mcp/server/tsconfig.json
