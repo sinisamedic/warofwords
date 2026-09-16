@@ -17,9 +17,13 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - V3 je u novom folderu **V3 mokup**. Sačuvati prethodni `mockups/` kao V2.
 - Za sada samo najvažniji ekrani: meniji, borba, power-upovi i unapređenja. Ne širiti atlas na sve moguće situacije.
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
-- Engine **nije izabran**. Godot proba nije odluka. Ne započinjati veliku implementaciju pre potvrde smera, osnovne mehanike i engine-a.
+- Prema poslednjem zahtevu, **Godot je ciljni engine za kasniju izradu**. Trenutno je autorizovan samo dizajn šest ekrana; ne implementirati igru ni novu simulaciju.
 
-## V3 — aktuelni predlog
+## Aktuelno: statični vizuelni dizajn
+
+Šest PNG mastera i galerija nalaze se u [design/](../design/README.md). [Specifikacija](../design/DESIGN-SPEC.md) opisuje komponente, mobilne dimenzije i stanja za buduću Godot izradu. To su usklađene slike menija, kampanje, arsenala, power-upova, unapređenja i borbe. Bez simulacije. Tema, izgled i vrednosti su predlozi za pregled; nisu automatski usvojeni time što su nacrtani.
+
+## V3 — prethodni interaktivni predlog
 
 [Mockup i uputstvo](../V3%20mokup/README.md), [istraživanje reference](../V3%20mokup/RESEARCH.md).
 
@@ -56,9 +60,9 @@ Ponovo se koristi prethodno generisana originalna arena Sunward Ruins. Nema novi
 
 ## Otvorene odluke
 
-1. Na telefonu potvrditi V3 kompoziciju, čitljivost, dodir i broj polja; naročito visinu arene prema tabli.
+1. Pregledati šest statičnih dizajna u design/, potvrditi izgled i mobilnu čitljivost, pa dimenzije komandi i broj polja.
 2. Potvrditi tempo duela, pravilo bonusa i punjenja, tipove sposobnosti i power-upove.
-3. Izabrati engine, zatim napraviti najmanji pravi igrivi susret.
+3. Posle usvajanja dizajna i odobrenja implementacije pripremiti komponente za Godot, zatim najmanji pravi igrivi susret.
 4. Izabrati licenciran engleski rečnik: US/UK, morfologija, vlastita imena, kratice i retke reči.
 5. Razviti generator sa garantovanim izborom reči i testirati težinu za odrasle.
 6. Potvrditi temu, ekonomiju, napredovanje i eventualnu monetizaciju. Ništa od toga nije zaključano.

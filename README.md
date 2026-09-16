@@ -2,11 +2,15 @@
 
 Originalna igra za Android i iOS: igrač prevlači preko slova u krugovima, sastavlja reči i prikuplja energiju koju troši na borbene sposobnosti. Slugterra je referenca za osećaj borbe i napredovanja; svet, likovi i grafika biće originalni. Naziv repozitorijuma nije potvrda konačnog naziva igre.
 
-**Status:** planiranje i interaktivni mockupovi. Usvojeni su landscape format, engleski jezik/rečnik za prvu verziju i borba protiv računara. Engine, izvor rečnika, tema i balans još nisu usvojeni. Godot 4.7.2 je samo tehnički isproban. Produkcioni igrivi prototip još ne postoji.
+**Status:** planiranje i interaktivni mockupovi. Usvojeni su landscape format, engleski jezik/rečnik za prvu verziju i borba protiv računara. Godot je ciljni engine za kasniju izradu; trenutno se radi samo vizuelni dizajn. Izvor rečnika, tema i balans još nisu usvojeni. Godot 4.7.2 je samo tehnički isproban. Produkcioni igrivi prototip još ne postoji.
 
 ## Nastavak rada
 
-### Aktuelni V3 mockup
+### Aktuelno: šest dizajna ekrana
+
+Otvoriti **[statičnu galeriju dizajna](design/index.html)** ili [pojedinačne PNG slike](design/README.md). Šest usklađenih landscape ekrana za buduću mobilnu igru u Godotu, bez simulacije. [Specifikacija za izradu](design/DESIGN-SPEC.md) i [poreklo materijala](design/PROVENANCE.md).
+
+### Prethodni V3 interaktivni mockup
 
 Otvoriti **[V3 mokup/index.html](V3%20mokup/index.html)**. Šest osnovnih mobilnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja i borba. Susedna slova sa dijagonalama, dopuna polja i punjenje sposobnosti po bojama. [Uputstvo i granice provere](V3%20mokup/README.md). V3 još treba vizuelno proveriti na telefonu.
 

@@ -2,7 +2,21 @@
 
 Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
 
-## Aktuelno: V3 mobilni mockup
+## Aktuelno: šest statičnih vizuelnih dizajna
+
+- Poslednji zahtev korisnika: samo dizajn šest osnovnih ekrana, bez simulacije i bez izrade igre. Godot je sada naveden kao ciljni engine za kasniju izradu.
+- Otvoriti **design/index.html** za statičnu galeriju ili pojedinačne PNG slike iz `design/screens/`. Galerija ne sadrži JavaScript.
+- Šest ekrana: glavni meni, kampanja, arsenal, power-upovi, unapređenja i borba. Svi su 1774 × 887, landscape 2:1, vizuelno usklađeni, engleski.
+- Šest novih ImageGen izlaza; postojeća arena korišćena kao referenca, zatim novi borbeni ekran kao stilska referenca za ostale. Svi rezultati su vizuelno pregledani direktno kao slike. Poreklo i tačni promptovi: `design/PROVENANCE.md`, `design/prompts.json`.
+- Specifikacija: `design/DESIGN-SPEC.md` — hijerarhija, tokeni, mobilne dimenzije, stanja, prelazi i odvajanje slojeva za budući Godot UI. Nisu napravljene Godot scene, kod igre ili nova simulacija.
+- PNG slike su spljošteni vizuelni masteri, ne slojeviti UI kit. Asset-i, tekst/fontovi i animacije pripremaju se odvojeno tek posle usvajanja.
+- Provere: šest validnih PNG-ova istih dimenzija; ključni natpisi, broj polja i putanja STONE vizuelno pregledani; u unapređenju 480−180=300. Svaki fajl ispod 10 MiB, zbir oko 17 MiB. Nema novih paketa ili LFS obrazaca. Statični lokalni linkovi provereni.
+- Nema fizičkog testa telefona/hitbox-ova. Brojevi, izgled sveta, imena i 28 polja i dalje su predlog.
+- V2 i V3 fajlovi ostaju neizmenjeni. V3 je prethodna simulacija, ne aktuelni dizajn koji korisnik sada traži.
+
+**Sledeći korak:** korisnik pregleda šest slika i potvrđuje/koriguje vizuelni smer. Ne nastavljati automatski izradu igre. Posle usvajanja izdvojiti produkcione komponente i pripremiti Godot UI prema specifikaciji, uz novu autorizaciju za implementaciju.
+
+## Prethodno: V3 mobilni mockup
 
 - Otvoriti **V3 mokup/index.html** lokalno u browseru, telefon vodoravno. Uputstvo i granice: `V3 mokup/README.md`. Istraživanje Slugterre: `V3 mokup/RESEARCH.md`.
 - Šest glavnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja, borba. Dodatno: pomoć, pauza, pobeda, poraz.
@@ -20,11 +34,11 @@ Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
 - Lokalni proverni skript: `.local/v3-review/logic.cjs` (ignorisano).
 - Demo lista nije produkcioni rečnik, dopuna nije kvalitetan generator. Nema trajnog napredovanja, naloga, zvuka ili prave kampanje. Promene se resetuju pri ponovnom učitavanju.
 
-## Tačan sledeći korak
+## Raniji V3 korak (zamenjen statičnim dizajnom iznad)
 
 Na landscape telefonu otvoriti V3. Probati Play → Prepare → Battle, reč STONE ili STONES u prvom redu i PLANE u trećem. Aktivirati napunjen štit, zatim druge sposobnosti. Pregledati Power-ups i Workshop. Potvrditi mobilnu kompoziciju i tek zatim menjati grafiku ili širiti implementaciju. Smer punjenja po bojama i pravilo susedstva ne pitati ponovo.
 
-Zatim potvrditi tempo, bonus, broj polja i **engine**. Godot je samo tehnički isproban, nije izabran.
+Tempo, bonus i broj polja ostaju predlozi. Poslednji korisnički zahtev navodi Godot za kasniju izradu; trenutno se radi samo dizajn.
 
 ## Nastavak na drugom računaru
 
@@ -45,4 +59,4 @@ Ovaj status opisuje sadržaj pripremljen za commit. Stvarni ishod push-a i hando
 - V2 commit 493600d: 86 landscape prikaza, čuva se u `mockups/` kao prethodni predlog. V1 portrait istorija: 40c1588.
 - Godot 4.7.2 i MCP proba ranije su radili na prvom računaru. To nije produkciona igra ni potvrda Android/iOS izvoza. Aktivnu MCP vezu i stvarni engine log ponovo proveriti pre korišćenja.
 - Lokalni alati, `.local/`, node_modules, Godot keš i instalacije ne prenose se GitHub-om. Izvori MCP servera i licenca ostaju u `tools/`.
-- Engine, licencirani engleski rečnik, tema, balans i monetizacija ostaju otvoreni. Aktivne odluke su u `docs/game-design.md`.
+- Godot je ciljni engine za buduću izradu. Licencirani engleski rečnik, tema, balans i monetizacija ostaju otvoreni. Aktivne odluke su u `docs/game-design.md`.
