@@ -33,6 +33,12 @@ Landscape mobilna igra, engleski UI/rečnik, računar kao protivnik, susedna slo
 
 Nema skaliranja desktop artboard-a, kataloga uz igru ili bočne web navigacije. Interfejs koristi stvarne CSS dimenzije: slova najmanje 44 × 44, komande najmanje 44 px, nazivi uglavnom 17–27 px. Tabla i arena dele visinu telefona. Bez skrola glavnih ekrana; duža pomoć može skrolovati unutar prozora. Uspravno se traži okretanje telefona. Za veoma male visine / browser trake raspored još treba proveriti na uređaju.
 
+## Ispravka praznog plavog ekrana
+
+Kod je izolovan u privatni opseg, a funkcija `top` preimenovana radi izbegavanja sudara sa browserom. Ako je V3 već otvoren, osvežiti stranicu sa Ctrl+Shift+R.
+
+Regresiona provera pokretanja: `node "V3 mokup/tests/startup.cjs"` iz korena repozitorijuma. Izvršava ceo skript i proverava svih šest ekrana kroz DOM zamenu; ne proverava vizuelni raspored.
+
 ## Provere i granice
 
 - Node sintaksa i izolovane provere stvarne logike prošle: 28 polja, susedstvo, dijagonale, povratak, zabrana ponavljanja polja, punjenje po tipu, bonus, zamena samo korišćenih polja, napadi, štit, lečenje, CPU, pauza, power-up jednom, nagrada jednom.

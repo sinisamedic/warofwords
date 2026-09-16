@@ -13,7 +13,8 @@ Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
 
 ## Provere / važno ograničenje
 
-- `node --check` prošao.
+- Ispravljen prazan plavi ekran: JavaScript je izolovan od browser globalnih naziva, a funkcija `top` preimenovana u `screenHeader`. Verzija script URL-a promenjena je na 3.1 radi ponovnog učitavanja.
+- `node --check` i `node "V3 mokup/tests/startup.cjs"` prošli. Novi test izvršava ceo entry script u DOM zameni i proverava generisanje svih šest ekrana i da globalni browser nazivi ostaju netaknuti. To nije pravi browser test.
 - Izolovane provere stvarnih JS funkcija prošle: broj polja, susedstvo i dijagonale, povratak i zabrana ponavljanja polja, punjenje po tipu, bonus, dopuna samo korišćenih polja, šteta, štit, lečenje, CPU, pauza, power-up jednom i nagrada jednom.
 - To nisu end-to-end testovi. Browser alat je odbio lokalni file URL zbog svoje politike pristupa. **V3 nije vizuelno potvrđen u browseru niti na fizičkom telefonu.** Ne prepisivati stare V2 vizuelne provere kao provere V3.
 - Lokalni proverni skript: `.local/v3-review/logic.cjs` (ignorisano).
