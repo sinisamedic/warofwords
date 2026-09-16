@@ -1,42 +1,59 @@
-# War of Words — atlas ekrana
+# War of Words — landscape atlas, revizija 02
 
-**84 ekrana i stanja, osam tokova. Vizuelni predlog, nije usvojen dizajn niti implementirana igra.**
+**86 landscape ekrana i stanja, osam tokova. Engleski jezik, borba protiv računara, vedriji izgled za širu publiku.**
+
+![Novi landscape borbeni mockup](preview.png)
 
 ## Otvaranje
 
-Otvoriti `index.html` dvoklikom u Chrome-u, Edge-u ili drugom savremenom browseru. Nisu potrebni instalacija, Node, engine, internet niti lokalni server. Fajlovi `index.html`, `style.css`, `screens.js` i `app.js` moraju ostati zajedno.
+Otvoriti `index.html` dvoklikom u modernom browseru. Nije potreban server, instalacija, engine niti internet. Držati zajedno `index.html`, `style.css`, `screens.js`, `app.js` i folder `assets/`.
 
-- **Istraži ekrane:** pretraživ katalog, interaktivni prikaz telefona, razlog postojanja ekrana i povezani ekrani.
-- **Atlas:** svi mockupovi; naslov kartice otvara ekran u punoj veličini.
-- **Tokovi:** osam povezanih korisničkih puteva.
-- Strelice uz naslov prolaze kroz katalog. Deo posle `#` označava ekran, npr. `index.html#home`, `index.html#battle`, `index.html#map`.
+- **Explore screens:** pojedinačni ekrani i povezana stanja.
+- **Atlas:** svi ekrani u landscape rasporedu.
+- **Flows:** osam tokova kroz igru.
+- **Focus view:** veći prikaz bez kataloga, koristan kada se telefon okrene vodoravno.
+- Direktni ekrani: `index.html#battle`, `index.html#home`, `index.html#map`, `index.html#encounter`.
 
-![Pregled interaktivnog atlasa](preview.png)
+Na uspravnom telefonu prikazuje se umanjen pregled i savet za okretanje. To nije portrait verzija igre. Ovo je pregled artboard-a 1024 × 576; stvarne touch target veličine, safe-area i podrška za šire telefone zahtevaju test u budućem engine-u.
 
-## Šta probati
+## Šta je promenjeno
 
-1. Otvoriti borbu. Povezati **M → O → S → T** prevlačenjem, pa pustiti. Alternativa: kliknuti slova redom i izabrati **Potvrdi**. Tastatura: Tab i Enter.
-2. Reč dodaje 5 energije; **Udarac** troši 6 i oduzima 10 zdravlja protivniku. Štit troši 5; prekid 10. Sve brojke su probne.
-3. Ista reč u istom skupu ne dodaje energiju. Posle tri različite prihvaćene reči dolazi novi skup. Mešanje čuva listu iskorišćenih reči.
-4. U prevlačenju povratak preko prethodnog kruga briše poslednje slovo. Sistemski prekid dodira ne šalje reč. Escape briše unos.
-5. Pauza i povratak iz nje čuvaju stanje otvorene demo borbe. Pojedinačni scenariji iz kataloga su nezavisni primeri.
-6. U podešavanjima pristupačnosti uključiti veći tekst i jači kontrast. Pregledati i ekran odbijene reči, poraza i neuspešnog čuvanja.
+- Landscape umesto portrait-a; arena sa igračem i računarom gore, velika tabla dole.
+- **35 kružnih slova u mreži 7 × 5**, kao predlog broja. Istovremeno postoji mnogo mogućih reči, ne jedan zadati odgovor.
+- **Engleski interfejs i engleska demo lista**, bez preostalog srpskog rečnika.
+- Svetle kamene ruševine, plavo nebo, toplije pozadine, odrasla istraživačica i mehanički protivnik. Mali simpatični likovi zamenjeni su modulima sposobnosti.
+- Duže reči daju više energije. Dodatni izazovi podstiču različite reči i širi vokabular.
+- Prethodna 84 ekrana preuređena su u landscape; dodata su dva posebna detalja za Strike i Disrupt. Stara verzija ostaje u Git istoriji na `40c1588`.
 
-## Granice mockupa
+## Interaktivna proba
 
-- Borbeni sat je zamrznut. Protivnik ne napada sam. Nema balansirane igre, stvarnog cooldown-a ni produkcionog rečnika.
-- Prikazani rezultati, ekonomija, profil i nagrade su ilustrativni. Demo borba nije izvor podataka za sve ekrane rezultata.
-- Nema trajnog čuvanja, naloga, cloud-a, analitike, slanja prijava ili kupovine. Osvežavanje stranice resetuje demo.
-- Formulari prikazuju validaciju i sledeći korak. Izbor jezika ne prevodi ceo mockup. Kolekcija prikazuje šablon detalja Ljuske; sva tri odjeka još nemaju zasebne detaljne stranice.
-- Duži ekrani namerno rastu radi pregleda sadržaja. U engine-u treba dogovoriti granice skrolovanja, safe-area i ponašanje softverske tastature na stvarnom uređaju.
-- Vizuelni smer „Svet odjeka“, srpska latinica, nazivi i svi dodatni sistemi su **predlozi**. Engine nije odabran.
+1. U borbi prevući preko **S → T → O → N → E** u prvom redu i pustiti: **+8 energije**. Alternativa: klik/tap svakog kruga, pa **Enter word**. Tastatura: Tab i Enter.
+2. **Start computer demo** pokreće predvidljivog protivnika koji najavljuje i izvodi udar. Nema ljudskog protivnika.
+3. Strike troši 6 i pravi 14 štete. Guard troši 5 i ublažava sledeći pogodak za 8. Disrupt troši 10 i prekida najavu; oporavak traje 15 sekundi tokom aktivne simulacije.
+4. Probati CRAFT, PLANE, BRIDGE, STREAM, PLANET ili **STREAMLINE**. Bilo koja dva kruga mogu da se povežu; svaki krug jednom po reči. Nema pravila susedstva u ovoj hipotezi.
+5. Ista reč ne donosi ponovo energiju na istoj tabli. Posle pet različitih reči menja se tabla. Mešanje čuva istoriju reči. Broj pet i način zamene su predlozi.
+6. Povratak preko prethodnog kruga briše poslednje slovo. Escape otkazuje unos; OS prekid dodira ne šalje polovičnu reč.
+7. Pauza i povratak čuvaju demo borbu; prelazak na drugi ekran kataloga otvara nezavisan primer. Trening nema protivničke udare.
 
-## Obuhvat i izvor materijala
+## Šta jeste i nije potvrđeno
 
-Spisak svih ekrana, razlog, obim i izlazne veze su u `screens.js`; dokument [dizajn ekrana](../docs/screen-design.md) sažima principe i otvorene odluke.
+**Potvrđeno od korisnika:** landscape, engleski za prvu verziju, računar kao protivnik, mnogo slova, više mogućih reči, vedriji izgled i publika koja uključuje odrasle.
 
-SVG likovi, pejzaž i elementi interfejsa su originalno nacrtani kodom za ovaj projekat. Nema preuzetih fontova, slika, zvuka ili biblioteka. Koriste se sistemski fontovi. `preview.png` je snimak ovog lokalnog mockupa, napravljen 2026-09-16. Za ove materijale nije uvedena zasebna javna licenca; nisu tuđa licencirana grafika. Demo reči su mala ručno upisana lista, ne uvezeni rečnik.
+**Predlog:** baš 35 slova, slobodno povezivanje, pet reči po tabli, svi brojevi, tempo, tema Sunward Ruins, imena i moduli. Engine i produkcioni engleski rečnik nisu izabrani.
 
-## Provera
+## Granice
 
-2026-09-16: Node provera sintakse; headless Edge otvaranje svih 84 ekrana na širinama 1440, 390 i 320 px; provera ciljnih ekrana; bez JavaScript grešaka i horizontalnog prelivanja stranice. Provereni unos MOST klikom i prevlačenjem, +5 energije, trošenje 6 za udarac i odbijanje ponovljene reči. Vizuelno pregledani borba, baza, pauza, atlas i uski prikaz. Ovo nije Android/iOS test. Lokalni snimci i testni skript su u ignorisanom `.local/mockup-review/` jer koriste putanju browser runtime-a ovog računara.
+- Ovo je interaktivni mockup sa jednostavnom skriptovanom simulacijom. Nije implementacija pune igre.
+- Demo ima **600 engleskih zapisa**. Po broju ponuđenih slova 584 su ostvariva na obe table. Nema produkcionog generatora, pune morfologije ni kompletne provere svih engleskih reči.
+- Boss faza, napredovanje, ekonomija, zadaci, cloud i nagrade su ilustrativni prikazi. Simulacija CPU-a demonstrira osnovni napad, ne kompletan boss obrazac.
+- Nema trajnog čuvanja, naloga, telemetrije, slanja prijava, plaćanja ili mrežnog rečnika. Osvežavanje stranice resetuje demo.
+- Neki tekstualni meniji imaju skrol unutar panela; borba se vidi cela bez skrolovanja.
+- Duži niz može fizički preseći druge krugove. Za proveru željene reči bez presecanja koristi tapkanje. Slobodno povezivanje naspram susedstva treba potvrditi.
+
+## Materijali
+
+[Poreklo grafike i tačan prompt](assets/README.md). Arena je originalan AI koncept, generisan ugrađenim ImageGen alatom. Nijedan lik ili kadar iz priložene reference nije kopiran u fajlove projekta. UI je autorski HTML/CSS, bez eksternih fontova ili biblioteka. `preview.png` je lokalni snimak našeg mockupa.
+
+## Provere
+
+Testni izveštaj za reviziju 02 sažet je u `STATUS.md`. Lokalni QA skript i snimci nalaze se u ignorisanom `.local/landscape-review/`; sadrže putanju runtime-a ovog računara i ne prenose se GitHub-om. Proveravati prikaz u desktop browseru i na realnom landscape telefonu pre odluke o veličini table.

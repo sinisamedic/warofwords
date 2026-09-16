@@ -2,13 +2,13 @@
 
 Originalna igra za Android i iOS: igrač prevlači preko slova u krugovima, sastavlja reči i prikuplja energiju koju troši na borbene sposobnosti. Slugterra je referenca za osećaj borbe i napredovanja; svet, likovi i grafika biće originalni. Naziv repozitorijuma nije potvrda konačnog naziva igre.
 
-**Status:** istraživanje i planiranje. Engine, jezik rečnika, tema i konkretan balans još nisu usvojeni. Godot 4.7.2 je samo tehnički isproban. Igrivi prototip još ne postoji.
+**Status:** planiranje i interaktivni mockupovi. Usvojeni su landscape format, engleski jezik/rečnik za prvu verziju i borba protiv računara. Engine, izvor rečnika, tema i balans još nisu usvojeni. Godot 4.7.2 je samo tehnički isproban. Produkcioni igrivi prototip još ne postoji.
 
 ## Nastavak rada
 
 ### Mockupovi ekrana
 
-Otvoriti **[mockups/index.html](mockups/index.html)** lokalno u browseru — bez instalacije i servera. [Atlas ekrana](mockups/README.md) sadrži 84 ekrana/stanja, probu povezivanja slova i osam povezanih tokova. [Dizajn ekrana](docs/screen-design.md) opisuje predloge i granice. Aktivni rad na ovim mockupovima je na grani `codex/screen-mockups`.
+Otvoriti **[mockups/index.html](mockups/index.html)** lokalno u browseru — bez instalacije i servera. [Landscape atlas](mockups/README.md) sadrži **86 ekrana/stanja**, 35-slova tablu, malu englesku demo listu, simulaciju računarskog protivnika i osam povezanih tokova. Vedrija revizija 02 zamenjuje prvi portrait koncept. [Dizajn ekrana](docs/screen-design.md) opisuje predloge i granice. Aktivni rad je na grani `codex/screen-mockups`.
 
 1. Pročitati [AGENTS.md](AGENTS.md) i [STATUS.md](STATUS.md).
 2. Proveriti Git stanje i sinhronizovati prema tim uputstvima.
