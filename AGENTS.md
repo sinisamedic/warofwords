@@ -4,7 +4,7 @@
 
 - Komuniciraj na srpskom, jasno i praktično. Ovaj repo služi isključivo igri War of Words (radni naziv).
 - Na početku svakog rada pročitaj ovaj fajl i STATUS.md, zatim relevantnu dokumentaciju.
-- Engine NIJE konačno izabran. Godot proba nije odluka. Ne započinji veliku implementaciju dok korisnik ne potvrdi osnovni smer, mehaniku i engine.
+- Korisnik je 2026-09-16 usvojio šest vizuelnih dizajna i izričito odobrio izradu cele igrive Android verzije u prethodno dogovorenom smeru. Aktivni engine je Godot 4.7.2, projekat `game/`. Starija zabrana implementacije je time zamenjena.
 - Usvojene odluke beleži u docs/game-design.md; predloge označi kao predloge. Ne zaključavaj temu, rečnik ili monetizaciju bez dogovora.
 - README.md i docs/setup.md opisuju aktivna uputstva; stariji PLAN.md i GODOT-SETUP.md služe kao istorija istraživanja. Poslednja eksplicitna korisnička odluka ima prednost.
 

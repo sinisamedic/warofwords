@@ -17,9 +17,36 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - V3 je u novom folderu **V3 mokup**. Sačuvati prethodni `mockups/` kao V2.
 - Za sada samo najvažniji ekrani: meniji, borba, power-upovi i unapređenja. Ne širiti atlas na sve moguće situacije.
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
-- Prema poslednjem zahtevu, **Godot je ciljni engine za kasniju izradu**. Trenutno je autorizovan samo dizajn šest ekrana; ne implementirati igru ni novu simulaciju.
+- Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktuelno: statični vizuelni dizajn
+## Aktivna implementacija — 0.1.0
+
+Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
+
+- Originalni Sunward Ruins svet, odrasla istraživačica i bronzani automaton. 2D, svetla pozadina i kontrastne komande. Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, opcije i dnevnik reči.
+- Tabla 7 × 4, polja 56 logičkih piksela, minimalna osnova 854 × 480 (16:9) sa proširenjem širine na širim telefonima. Reči najmanje 3 slova, bez ponavljanja polja i bez iste reči u istom duelu. Dijagonale važe. Prevlačenje ili dodir + ✓; brzi pokreti prate i pređena polja između događaja dodira.
+- Samo iskorišćena polja se dopunjavaju. Solver proverava mogućnosti; prazna tabla se automatski osvežava. Četiri ugrađene reči u redovima čine nove table pristupačnim, uz dodatne dijagonalne kombinacije. Hint otkriva putanju, ne šalje reč automatski.
+- SCOWL 2020.12.07, američki engleski, 76.802 reči dužine 3–16, uključujući infleksije. [Poreklo i tačni filteri](../game/data/README.md). Nema definicija ni kurirane liste za uzrast.
+- Svako polje puni svoju boju za 1; reči od 6+ daju 2 po polju. Napunjena sposobnost ne skladišti višak. Svaka reč dodatno nanosi `dužina + 2 × max(0, dužina − 4)` direktne štete.
+
+| Sposobnost | Energija | Nivo 1 | Dobit po nivou |
+| --- | --- | --- | --- |
+| Pulse, zlatna | 4 | 24 štete | +8 |
+| Aegis, plava | 5 | 20 zaštite od sledećeg napada | +5 |
+| Arc, ljubičasta | 7 | 18 štete + prekida najavu napada | +6 štete |
+| Mend, zelena | 5 | 24 lečenja | +6 |
+
+- Svi počinju na nivou 1, najviše nivo 8. Unapređenje košta `100 + trenutni nivo × 60`; početak sa 180 novčića. Aegis započinje duel sa 3 energije da pomogne prvoj odbrani.
+- 12 susreta, tri poglavlja, svaki četvrti boss. Svi koriste originalni automaton sa varijacijom boje i rastućim statistikama. Boss svaki treći udar dodaje 8 štete. Nema mrežnog matchmaking-a ni AI koji rešava isti rečnik.
+- Igrač ima 100 HP. Za indeks misije m=0…11 protivnik ima `72+13m` HP, boss još 35. Napad `12+m`, razmak `max(8,14−0.42m)` sekundi, prvi napad +4 s. Poslednje 3 s se najavljuju. Arc vraća pun razmak +3 s; Aegis se troši pri jednom udaru.
+- Izbor jednog power-upa pre borbe: Freeze 8 s, Fresh Board, Overcharge ×2 za sledeću reč. Jedna besplatna upotreba po duelu.
+- Prva pobeda `120+20m` novčića; ponavljanje `40+5m`; poraz do 25, po 2 za pronađenu reč. Zvezdice prema preostalom zdravlju: 3 za ≥70, 2 za ≥35, inače 1. Otključava se sledeća misija.
+- Lokalni save sa rezervnom kopijom, autosave borbe na 5 s i posle poteza, pauza pri gubitku fokusa. Continue Duel vraća i tablu i potrošeni power-up i počinje pauzirano. Poslednjih najviše 600 pronađenih jedinstvenih reči ulaze u dnevnik posle duela.
+- Offline bez naloga, oglasa, kupovina ili monetizacije. Zvuk se sintetiše, haptika i reduced motion se mogu isključiti/podesiti.
+
+Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pritiskom, težina rečnika, dodatne animacije/različiti protivnici i dugoročna progresija. Monetizacija i iOS nisu deo verzije 0.1.0.
+
+## Istorija: usvojeni statični vizuelni dizajn
 
 Šest PNG mastera i galerija nalaze se u [design/](../design/README.md). [Specifikacija](../design/DESIGN-SPEC.md) opisuje komponente, mobilne dimenzije i stanja za buduću Godot izradu. To su usklađene slike menija, kampanje, arsenala, power-upova, unapređenja i borbe. Bez simulacije. Tema, izgled i vrednosti su predlozi za pregled; nisu automatski usvojeni time što su nacrtani.
 
@@ -58,7 +85,7 @@ Mockup počinje sa 480 novčića, unapređenje košta 180, pobeda daje 120. Stan
 
 Ponovo se koristi prethodno generisana originalna arena Sunward Ruins. Nema novih ImageGen poziva. Tema, glavni lik, protivnik i imena sposobnosti i dalje su predlozi. SVG ikone i interfejs su originalni. Slugterra snimci su istraživačka referenca, nisu materijal igre.
 
-## Otvorene odluke
+## Ranije otvorene odluke (istorija pre autorizacije implementacije)
 
 1. Pregledati šest statičnih dizajna u design/, potvrditi izgled i mobilnu čitljivost, pa dimenzije komandi i broj polja.
 2. Potvrditi tempo duela, pravilo bonusa i punjenja, tipove sposobnosti i power-upove.

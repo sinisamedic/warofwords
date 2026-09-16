@@ -1,0 +1,21 @@
+{
+  "created": "2026-09-16",
+  "tool": "OpenAI ImageGen",
+  "reference": "Approved War of Words designs in design/screens/",
+  "prompts": [
+    {
+      "id": "arena",
+      "prompt": "Create a production 2D mobile game BACKGROUND texture, exactly 3:1 panoramic landscape. Reference image is STYLE ONLY. Recreate original bright sandstone observatory ruins world with distant floating towers, blue sky, waterfalls, warm stone and sparse plants. View straight side-on; a horizontal sandstone combat floor runs across bottom 12% at same elevation. Broad open central arena. NO characters anywhere, NO UI, no letters, health bars, circles, buttons or text. Crisp refined painterly adventure game art for adults, depth and detail but restrained central visual noise. Scene has full-height clear spaces at left and right for separately animated adult fighters. Fill entire image."
+    },
+    {
+      "id": "fighters",
+      "prompt": "Use reference as exact character identity and rendering style guide. Generate a PRODUCTION 2D CHARACTER SHEET with genuinely TRANSPARENT alpha background, landscape 2:1. Exactly TWO separate full-body standing fighters side by side, not overlapping, separated by broad transparent space. LEFT HALF: adult woman expedition ranger short black hair teal coat orange scarf tan trousers tall boots, aimed compact brass energy gauntlet toward RIGHT. RIGHT HALF: tall angular bronze automaton sentinel luminous violet core aimed LEFT. Both face each other side-on, battle idle poses. Their entire bodies weapons coats feet fit within their respective half with 8% padding, baseline near 90% of canvas height, same scale. Painterly original art consistent with reference. No ground scenery, no shadow beneath feet, no text, no UI, no frame, no checkerboard drawn into image. Actual transparency outside sprites. Do not include anything except these TWO fighters."
+    },
+    {
+      "id": "map",
+      "prompt": "Create a production BACKGROUND texture for the campaign map of this same original mobile game, landscape 2:1. Match the reference sunlit sandstone observatory world, saturated blue sky, aqua river, waterfalls and floating ancient structures. Bird's-eye oblique view of five distinct sandstone plateaus connected by winding bridges leading from lower LEFT to upper RIGHT grand observatory tower. Each plateau has open space for a separate UI mission marker. Refined painterly game artwork aimed at adults too, radiant day, readable landforms, no clutter. NO characters, NO UI, NO labels/text, NO markers, NO circles, NO numbers, NO icons. This is environment art only; software draws navigation over it."
+    }
+  ],
+  "transparencyCorrection": "Edit this sprite sheet. Preserve BOTH illustrated characters exactly, their poses, colors, scale, spacing and positions. REMOVE the entire gray checkerboard pattern background. The final PNG must have actual alpha=0 transparent pixels outside the two fighters, not a painted checkerboard or any solid color. Also remove any background scribbles. Keep detailed clean silhouettes and the transparent space between them. This is a background extraction for a game sprite sheet. No other changes.",
+  "finalMagentaCorrection": "Edit the supplied two-fighter sprite sheet. Preserve both fighters exactly, all details, poses and positions. Replace ALL gray checkerboard background with one perfectly flat, untextured solid chroma magenta RGB #FF00FF. Every pixel outside the character silhouettes should be flat #FF00FF, including between limbs. NO checkerboard, no transparency, no gradients, no cast shadows, no background scribbles. Keep characters opaque and natural colors. Output same 2:1 image and same two characters. This is a chroma-key game sprite asset, not a poster."
+}

@@ -1,43 +1,40 @@
-# War of Words — mobilna igra u planiranju
+# War of Words
 
-Originalna igra za Android i iOS: igrač prevlači preko slova u krugovima, sastavlja reči i prikuplja energiju koju troši na borbene sposobnosti. Slugterra je referenca za osećaj borbe i napredovanja; svet, likovi i grafika biće originalni. Naziv repozitorijuma nije potvrda konačnog naziva igre.
+**Igriva Android verzija 0.1.0 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj susedna engleska slova, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
-**Status:** planiranje i interaktivni mockupovi. Usvojeni su landscape format, engleski jezik/rečnik za prvu verziju i borba protiv računara. Godot je ciljni engine za kasniju izradu; trenutno se radi samo vizuelni dizajn. Izvor rečnika, tema i balans još nisu usvojeni. Godot 4.7.2 je samo tehnički isproban. Produkcioni igrivi prototip još ne postoji.
+## Probaj igru
 
-## Nastavak rada
+- APK: `WarOfWords-0.1.0-android.apk` iz isporučenog paketa / GitHub izdanja. Lokalni build je u ignorisanom `exports/`.
+- [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
+- Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
+- **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Pomoć je u Options → How to Play.
 
-### Aktuelno: šest dizajna ekrana
+## Šta je uključeno
 
-Otvoriti **[statičnu galeriju dizajna](design/index.html)** ili [pojedinačne PNG slike](design/README.md). Šest usklađenih landscape ekrana za buduću mobilnu igru u Godotu, bez simulacije. [Specifikacija za izradu](design/DESIGN-SPEC.md) i [poreklo materijala](design/PROVENANCE.md).
+Šest osnovnih ekrana, 12 misija u tri poglavlja, četiri sposobnosti sa osam nivoa, tri besplatna power-upa, novčići i otključavanje misija, lokalni engleski rečnik sa 76.802 reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
 
-### Prethodni V3 interaktivni mockup
+[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.0.md) · [Status i sledeći korak](STATUS.md).
 
-Otvoriti **[V3 mokup/index.html](V3%20mokup/index.html)**. Šest osnovnih mobilnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja i borba. Susedna slova sa dijagonalama, dopuna polja i punjenje sposobnosti po bojama. [Uputstvo i granice provere](V3%20mokup/README.md). V3 još treba vizuelno proveriti na telefonu.
+## Nastavi na drugom računaru
 
-### Prethodni V2 atlas (sačuvan)
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/android-playable**:
 
-Otvoriti **[mockups/index.html](mockups/index.html)** lokalno u browseru — bez instalacije i servera. [Landscape atlas](mockups/README.md) sadrži **86 ekrana/stanja**, 35-slova tablu, malu englesku demo listu, simulaciju računarskog protivnika i osam povezanih tokova. Vedrija revizija 02 zamenjuje prvi portrait koncept. [Dizajn ekrana](docs/screen-design.md) opisuje predloge i granice. Aktivni rad je na grani `codex/screen-mockups`.
+```powershell
+git fetch origin --prune
+git switch codex/android-playable
+git pull --ff-only
+```
 
-1. Pročitati [AGENTS.md](AGENTS.md) i [STATUS.md](STATUS.md).
-2. Proveriti Git stanje i sinhronizovati prema tim uputstvima.
-3. Dogovoriti otvorene odluke iz [dizajna igre](docs/game-design.md).
-
-Repozitorijum: https://github.com/sinisamedic/warofwords
-
-## Pokretanje postojeće tehničke probe
-
-Ovo nije igra. Standardnim Godotom **4.7.2** uvesti `setup-probe/project.godot`, otvoriti `connection_probe.tscn` i pritisnuti **F6**. Scena prikazuje tekst koji je ranije napravljen kroz MCP; taj tekst sam po sebi ne potvrđuje trenutnu vezu. Bez aktivnog MCP servera scena i dalje može da se pokrene.
-
-Za stvarnu proveru veze, zavisnosti i podešavanje računara pratiti [docs/setup.md](docs/setup.md).
+Ako grana nije lokalna: `git switch --track origin/codex/android-playable`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
 
 ## Struktura
 
-- `docs/game-design.md` — usvojeni zahtevi, predlozi i otvorene odluke.
-- `docs/setup.md` — ponovljivo podešavanje računara i MCP-a.
-- `docs/PLAN.md` — sačuvano detaljno početno istraživanje.
-- `docs/GODOT-SETUP.md` — istorijski izveštaj prve MCP probe.
-- `setup-probe/` — mala tehnička Godot proba i dodatak sa lokalnom ispravkom.
-- `tools/godot-mcp/server/` — verzionisani izvori MCP servera i zaključane zavisnosti.
-- `.local/` — ignorisani podaci pojedinačnog računara, logovi i lokalne arhive.
+- `game/` — aktivna igra, asset-i, rečnik, licence, testovi i Android export preset.
+- `tools/build-android.ps1`, `tools/build-dictionary.ps1` — ponovljiva izgradnja i provere.
+- `design/` — šest usvojenih statičnih dizajna, očuvani masteri i specifikacija.
+- `V3 mokup/`, `mockups/` — prethodni interaktivni predlozi, sačuvani bez izmena.
+- `setup-probe/`, `tools/godot-mcp/` — ranija tehnička proba i MCP alati; igra ih ne koristi.
+- `docs/PLAN.md`, `docs/GODOT-SETUP.md` — istorija istraživanja.
+- `.local/`, `exports/` — lokalni alati, logovi, keš i izlazni APK; ne commit-uju se.
 
-Kod, dokumentacija i odabrani izvorni grafički/zvučni materijali pripadaju GitHub-u. Keš, zavisnosti, instalacije alata i tajne ostaju lokalno. Git LFS još nije uveden: nema velikih binarnih materijala za slanje.
+Repozitorijum: https://github.com/sinisamedic/warofwords. Poreklo novih materijala i licence nalaze se uz `game/assets/`, `game/data/` i `game/licenses/`. Novi izvorni binarni fajlovi su pojedinačno manji od 10 MiB; LFS nije potreban za ovaj paket izvora.

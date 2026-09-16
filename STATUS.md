@@ -1,62 +1,53 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
+Ažurirano: 2026-09-16. **Aktivna grana: `codex/android-playable`.**
 
-## Aktuelno: šest statičnih vizuelnih dizajna
+## Aktuelno — igriva Android verzija 0.1.0
 
-- Poslednji zahtev korisnika: samo dizajn šest osnovnih ekrana, bez simulacije i bez izrade igre. Godot je sada naveden kao ciljni engine za kasniju izradu.
-- Otvoriti **design/index.html** za statičnu galeriju ili pojedinačne PNG slike iz `design/screens/`. Galerija ne sadrži JavaScript.
-- Šest ekrana: glavni meni, kampanja, arsenal, power-upovi, unapređenja i borba. Svi su 1774 × 887, landscape 2:1, vizuelno usklađeni, engleski.
-- Šest novih ImageGen izlaza; postojeća arena korišćena kao referenca, zatim novi borbeni ekran kao stilska referenca za ostale. Svi rezultati su vizuelno pregledani direktno kao slike. Poreklo i tačni promptovi: `design/PROVENANCE.md`, `design/prompts.json`.
-- Specifikacija: `design/DESIGN-SPEC.md` — hijerarhija, tokeni, mobilne dimenzije, stanja, prelazi i odvajanje slojeva za budući Godot UI. Nisu napravljene Godot scene, kod igre ili nova simulacija.
-- PNG slike su spljošteni vizuelni masteri, ne slojeviti UI kit. Asset-i, tekst/fontovi i animacije pripremaju se odvojeno tek posle usvajanja.
-- Provere: šest validnih PNG-ova istih dimenzija; ključni natpisi, broj polja i putanja STONE vizuelno pregledani; u unapređenju 480−180=300. Svaki fajl ispod 10 MiB, zbir oko 17 MiB. Nema novih paketa ili LFS obrazaca. Statični lokalni linkovi provereni.
-- Nema fizičkog testa telefona/hitbox-ova. Brojevi, izgled sveta, imena i 28 polja i dalje su predlog.
-- V2 i V3 fajlovi ostaju neizmenjeni. V3 je prethodna simulacija, ne aktuelni dizajn koji korisnik sada traži.
+Korisnik je usvojio šest dizajna i izričito odobrio celu igru za probu na Android telefonu, uz slobodu rešavanja detalja. Godot je aktivni engine. Ranija zabrana implementacije više ne važi.
 
-**Sledeći korak:** korisnik pregleda šest slika i potvrđuje/koriguje vizuelni smer. Ne nastavljati automatski izradu igre. Posle usvajanja izdvojiti produkcione komponente i pripremiti Godot UI prema specifikaciji, uz novu autorizaciju za implementaciju.
+- Projekat: **game/project.godot**, Godot 4.7.2 standard, originalna 2D grafika; Blender nije potreban.
+- Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, kraj kampanje, opcije i dnevnik reči.
+- Engleski interfejs, landscape, 7 × 4 susedna slova sa dijagonalama i dopunom. Tipovi slova pune četiri sposobnosti. Brzo prevlačenje i tap + ✓.
+- Offline SCOWL rečnik od 76.802 reči, generator sa proverom rešenja, Hint, bonus za duge reči.
+- 12 računarskih protivnika/susreta, tri poglavlja sa boss susretima, novčići, zvezdice, otključavanje i unapređenja do nivoa 8. Tri power-upa, jedan besplatno po duelu.
+- Lokalni trajni napredak i nastavak tačno sačuvane borbe, uključujući tablu i potrošeni power-up. Nastavak je pauziran. Rezervna kopija za oštećen save. Učitavanje rečnika u pozadini sa vidljivim ekranom učitavanja.
+- Sintetisani zvučni efekti, vibracija i reduced motion opcije. Nema naloga, mreže, analitike, reklama ili monetizacije.
+- APK: **exports/WarOfWords-0.1.0-android.apk**, debug potpis, ARM64 i x86_64, minimum API 24 / target 36. Build izlaz i hash su ignorisani; distribucija je predviđena kroz GitHub pre-release assets.
+- Poreklo asset-a, tačni ImageGen promptovi, licence Godota/fontova/rečnika i reprodukcija rečnika su u `game/`. Novi binarni izvori su pojedinačno ispod 10 MiB; LFS nije potreban za njih. APK se ne dodaje u Git istoriju.
 
-## Prethodno: V3 mobilni mockup
+## Završene provere
 
-- Otvoriti **V3 mokup/index.html** lokalno u browseru, telefon vodoravno. Uputstvo i granice: `V3 mokup/README.md`. Istraživanje Slugterre: `V3 mokup/RESEARCH.md`.
-- Šest glavnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja, borba. Dodatno: pomoć, pauza, pobeda, poraz.
-- Potvrđeno od korisnika: susedna slova + dijagonale, dopuna korišćenih polja, oružja/sposobnosti umesto bića, tipovi/boje slova pune odgovarajuće sposobnosti. Landscape, engleski, računar i odrasla publika ostaju usvojeni.
-- V3 predlaže 28 polja (7 × 4), krupne komande bez desktop atlasa, četiri sposobnosti, tri power-upa i bonus za 6+ slova. Brojevi, tema i tempo nisu konačno usvojeni.
-- Interaktivni demo: prevlačenje ili tap + ✓, punjenje po tipu, dopuna polja, aktiviranje sposobnosti, CPU napadi, pauza, nagrada i unapređenja tokom sesije.
-- `mockups/` (V2) je sačuvan bez izmena. V3 koristi istu originalnu arenu; nema novih generisanih slika, paketa ili velikih binarnih fajlova.
+- Godot import i **91 uspešna automatska provera**, uključujući solver/generator, brzo prevlačenje, energiju, CPU/štit/lečenje, jednokratne nagrade, JSON round-trip, oštećen save i završivost misija 1/4/8/12.
+- Šest ekrana renderovano u Godotu; pregledani 16:9, 2:1 i Android široki prikaz. Snimci su u `docs/screenshots/`.
+- **Konačni APK instaliran i testiran stvarnim dodirima u Android emulatoru API 36, 2400 × 1080.** Prošli meni → kampanja → power-up → borba, STONE prevlačenjem, Freeze, gašenje/nastavak iste pauzirane borbe, Aegis/Hint, reči i napadi do pobede, nagrada/otključavanje, unapređenje i čuvanje posle novog restarta. Završni log nema GDScript/engine ERROR niti fatalni pad; javlja se benigno upozorenje shader keša pri rekompajliranju.
+- APK izvoz potvrđuje potpis i njegovu verifikaciju. Manifest i SHA256 provereni. Detalji i granice: **docs/QA-0.1.0.md**.
+- Fizički Samsung S23 Ultra nije dostupan za test. Zvuk/vibracija nisu provereni slušanjem/osećajem na fizičkom uređaju. Balans, baterija i duže partije treba da se provere rukom.
+- SwiftShader emulator nije radio; uspešan test koristi NVIDIA host OpenGL, `-feature -Vulkan -no-snapshot`. Ne pripisivati ovaj rezultat svim Android drajverima.
 
-## Provere / važno ograničenje
+## Tačan sledeći korak
 
-- Ispravljen prazan plavi ekran: JavaScript je izolovan od browser globalnih naziva, a funkcija `top` preimenovana u `screenHeader`. Verzija script URL-a promenjena je na 3.1 radi ponovnog učitavanja.
-- `node --check` i `node "V3 mokup/tests/startup.cjs"` prošli. Novi test izvršava ceo entry script u DOM zameni i proverava generisanje svih šest ekrana i da globalni browser nazivi ostaju netaknuti. To nije pravi browser test.
-- Izolovane provere stvarnih JS funkcija prošle: broj polja, susedstvo i dijagonale, povratak i zabrana ponavljanja polja, punjenje po tipu, bonus, dopuna samo korišćenih polja, šteta, štit, lečenje, CPU, pauza, power-up jednom i nagrada jednom.
-- To nisu end-to-end testovi. Browser alat je odbio lokalni file URL zbog svoje politike pristupa. **V3 nije vizuelno potvrđen u browseru niti na fizičkom telefonu.** Ne prepisivati stare V2 vizuelne provere kao provere V3.
-- Lokalni proverni skript: `.local/v3-review/logic.cjs` (ignorisano).
-- Demo lista nije produkcioni rečnik, dopuna nije kvalitetan generator. Nema trajnog napredovanja, naloga, zvuka ili prave kampanje. Promene se resetuju pri ponovnom učitavanju.
+Na Samsung telefonu preuzeti APK iz GitHub izdanja, instalirati i odigrati prve četiri misije. **Play → Prepare → Battle**; na prvoj tabli postoji STONE. Proveriti udobnost povezivanja, čitljivost, tempo CPU napada, zvuk i nastavak posle zaključavanja. Na osnovu tog testa podesiti balans; ne širiti sadržaj pre te povratne informacije.
 
-## Raniji V3 korak (zamenjen statičnim dizajnom iznad)
-
-Na landscape telefonu otvoriti V3. Probati Play → Prepare → Battle, reč STONE ili STONES u prvom redu i PLANE u trećem. Aktivirati napunjen štit, zatim druge sposobnosti. Pregledati Power-ups i Workshop. Potvrditi mobilnu kompoziciju i tek zatim menjati grafiku ili širiti implementaciju. Smer punjenja po bojama i pravilo susedstva ne pitati ponovo.
-
-Tempo, bonus i broj polja ostaju predlozi. Poslednji korisnički zahtev navodi Godot za kasniju izradu; trenutno se radi samo dizajn.
+Uputstvo za instalaciju i build: **docs/android.md**. Aktivne odluke/balans: **docs/game-design.md**. Ovo je prva kompletna kampanja za probu, ne Play Store izdanje; dva lika dele se kroz susrete, bez skeletne animacije i muzike. iOS, cloud save i monetizacija nisu urađeni.
 
 ## Nastavak na drugom računaru
 
-Pročitati AGENTS.md, sačuvati eventualne lokalne izmene, proveriti remote i Git stanje, pa:
+Pročitati AGENTS.md, zaštititi eventualne lokalne izmene i proveriti remote/Git stanje, pa:
 
 ```powershell
 git fetch origin --prune
-git switch codex/screen-mockups
+git switch codex/android-playable
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/screen-mockups`. Uputstvo za alate: `docs/setup.md`. GitHub prenosi izvor, ne instalacije alata.
+Ako grana nije lokalna: `git switch --track origin/codex/android-playable`. Importovati `game/project.godot`; za Android instalirati Godot 4.7.2/JDK/SDK/export templates prema `docs/android.md`. MCP nije potreban. Potpisni ključevi ostaju van Git-a; na drugom računaru koristiti isti privatni ključ za kompatibilno ažuriranje postojeće instalacije.
 
-Ovaj status opisuje sadržaj pripremljen za commit. Stvarni ishod push-a i handoff SHA proveriti kroz Git i završnu poruku; ova rečenica ne potvrđuje slanje.
+Ovaj status beleži provereni sadržaj pripremljen za handoff. Ishod push-a, SHA i stvarni URL izdanja potvrđuju se zasebno kroz Git/GitHub i završnu poruku, ne unapred ovim tekstom.
 
-## Raniji rad i lokalno okruženje
+## Sačuvana istorija
 
-- V2 commit 493600d: 86 landscape prikaza, čuva se u `mockups/` kao prethodni predlog. V1 portrait istorija: 40c1588.
-- Godot 4.7.2 i MCP proba ranije su radili na prvom računaru. To nije produkciona igra ni potvrda Android/iOS izvoza. Aktivnu MCP vezu i stvarni engine log ponovo proveriti pre korišćenja.
-- Lokalni alati, `.local/`, node_modules, Godot keš i instalacije ne prenose se GitHub-om. Izvori MCP servera i licenca ostaju u `tools/`.
-- Godot je ciljni engine za buduću izradu. Licencirani engleski rečnik, tema, balans i monetizacija ostaju otvoreni. Aktivne odluke su u `docs/game-design.md`.
+- `design/`: šest usvojenih statičnih ImageGen dizajna, galerija i specifikacija. Osnovni commit ove grane: 2a5a1c7 sa grane `codex/screen-mockups`.
+- `V3 mokup/`: ranija interaktivna simulacija, sačuvana bez izmena.
+- `mockups/`: raniji V2 atlas (493600d); V1 portrait istorija 40c1588.
+- `setup-probe/`, `tools/godot-mcp/`: ranija tehnička proba i licencirani MCP izvor, nevezani za runtime ove igre.

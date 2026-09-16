@@ -1,6 +1,6 @@
 # Podešavanje računara i prenos rada
 
-Ova dokumentacija je aktivno uputstvo. Godot je opcionalna tehnička proba, ne konačno izabrani engine igre. Za rad na planu potrebni su samo Git, pristup repozitorijumu i Codex.
+Ova dokumentacija opisuje Git i razvojno okruženje. **Aktivna igra je u `game/`, Godot 4.7.2 je usvojen.** Za pokretanje igre ne trebaju MCP, Node ili Blender. Android instalacija i build: [android.md](android.md). Ostatak ovog dokumenta čuva i postupak za opcionalnu stariju MCP probu.
 
 ## 1. Verzije
 
@@ -10,13 +10,13 @@ Ovo su tačne verzije proverene na prvom računaru 2026-09-15, ne tvrdnja da su 
 | --- | --- | --- |
 | Git for Windows | 2.55.0.windows.5 | Rad sa repozitorijumom; na drugom OS-u kompatibilan Git 2.x |
 | Git LFS | 3.7.1 | Dostupan lokalno; nije aktiviran za ovaj repo |
-| Godot standard, x86_64 | 4.7.2.stable.official.ed1daf0bf | Samo za postojeću probu, bez .NET |
+| Godot standard, x86_64 | 4.7.2.stable.official.ed1daf0bf | Aktivna igra i ranija proba, bez .NET |
 | Node.js | 22.14.0 | Lokalni MCP server i verifikaciona skripta |
 | npm | 9.8.1 | `npm ci` iz sačuvanog lockfile-a |
 | Godot MCP server | 0.1.0, commit 328e15f7d38092371b2aca8b81c40b8188bbe747 | Izvor mkdevkit/godot-mcp, MIT |
 | Inkscape | 1.4.2 | Opcionalno; prethodna dijagnostika, nije neophodan za ovu probu |
 
-Blender verzija nije potvrđena. Android SDK/JDK, iOS Xcode i export templates još nisu podešeni/potvrđeni; konkretne verzije odabrati kada usvojimo engine i platformu prvog testa. Codex verzija nije zaključana; na svakom računaru proveriti dostupnost shell i MCP funkcija.
+Android build je dodat 2026-09-16: JDK 21.0.6, SDK platform 35, build-tools 36.0.0, zvanični Godot 4.7.2 Android export templates. Tačne korake opisuje [android.md](android.md). Blender i iOS Xcode nisu potrebni za ovaj Android paket. iOS nije deo ove isporuke. Codex verzija nije zaključana; na svakom računaru proveriti dostupnost alata.
 
 ## 2. Kloniranje na drugom računaru
 

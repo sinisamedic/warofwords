@@ -8,6 +8,9 @@
 *.json text eol=lf
 *.ts text eol=lf
 *.mjs text eol=lf
+*.cjs text eol=lf
+*.cfg text eol=lf
+*.import text eol=lf
 *.ps1 text eol=lf
 *.svg text eol=lf
 *.png binary
@@ -16,5 +19,11 @@
 *.blend binary
 *.wav binary
 *.ogg binary
+*.ttf binary
+
+# Keep the reproducible dictionary hash identical across Windows and Unix.
+game/data/english.txt text eol=lf
+# Preserve upstream notices verbatim, including their original trailing spaces.
+game/licenses/*.txt -whitespace
 
 # Add agreed LFS patterns before the first commit of large binary assets.
