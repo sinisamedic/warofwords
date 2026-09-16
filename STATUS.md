@@ -2,19 +2,32 @@
 
 Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
 
-## Aktuelna revizija 02 — landscape i engleski
+## Aktuelno: V3 mobilni mockup
 
-- Korisnik je potvrdio **landscape**, mnogo kružnih slova ispod arene, **engleski za prvu verziju** i **računarskog protivnika**. Traži vedriji izgled i publiku koja uključuje odrasle; širi vokabular treba da pomaže pobedi. Odluke su u `docs/game-design.md`.
-- Preuređen atlas: **86 landscape ekrana/stanja**, osam tokova. `mockups/index.html` se otvara direktno u browseru bez servera/instalacije. Uputstvo: `mockups/README.md`; dizajn: `docs/screen-design.md`.
-- Novi vizuelni **predlog**: svetle Sunward Ruins, odrasla istraživačica, mehanički Sentinel i tri modula umesto malih simpatičnih bića. Konkretna tema, imena, protagonistkinja i balans nisu usvojeni.
-- Probna mreža **7 × 5 / 35 slova**, sa više mogućih reči. Slobodno povezivanje bilo kojih krugova, pet reči po tabli i pravila zamene su hipoteze. Demo lista ima **600 engleskih zapisa**, od kojih 584 mogu da se sastave prema broju slova na svakoj od dve demonstracione table. To nije produkcioni rečnik niti generator.
-- **Start computer demo** pokreće jednostavan CPU koji najavljuje i izvodi udare. Reči pune energiju, Strike/Guard/Disrupt rade; pauza čuva stanje. Katalog je početno zamrznut radi pregleda. Nema trajnog napredovanja, cloud-a, telemetrije ili slanja prijava.
-- Provere: svih 86 ekrana na širinama 1440/1024/844/390 px u Edge-u, bez JS grešaka, nepoznatih ciljnih ekrana, horizontalnog prelivanja i ispadanja kontrola iz okvira. Testirani STONE klik/drag, STREAMLINE, ponovljene reči, mešanje, peta reč i nova tabla, poništavanje, tastatura, energija, CPU napad, štit, prekid, trening i pauza. Vizuelno pregledani borba, baza, briefing, kolekcija, atlas, putanja reči i landscape focus. **Nije test na fizičkom telefonu.**
-- `mockups/assets/sunward-arena.png` je originalna slika generisana ugrađenim ImageGen alatom (~2.64 MiB). Tačan prompt i poreklo: `mockups/assets/README.md`. `mockups/preview.png` je snimak našeg UI-ja. Nema fajlova preko 10 MiB, novih paketa ili potrebe za LFS-om.
-- Prvi portrait predlog je u Git istoriji, commit `40c1588`; ne koristiti njegova pravila sedam slova/srpski/portrait kao aktuelne odluke.
-- Rad je pripremljen za običan push ove grane. Stvarni ishod i handoff SHA proveriti kroz Git / završnu poruku, ne zaključivati iz ove rečenice da je push uspeo.
+- Otvoriti **V3 mokup/index.html** lokalno u browseru, telefon vodoravno. Uputstvo i granice: `V3 mokup/README.md`. Istraživanje Slugterre: `V3 mokup/RESEARCH.md`.
+- Šest glavnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja, borba. Dodatno: pomoć, pauza, pobeda, poraz.
+- Potvrđeno od korisnika: susedna slova + dijagonale, dopuna korišćenih polja, oružja/sposobnosti umesto bića, tipovi/boje slova pune odgovarajuće sposobnosti. Landscape, engleski, računar i odrasla publika ostaju usvojeni.
+- V3 predlaže 28 polja (7 × 4), krupne komande bez desktop atlasa, četiri sposobnosti, tri power-upa i bonus za 6+ slova. Brojevi, tema i tempo nisu konačno usvojeni.
+- Interaktivni demo: prevlačenje ili tap + ✓, punjenje po tipu, dopuna polja, aktiviranje sposobnosti, CPU napadi, pauza, nagrada i unapređenja tokom sesije.
+- `mockups/` (V2) je sačuvan bez izmena. V3 koristi istu originalnu arenu; nema novih generisanih slika, paketa ili velikih binarnih fajlova.
 
-**Na drugom računaru**, posle provere i čuvanja eventualnih lokalnih izmena prema AGENTS.md:
+## Provere / važno ograničenje
+
+- `node --check` prošao.
+- Izolovane provere stvarnih JS funkcija prošle: broj polja, susedstvo i dijagonale, povratak i zabrana ponavljanja polja, punjenje po tipu, bonus, dopuna samo korišćenih polja, šteta, štit, lečenje, CPU, pauza, power-up jednom i nagrada jednom.
+- To nisu end-to-end testovi. Browser alat je odbio lokalni file URL zbog svoje politike pristupa. **V3 nije vizuelno potvrđen u browseru niti na fizičkom telefonu.** Ne prepisivati stare V2 vizuelne provere kao provere V3.
+- Lokalni proverni skript: `.local/v3-review/logic.cjs` (ignorisano).
+- Demo lista nije produkcioni rečnik, dopuna nije kvalitetan generator. Nema trajnog napredovanja, naloga, zvuka ili prave kampanje. Promene se resetuju pri ponovnom učitavanju.
+
+## Tačan sledeći korak
+
+Na landscape telefonu otvoriti V3. Probati Play → Prepare → Battle, reč STONE ili STONES u prvom redu i PLANE u trećem. Aktivirati napunjen štit, zatim druge sposobnosti. Pregledati Power-ups i Workshop. Potvrditi mobilnu kompoziciju i tek zatim menjati grafiku ili širiti implementaciju. Smer punjenja po bojama i pravilo susedstva ne pitati ponovo.
+
+Zatim potvrditi tempo, bonus, broj polja i **engine**. Godot je samo tehnički isproban, nije izabran.
+
+## Nastavak na drugom računaru
+
+Pročitati AGENTS.md, sačuvati eventualne lokalne izmene, proveriti remote i Git stanje, pa:
 
 ```powershell
 git fetch origin --prune
@@ -22,44 +35,13 @@ git switch codex/screen-mockups
 git pull --ff-only
 ```
 
-Ako grana još ne postoji lokalno, `git switch --track origin/codex/screen-mockups`. Ako repo tek kloniraš, koristi postojeća uputstva iz `docs/setup.md`, pa prebaci na ovu granu.
+Ako grana nije lokalna: `git switch --track origin/codex/screen-mockups`. Uputstvo za alate: `docs/setup.md`. GitHub prenosi izvor, ne instalacije alata.
 
-**Tačan sledeći korak:** otvoriti `mockups/index.html#battle`, uključiti „Start computer demo“ i probati STONE, BRIDGE, STREAM i STREAMLINE. Pregledati „Focus view“ na vodoravnom telefonu, pa potvrditi broj slova, susedstvo/slobodno povezivanje i način zamene/dopune. Zatim potvrditi tempo CPU-a i engine. Engleski i landscape se više ne tretiraju kao otvorene odluke. Ne implementirati svih 86 prikaza odjednom.
+Ovaj status opisuje sadržaj pripremljen za commit. Stvarni ishod push-a i handoff SHA proveriti kroz Git i završnu poruku; ova rečenica ne potvrđuje slanje.
 
-## Završen rad
+## Raniji rad i lokalno okruženje
 
-- Sačuvani početni zahtevi, istraživanje reference i predlozi dizajna.
-- Korisnik je na prvom računaru raspakovao standardni Godot 4.7.2.
-- Tehnička Godot MCP proba je ranije prošla: kreiranje, izmena, čuvanje i pokretanje scene, čitanje runtime stabla i pregled slike. Ispravljena lokalna kompatibilnost pri čuvanju scene.
-- Postojeći folder povezan sa `sinisamedic/warofwords`; GitHub je prilikom početne provere bio prazan. Fajlovi nisu prepisani drugom kopijom.
-- Pripremljeni README, AGENTS, ovaj status, game-design i setup dokumenti; ignorisani lokalni podaci i verzionisani potrebni MCP izvori sa lockfile-om i licencom.
-- Unutrašnji Git MCP checkout-a sačuvan lokalno kao metapodaci u `.local/`; projekat ima jedan aktivan Git repozitorijum.
-
-## Šta još nije odlučeno
-
-- Engine: Godot, Unity ili Unreal. **Godot je isproban, nije konačno usvojen.**
-- Korisnikov screenshot je konkretna referenca kompozicije borbe. Tačno izdanje reference nije prepreka ovom dizajnu.
-- Izvor/verzija/licenca produkcionog **engleskog** rečnika i US/UK varijante; jezik prve verzije je potvrđen.
-- Broj slova, pravilo susedstva i zamena/dopuna nakon reči.
-- Borbeni tempo: blagi realni ili potezni.
-- Tema, konačni naziv i konkretan balans.
-- Modeli test telefona i pristup Mac-u za iOS.
-
-## Sledeći koraci
-
-1. Na drugom računaru otvoriti repo, proveriti sinhronizaciju i nastaviti granu `codex/screen-mockups` prema odeljku iznad. Pročitati AGENTS.md i ovaj status.
-2. Proveriti remote, stanje grane i `git fetch`; ne pretpostaviti sinhronizaciju iz teksta ovog fajla.
-3. Sa korisnikom potvrditi novi raspored, pravila table, engine i osnovni tempo borbe. Ne širiti implementaciju pre odgovora.
-4. Proveriti 35 slova i pet reči po tabli naspram dopune korišćenih slova; prioritet su čitljivost, dodir i zanimljiv izbor reči za širu publiku.
-5. Tek po dogovoru napraviti najmanji igrivi susret iz docs/game-design.md.
-
-## Provere i ograničenja
-
-- Godot MCP je praktično testiran ranije na prvom računaru; u trenutnoj listi alata još nema callable Godot MCP alata. Lokalna registracija `godot-local` postoji, ali mora biti učitana/proverena u novoj sesiji.
-- Godot proba nije testirana na Android/iOS. SDK i export templates nisu potvrđeni.
-- Produkciona igra i kompletan engleski rečnik nisu implementirani. Postoji HTML simulacija i koncept grafika; LFS nije aktiviran.
-- Rutinske provere organizacije: sintaksa Node skripte, build MCP servera, provera linkova/diff-a i pregled sadržaja za commit. Tačan rezultat slanja i SHA proveravati kroz Git; ne smatrati ovaj status potvrdom uspešnog push-a.
-
-## Lokalno, ne prenosi se GitHub-om
-
-Instalacije alata, `.local/` (mašinska podešavanja, logovi, snimak probe i arhiva), `node_modules`, generisani MCP build i Godot keš. Njihov izostanak je nameran; za obnovu potrebnih delova koristiti docs/setup.md. Lokalna arhiva nije zamena za backup računara.
+- V2 commit 493600d: 86 landscape prikaza, čuva se u `mockups/` kao prethodni predlog. V1 portrait istorija: 40c1588.
+- Godot 4.7.2 i MCP proba ranije su radili na prvom računaru. To nije produkciona igra ni potvrda Android/iOS izvoza. Aktivnu MCP vezu i stvarni engine log ponovo proveriti pre korišćenja.
+- Lokalni alati, `.local/`, node_modules, Godot keš i instalacije ne prenose se GitHub-om. Izvori MCP servera i licenca ostaju u `tools/`.
+- Engine, licencirani engleski rečnik, tema, balans i monetizacija ostaju otvoreni. Aktivne odluke su u `docs/game-design.md`.

@@ -1,78 +1,68 @@
-# Dizajn igre — odluke i hipoteze
+# War of Words — dizajn igre
 
-Aktuelno: 2026-09-16. Poslednja eksplicitna korisnička instrukcija ima prednost nad starim planom.
+Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
-## Usvojeni zahtevi
+## Usvojeno
 
-- Originalna mobilna igra za Android i iOS.
-- **Landscape format**, prema korisnikovom screenshot-u borbe. Gore su igrač i protivnik na suprotnim stranama, zdravlje i pauza; dole velika tabla sa mnogo slova za povezivanje.
-- **Prva verzija na engleskom, sa engleskim rečnikom.** Jezik više nije otvorena odluka. Tačan izvor, verzija, licenca i pravila varijanti engleskog još nisu odabrani.
-- **Solo borba protiv računarski kontrolisanog protivnika.** Nema živog protivnika / PvP-a u ovom smeru.
-- Slova su u krugovima. Povezivanjem se sastavljaju postojeće reči. Od ponuđenih slova treba da postoji više mogućih reči.
-- Prihvaćene reči daju resurse. Ručno aktivirani napadi/sposobnosti troše resurse.
-- Igra treba da bude privlačna i odraslima. Širi vokabular i pronalaženje različitih/dužih reči treba da pomognu pobedi; vizuelni identitet ne sme izgledati kao igra samo za malu decu.
-- **Vedriji i svetliji stil**; prethodna dominantna tamnozelena i detinjasti mali likovi nisu odgovarajući smer.
-- Slugterra screenshot je referenca za raspored i osećaj borbe. Likovi, svet, nazivi i grafika ostaju originalni. Screenshot nije produkcioni materijal projekta.
-- Prioritet su dodir, čitljiv ekran, zanimljive odluke i mali početni troškovi.
-- **Engine nije izabran.** Godot tehnička proba nije odluka. Ne započinjati veliku implementaciju dok se ne potvrde osnovna pravila i engine.
+- Mobilna igra u **landscape** položaju. Telefon je osnovni format; ne umanjivati desktop interfejs.
+- Prva verzija: **engleski interfejs i engleski rečnik**.
+- Borba protiv **računara**, bez ljudskog protivnika u ovom smeru.
+- Kompozicija po korisnikovoj Slugterra referenci: duel i zdravlje gore, velika tabla slova dole, napunjene sposobnosti nadohvat prstiju.
+- Slova u krugovima; više mogućih reči na tabli.
+- **Povezuju se samo susedna slova, uključujući dijagonale.**
+- **Korišćena slova nestaju i dopunjavaju se novim.** Prethodna V2 hipoteza pet reči po istoj tabli je odbačena.
+- **Oružja i sposobnosti umesto sakupljivih bića.**
+- **Slova imaju tipove/boje i pune odgovarajuća oružja/sposobnosti.** Nije usvojeno punjenje unapred izabranog oružja niti zajednički energetski bazen.
+- Vedriji stil, privlačan i odraslima. Znanje reči treba da doprinosi pobedi.
+- V3 je u novom folderu **V3 mokup**. Sačuvati prethodni `mockups/` kao V2.
+- Za sada samo najvažniji ekrani: meniji, borba, power-upovi i unapređenja. Ne širiti atlas na sve moguće situacije.
+- Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
+- Engine **nije izabran**. Godot proba nije odluka. Ne započinjati veliku implementaciju pre potvrde smera, osnovne mehanike i engine-a.
 
-## Mockup revizija 02
+## V3 — aktuelni predlog
 
-[Atlas](../mockups/README.md) ima 86 landscape ekrana/stanja i osam tokova. Svih 84 prethodnih prikaza je zamenjeno; dodata su dva odvojena detalja sposobnosti. Prethodna portrait revizija dostupna je u Git istoriji, commit `40c1588`, kao prevaziđen predlog.
+[Mockup i uputstvo](../V3%20mokup/README.md), [istraživanje reference](../V3%20mokup/RESEARCH.md).
 
-**Vizuelni predlog:** Sunward Ruins, svetle kamene ruševine sa plavim nebom, odrasla istraživačica i mehanički Sentinel. Taktički moduli Strike, Guard i Disrupt zamenjuju simpatična bića. Tema, imena, protagonistkinja i konkretna umetnička obrada još nisu potvrđeni.
+Šest glavnih ekrana: glavni meni, kampanja, arsenal, power-upovi, unapređenja i borba. Pomoć, pauza i rezultat su prozori preko borbe. UI je engleski. Katalog za dizajnere ne zauzima prostor u igri.
 
-Jedna originalna arena generisana je ugrađenim ImageGen alatom; poreklo i prompt su u [dokumentaciji grafike](../mockups/assets/README.md). Interfejs, slova, putanje i statistike renderuju se odvojeno, kao pravi elementi mockupa.
+### Tabla i reči — predlog detalja
 
-## Predlog table — NIJE konačno usvojeno
+- 28 polja, mreža 7 × 4, minimum 44 CSS px po polju. Broj treba potvrditi na telefonu.
+- Najmanje tri slova. Jedno polje jednom u reči. Povratak preko prethodnog polja skraćuje putanju.
+- Prevlačenje i puštanje potvrđuju reč; pojedinačni dodiri pa ✓ su alternativa. OS prekid dodira otkazuje putanju.
+- Mešanje boja unutar reči dozvoljeno je; tip svakog iskorišćenog polja puni svoju sposobnost. Uz boju se prikazuje simbol.
+- Jedno slovo daje jednu energiju svog tipa; reči od 6+ slova daju dve po polju. To je predlog bonusa i nije konačan balans.
+- Mockup menja samo korišćena polja, bez fizičkog padanja kolona. Konačnu animaciju i pravilo padanja treba rešiti u prototipu.
+- Mala autorska lista reči je lokalna. Dopuna je demonstraciona i ne garantuje kvalitet tabli. Produkcioni rečnik/generator nisu implementirani.
 
-- **35 krugova, mreža 7 × 5**. Korisnik je potvrdio mnogo slova, ali ne ovaj tačan broj. Proveriti dodirne zone na stvarnom telefonu.
-- Za ovu reviziju svaki krug može da se spoji sa bilo kojim drugim; **ne traži se susedstvo**. Dva ista slova zahtevaju dva kruga. Pravilo susedstva/dijagonala ostaje za potvrdu.
-- Povratak preko prethodnog kruga briše poslednje slovo. Puštanje posle prevlačenja potvrđuje. Tapkanje pa „Enter word“ je alternativa. OS prekid dodira otkazuje unos.
-- Tabla ostaje kroz **pet različitih prihvaćenih reči**, zatim dobija novi raspored posle puštanja. Pet je probna vrednost; moguće su kasnije delimična dopuna ili zamena korišćenih slova.
-- Mešanje je besplatno i čuva iskorišćene reči. Ručna zamena u atlasu nema cooldown; u igri treba rešiti ritam i cenu/zabranu zloupotrebe.
-- Automatska promena ne sme da se desi usred dodira. Borbeni efekti ne pomeraju slova.
-- Tabla mora da ima više ostvarivih engleskih reči različitih dužina. Mockup koristi dva rasporeda istih 35 slova, ne produkcioni generator.
+### Borba — probne vrednosti
 
-## Engleski rečnik
+| Sposobnost | Tip slova | Cena | Osnovni efekat |
+| --- | --- | --- | --- |
+| Pulse | zlato / ϟ | 6 | direktna šteta 24 |
+| Aegis | plavo / ◇ | 6 | zaštita 18 od narednog udarca |
+| Arc | ljubičasto / ⌁ | 8 | šteta 16 i odlaganje protivnika 5 s |
+| Mend | zeleno / + | 6 | lečenje 20 |
 
-Mockup ima **600 ručno upisanih demonstracionih engleskih zapisa**. Provera broja ponuđenih slova nalazi 584 ostvariva zapisa na svakoj demonstracionoj tabli; to nije mera kvaliteta, učestalosti ili izbalansiranosti rečnika. Primeri: STONE, CRAFT, PLANE, BRIDGE, STREAM, PLANET, STREAMLINE.
+Nivoi dodaju po 2 efekta. Početna četiri nivoa su 3, 2, 2, 1. Igrač i protivnik imaju po 100 zdravlja. CPU napada na 10 s za 18 štete i najavljuje poslednje 3 s. Nema AI sastavljanja reči. Početni štit je napunjen radi probe, ostale sposobnosti delimično napunjene.
 
-- Najmanje tri slova; jedan zapis daje energiju jednom po tabli. Duga reč nema veštačko ograničenje na sedam slova.
-- Validacija je lokalna, bez mrežnog/AI sudije. Slova se normalizuju u velika engleska slova radi prikaza; tabela i lista određuju ostvarivost.
-- Produkcioni engleski rečnik treba odabrati i licencirati pre distribucije. Demo lista nije obećanje da će svaka ispravna engleska reč biti prihvaćena.
-- Otvoreno: US/UK varijante, fleksijski oblici, vlastita imena, skraćenice, vulgarizmi, retke reči, učestalost i težina po oblasti.
-- Neprihvaćena reč treba da dobije jasan razlog bez oduzimanja zdravlja/energije. Predlog reči za pregled ne menja rezultat borbe.
+Tri predložena power-upa: zaustavljanje protivnika 8 s, mešanje table, dupliranje energije sledeće reči. Izabere se jedan i koristi jednom po susretu. Upotreba nije monetizovana.
 
-## Predlog borbe i demonstracija
+Mockup počinje sa 480 novčića, unapređenje košta 180, pobeda daje 120. Stanje traje do reload-a. Kampanja i otključavanje su ilustrativni; nema stvarnog snimanja.
 
-Mockup prikazuje široku arenu gore i gustu tablu dole, uz sposobnosti levo i povratnu informaciju o reči desno. CPU ne sastavlja reči; izvodi najavljene obrasce napada.
+### Izgled
 
-Probne vrednosti:
+Ponovo se koristi prethodno generisana originalna arena Sunward Ruins. Nema novih ImageGen poziva. Tema, glavni lik, protivnik i imena sposobnosti i dalje su predlozi. SVG ikone i interfejs su originalni. Slugterra snimci su istraživačka referenca, nisu materijal igre.
 
-| Dužina reči | 3 | 4 | 5 | 6 | 7 | 8+ |
-| --- | --- | --- | --- | --- | --- | --- |
-| Energija | 3 | 5 | 8 | 12 | 17 | 22 |
+## Otvorene odluke
 
-- Kapacitet energije 30; bez prenosa između susreta.
-- Strike: 6 energije, 14 štete. Guard: 5 energije, ublažava 8 od sledećeg pogotka. Disrupt: 10 energije, resetuje najavu, 15 sekundi oporavka.
-- Demonstracioni CPU: 12 štete na približno 10 sekundi, jasna najava poslednje tri sekunde. Igrač počinje sa 100, obični protivnik sa 80 zdravlja.
-- Dugme „Start computer demo“ pokreće simulaciju. Katalog stanja je podrazumevano pauziran radi pregleda. Pauza i odlazak stranice u pozadinu zaustavljaju CPU; nastavak čuva stanje.
-- Trening isključuje CPU. Boss ekran prikazuje predlog faze; kompletan boss obrazac nije implementiran.
-- Brojke, tempo i trajanje nisu balansirani. Ne tvrditi da ovaj HTML mockup predstavlja izabrani engine ili gotovu borbu na telefonu.
+1. Na telefonu potvrditi V3 kompoziciju, čitljivost, dodir i broj polja; naročito visinu arene prema tabli.
+2. Potvrditi tempo duela, pravilo bonusa i punjenja, tipove sposobnosti i power-upove.
+3. Izabrati engine, zatim napraviti najmanji pravi igrivi susret.
+4. Izabrati licenciran engleski rečnik: US/UK, morfologija, vlastita imena, kratice i retke reči.
+5. Razviti generator sa garantovanim izborom reči i testirati težinu za odrasle.
+6. Potvrditi temu, ekonomiju, napredovanje i eventualnu monetizaciju. Ništa od toga nije zaključano.
 
-## Napredovanje — predlozi
+## Istorija
 
-Kampanja protiv računara, kratke oblasti, garantovane nagrade, module kolekcija i radionica. Taktičke grane menjaju odluke: jači štit ili povraćaj energije. Zadaci za raznovrsnost i dužinu reči, trening i dnevnik su kasnije opcije. Cloud, kozmetika i dodatni izazovi su opcioni i nepovezani sa stvarnim servisima.
-
-Monetizacija nije usvojena. Nema kupovina, reklamnog oživljavanja, PvP-a ili obaveznih servera u ovom predlogu.
-
-## Sledeće odluke
-
-1. Potvrditi da nova landscape kompozicija odgovara screenshot-u i nameri korisnika.
-2. Proveriti 7 × 5 krugova na telefonu: dodir, čitljivost, slobodno povezivanje naspram susednih slova.
-3. Potvrditi šta se događa sa korišćenim slovima i koliko reči traje ista tabla.
-4. Potvrditi tempo računarskih napada i ciljnu težinu vokabulara; tek potom konkretan balans.
-5. Izabrati engine i produkcioni engleski rečnik. Tema može još ostati otvorena.
-
-Stariji [PLAN.md](PLAN.md) čuva istraživanje reference, ali njegove portrait/7-slova/srpski hipoteze više nisu aktivna uputstva.
+V2 atlas od 86 ekrana ostaje u [mockups/](../mockups/README.md). Njegovo slobodno povezivanje, zajednička energija i pet reči po tabli više nisu aktuelna pravila. V1 portrait/srpski/sedam slova nalazi se u istoriji (40c1588). Stariji PLAN.md i GODOT-SETUP.md su istorija istraživanja, ne aktivne odluke.

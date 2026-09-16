@@ -6,7 +6,11 @@ Originalna igra za Android i iOS: igrač prevlači preko slova u krugovima, sast
 
 ## Nastavak rada
 
-### Mockupovi ekrana
+### Aktuelni V3 mockup
+
+Otvoriti **[V3 mokup/index.html](V3%20mokup/index.html)**. Šest osnovnih mobilnih ekrana: meni, kampanja, arsenal, power-upovi, unapređenja i borba. Susedna slova sa dijagonalama, dopuna polja i punjenje sposobnosti po bojama. [Uputstvo i granice provere](V3%20mokup/README.md). V3 još treba vizuelno proveriti na telefonu.
+
+### Prethodni V2 atlas (sačuvan)
 
 Otvoriti **[mockups/index.html](mockups/index.html)** lokalno u browseru — bez instalacije i servera. [Landscape atlas](mockups/README.md) sadrži **86 ekrana/stanja**, 35-slova tablu, malu englesku demo listu, simulaciju računarskog protivnika i osam povezanih tokova. Vedrija revizija 02 zamenjuje prvi portrait koncept. [Dizajn ekrana](docs/screen-design.md) opisuje predloge i granice. Aktivni rad je na grani `codex/screen-mockups`.
 
