@@ -6,6 +6,10 @@ Originalna igra za Android i iOS: igrač prevlači preko slova u krugovima, sast
 
 ## Nastavak rada
 
+### Mockupovi ekrana
+
+Otvoriti **[mockups/index.html](mockups/index.html)** lokalno u browseru — bez instalacije i servera. [Atlas ekrana](mockups/README.md) sadrži 84 ekrana/stanja, probu povezivanja slova i osam povezanih tokova. [Dizajn ekrana](docs/screen-design.md) opisuje predloge i granice. Aktivni rad na ovim mockupovima je na grani `codex/screen-mockups`.
+
 1. Pročitati [AGENTS.md](AGENTS.md) i [STATUS.md](STATUS.md).
 2. Proveriti Git stanje i sinhronizovati prema tim uputstvima.
 3. Dogovoriti otvorene odluke iz [dizajna igre](docs/game-design.md).

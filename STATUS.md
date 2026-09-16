@@ -1,6 +1,27 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-15. Aktivna grana: `main`.
+Ažurirano: 2026-09-16. Aktivna grana: `codex/screen-mockups`.
+
+## Nastavak kod kuće — mockupovi
+
+- Napravljen atlas **84 ekrana i stanja**, sa osam tokova: `mockups/index.html`. Otvara se direktno u browseru bez instalacije/servera. Uputstvo: `mockups/README.md`; dizajnerski pregled: `docs/screen-design.md`.
+- Originalan vizuelni predlog „Svet odjeka“: baza, mapa, borba, kolekcija, radionica, priča, nagrade, trening, podešavanja i rubna stanja. Tema, jezik/pismo, ekonomija i engine **nisu usvojeni**.
+- Interaktivna demonstracija povezivanja slova, male demo liste, energije i sposobnosti. Borbeni sat je zamrznut, nema produkcionog rečnika, pravog napredovanja, online servisa ni trajnog čuvanja.
+- Provere: 84 ekrana na širinama 1440/390/320 px u Edge-u, bez JavaScript grešaka, nepoznatih ciljnih ekrana i horizontalnog prelivanja. Provereni MOST klikom/prevlačenjem, energija, udarac i ponovljena reč. Vizuelno pregledani baza, borba, pauza, atlas i uski prikaz. Nije test na fizičkom telefonu.
+- `mockups/preview.png` je mali snimak našeg interfejsa. Ostala grafika je originalni SVG u kodu. Nema velikih binarnih materijala, novih zavisnosti ni potrebe za LFS-om.
+- Rad je pripremljen za običan push ove grane. Stvarni ishod i handoff SHA proveriti kroz Git / završnu poruku, ne zaključivati iz ove rečenice da je push uspeo.
+
+**Na drugom računaru**, posle provere i čuvanja eventualnih lokalnih izmena prema AGENTS.md:
+
+```powershell
+git fetch origin --prune
+git switch codex/screen-mockups
+git pull --ff-only
+```
+
+Ako grana još ne postoji lokalno, `git switch --track origin/codex/screen-mockups`. Ako repo tek kloniraš, koristi postojeća uputstva iz `docs/setup.md`, pa prebaci na ovu granu.
+
+**Tačan sledeći korak:** otvoriti `mockups/index.html`, pregledati borbu, bazu, mapu i karticu „Tokovi“; sa korisnikom odabrati vizuelni smer i minimum ekrana za prototip. Zatim potvrditi engine, jezik/pismo i tempo borbe. Ne započinjati implementaciju svih 84 prikaza.
 
 ## Završen rad
 
@@ -22,7 +43,7 @@ Ažurirano: 2026-09-15. Aktivna grana: `main`.
 
 ## Sledeći koraci
 
-1. Na drugom računaru klonirati repo i otvoriti taj folder kao Codex projekat; pročitati AGENTS.md i ovaj status. Pratiti docs/setup.md.
+1. Na drugom računaru otvoriti repo, proveriti sinhronizaciju i nastaviti granu `codex/screen-mockups` prema odeljku iznad. Pročitati AGENTS.md i ovaj status.
 2. Proveriti remote, stanje grane i `git fetch`; ne pretpostaviti sinhronizaciju iz teksta ovog fajla.
 3. Sa korisnikom potvrditi engine i jezik prototipa, zatim osnovni tempo borbe. Ne širiti implementaciju pre odgovora.
 4. Uporediti 7 fiksnih slova kroz tri reči naspram zamene posle svake reči kao dizajnerske hipoteze; prioritet su čitljivost i kontinuitet razmišljanja.

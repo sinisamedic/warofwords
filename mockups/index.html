@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="sr-Latn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>War of Words · Atlas ekrana</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="studio-head">
+    <a class="brand" href="#battle"><span class="brand-mark">W</span><span>WAR OF WORDS<small>DIZAJN IGRE / 01</small></span></a>
+    <nav aria-label="Prikaz"><button data-view="play" class="active">Istraži ekrane</button><button data-view="atlas">Atlas</button><button data-view="flows">Tokovi</button></nav>
+    <span class="proposal">KONCEPT · NIJE USVOJENO</span>
+  </header>
+  <main id="studio">
+    <aside class="catalog"><div class="catalog-top"><span class="eyebrow">BIBLIOTEKA EKRANA</span><b id="count"></b></div><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Pronađi ekran ili situaciju…" aria-label="Pretraži ekrane"></label><div id="screen-list"></div><div class="catalog-foot">Originalni svet, privremeni nazivi.<br>Srpska latinica kao primer.</div></aside>
+    <section id="workspace" aria-label="Pregled mockupa"></section>
+    <aside id="inspector"></aside>
+  </main>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+  <script src="screens.js"></script><script src="app.js"></script>
+</body>
+</html>

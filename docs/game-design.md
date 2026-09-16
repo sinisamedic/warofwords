@@ -39,6 +39,8 @@ Testirati iste početne skupove kroz varijante kako slučajna ponuda ne bi odlu�
 
 ## Kasniji predlozi
 
+- **Vizuelni predlog 2026-09-16:** izrađen [atlas ekrana](../mockups/README.md) i [opis dizajna ekrana](screen-design.md). „Svet odjeka“, ostrva, svetionik, mali odjeci i srpska latinica služe konkretnom mockupu; **nisu usvojene odluke**. Atlas ima 84 ekrana/stanja i osam tokova; nije implementacija igre niti izbor engine-a.
+
 - Grane nadogradnji koje menjaju taktiku: duži štit ili povraćaj energije; proboj oklopa ili više pogodaka; prekid ili usporavanje.
 - Oblasti sa novom mehanikom i boss obrascem; garantovane nove sposobnosti za prve pobede.
 - Vizuelni pravci: bio-svetleće ekspedicije, radionice odjeka, arhipelag mastila. Nijedan nije usvojen.
