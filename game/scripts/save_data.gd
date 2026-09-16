@@ -4,7 +4,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"haptics":true,"calm":false,"tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"haptics":true,"calm":false,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -29,6 +29,8 @@ func load_game() -> void:
 			for i in 4:
 				data.levels[i] = clampi(number(data.levels[i],1),1,8)
 			data.dictionary = data.dictionary.filter(func(word): return word is String)
+			for key in ["ui_language","word_language"]:
+				if data[key] not in ["en","sr"]: data[key] = "en"
 			for key in data.wins.keys():
 				data.wins[key] = clampi(number(data.wins[key],1),1,3)
 			break

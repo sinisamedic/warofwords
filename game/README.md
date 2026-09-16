@@ -1,4 +1,4 @@
-# War of Words — playable Android 0.1.0
+# War of Words — playable Android 0.1.1
 
 Offline landscape word combat, implemented in Godot 4.7.2. Open `project.godot`, then run the main scene. Android installation/build instructions: [../docs/android.md](../docs/android.md).
 
@@ -6,6 +6,6 @@ Six core screens: home, campaign, arsenal, power-ups, upgrades, battle. Includes
 
 Connect adjacent letters (diagonals allowed); release to submit or tap letters then ✓. Used tiles refill. Each tile color charges its ability. Six-letter words double the charge; all valid words also deal damage. No repeated words in one duel. Hint reveals a possible path. Choose one free, single-use power-up before each duel.
 
-Progress is saved locally, including an unfinished duel. Returning to an unfinished duel starts paused. Options include sound, haptics and reduced motion. The dictionary has 76,802 English entries; [source and build recipe](data/README.md).
+Progress is saved locally, including an unfinished duel. Returning to an unfinished duel starts paused. Options include sound, haptics and reduced motion. UI language and word dictionary are independent (English / Serbian Latin). Serbian includes Č/Ć/Š/Đ/Ž and LJ/NJ/DŽ tiles, with 1,740,276 inflected forms; English has 76,802 entries. Saved duels retain their own dictionary. Portrait health bars, rich enamel letter tokens, illustrated abilities with segmented circular charge, and an icon-only boost follow the approved battle design. Confirm/cancel appear only for tap composition. See [source and build recipe](data/README.md).
 
-This is the first complete testable campaign, with provisional balancing and two character sprites shared across encounters. Earlier designs/mockups remain in their own folders. See [QA and limitations](../docs/QA-0.1.0.md) for what has actually been tested.
+This is the first complete testable campaign, with provisional balancing and two character sprites shared across encounters. Earlier designs/mockups remain in their own folders. See [QA and limitations](../docs/QA-0.1.1.md) for what has actually been tested.

@@ -1,53 +1,48 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-16. **Aktivna grana: `codex/android-playable`.**
+Ažurirano: 2026-09-16. **Aktivna grana: `codex/battle-polish-serbian`.**
 
-## Aktuelno — igriva Android verzija 0.1.0
+## Aktuelno — Android 0.1.1
 
-Korisnik je usvojio šest dizajna i izričito odobrio celu igru za probu na Android telefonu, uz slobodu rešavanja detalja. Godot je aktivni engine. Ranija zabrana implementacije više ne važi.
+Posle fizičkog testa 0.1.0 korisnik je zatražio podešavanja, probni srpski i približavanje borbenog ekrana usvojenom dizajnu. Sprovedeno:
 
-- Projekat: **game/project.godot**, Godot 4.7.2 standard, originalna 2D grafika; Blender nije potreban.
-- Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, kraj kampanje, opcije i dnevnik reči.
-- Engleski interfejs, landscape, 7 × 4 susedna slova sa dijagonalama i dopunom. Tipovi slova pune četiri sposobnosti. Brzo prevlačenje i tap + ✓.
-- Offline SCOWL rečnik od 76.802 reči, generator sa proverom rešenja, Hint, bonus za duge reči.
-- 12 računarskih protivnika/susreta, tri poglavlja sa boss susretima, novčići, zvezdice, otključavanje i unapređenja do nivoa 8. Tri power-upa, jedan besplatno po duelu.
-- Lokalni trajni napredak i nastavak tačno sačuvane borbe, uključujući tablu i potrošeni power-up. Nastavak je pauziran. Rezervna kopija za oštećen save. Učitavanje rečnika u pozadini sa vidljivim ekranom učitavanja.
-- Sintetisani zvučni efekti, vibracija i reduced motion opcije. Nema naloga, mreže, analitike, reklama ili monetizacije.
-- APK: **exports/WarOfWords-0.1.0-android.apk**, debug potpis, ARM64 i x86_64, minimum API 24 / target 36. Build izlaz i hash su ignorisani; distribucija je predviđena kroz GitHub pre-release assets.
-- Poreklo asset-a, tačni ImageGen promptovi, licence Godota/fontova/rečnika i reprodukcija rečnika su u `game/`. Novi binarni izvori su pojedinačno ispod 10 MiB; LFS nije potreban za njih. APK se ne dodaje u Git istoriju.
+- Options iz glavnog menija i pauze: zvuk, vibracija, manje animacija, **odvojeni jezik menija i rečnik** (English / Srpski).
+- Srpski latinicom: č/ć/š/đ/ž, LJ/NJ/DŽ na jednoj pločici, 1.740.276 offline oblika. Izvor LibreOffice/Hunspell pod MPL-2.0, verzionisani originalni izvori i ponovljiva izgradnja. Engleski ostaje SCOWL sa 76.802 reči.
+- Kompaktni health barovi sa portretima i gradijentom; vidljivi likovi i niža arena. Uklonjen LINK A WORD. ×/✓ samo za sastavljanje dodirima; slide se potvrđuje puštanjem.
+- Nove originalne ilustracije sposobnosti i power-upova, segmenti punjenja oko kruga, jasna ikonica Freeze, bogatiji vektorski tokeni i podebljana slova. Izgled pregledan na 16:9 i širokom Android prikazu.
+- Optimizovana pozadina/tokeni/prstenovi i zaštita dodira tokom promene ekrana. Rečnici se učitavaju u pozadini i koriste štedljiviju pretragu.
+- Sačuvane borbe zadržavaju svoj rečnik. Stari 0.1.0 save ostaje kompatibilan; novčići, misije i unapređenja se čuvaju.
+- Paket `com.sinisamedic.warofwords`, 0.1.1 / code 2, isti debug sertifikat kao objavljeni 0.1.0. APK: `exports/WarOfWords-0.1.1-android.apk`; ne ide u Git istoriju.
 
 ## Završene provere
 
-- Godot import i **91 uspešna automatska provera**, uključujući solver/generator, brzo prevlačenje, energiju, CPU/štit/lečenje, jednokratne nagrade, JSON round-trip, oštećen save i završivost misija 1/4/8/12.
-- Šest ekrana renderovano u Godotu; pregledani 16:9, 2:1 i Android široki prikaz. Snimci su u `docs/screenshots/`.
-- **Konačni APK instaliran i testiran stvarnim dodirima u Android emulatoru API 36, 2400 × 1080.** Prošli meni → kampanja → power-up → borba, STONE prevlačenjem, Freeze, gašenje/nastavak iste pauzirane borbe, Aegis/Hint, reči i napadi do pobede, nagrada/otključavanje, unapređenje i čuvanje posle novog restarta. Završni log nema GDScript/engine ERROR niti fatalni pad; javlja se benigno upozorenje shader keša pri rekompajliranju.
-- APK izvoz potvrđuje potpis i njegovu verifikaciju. Manifest i SHA256 provereni. Detalji i granice: **docs/QA-0.1.0.md**.
-- Fizički Samsung S23 Ultra nije dostupan za test. Zvuk/vibracija nisu provereni slušanjem/osećajem na fizičkom uređaju. Balans, baterija i duže partije treba da se provere rukom.
-- SwiftShader emulator nije radio; uspešan test koristi NVIDIA host OpenGL, `-feature -Vulkan -no-snapshot`. Ne pripisivati ovaj rezultat svim Android drajverima.
+- Godot import i **129 automatskih provera, 0 grešaka**.
+- Android emulator API 36 / 2400 × 1080: nadogradnja čuva kompletan save, stvarni slide/tap, borba do pobede, nagrada/unapređenje, restart, nezavisni jezici, srpska reč sa dijakritikom i nastavak srpske borbe posle promene menija na engleski.
+- Završni APK ponovo instaliran i provereni nastavak, komande sposobnosti, Freeze i engine log. Potpis, manifest, hash i uključene licence provereni.
+- **docs/QA-0.1.1.md** beleži tačan APK hash, postupak i granice; snimci su u `docs/screenshots/0.1.1/`.
+- Svaki novi binarni izvor je ispod 10 MiB. Srpski rečnik je gzip od oko 4 MB, uz ceo izvor i skriptu. LFS nije potreban za ove fajlove.
 
 ## Tačan sledeći korak
 
-Na Samsung telefonu preuzeti APK iz GitHub izdanja, instalirati i odigrati prve četiri misije. **Play → Prepare → Battle**; na prvoj tabli postoji STONE. Proveriti udobnost povezivanja, čitljivost, tempo CPU napada, zvuk i nastavak posle zaključavanja. Na osnovu tog testa podesiti balans; ne širiti sadržaj pre te povratne informacije.
+Na Samsungu instalirati APK **preko postojeće aplikacije**, bez deinstaliranja. U Options podesiti zasebno Interface language i Word dictionary. Srpski rečnik važi za novu borbu; već započeta ostaje na svom jeziku.
 
-Uputstvo za instalaciju i build: **docs/android.md**. Aktivne odluke/balans: **docs/game-design.md**. Ovo je prva kompletna kampanja za probu, ne Play Store izdanje; dva lika dele se kroz susrete, bez skeletne animacije i muzike. iOS, cloud save i monetizacija nisu urađeni.
+Proveriti veličinu/udobnost dodira, čitljivost portreta i punjenja, zvuk/vibraciju, te srpske reči u nekoliko partija. Fizički telefon, baterija i trajni FPS nisu provereni ovde. Emulator je posle optimizacije beležio 19–36 FPS u borbi, što nije procena brzine na S23 Ultra. Srpski rečnik je probni, ne konačna turnirska lista; ćirilica nije deo ove izmene. Dalji balans i sledeće dorade čekaju korisnikov test.
 
 ## Nastavak na drugom računaru
 
-Pročitati AGENTS.md, zaštititi eventualne lokalne izmene i proveriti remote/Git stanje, pa:
+Pročitati AGENTS.md i ovaj status, zaštititi eventualni lokalni rad i proveriti Git/remote, zatim:
 
 ```powershell
 git fetch origin --prune
-git switch codex/android-playable
+git switch codex/battle-polish-serbian
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/android-playable`. Importovati `game/project.godot`; za Android instalirati Godot 4.7.2/JDK/SDK/export templates prema `docs/android.md`. MCP nije potreban. Potpisni ključevi ostaju van Git-a; na drugom računaru koristiti isti privatni ključ za kompatibilno ažuriranje postojeće instalacije.
-
-Ovaj status beleži provereni sadržaj pripremljen za handoff. Ishod push-a, SHA i stvarni URL izdanja potvrđuju se zasebno kroz Git/GitHub i završnu poruku, ne unapred ovim tekstom.
+Ako grana nije lokalna: `git switch --track origin/codex/battle-polish-serbian`. Aktivni Godot projekat je `game/project.godot`. Setup i Android uputstva: **docs/setup.md**, **docs/android.md**. Potpisni ključevi i lokalni alati ne prenose se Git-om. Proverene datoteke su spremne za handoff; ishod push-a, udaljeni SHA i stvarna objava izdanja potvrđuju se zasebno nakon operacije.
 
 ## Sačuvana istorija
 
-- `design/`: šest usvojenih statičnih ImageGen dizajna, galerija i specifikacija. Osnovni commit ove grane: 2a5a1c7 sa grane `codex/screen-mockups`.
-- `V3 mokup/`: ranija interaktivna simulacija, sačuvana bez izmena.
-- `mockups/`: raniji V2 atlas (493600d); V1 portrait istorija 40c1588.
-- `setup-probe/`, `tools/godot-mcp/`: ranija tehnička proba i licencirani MCP izvor, nevezani za runtime ove igre.
+- `codex/android-playable`, 0942094, izdanje `v0.1.0-android-preview`: prva igriva verzija, koju je korisnik probao na telefonu.
+- `design/`: šest usvojenih statičnih dizajna, commit 2a5a1c7 sa `codex/screen-mockups`; masteri ostaju neizmenjeni.
+- `V3 mokup/`, `mockups/`: prethodni predlozi, bez izmena.
+- `setup-probe/`, `tools/godot-mcp/`: istorijska tehnička proba, izvan runtime-a igre.

@@ -1,0 +1,42 @@
+extends RefCounted
+
+const SR := {
+"Preparing your word arsenal...":"Pripremam rečnike...",
+"PLAY  >":"IGRAJ  >", "ARSENAL":"ARSENAL", "UPGRADES":"UNAPREĐENJA", "CONTINUE DUEL":"NASTAVI BORBU",
+"WORD JOURNAL":"DNEVNIK REČI", "OPTIONS":"PODEŠAVANJA", "OFFLINE  •  SOLO CAMPAIGN":"BEZ INTERNETA  •  PROTIV RAČUNARA",
+"SUNWARD RUINS":"SUNČANE RUŠEVINE", "THE SKY BRIDGES":"NEBESKI MOSTOVI", "THE OBSERVATORY":"OPSERVATORIJA",
+"CAMPAIGN":"KAMPANJA", "LOCK":"KLJUČ", "CPU  •  %s  •  +%d COINS":"CPU  •  %s  •  +%d NOVČIĆA", "BOSS":"BOS", "DUEL":"BORBA", "PREPARE >":"PRIPREMI SE >",
+"Training Sentinel":"Stražar za obuku", "Copper Scout":"Bakarni izviđač", "Gatekeeper":"Čuvar kapije", "BRONZE WARDEN":"BRONZANI ČUVAR",
+"Sky Watcher":"Nebeski osmatrač", "Storm Sentinel":"Olujni stražar", "Bridge Guardian":"Čuvar mosta", "TEMPEST WARDEN":"ČUVAR OLUJE",
+"Astral Sentinel":"Astralni stražar", "Archive Keeper":"Čuvar arhive", "Sunforged Elite":"Sunčeva elita", "THE LAST WARDEN":"POSLEDNJI ČUVAR",
+"PULSE":"IMPULS", "AEGIS":"ŠTIT", "ARC":"LUK", "MEND":"LEČENJE",
+"Direct energy blast":"Direktan energetski udar", "Block the next attack":"Blokira sledeći napad", "Strike and interrupt":"Udara i prekida napad", "Restore your health":"Obnavlja zdravlje",
+"LEVEL %d":"NIVO %d", "EQUIPPED":"OPREMLJENO", "  •  %d ENERGY":"  •  %d ENERGIJE", "POWER-UPS":"POJAČANJA", "UPGRADE >":"UNAPREDI >",
+"CHOOSE ONE FOR BATTLE":"IZABERI JEDNO ZA BORBU", "TIME FREEZE":"ZAUSTAVI VREME", "FRESH BOARD":"NOVA TABLA", "OVERCHARGE":"PREPUNJAVANJE",
+"Stop the enemy for 8s":"Zaustavi protivnika na 8 s", "A new field of letters":"Potpuno nova tabla slova", "Double your next word":"Dupla energija sledeće reči",
+"TAP TO EQUIP":"DODIRNI ZA IZBOR", "ONE FREE USE PER DUEL":"JEDNOM BESPLATNO PO BORBI", "BATTLE >":"U BORBU >",
+"LEVEL %d  >  %d":"NIVO %d  >  %d", "DAMAGE":"ŠTETA", "PROTECTION":"ZAŠTITA", "HEALING":"LEČENJE",
+"CHARGE   %d ENERGY":"PUNJENJE   %d ENERGIJE", "MAX LEVEL":"NAJVIŠI NIVO", "UPGRADE  ◈ %d":"UNAPREDI  ◈ %d", "Fully upgraded":"Potpuno unapređeno", "Earn coins in campaign":"Osvoji novčiće u kampanji", "Balance after: %d":"Preostaje: %d",
+"YOU":"TI", "WARDEN":"ČUVAR", "SENTINEL":"STRAŽAR", "READY":"SPREMNO", "FROZEN  %.1fs":"ZAUSTAVLJEN  %.1f s", "INCOMING  %.1fs":"NAPAD ZA  %.1f s", "Next attack  %ds":"Napad za  %d s",
+"SOUND":"ZVUK", "HAPTICS":"VIBRACIJA", "REDUCED MOTION":"MANJE ANIMACIJA", "ON":"DA", "OFF":"NE", "HOW TO PLAY":"KAKO SE IGRA", "CREDITS":"AUTORI I LICENCE",
+"INTERFACE LANGUAGE":"JEZIK MENIJA", "WORD DICTIONARY":"REČNIK ZA IGRU", "Applies to new duels. Saved duels keep their dictionary.":"Važi za nove borbe. Sačuvana borba zadržava svoj rečnik.", "Offline dictionaries  •  v0.1.1":"Rečnici bez interneta  •  v0.1.1",
+"%d words found   •   Best: %s":"Pronađeno reči: %d   •   Najduža: %s", "Your discoveries will appear here after a duel.":"Pronađene reči pojaviće se ovde posle borbe.", "PAGE %d":"STRANA %d",
+"PAUSED":"PAUZA", "Your duel is safely paused.":"Borba je pauzirana.", "Progress is saved on this device.":"Napredak je sačuvan na ovom uređaju.",
+"WORDS BECOME POWER":"REČI POSTAJU SNAGA", "Link neighboring letters, including diagonals.":"Spajaj susedna slova, uključujući dijagonale.",
+"Release to submit; drag back to undo a letter.":"Pusti prst da potvrdiš; vrati se da ukloniš slovo.", "Colors charge the matching abilities. Tap READY.":"Boje pune sposobnosti. Dodirni kada su SPREMNE.",
+"Long words hit harder. Find each word once per duel.":"Duge reči jače udaraju. Svaka važi jednom po borbi.", "Tap letters + ✓ also works. HINT reveals a path.":"Može i dodir slova + ✓. Sijalica otkriva reč.",
+"An original offline word-combat adventure.":"Originalna avantura borbe rečima, bez interneta.", "Built with Godot 4.7.2 (MIT).":"Napravljeno u Godotu 4.7.2 (MIT).",
+"English: SCOWL · Serbian: LibreOffice (MPL-2.0).":"Engleski: SCOWL · Srpski: LibreOffice (MPL-2.0).", "Cinzel / Lato: SIL Open Font License.":"Cinzel / Lato: SIL Open Font License.",
+"Original AI-assisted art and synthesized sound.":"Originalne AI ilustracije i sintetisan zvuk.", "Full notices included in the project and app package.":"Potpune licence su u projektu i paketu aplikacije.",
+"VICTORY":"POBEDA", "DEFEATED":"PORAZ", "A new word. A better moment. Try again.":"Nova reč, nova prilika. Pokušaj ponovo.", "%d words  •  Best: %s":"Reči: %d  •  Najduža: %s", "+%d coins   •   %.0f seconds":"+%d novčića   •   %.0f sekundi", "The observatory is free. Campaign complete!":"Opservatorija je slobodna. Kampanja je završena!",
+"START A NEW DUEL?":"ZAPOČNI NOVU BORBU?", "Your unfinished duel will be replaced.":"Nedovršena borba biće zamenjena.", "Your coins and upgrades are safe.":"Novčići i unapređenja ostaju sačuvani.", "LEAVE THE GAME?":"IZAĐI IZ IGRE?", "Your progress has been saved.":"Napredak je sačuvan.",
+"MENU":"MENI", "HELP":"POMOĆ", "RESUME":"NASTAVI", "MAP":"MAPA", "NEXT >":"DALJE >", "RETRY":"PONOVI", "CANCEL":"ODUSTANI", "START":"POČNI", "BACK":"NAZAD", "QUIT":"IZAĐI", "GOT IT":"RAZUMEM",
+"%s upgraded to level %d":"%s: unapređeno na nivo %d", "Use at least three letters":"Spoji najmanje tri slova", "Not in the selected dictionary":"Nema te reči u izabranom rečniku", "Already found — try a different word":"Već pronađena — pokušaj drugu reč",
+"%s  •  %d damage%s":"%s  •  %d štete%s", "  •  Board refreshed":"  •  Nova tabla", "%s needs %d matching energy":"%s: potrebno %d energije iste boje", "Your shield is already active":"Štit je već aktivan", "Health is already full":"Zdravlje je već puno",
+"Pulse fired!":"Impuls ispaljen!", "Shield ready":"Štit je spreman", "Enemy attack interrupted":"Protivnikov napad je prekinut", "Health restored":"Zdravlje je obnovljeno", "Shield absorbed the attack":"Štit je upio napad", "Enemy hit  −%d HP":"Protivnik pogađa  −%d HP",
+"Time frozen — keep finding words":"Vreme stoji — nastavi da tražiš reči", "Fresh board — new possibilities":"Nova tabla — nove mogućnosti", "Next word gives double energy":"Sledeća reč daje duplu energiju", "Try %s — follow the highlighted letters":"Pokušaj %s — prati označena slova",
+"Could not save progress on this device":"Napredak nije sačuvan na ovom uređaju", "Old duel could not be restored. Start a new one.":"Stara borba ne može da se nastavi. Započni novu."
+}
+
+static func translate(value: String, language: String) -> String:
+	return SR.get(value,value) if language == "sr" else value

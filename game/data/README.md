@@ -17,3 +17,14 @@ Rebuild from the unchanged archive, from repo root:
 ```
 
 Dictionary data is committed; players and developers do not need to download it separately.
+
+## Serbian Latin — test dictionary, 0.1.1
+
+- Source: LibreOffice/dictionaries, **sr/** at commit `5fe575dbcfeb789e2ab2d9731b88ac0dacc4f453`.
+- [Upstream README and licensing](https://github.com/LibreOffice/dictionaries/blob/5fe575dbcfeb789e2ab2d9731b88ac0dacc4f453/sr/README.txt). Author: Milutin Smiljanic. We elect **MPL-2.0** from the upstream license alternatives. This license covers the dictionary source and derived word list, not unrelated game code.
+- Unmodified `sr-Latn.dic`, `sr-Latn.aff`, README are retained in `tools/dictionaries/sr/`. License and source notice also ship in `game/licenses/` inside the APK.
+- Build: `node tools/build-serbian-dictionary.cjs`. Requires only Node built-ins, no network. Applies the pinned numeric prefix/suffix rules and cross products; excludes uppercase source entries, punctuation, abbreviations containing punctuation, and foreign letters. Keeps **3–12 Serbian alphabet tiles** per word. No general guarantee that every colloquial word is included or that every homograph is suitable for a word game.
+- **1,740,276 forms**, including noun cases and verb inflections. The uncompressed UTF-8/LF list is 19,373,889 bytes, SHA256 `515ac56e66dfdcb272116cac546dc72230a8da6a38a88fa089bf1f44eb3a6a91`.
+- Stored as `serbian.txt.gz` (4,057,209 bytes) to avoid a large uncompressed Git asset. Its complete preferred source and reproduction script are included. No LFS needed: every new binary is under 10 MiB.
+- Č, Ć, Š, Đ, Ž and single-tile **LJ, NJ, DŽ**. At least three selected tiles; energy and damage use the number of selected tiles. Tutorial begins with KAMEN. This is a spelling resource for testing, not a curated tournament word list or definitions database.
+- Runtime uses sorted strings and binary search with a short prefix index, avoiding a large per-word hash map. Dictionary loading happens on a background thread and both selected dictionaries can be cached. UI and dictionary choices are independent. Each saved duel records its dictionary; 0.1.0 saves default to English.

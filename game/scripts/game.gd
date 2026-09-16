@@ -3,11 +3,14 @@ extends Control
 const Lexicon = preload("res://scripts/lexicon.gd")
 const SaveData = preload("res://scripts/save_data.gd")
 const Sound = preload("res://scripts/sound.gd")
+const Ornaments = preload("res://scripts/ornaments.gd")
+const Portrait = preload("res://scripts/portrait.gd")
+const Localization = preload("res://scripts/localization.gd")
 const Actor = preload("res://scripts/actor.gd")
 const CREAM := Color("fff1ce")
 const GOLD := Color("f3c569")
 const INK := Color("10283d")
-const COLORS := [Color("f6cc70"),Color("8fd7f6"),Color("c6a2f2"),Color("91dfb8")]
+const COLORS := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
 const NAMES := ["PULSE","AEGIS","ARC","MEND"]
 const ROLES := ["Direct energy blast","Block the next attack","Strike and interrupt","Restore your health"]
 const COSTS := [4,5,7,5]
@@ -22,6 +25,9 @@ var arena: Texture2D = preload("res://assets/art/arena.png")
 var map_art: Texture2D = preload("res://assets/art/map.png")
 var fighters: Texture2D = preload("res://assets/art/fighters.png")
 var lex = Lexicon.new(false)
+var lexicons: Dictionary = {}
+var portraits: Array[Sprite2D] = []
+var tap_composition := false
 var loading := true
 var dictionary_thread: Thread
 var save = SaveData.new()
@@ -35,6 +41,7 @@ var mission := 0
 var chapter := 0
 var overlay := ""
 var buttons: Array[Dictionary] = []
+var buttons_state := ""
 var hitboxes: Array[Rect2] = []
 var pressed_action := ""
 var pressed_value := -1
@@ -74,15 +81,18 @@ var shuffled := 0
 var journal_page := 0
 var autosave_clock := 0.0
 var fps_label := false
+var debug_sample_at := 0
 
 func _ready() -> void:
 	Engine.max_fps = 60
 	Input.use_accumulated_input = false
 	var heading := FontVariation.new()
 	heading.base_font = title_font
-	heading.variation_opentype = {"wght":600}
+	heading.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"):800}
 	title_font = heading
 	save.load_game()
+	lex = Lexicon.new(false, save.data.word_language)
+	lexicons[lex.language] = lex
 	mission = save.data.unlocked
 	chapter = mission / 4
 	sfx = Sound.new()
@@ -96,6 +106,11 @@ func _ready() -> void:
 	add_child(enemy_actor)
 	hero.z_index = -1
 	enemy_actor.z_index = -1
+	for opponent in [false,true]:
+		var portrait = Portrait.new()
+		portrait.setup(fighters,opponent)
+		add_child(portrait)
+		portraits.append(portrait)
 	# Background is drawn by a sibling behind both actors; HUD is drawn by this Control.
 	var backdrop := Node2D.new()
 	backdrop.name = "Backdrop"
@@ -121,6 +136,20 @@ func finish_loading() -> void:
 		print("WarOfWords: ready")
 	queue_redraw()
 
+func select_dictionary(code: String) -> void:
+	if lexicons.has(code):
+		lex = lexicons[code]
+		return
+	loading = true
+	lex = Lexicon.new(false,code)
+	lexicons[code] = lex
+	dictionary_thread = Thread.new()
+	dictionary_thread.start(lex.load_dictionary)
+	await finish_loading()
+
+func t(value: String) -> String:
+	return Localization.translate(value,save.data.get("ui_language","en"))
+
 func _exit_tree() -> void:
 	if dictionary_thread != null:
 		dictionary_thread.wait_to_finish()
@@ -140,12 +169,15 @@ func _notification(what: int) -> void:
 		get_tree().quit()
 
 func _process(delta: float) -> void:
+	if OS.is_debug_build() and Time.get_ticks_msec()-debug_sample_at >= 15000:
+		debug_sample_at=Time.get_ticks_msec()
+		print("WarOfWords: performance screen=%s fps=%d draw_calls=%d" % [screen,Engine.get_frames_per_second(),RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
 	clock += delta
 	notice_time = maxf(0,notice_time-delta)
 	hint_time = maxf(0,hint_time-delta)
 	attack_flash = maxf(0,attack_flash-delta)
 	hero_flash = maxf(0,hero_flash-delta)
-	var active := screen == "battle" and overlay.is_empty() and not ended
+	var active := screen == "battle" and overlay.is_empty() and not ended and not loading
 	if active:
 		duration += delta
 		if freeze > 0:
@@ -172,13 +204,16 @@ func update_actors() -> void:
 		return
 	hero.visible = screen in ["home","battle","arsenal","powers"]
 	enemy_actor.visible = screen == "battle"
+	for i in portraits.size():
+		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
+		portraits[i].position = Vector2(44 if i == 0 else size.x-44,33)
 	var bob := 0.0 if save.data.calm else sin(clock*2.0)*1.3
 	if screen == "battle":
-		var actor_height := 135.0
+		var actor_height := 137.0
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
 		enemy_actor.scale = hero.scale
-		hero.position = Vector2(size.x*0.19,110+bob)
-		enemy_actor.position = Vector2(size.x*0.81,108-bob)
+		hero.position = Vector2(size.x*0.20,119+bob)
+		enemy_actor.position = Vector2(size.x*0.80,117-bob)
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 else Color.WHITE
 		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 else Color(1,1-float(mission%4)*0.055,1)
 	else:
@@ -193,7 +228,7 @@ func _draw_backdrop(node: Node2D) -> void:
 	var tex := map_art if screen == "campaign" else arena
 	var target := Rect2(Vector2.ZERO,size)
 	if screen == "battle":
-		target.size.y = 188
+		target.size.y = 180
 	var ratio := target.size.x/target.size.y
 	var tw := float(tex.get_width())
 	var th := float(tex.get_height())
@@ -221,7 +256,8 @@ func panel(rect: Rect2, color: Color = INK, border: Color = GOLD, radius: int = 
 	var inner := rect.grow(-4)
 	draw_line(inner.position,Vector2(inner.end.x,inner.position.y),Color(border,0.23),1,true)
 
-func text(value: String, rect: Rect2, font_size: int = 22, color: Color = CREAM, heading: bool = false, align: int = HORIZONTAL_ALIGNMENT_CENTER) -> void:
+func text(value: String, rect: Rect2, font_size: int = 22, color: Color = CREAM, heading: bool = false, align: int = HORIZONTAL_ALIGNMENT_CENTER, localize: bool = true) -> void:
+	if localize: value = t(value)
 	var face := title_font if heading else font
 	var actual := font_size
 	while face.get_string_size(value,align,-1,actual).x > rect.size.x and actual > 16:
@@ -247,37 +283,10 @@ func header(title: String, back_to: String = "home") -> void:
 	text("%d   ◈" % int(save.data.coins),Rect2(size.x-169,16,139,50),26,GOLD)
 
 func icon(kind: int, center: Vector2, radius: float, color: Color = GOLD) -> void:
-	draw_circle(center,radius,Color("123249"))
-	draw_arc(center,radius,0,TAU,64,color,3,true)
-	draw_arc(center,radius-5,0,TAU,64,Color(color,0.3),1,true)
-	var r := radius*0.6
-	match kind:
-		0:
-			draw_circle(center+Vector2(r*0.12,0),r*0.45,color)
-			for y in [-0.5,0.0,0.5]:
-				draw_line(center+Vector2(-r,y*r),center+Vector2(0,y*r*0.25),color,3,true)
-		1:
-			var points := PackedVector2Array([center+Vector2(-r,-r*.6),center+Vector2(0,-r),center+Vector2(r,-r*.6),center+Vector2(r*.7,r*.4),center+Vector2(0,r),center+Vector2(-r*.7,r*.4),center+Vector2(-r,-r*.6)])
-			draw_colored_polygon(points,Color(color,0.22))
-			draw_polyline(points,color,3,true)
-		2:
-			var points := PackedVector2Array([center+Vector2(r*.3,-r),center+Vector2(-r*.4,0),center+Vector2(r*.35,0),center+Vector2(-r*.3,r)])
-			draw_polyline(points,color,6,true)
-		3:
-			draw_line(center-Vector2(r,0),center+Vector2(r,0),color,8,true)
-			draw_line(center-Vector2(0,r),center+Vector2(0,r),color,8,true)
-		4:
-			for a in range(0,180,60):
-				var v := Vector2.from_angle(deg_to_rad(a))*r
-				draw_line(center-v,center+v,color,3,true)
-		5:
-			draw_arc(center,r,-PI*.7,PI*.7,30,color,4,true)
-			draw_line(center+Vector2(-r*.6,-r*.8),center+Vector2(-r*.65,-r*.05),color,4,true)
-		6:
-			var pts := PackedVector2Array([center+Vector2(0,-r),center+Vector2(r*.7,0),center+Vector2(0,r),center+Vector2(-r*.7,0)])
-			draw_colored_polygon(pts,color)
+	Ornaments.medallion(self,kind,center,radius,color)
 
 func _draw() -> void:
+	buttons_state = screen+"|"+overlay
 	buttons.clear()
 	hitboxes.clear()
 	if loading:
@@ -298,10 +307,10 @@ func _draw() -> void:
 	if not overlay.is_empty():
 		draw_overlay()
 	if notice_time > 0:
-		var width := minf(640,size.x-80)
-		var notice_y := 82.0 if screen=="battle" else size.y-66
-		panel(Rect2((size.x-width)/2,notice_y,width,46),Color("e9c77e"),CREAM)
-		text(notice,Rect2((size.x-width)/2+10,notice_y,width-20,46),21,INK)
+		var width := minf(570,size.x-80)
+		var notice_y := 133.0 if screen=="battle" else size.y-66
+		panel(Rect2((size.x-width)/2,notice_y,width,38),Color("e9c77e"),CREAM)
+		text(notice,Rect2((size.x-width)/2+10,notice_y,width-20,38),21,INK)
 	if fps_label:
 		text(str(Engine.get_frames_per_second()),Rect2(0,0,60,24),16)
 
@@ -351,8 +360,8 @@ func draw_campaign() -> void:
 		buttons.append({"rect":Rect2(p-Vector2(42,42),Vector2(84,84)),"id":"mission","value":level,"enabled":available})
 	var y := size.y-134
 	panel(Rect2(24,y,size.x-48,112))
-	text(ENEMIES[mission].to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
-	text("CPU  •  %s  •  +%d COINS" % ["BOSS" if mission%4==3 else "DUEL",40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+51,size.x-320,35),19,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
+	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
+	text("CPU  •  %s  •  +%d COINS" % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+51,size.x-320,35),19,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter > 0:
 		action("<",Rect2(23,86,50,46),"chapter",chapter-1)
@@ -371,7 +380,7 @@ func draw_arsenal() -> void:
 		text("EQUIPPED",Rect2(rect.position.x,320,width,28),18,COLORS[i])
 		buttons.append({"rect":rect,"id":"select","value":i,"enabled":true})
 	panel(Rect2(size.x*.2,368,size.x*.6,35),INK,Color("547283"),8)
-	text(ROLES[selected]+"  •  %d ENERGY" % COSTS[selected],Rect2(20,369,size.x-40,34),22)
+	text(t(ROLES[selected])+t("  •  %d ENERGY") % COSTS[selected],Rect2(20,369,size.x-40,34),22)
 	action("POWER-UPS",Rect2(24,size.y-65,212,48),"powers")
 	action("UPGRADE >",Rect2(size.x-236,size.y-65,212,48),"upgrades",-1,true)
 
@@ -411,78 +420,103 @@ func draw_upgrades() -> void:
 	panel(Rect2(x,90,width,344))
 	text("LEVEL %d  >  %d" % [level,mini(8,level+1)],Rect2(x+12,106,width-24,50),32,GOLD,true)
 	text(["DAMAGE","PROTECTION","DAMAGE","HEALING"][selected],Rect2(x+16,169,width-32,30),23)
-	text(str(effect(selected)) if level==8 else "%d  >  %d" % [effect(selected),effect(selected)+[8,5,6,6][selected]],Rect2(x+16,206,width-32,48),35,COLORS[selected])
+	text(str(effect(selected)) if level==8 else t("%d  >  %d") % [effect(selected),effect(selected)+[8,5,6,6][selected]],Rect2(x+16,206,width-32,48),35,COLORS[selected])
 	text("CHARGE   %d ENERGY" % COSTS[selected],Rect2(x+16,265,width-32,34),23)
-	action("MAX LEVEL" if level==8 else "UPGRADE  ◈ %d" % price,Rect2(x+20,319,width-40,56),"upgrade",selected,true,level<8 and save.data.coins>=price)
-	text("Fully upgraded" if level==8 else "Earn coins in campaign" if save.data.coins<price else "Balance after: %d" % (int(save.data.coins)-price),Rect2(x+12,386,width-24,29),19)
+	action("MAX LEVEL" if level==8 else t("UPGRADE  ◈ %d") % price,Rect2(x+20,319,width-40,56),"upgrade",selected,true,level<8 and save.data.coins>=price)
+	text("Fully upgraded" if level==8 else "Earn coins in campaign" if save.data.coins<price else t("Balance after: %d") % (int(save.data.coins)-price),Rect2(x+12,386,width-24,29),19)
 
 func board_rect() -> Rect2:
-	return Rect2((size.x-428)/2,218,428,242)
+	return Rect2((size.x-454)/2,205,454,256)
 
 func tile_center(i: int) -> Vector2:
-	return board_rect().position+Vector2((i%7)*62+28,(i/7)*62+28)
+	return board_rect().position+Vector2((i%7)*65+32,(i/7)*65+32)
+
+func health_bar(rect: Rect2, current: int, maximum: int, opponent: bool) -> void:
+	Ornaments.plaque(self,rect)
+	var start := rect.position.x+17 if opponent else rect.position.x+38
+	var width := rect.size.x-55
+	var label := t("WARDEN" if mission%4==3 else "SENTINEL") + " · CPU" if opponent else t("YOU")
+	text(label,Rect2(start,rect.position.y+1,width-70,20),18,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
+	text("%d/%d" % [current,maximum],Rect2(start+width-82,rect.position.y+1,82,20),18,CREAM)
+	var bar := Rect2(start,rect.position.y+23,width,11)
+	draw_style_box(health_style(Color("060f20")),bar.grow(1))
+	var colors := [Color("ffa26e"),Color("ff6046"),Color("ba2e24")] if opponent else [Color("d1ff78"),Color("88e344"),Color("439d25")]
+	var fill := Rect2(bar.position,Vector2(bar.size.x*float(current)/maximum,11))
+	draw_polygon(PackedVector2Array([fill.position,Vector2(fill.end.x,fill.position.y),fill.end,Vector2(fill.position.x,fill.end.y)]),PackedColorArray([colors[0],colors[0],colors[2],colors[2]]))
+	draw_line(fill.position+Vector2(0,1),Vector2(fill.end.x,fill.position.y+1),colors[0],1)
+	var portrait_center := Vector2(size.x-44 if opponent else 44,33)
+	Ornaments.gradient_disc(self,portrait_center,28,Color("fff0b6"),Color("97703b"))
+	draw_circle(portrait_center,25,INK)
+
+func health_style(color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = color
+	style.set_corner_radius_all(4)
+	return style
 
 func draw_battle() -> void:
-	panel(Rect2(0,184,size.x,size.y-184),Color("17374c"),Color("b79456"),0)
-	panel(Rect2(24,12,size.x*.36,50),Color("0f273d"))
-	panel(Rect2(size.x-size.x*.36-24,12,size.x*.36,50),Color("0f273d"))
-	text("YOU",Rect2(37,14,80,24),20,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
-	text("%d / 100" % hp,Rect2(size.x*.36-99,14,108,24),20)
-	var left_bar := Rect2(38,43,size.x*.36-28,9)
-	draw_rect(left_bar,Color("29445a"))
-	draw_rect(Rect2(left_bar.position,Vector2(left_bar.size.x*hp/100.0,9)),Color("89d675"))
-	var ex := size.x-size.x*.36-10
-	text("%s  •  CPU" % ("WARDEN" if mission%4==3 else "SENTINEL"),Rect2(ex,14,size.x*.36-130,24),18,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
-	text("%d / %d" % [foe_hp,foe_max],Rect2(size.x-137,14,99,24),20)
-	var enemy_bar := Rect2(ex,43,size.x*.36-28,9)
-	draw_rect(enemy_bar,Color("29445a"))
-	draw_rect(Rect2(enemy_bar.position,Vector2(enemy_bar.size.x*foe_hp/foe_max,9)),Color("ef936b"))
-	action("II",Rect2(size.x/2-27,11,54,51),"pause")
-	var intent := "FROZEN  %.1fs" % freeze if freeze > 0 else "INCOMING  %.1fs" % countdown if countdown<3 else "Next attack  %ds" % int(ceil(countdown))
-	panel(Rect2(size.x/2-126,143,252,33),Color("63392f") if countdown<3 and freeze<=0 else INK)
-	text(intent,Rect2(size.x/2-121,143,242,33),18,CREAM)
+	# The frame, medallions and tokens use the approved battle illustration's visual language.
+	panel(Rect2(0,177,size.x,size.y-177),Color("102b41"),Color("a78048"),0)
+	draw_texture_rect(Ornaments.WEAVE,Rect2(2,179,size.x-4,size.y-181),true)
+	var board := board_rect()
+	Ornaments.plaque(self,Rect2(board.position-Vector2(7,9),board.size+Vector2(14,17)))
+	for x in 6:
+		for y in 3:
+			Ornaments.gem(self,board.position+Vector2(64.5+x*65,64.5+y*65),3)
+	var health_width := minf(350,size.x*.365)
+	health_bar(Rect2(43,10,health_width,40),hp,100,false)
+	health_bar(Rect2(size.x-health_width-43,10,health_width,40),foe_hp,foe_max,true)
+	Ornaments.jewel(self,Vector2(size.x/2,33),24,Color("245573"))
+	text("II",Rect2(size.x/2-20,10,40,44),29,GOLD,true)
+	buttons.append({"rect":Rect2(size.x/2-27,6,54,54),"id":"pause","value":-1,"enabled":true})
+	var intent := t("FROZEN  %.1fs") % freeze if freeze > 0 else t("INCOMING  %.1fs") % countdown if countdown<3 else t("Next attack  %ds") % int(ceil(countdown))
+	if notice_time <= 0:
+		panel(Rect2(size.x/2-113,136,226,32),Color("63392f") if countdown<3 and freeze<=0 else INK,GOLD,12)
+		text(intent,Rect2(size.x/2-108,136,216,32),18)
 	if shield>0:
-		draw_arc(Vector2(size.x*.19,115),61,-PI*.5,PI*.5,32,COLORS[1],4,true)
-	var word := ""
-	for i in path:
-		word += lex.letters[i]
-	text(word if not word.is_empty() else "LINK A WORD",Rect2(size.x/2-145,180,290,34),24,GOLD,true)
-	action("×",Rect2(size.x/2-207,174,48,42),"clear")
-	action("✓",Rect2(size.x/2+159,174,48,42),"submit")
+		draw_arc(Vector2(size.x*.20,120),55,-PI*.5,PI*.5,32,COLORS[1],3,true)
+	if not path.is_empty():
+		var word := ""
+		for i in path: word += lex.letters[i]
+		Ornaments.plaque(self,Rect2(size.x/2-158,173,316,32))
+		text(word,Rect2(size.x/2-148,174,296,30),24,GOLD,true,HORIZONTAL_ALIGNMENT_CENTER,false)
+		if tap_composition and not (dragging and drag_moved):
+			action("×",Rect2(size.x/2-216,161,49,43),"clear")
+			action("✓",Rect2(size.x/2+167,161,49,43),"submit")
 	for i in 28:
 		var p := tile_center(i)
-		var color: Color = COLORS[lex.types[i]]
-		var chosen := i in path
-		draw_circle(p+Vector2(0,3),29,Color("091e30"))
-		draw_circle(p,28,color.lightened(0.18) if chosen else color)
-		draw_arc(p,27,0,TAU,48,CREAM if chosen else Color("e2c185"),2,true)
+		Ornaments.jewel(self,p,29.5,COLORS[lex.types[i]],i in path)
 		if hint_time>0 and i in hint_path:
-			draw_arc(p,30,0,TAU,48,CREAM,3,true)
-		hitboxes.append(Rect2(p-Vector2(29,29),Vector2(58,58)))
+			draw_arc(p,32,0,TAU,48,CREAM,2,true)
+		hitboxes.append(Rect2(p-Vector2(30,30),Vector2(60,60)))
 	if path.size()>1:
 		var points := PackedVector2Array()
-		for i in path:
-			points.append(tile_center(i))
-		draw_polyline(points,Color(1,0.98,0.78,0.76),6,true)
+		for i in path: points.append(tile_center(i))
+		draw_polyline(points,Color(1,.79,.32,.5),9,true)
+		draw_polyline(points,Color("fff2c2"),4,true)
 	for i in 28:
 		var p := tile_center(i)
-		text(lex.letters[i],Rect2(p.x-25,p.y-26,50,43),31,INK)
-		text(["ϟ","◆","≈","+"][lex.types[i]],Rect2(p.x-12,p.y+12,24,15),14,INK)
+		text(lex.letters[i],Rect2(p.x-26,p.y-27,52,43),32 if lex.letters[i].length()==1 else 25,Color("071723"),true)
+	for i in 28:
+		var p := tile_center(i)
+		text(["ϟ","◆","≈","+"][lex.types[i]],Rect2(p.x-12,p.y+12,24,16),16,Color("193a46"))
 	for i in 4:
-		var left := i<2
-		var x := size.x/2-366 if left else size.x/2+234
-		var y := 218.0+float(i%2)*97
-		var rect := Rect2(x,y,132,89)
+		var center := ability_center(i)
 		var ready: bool = energy[i] >= COSTS[i]
-		panel(rect,Color("785b26") if ready else INK,COLORS[i])
-		icon(i,Vector2(x+30,y+32),23,COLORS[i])
-		text(NAMES[i],Rect2(x+57,y+8,70,31),19,CREAM,true)
-		text("READY" if ready else "%d/%d" % [energy[i],COSTS[i]],Rect2(x+57,y+38,70,25),19,GOLD if ready else CREAM)
-		draw_rect(Rect2(x+12,y+72,108,5),Color("294152"))
-		draw_rect(Rect2(x+12,y+72,108*minf(1,float(energy[i])/COSTS[i]),5),COLORS[i])
-		buttons.append({"rect":rect,"id":"fire","value":i,"enabled":true})
-	action("HINT",Rect2(size.x/2-366,420,132,42),"hint")
-	action("USED" if boost_used else ["FREEZE","REFRESH","×2 WORD"][save.data.selected_power],Rect2(size.x/2+234,420,132,42),"boost",-1,not boost_used,not boost_used)
+		Ornaments.medallion(self,i,center,47,COLORS[i],energy[i],COSTS[i])
+		var label := Rect2(center.x-58,center.y+29,116,43)
+		Ornaments.plaque(self,label)
+		text(NAMES[i],Rect2(label.position.x+5,label.position.y+1,106,21),19,CREAM,true)
+		text("READY" if ready else t("%d/%d") % [energy[i],COSTS[i]],Rect2(label.position.x+5,label.position.y+21,106,21),18,GOLD if ready else CREAM)
+		buttons.append({"rect":Rect2(center-Vector2(59,48),Vector2(118,122)),"id":"fire","value":i,"enabled":true})
+	var help_center := Vector2(size.x/2-313,446)
+	var power_center := Vector2(size.x/2+294,446)
+	Ornaments.medallion(self,7,help_center,25,GOLD)
+	buttons.append({"rect":Rect2(help_center-Vector2(30,27),Vector2(60,54)),"id":"hint","value":-1,"enabled":true})
+	Ornaments.plaque(self,Rect2(power_center.x-10,426,77,40))
+	Ornaments.medallion(self,4+save.data.selected_power,power_center,25,COLORS[1],-1,1,boost_used)
+	text("×0" if boost_used else "×1",Rect2(power_center.x+26,427,35,38),23,Color("728894") if boost_used else CREAM)
+	buttons.append({"rect":Rect2(power_center-Vector2(29,27),Vector2(99,54)),"id":"boost","value":-1,"enabled":not boost_used})
 	for p in projectiles:
 		var progress: float = p.time/0.5
 		var start_x: float = size.x*(0.24 if p.player else 0.77)
@@ -491,19 +525,37 @@ func draw_battle() -> void:
 		draw_circle(location,10*(1-progress*0.4),p.color)
 		draw_arc(location,15,0,TAU,20,Color(p.color,0.4),4,true)
 	for particle in sparks:
-		var t: float = particle.time
-		var location: Vector2 = particle.pos+particle.vel*t+Vector2(0,80)*t*t
-		draw_circle(location,4*(1-t/0.7),Color(particle.color,1-t/0.7))
+		var time: float = particle.time
+		var location: Vector2 = particle.pos+particle.vel*time+Vector2(0,80)*time*time
+		draw_circle(location,4*(1-time/0.7),Color(particle.color,1-time/0.7))
+
+func ability_center(i: int) -> Vector2:
+	return Vector2(size.x/2+(-313 if i<2 else 313),236+(i%2)*111)
 
 func draw_settings() -> void:
 	header("OPTIONS")
-	var x := size.x/2-240
-	action("SOUND  " + ("ON" if save.data.sound else "OFF"),Rect2(x,99,480,55),"sound")
-	action("HAPTICS  " + ("ON" if save.data.haptics else "OFF"),Rect2(x,170,480,55),"haptics")
-	action("REDUCED MOTION  " + ("ON" if save.data.calm else "OFF"),Rect2(x,241,480,55),"calm")
-	action("HOW TO PLAY",Rect2(x,312,230,52),"help")
-	action("CREDITS",Rect2(x+250,312,230,52),"credits")
-	text("English  •  Offline  •  v0.1.0",Rect2(x,390,480,35),21,GOLD)
+	var gap := 20.0
+	var width := (size.x-72-gap)/2
+	var right := 36+width+gap
+	panel(Rect2(28,84,width+16,308))
+	panel(Rect2(right-8,84,width+16,308))
+	for i in 3:
+		var key: String = ["sound","haptics","calm"][i]
+		var label := t(["SOUND","HAPTICS","REDUCED MOTION"][i])
+		action(label+"   "+t("ON" if save.data[key] else "OFF"),Rect2(38,105+i*73,width-4,56),key,-1,save.data[key])
+	text("INTERFACE LANGUAGE",Rect2(right,99,width,30),22,GOLD,true)
+	var half := (width-10)/2
+	action("English",Rect2(right,137,half,51),"ui_language",0,save.data.ui_language=="en")
+	action("Srpski",Rect2(right+half+10,137,half,51),"ui_language",1,save.data.ui_language=="sr")
+	text("WORD DICTIONARY",Rect2(right,210,width,30),22,GOLD,true)
+	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
+	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
+	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,312,width,28),19)
+	text("Offline dictionaries  •  v0.1.1",Rect2(38,336,width-4,32),18)
+	panel(Rect2(28,394,size.x-56,29),INK,Color("547283"),8)
+	text("Applies to new duels. Saved duels keep their dictionary.",Rect2(34,394,size.x-68,29),18,CREAM)
+	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
+	action("CREDITS",Rect2(right,427,width,46),"credits")
 
 func draw_journal() -> void:
 	header("WORD JOURNAL")
@@ -517,7 +569,7 @@ func draw_journal() -> void:
 		var word: String = list[journal_page*12+i]
 		var column := i%3
 		var row: int = i/3
-		text(word,Rect2(50+column*(size.x-100)/3,153+row*43,(size.x-120)/3,39),25,CREAM,true)
+		text(word,Rect2(50+column*(size.x-100)/3,153+row*43,(size.x-120)/3,39),25,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
 	action("<",Rect2(28,size.y-62,60,46),"journal_page",journal_page-1,false,journal_page>0)
 	text("PAGE %d" % (journal_page+1),Rect2(size.x/2-100,size.y-62,200,46),21)
 	action(">",Rect2(size.x-88,size.y-62,60,46),"journal_page",journal_page+1,false,(journal_page+1)*12<list.size())
@@ -538,10 +590,10 @@ func draw_overlay() -> void:
 			lines=["Link neighboring letters, including diagonals.","Release to submit; drag back to undo a letter.","Colors charge the matching abilities. Tap READY.","Long words hit harder. Find each word once per duel.","Tap letters + ✓ also works. HINT reveals a path."]
 		"credits":
 			title="WAR OF WORDS"
-			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL 2020.12.07 · 76,802 entries.","Cinzel / Lato: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Full notices included in the project and app package."]
+			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Cinzel / Lato: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Full notices included in the project and app package."]
 		"result":
 			title="VICTORY" if won else "DEFEATED"
-			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.","%d words  •  Best: %s" % [word_count,best_word if not best_word.is_empty() else "—"],"+%d coins   •   %.0f seconds" % [reward,duration]]
+			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.",t("%d words  •  Best: %s") % [word_count,best_word if not best_word.is_empty() else "—"],t("+%d coins   •   %.0f seconds") % [reward,duration]]
 			if won and mission==11:
 				lines.append("The observatory is free. Campaign complete!")
 		"replace":
@@ -558,9 +610,9 @@ func draw_overlay() -> void:
 	var middle := size.x/2
 	match overlay:
 		"pause":
-			action("MENU",Rect2(middle-270,y,155,51),"save_home")
-			action("HELP",Rect2(middle-100,y,150,51),"help")
-			action("RESUME",Rect2(middle+65,y,205,51),"resume",-1,true)
+			action("MENU",Rect2(middle-300,y,125,51),"save_home")
+			action("OPTIONS",Rect2(middle-165,y,190,51),"settings")
+			action("RESUME",Rect2(middle+45,y,255,51),"resume",-1,true)
 		"result":
 			action("MAP",Rect2(middle-275,y,140,51),"campaign")
 			action("UPGRADES",Rect2(middle-119,y,185,51),"upgrades")
@@ -603,6 +655,7 @@ func _input(event: InputEvent) -> void:
 
 func press(p: Vector2) -> void:
 	pressed_action=""; pressed_value=-1
+	if buttons_state != screen+"|"+overlay: return
 	if screen=="battle" and overlay.is_empty() and not ended:
 		for i in hitboxes.size():
 			if hitboxes[i].has_point(p):
@@ -626,6 +679,7 @@ func trace_point(p: Vector2) -> void:
 	for i in hitboxes.size():
 		if hitboxes[i].has_point(p) and (path.is_empty() or path.back()!=i):
 			drag_moved=true
+			tap_composition=false
 			add_letter(i)
 			return
 
@@ -634,10 +688,13 @@ func release(p: Vector2) -> void:
 		dragging=false
 		if drag_moved:
 			submit_word()
+		else:
+			tap_composition = not path.is_empty()
 		return
 	var id := pressed_action
 	var value := pressed_value
 	pressed_action=""; pressed_value=-1
+	if buttons_state != screen+"|"+overlay: return
 	for b in buttons:
 		if b.id==id and b.value==value and b.rect.has_point(p) and b.enabled:
 			sfx.play("tap")
@@ -655,6 +712,7 @@ func add_letter(i: int) -> void:
 		Input.vibrate_handheld(12)
 
 func dispatch(id: String, value: int = -1) -> void:
+	if OS.is_debug_build(): print("WarOfWords: action=%s screen=%s overlay=%s" % [id,screen,overlay])
 	match id:
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
@@ -685,6 +743,11 @@ func dispatch(id: String, value: int = -1) -> void:
 			save.data[id]=not save.data[id]
 			sfx.enabled=save.data.sound
 			save.save_game()
+		"ui_language":
+			save.data.ui_language = ["en","sr"][value]; save.save_game()
+		"word_language":
+			save.data.word_language = ["en","sr"][value]; save.save_game()
+			await select_dictionary(save.data.word_language)
 		"quit": persist_battle(); get_tree().quit()
 	queue_redraw()
 
@@ -693,7 +756,7 @@ func change_screen(target: String) -> void:
 		persist_battle()
 	previous=screen
 	screen=target
-	overlay=""; path.clear(); dragging=false
+	overlay=""; path.clear(); dragging=false; tap_composition=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
 	get_node("Backdrop").queue_redraw()
@@ -722,11 +785,12 @@ func upgrade() -> void:
 	save.data.levels[selected]+=1
 	save.save_game()
 	sfx.play("upgrade")
-	message("%s upgraded to level %d" % [NAMES[selected],save.data.levels[selected]])
+	message(t("%s upgraded to level %d") % [t(NAMES[selected]),save.data.levels[selected]])
 
 func start_battle() -> void:
 	if mission>save.data.unlocked:
 		return
+	await select_dictionary(save.data.word_language)
 	change_screen("battle")
 	hp=100; foe_max=72+mission*13+(35 if mission%4==3 else 0); foe_hp=foe_max
 	energy=[0,3,0,0]; shield=0; used.clear(); word_count=0; best_word=""
@@ -735,7 +799,7 @@ func start_battle() -> void:
 	projectiles.clear(); sparks.clear(); hint_path.clear(); path.clear()
 	lex.generate()
 	if not save.data.tutorial:
-		lex.letters.assign(Array("STONESTREAMLINEPLANETCARDSEN".split("")))
+		lex.letters.assign(Array(("KAMENVAREKASUNŠTITIGRVODAMOS" if lex.language=="sr" else "STONESTREAMLINEPLANETCARDSEN").split("")))
 		lex.find_words()
 		overlay="help"
 	persist_battle()
@@ -744,16 +808,17 @@ func interval() -> float:
 	return maxf(8,14-mission*0.42)
 
 func submit_word() -> void:
+	tap_composition=false
 	if path.size()<3:
-		message("Use at least three letters"); return
+		message("Use at least three letters"); path.clear(); return
 	var word: String = lex.validate_path(path)
 	if word.is_empty():
-		message("Not in the English dictionary"); path.clear(); return
+		message("Not in the selected dictionary"); path.clear(); return
 	if used.has(word):
 		message("Already found — try a different word"); path.clear(); return
 	used[word]=true; word_count+=1
 	if word.length()>best_word.length(): best_word=word
-	var multiplier := (2 if word.length()>=6 else 1)*(2 if surge else 1)
+	var multiplier := (2 if path.size()>=6 else 1)*(2 if surge else 1)
 	var gain := [0,0,0,0]
 	for i in path:
 		gain[lex.types[i]]+=multiplier
@@ -761,20 +826,20 @@ func submit_word() -> void:
 			sparks.append({"pos":tile_center(i),"vel":Vector2(randf_range(-50,50),randf_range(-80,-15)),"time":0.0,"color":COLORS[lex.types[i]]})
 	for i in 4: energy[i]=mini(COSTS[i],energy[i]+gain[i])
 	surge=false
-	var damage := word.length()+maxi(0,word.length()-4)*2
+	var damage := path.size()+maxi(0,path.size()-4)*2
 	foe_hp=maxi(0,foe_hp-damage)
 	attack_flash=0.2
 	projectiles.append({"player":true,"color":GOLD,"time":0.0})
 	sfx.play("word")
 	var refreshed: bool = lex.refill(path,used)
 	path.clear()
-	message("%s  •  %d damage%s" % [word,damage,"  •  Board refreshed" if refreshed else ""])
+	message(t("%s  •  %d damage%s") % [word,damage,t("  •  Board refreshed") if refreshed else ""])
 	if foe_hp<=0: finish(true)
 	else: persist_battle()
 
 func fire(i: int) -> void:
 	if ended or energy[i]<COSTS[i]:
-		message("%s needs %d matching energy" % [NAMES[i],COSTS[i]]); return
+		message(t("%s needs %d matching energy") % [t(NAMES[i]),COSTS[i]]); return
 	if i==1 and shield>0: message("Your shield is already active"); return
 	if i==3 and hp>=100: message("Health is already full"); return
 	energy[i]=0
@@ -801,7 +866,7 @@ func enemy_attack() -> void:
 	projectiles.append({"player":false,"color":COLORS[2],"time":0.0})
 	sfx.play("hit")
 	if save.data.haptics and OS.get_name()=="Android": Input.vibrate_handheld(45)
-	message("Shield absorbed the attack" if damage==0 else "Enemy hit  −%d HP" % damage)
+	message("Shield absorbed the attack" if damage==0 else t("Enemy hit  −%d HP") % damage)
 	if hp<=0: finish(false)
 
 func power_up() -> void:
@@ -825,7 +890,7 @@ func show_hint() -> void:
 	if solution.is_empty(): return
 	hint_path.assign(lex.solutions[solution])
 	hint_time=4
-	message("Try %s — follow the highlighted letters" % solution)
+	message(t("Try %s — follow the highlighted letters") % solution)
 
 func finish(victory: bool) -> void:
 	if ended: return
@@ -848,7 +913,7 @@ func finish(victory: bool) -> void:
 
 func persist_battle() -> void:
 	if screen=="battle" and not ended and lex.letters.size()==28:
-		save.data.battle={"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
+		save.data.battle={"dictionary_code":lex.language,"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
 	if not save.save_game(): message("Could not save progress on this device")
 
 func restore_battle() -> void:
@@ -856,6 +921,7 @@ func restore_battle() -> void:
 	if b.is_empty(): return
 	if not valid_snapshot(b):
 		save.data.battle={}; save.save_game(); message("Old duel could not be restored. Start a new one."); return
+	await select_dictionary(b.get("dictionary_code","en"))
 	change_screen("battle")
 	mission=int(b.mission); hp=int(b.hp); foe_hp=int(b.foe); foe_max=int(b.max)
 	energy.assign(b.energy); shield=int(b.shield); countdown=float(b.countdown)
@@ -877,28 +943,53 @@ func valid_snapshot(b: Dictionary) -> bool:
 		if not (b.energy[i] is int or b.energy[i] is float) or b.energy[i]<0 or b.energy[i]>COSTS[i]: return false
 	for word in b.used:
 		if not word is String: return false
+	if b.get("dictionary_code","en") not in ["en","sr"]: return false
+	var tile_lex = Lexicon.new(false,b.get("dictionary_code","en"))
 	for letter in b.letters:
-		if not letter is String or letter.length()!=1 or letter<"A" or letter>"Z": return false
+		if not letter is String or not tile_lex.valid_tile(letter): return false
 	for kind in b.types:
 		if not (kind is int or kind is float): return false
 		if int(kind)<0 or int(kind)>3 or float(int(kind))!=float(kind): return false
 	return int(b.mission)>=0 and int(b.mission)<12 and int(b.hp)>0 and int(b.hp)<=100 and int(b.foe)>0 and int(b.max)>0 and int(b.power) in [0,1,2]
 
 func message(value: String) -> void:
-	notice=value; notice_time=2.2
+	notice=t(value); notice_time=2.2
 
 func _run_visual_qa() -> void:
 	# Opt-in developer capture through Godot's renderer, never included as an automatic run.
 	while loading:
 		await get_tree().process_frame
+	save.path = "res://../.local/visual-progress.json"
+	save.data = save.defaults()
 	var directory := ProjectSettings.globalize_path("res://../.local/game-qa")
 	DirAccess.make_dir_recursive_absolute(directory)
 	for view in ["home","campaign","arsenal","powers","upgrades","battle"]:
-		if view=="battle": start_battle(); overlay="pause"
+		if view=="battle":
+			await start_battle()
+			energy.assign([4,3,3,2]); hp=84; foe_hp=56; overlay="pause"
 		else: change_screen(view)
 		await get_tree().process_frame
 		await get_tree().process_frame
 		if view=="battle": overlay=""; countdown=60
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(directory+"/"+view+".png")
+	path.assign([0,1,2,3,4]); tap_composition = true
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png(directory+"/battle-tap.png")
+	tap_composition = false; dragging = true; drag_moved = true
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png(directory+"/battle-slide.png")
+	change_screen("settings"); save.data.ui_language="sr"; save.data.word_language="sr"
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png(directory+"/settings-sr.png")
+	await select_dictionary("en")
+	change_screen("battle"); ended=false; countdown=60
+	lex.letters.assign(Array("MEND".split(""))+lex.letters.slice(4))
+	path.assign([0,1,2,3]); tap_composition=true
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png(directory+"/english-word-serbian-ui.png")
 	get_tree().quit()

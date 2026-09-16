@@ -13,6 +13,7 @@ func _initialize() -> void:
 	call_deferred("run_tests")
 
 func run_tests() -> void:
+	get_tree_watchdog()
 	var scene = load("res://main.tscn").instantiate()
 	root.add_child(scene)
 	await process_frame
@@ -122,5 +123,70 @@ func run_tests() -> void:
 				scene.enemy_attack()
 				if scene.energy[3]>=5: scene.fire(3)
 		check(scene.ended and scene.won,"playable completion mission %d" % (level+1))
+	# Old progress and in-progress English duels survive independent locale changes.
+	scene.mission=0; scene.start_battle(); scene.persist_battle()
+	var old_duel: Dictionary = scene.save.data.battle.duplicate(true)
+	old_duel.erase("dictionary_code")
+	check(scene.valid_snapshot(old_duel),"0.1.0 duel accepted without dictionary field")
+	scene.change_screen("settings")
+	scene.dispatch("ui_language",1)
+	check(scene.t("OPTIONS")=="PODEŠAVANJA" and scene.lex.language=="en","UI language does not change dictionary")
+	var sr_started := Time.get_ticks_msec()
+	await scene.dispatch("word_language",1)
+	print("Serbian load: %d ms; %d entries" % [Time.get_ticks_msec()-sr_started,scene.lex.words.size()])
+	check(scene.lex.words.size()==1740276,"complete licensed Serbian inflections loaded")
+	for word in ["REČ","REČI","ŠTIT","ŠTITA","LJUBAV","NJEGA","DŽEP","KUĆA","KUĆE","ĐAK","ŽIVOT"]:
+		check(scene.lex.contains(word),"Serbian dictionary: "+word)
+	check(not scene.lex.contains("EXTRAORDINARY") and not scene.lex.contains("KUCAAA"),"Serbian rejects foreign or invalid words")
+	check(scene.lex.tokens("LJUBAV")==["LJ","U","B","A","V"] and scene.lex.tokens("DŽEP")==["DŽ","E","P"],"Serbian digraphs occupy one tile")
+	for n in 10:
+		scene.lex.generate()
+		check(scene.lex.letters.size()==28 and scene.lex.solutions.size()>=4,"Serbian playable board %d" % n)
+	scene.save.data.tutorial=false
+	await scene.start_battle()
+	var kamen: Array[int] = [0,1,2,3,4]
+	check(scene.lex.letters.size()==28 and scene.lex.validate_path(kamen)=="KAMEN","Serbian guided board and swipe")
+	scene.overlay=""; scene.path.clear()
+	await process_frame
+	await process_frame
+	scene.buttons_state="home|"
+	scene.press(scene.tile_center(0)); scene.release(scene.tile_center(0))
+	check(scene.path.is_empty(),"input waits for the new screen to be drawn")
+	# Headless tests do not render; acknowledge the current screen as a real draw does.
+	scene.buttons_state=scene.screen+"|"+scene.overlay
+	scene.press(scene.tile_center(0)); scene.release(scene.tile_center(0))
+	await process_frame
+	check(scene.tap_composition and scene.path==[0] and scene.word_count==0,"tap waits for explicit confirmation")
+	scene.press(scene.tile_center(0)); scene.move(scene.tile_center(4))
+	await process_frame
+	check(not scene.tap_composition and not scene.buttons.any(func(b): return b.id=="submit"),"slide hides confirmation controls")
+	scene.release(scene.tile_center(4))
+	check(scene.used.has("KAMEN") and scene.path.is_empty(),"Serbian slide automatically submits")
+	scene.lex.letters.assign(["DŽ","E","P","K","A","M","E","R","E","Č","I","G","R","A","Š","T","I","T","LJ","U","B","A","V","NJ","E","G","A","Đ"])
+	scene.path.assign([0,1,2]); var old_hp: int=scene.foe_hp
+	scene.submit_word()
+	check(scene.used.has("DŽEP") and scene.foe_hp==old_hp-3,"digraph damage counts tiles not code points")
+	scene.persist_battle()
+	check(scene.valid_snapshot(scene.save.data.battle),"Serbian snapshot accepts accented and digraph tiles")
+	scene.change_screen("home"); await scene.restore_battle()
+	check(scene.lex.language=="sr" and scene.overlay=="pause" and scene.used.has("DŽEP"),"Serbian duel resumes paused with same dictionary")
+	scene.change_screen("home"); scene.save.data.battle=old_duel
+	await scene.restore_battle()
+	check(scene.lex.language=="en" and scene.save.data.word_language=="sr" and scene.save.data.ui_language=="sr","old English duel keeps dictionary despite Serbian settings")
+	scene.persist_battle(); persistence.load_game()
+	check(persistence.data.word_language=="sr" and persistence.data.ui_language=="sr","both language settings persist")
+	var invalid: Dictionary = old_duel.duplicate(true)
+	invalid.letters[0]="Č"
+	check(not scene.valid_snapshot(invalid),"English snapshot rejects Serbian-only tile")
+	scene.change_screen("home")
+	invalid=old_duel.duplicate(true); invalid.dictionary_code=[]
+	scene.save.data.battle=invalid
+	await scene.restore_battle()
+	check(scene.save.data.battle.is_empty() and scene.screen=="home","malformed dictionary code is rejected before loading")
 	print("RESULT: %d failures" % failures)
 	quit(1 if failures else 0)
+
+func get_tree_watchdog() -> void:
+	await create_timer(60).timeout
+	push_error("Test watchdog expired")
+	quit(1)

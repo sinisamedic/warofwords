@@ -5,7 +5,7 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 ## Usvojeno
 
 - Mobilna igra u **landscape** položaju. Telefon je osnovni format; ne umanjivati desktop interfejs.
-- Prva verzija: **engleski interfejs i engleski rečnik**.
+- Početni engleski interfejs i rečnik; posle testa 0.1.0 korisnik traži **odvojena podešavanja jezika interfejsa i rečnika, sa srpskim za test**.
 - Borba protiv **računara**, bez ljudskog protivnika u ovom smeru.
 - Kompozicija po korisnikovoj Slugterra referenci: duel i zdravlje gore, velika tabla slova dole, napunjene sposobnosti nadohvat prstiju.
 - Slova u krugovima; više mogućih reči na tabli.
@@ -19,12 +19,12 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
 - Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktivna implementacija — 0.1.0
+## Aktivna implementacija — 0.1.1
 
 Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
 
 - Originalni Sunward Ruins svet, odrasla istraživačica i bronzani automaton. 2D, svetla pozadina i kontrastne komande. Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, opcije i dnevnik reči.
-- Tabla 7 × 4, polja 56 logičkih piksela, minimalna osnova 854 × 480 (16:9) sa proširenjem širine na širim telefonima. Reči najmanje 3 slova, bez ponavljanja polja i bez iste reči u istom duelu. Dijagonale važe. Prevlačenje ili dodir + ✓; brzi pokreti prate i pređena polja između događaja dodira.
+- Tabla 7 × 4, polja približno 59 logičkih piksela, dodirna oblast 60 × 60 i razmak centara 65, minimalna osnova 854 × 480 (16:9) sa proširenjem širine na širim telefonima. Reči najmanje 3 slova, bez ponavljanja polja i bez iste reči u istom duelu. Dijagonale važe. Prevlačenje ili dodir + ✓; brzi pokreti prate i pređena polja između događaja dodira.
 - Samo iskorišćena polja se dopunjavaju. Solver proverava mogućnosti; prazna tabla se automatski osvežava. Četiri ugrađene reči u redovima čine nove table pristupačnim, uz dodatne dijagonalne kombinacije. Hint otkriva putanju, ne šalje reč automatski.
 - SCOWL 2020.12.07, američki engleski, 76.802 reči dužine 3–16, uključujući infleksije. [Poreklo i tačni filteri](../game/data/README.md). Nema definicija ni kurirane liste za uzrast.
 - Svako polje puni svoju boju za 1; reči od 6+ daju 2 po polju. Napunjena sposobnost ne skladišti višak. Svaka reč dodatno nanosi `dužina + 2 × max(0, dužina − 4)` direktne štete.
@@ -45,6 +45,17 @@ Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da 
 - Offline bez naloga, oglasa, kupovina ili monetizacije. Zvuk se sintetiše, haptika i reduced motion se mogu isključiti/podesiti.
 
 Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pritiskom, težina rečnika, dodatne animacije/različiti protivnici i dugoročna progresija. Monetizacija i iOS nisu deo verzije 0.1.0.
+
+## Dorade posle fizičkog testa 0.1.0 — usvojeno 2026-09-16
+
+- Manji health HUD sa portretima, zlatnim kapsulama i zelenim/crvenim gradijentom; likovi ostaju vidljivi. Arena zauzima 180 od 480 logičkih piksela visine.
+- Uklonjen prazan naslov LINK A WORD. Reč se pokazuje samo tokom sastavljanja. × i ✓ postoje samo pri dodirivanju pojedinačnih slova; prevlačenje se potvrđuje puštanjem prsta.
+- Ilustrovane kružne sposobnosti i power-upovi, segmenti energije oko kruga, emajlirane pločice sa jačim bojama i podebljanim slovima. Freeze i Hint imaju ikone, sa brojem preostalih upotreba za power-up.
+- Options je dostupan iz glavnog menija i pauze. Zvuk, vibracija, manje animacija, jezik menija i rečnik su trajna nezavisna podešavanja.
+- Srpski za test je latinica (implementacioni izbor): č/ć/š/đ/ž i LJ/NJ/DŽ na jednoj pločici. Najmanje 3 korišćene pločice; bonus i šteta broje pločice, ne Unicode znakove. Početna srpska reč je KAMEN.
+- Srpski Hunspell/LibreOffice izvor pod MPL-2.0, 1.740.276 oblika od 3–12 slova srpske abecede. Izvor, tačna revizija, filtriranje i licence: game/data/README.md. Rečnik je probni pravopisni resurs, ne konačna turnirska lista.
+- Promena rečnika važi za nove borbe. Sačuvana borba nosi svoj kod rečnika; borbe iz 0.1.0 podrazumevaju engleski. Novčići, misije i unapređenja ostaju zajednički.
+- Verzija 0.1.1 / Android versionCode 2 koristi isti paket i potpis za nadogradnju 0.1.0. Monetizacija nije uvedena.
 
 ## Istorija: usvojeni statični vizuelni dizajn
 

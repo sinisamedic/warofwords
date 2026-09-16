@@ -20,10 +20,12 @@
 *.wav binary
 *.ogg binary
 *.ttf binary
+*.gz binary
 
 # Keep the reproducible dictionary hash identical across Windows and Unix.
 game/data/english.txt text eol=lf
 # Preserve upstream notices verbatim, including their original trailing spaces.
 game/licenses/*.txt -whitespace
+tools/dictionaries/sr/* -text -whitespace
 
 # Add agreed LFS patterns before the first commit of large binary assets.

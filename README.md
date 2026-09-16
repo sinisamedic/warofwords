@@ -1,31 +1,31 @@
 # War of Words
 
-**Igriva Android verzija 0.1.0 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj susedna engleska slova, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
+**Igriva Android verzija 0.1.1 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj susedna engleska ili srpska slova, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 
-- APK: `WarOfWords-0.1.0-android.apk` iz isporučenog paketa / GitHub izdanja. Lokalni build je u ignorisanom `exports/`.
+- APK: [WarOfWords-0.1.1-android.apk](https://github.com/sinisamedic/warofwords/releases/download/v0.1.1-android-preview/WarOfWords-0.1.1-android.apk). Lokalni build je u ignorisanom `exports/`.
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
-- **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Pomoć je u Options → How to Play.
+- **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni; novi rečnik važi za nove borbe.
 
 ## Šta je uključeno
 
-Šest osnovnih ekrana, 12 misija u tri poglavlja, četiri sposobnosti sa osam nivoa, tri besplatna power-upa, novčići i otključavanje misija, lokalni engleski rečnik sa 76.802 reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
+Šest osnovnih ekrana, 12 misija u tri poglavlja, četiri sposobnosti sa osam nivoa, tri besplatna power-upa, novčići i otključavanje misija, odvojen izbor jezika menija i rečnika, 76.802 engleske i 1.740.276 srpskih oblika reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
 
-[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.0.md) · [Status i sledeći korak](STATUS.md).
+[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.1.md) · [Status i sledeći korak](STATUS.md).
 
 ## Nastavi na drugom računaru
 
-Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/android-playable**:
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/battle-polish-serbian**:
 
 ```powershell
 git fetch origin --prune
-git switch codex/android-playable
+git switch codex/battle-polish-serbian
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/android-playable`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
+Ako grana nije lokalna: `git switch --track origin/codex/battle-polish-serbian`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
 
 ## Struktura
 

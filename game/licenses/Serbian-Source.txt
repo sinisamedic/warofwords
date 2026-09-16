@@ -1,0 +1,19 @@
+Serbian dictionary by Milutin Smiljanic <msmiljanic.gm@gmail.com>.
+Upstream: LibreOffice/dictionaries, sr/, revision
+5fe575dbcfeb789e2ab2d9731b88ac0dacc4f453
+https://github.com/LibreOffice/dictionaries/tree/5fe575dbcfeb789e2ab2d9731b88ac0dacc4f453/sr
+
+We use the dictionary under Mozilla Public License 2.0 (MPL-2.0), one
+of the upstream offered licenses. See Serbian-MPL-2.0.txt and
+Serbian-Upstream-README.txt for the license and original notice.
+
+Modified for War of Words on 2026-09-16: expanded numeric affix rules,
+lowercase Serbian Latin entries only, no punctuation, 3-12 alphabet tiles,
+deduplicated, sorted and gzip-compressed. This derived word list is also
+available under MPL-2.0. This notice does not place unrelated game code
+under MPL-2.0.
+
+Complete source, original .dic/.aff, and build recipe:
+https://github.com/sinisamedic/warofwords/tree/v0.1.1-android-preview/tools/dictionaries/sr
+https://github.com/sinisamedic/warofwords/blob/v0.1.1-android-preview/tools/build-serbian-dictionary.cjs
+https://github.com/sinisamedic/warofwords/blob/v0.1.1-android-preview/game/data/README.md
