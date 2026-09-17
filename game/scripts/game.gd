@@ -7,6 +7,7 @@ const Ornaments = preload("res://scripts/ornaments.gd")
 const Portrait = preload("res://scripts/portrait.gd")
 const Localization = preload("res://scripts/localization.gd")
 const Actor = preload("res://scripts/actor.gd")
+const HeroRig = preload("res://scripts/hero_rig.gd")
 const EnemyArt = preload("res://scripts/enemy_art.gd")
 const CREAM := Color("fff1ce")
 const GOLD := Color("f3c569")
@@ -28,6 +29,10 @@ var title_emblem: Texture2D = preload("res://assets/art/title-emblem.png")
 var board_environment: Texture2D = preload("res://assets/art/board-environment.png")
 var arena: Texture2D = preload("res://assets/art/arena.png")
 var map_art: Texture2D = preload("res://assets/art/map.png")
+const CAMPAIGN_ART := [preload("res://assets/art/campaign-sunward.png"),preload("res://assets/art/campaign-sky.png"),preload("res://assets/art/campaign-observatory.png")]
+var campaign_background_from := 0
+var campaign_background_time := .55
+var campaign_background_direction := 1.0
 var fighters: Texture2D = preload("res://assets/art/fighters.png")
 var menu_icons: Texture2D = preload("res://assets/art/menu-icons.png")
 var lex = Lexicon.new(false)
@@ -51,7 +56,8 @@ var campaign_track: Control
 var campaign_offset := 0.0
 var campaign_slide_from := 0.0
 var campaign_slide_time := .32
-var hero: Sprite2D
+var hero: Node2D
+var home_hero: Sprite2D
 var enemy_actor: Sprite2D
 var screen := "home"
 var previous := "home"
@@ -122,13 +128,16 @@ func _ready() -> void:
 	music = preload("res://scripts/music.gd").new()
 	add_child(music)
 	music.set_enabled(save.data.music)
-	hero = Actor.new()
+	hero = HeroRig.new()
+	home_hero = Actor.new()
+	home_hero.setup(fighters,false)
 	enemy_actor = Actor.new()
-	hero.setup(fighters,false)
 	enemy_actor.setup(fighters,true)
 	add_child(hero)
+	add_child(home_hero)
 	add_child(enemy_actor)
 	hero.z_index = -1
+	home_hero.z_index = -1
 	enemy_actor.z_index = -1
 	for opponent in [false,true]:
 		var portrait = Portrait.new()
@@ -138,7 +147,7 @@ func _ready() -> void:
 	# Background is drawn by a sibling behind both actors; HUD is drawn by this Control.
 	var backdrop := Node2D.new()
 	backdrop.name = "Backdrop"
-	backdrop.z_index = -2
+	backdrop.z_index = -10
 	backdrop.draw.connect(_draw_backdrop.bind(backdrop))
 	add_child(backdrop)
 	campaign_track=Control.new()
@@ -207,6 +216,9 @@ func _process(delta: float) -> void:
 		debug_sample_at=Time.get_ticks_msec()
 		print("WarOfWords: performance screen=%s fps=%d draw_calls=%d" % [screen,Engine.get_frames_per_second(),RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
 	clock += delta
+	if screen=="campaign":
+		campaign_background_time=minf(.55,campaign_background_time+delta)
+		get_node("Backdrop").queue_redraw()
 	if screen=="campaign" and not page_gesture and campaign_offset!=0:
 		campaign_slide_time=minf(.32,campaign_slide_time+delta)
 		campaign_offset=lerpf(campaign_slide_from,0,1-pow(1-campaign_slide_time/.32,3))
@@ -246,13 +258,15 @@ func _process(delta: float) -> void:
 	for p in sparks:
 		p.time += delta
 	sparks = sparks.filter(func(p): return p.time < 0.7)
+	hero.advance_pose(delta,save.data.calm,loading or (screen=="battle" and (not overlay.is_empty() or ended)))
 	update_actors()
 	queue_redraw()
 
 func update_actors() -> void:
 	if hero == null:
 		return
-	hero.visible = screen in ["home","battle","arsenal","powers"]
+	hero.visible = screen == "battle"
+	home_hero.visible = screen == "home"
 	enemy_actor.visible = screen == "battle"
 	for i in portraits.size():
 		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
@@ -261,41 +275,36 @@ func update_actors() -> void:
 		if enemy_art_mission != mission:
 			EnemyArt.apply(enemy_actor,portraits[1],mission)
 			enemy_art_mission=mission
-		var actor_height := 137.0
-		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
+		hero.scale = Vector2.ONE*.84
 		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.CELL.y
 		var idle: bool = not save.data.calm and not ended
-		var hero_breath := 1.0+sin(clock*2.1)*.027 if idle else 1.0
 		var enemy_breath := 1.0+sin(clock*1.8+.8)*.032 if idle else 1.0
-		hero.scale.y*=hero_breath
 		enemy_actor.scale.y*=enemy_breath
 		var hero_kick := 0.0 if save.data.calm else hit_offset(hero_recoil,hero_hit_strength)
 		var enemy_kick := 0.0 if save.data.calm else hit_offset(enemy_recoil,enemy_hit_strength)
-		hero.rotation = -hero_kick*.0025+(sin(clock*1.25)*.026 if idle else 0.0)
+		hero.rotation = -hero_kick*.0025
 		enemy_actor.rotation = enemy_kick*.0025+(sin(clock*1.15+.9)*.025 if idle else 0.0)
 		# Rotation and breathing happen about the feet, keeping both fighters grounded.
-		hero.position = Vector2(size.x*.20-hero_kick,GROUND_Y)-Vector2(0,(GROUND_Y-119)*hero_breath).rotated(hero.rotation)
+		hero.position = Vector2(size.x*.20-hero_kick,GROUND_Y)
 		enemy_actor.position = Vector2(size.x*.80+enemy_kick,GROUND_Y)-Vector2(0,EnemyArt.foot_offset(mission)*enemy_actor.scale.y).rotated(enemy_actor.rotation)
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 and not save.data.calm else Color.WHITE
 		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color.WHITE
 		if ended:
 			animate_defeat(enemy_actor if won else hero,won)
 	else:
-		var actor_height := size.y*0.84
-		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
-		# Anchor the feet to the raised sunlit platform, with a visible breathing sway.
-		hero.position = Vector2(size.x*0.24,size.y*0.48+(0.0 if save.data.calm else sin(clock*2.1)*3.2))
-		hero.rotation = 0.0 if save.data.calm else sin(clock*1.5)*.008
-		hero.modulate = Color.WHITE
-		if screen in ["arsenal","powers"]:
-			hero.visible = false
+		# The large home illustration stays intact; the cutout rig is only used in combat.
+		home_hero.scale=Vector2.ONE*size.y*.84/fighters.get_height()
+		home_hero.position=Vector2(size.x*.24,size.y*.48+(0.0 if save.data.calm else sin(clock*2.1)*3.2))
+		home_hero.rotation=0.0 if save.data.calm else sin(clock*1.5)*.008
+	var muzzle: Vector2=get_global_transform().affine_inverse()*hero.muzzle_position()
+	fx.player_muzzle=Vector2(muzzle.x/maxf(1,size.x),muzzle.y)
 
 func hit_offset(remaining: float, strength: float) -> float:
 	if remaining <= 0: return 0
 	var u := 1.0-remaining/.48
 	return strength*exp(-u*4.5)*(1.0+sin(u*TAU*3.5)*.55)
 
-func animate_defeat(actor: Sprite2D, opponent: bool) -> void:
+func animate_defeat(actor: Node2D, opponent: bool) -> void:
 	var u := clampf(1.0-result_delay/DEFEAT_DURATION,0,1)
 	actor.modulate=Color.WHITE
 	actor.modulate.a=1.0-smoothstep(.30 if opponent else .65,1.0,u)
@@ -324,6 +333,7 @@ func advance_combat(delta: float) -> void:
 		else:
 			damage=maxi(0,damage-shield); shield=0
 			hp=maxi(0,hp-damage)
+			hero.react("hit",save.data.calm)
 			hero_flash=.22; hero_recoil=.48; hero_hit_strength=12.0 if blocked else 22.0
 			message("Shield absorbed the attack" if damage==0 else t("Enemy hit  −%d HP") % damage)
 		fx.impact(impact,blocked)
@@ -335,6 +345,12 @@ func advance_combat(delta: float) -> void:
 	if not impacts.is_empty() and not ended: persist_battle()
 
 func _draw_backdrop(node: Node2D) -> void:
+	if screen=="campaign":
+		var u := smoothstep(0,.55,campaign_background_time)
+		draw_campaign_background(node,CAMPAIGN_ART[campaign_background_from],1.0,-18*u*campaign_background_direction)
+		draw_campaign_background(node,CAMPAIGN_ART[chapter],u,18*(1-u)*campaign_background_direction)
+		node.draw_rect(Rect2(Vector2.ZERO,size),Color(.03,.09,.14,.16))
+		return
 	var tex := map_art if screen == "campaign" else arena
 	var target := Rect2(Vector2.ZERO,size)
 	if screen == "battle":
@@ -358,6 +374,19 @@ func _draw_backdrop(node: Node2D) -> void:
 		node.draw_set_transform(Vector2.ZERO)
 	if screen != "battle":
 		node.draw_rect(Rect2(Vector2.ZERO,size),Color(0.03,0.09,0.14,0.16))
+
+func draw_campaign_background(node: Node2D, tex: Texture2D, alpha: float, shift: float) -> void:
+	# A small overscan allows a gentle pan during the dissolve without exposing an edge.
+	var target := Rect2(-22+shift,-8,size.x+44,size.y+16)
+	var source := Rect2(Vector2.ZERO,tex.get_size())
+	var ratio := target.size.x/target.size.y
+	if source.size.x/source.size.y>ratio:
+		source.size.x=source.size.y*ratio
+		source.position.x=(tex.get_width()-source.size.x)/2
+	else:
+		source.size.y=source.size.x/ratio
+		source.position.y=(tex.get_height()-source.size.y)*.4
+	node.draw_texture_rect_region(tex,target,source,Color(1,1,1,alpha))
 
 func panel(rect: Rect2, _color: Color = INK, _border: Color = GOLD, _radius: int = 14) -> void:
 	Ornaments.frame(self,rect,2 if rect.size.y > 75 else 0,Color.WHITE if _border == GOLD else _border.lightened(.55))
@@ -481,10 +510,15 @@ func campaign_span() -> float:
 func settle_campaign(target: int) -> void:
 	var next := clampi(target,0,mini(2,int(save.data.unlocked)/4))
 	if next!=chapter:
+		campaign_background_from=chapter
+		campaign_background_time=0
+		campaign_background_direction=signf(next-chapter)
 		campaign_offset+=(next-chapter)*campaign_span()
 		chapter=next; mission=chapter*4
 	campaign_slide_from=campaign_offset; campaign_slide_time=0
-	if save.data.calm: campaign_offset=0
+	if save.data.calm:
+		campaign_offset=0
+		campaign_background_time=.55
 
 func draw_campaign_track(canvas: Control) -> void:
 	if screen!="campaign": return
@@ -514,7 +548,8 @@ func draw_campaign() -> void:
 	campaign_track.size=Vector2(size.x*.64-84,203)
 	campaign_track.visible=overlay.is_empty() and not loading
 	campaign_track.queue_redraw()
-	if absf(campaign_offset)<.5 and not page_gesture:
+	# Keep level hit targets alive while a finger is held still across redraws.
+	if absf(campaign_offset)<.5:
 		var points := campaign_points()
 		for i in 4:
 			buttons.append({"rect":Rect2(points[i]+campaign_track.position-Vector2(42,42),Vector2(84,84)),"id":"mission","value":chapter*4+i,"enabled":chapter*4+i<=save.data.unlocked})
@@ -741,7 +776,7 @@ func draw_settings() -> void:
 	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
 	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
 	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,315,width,28),19)
-	text("Offline dictionaries  •  v0.1.5",Rect2(right,349,width,26),17)
+	text("Offline dictionaries  •  v0.1.6",Rect2(right,349,width,26),17)
 	panel(Rect2(28,394,size.x-56,29),INK)
 	text(notice if notice_time>0 else "Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
@@ -979,6 +1014,7 @@ func haptic(milliseconds: int, strength: float) -> void:
 		Input.vibrate_handheld(milliseconds,strength)
 
 func launch_attack(player: bool, kind: String, color: Color, damage: int) -> void:
+	if player: hero.react("fire",save.data.calm)
 	fx.launch(player,kind,color,damage)
 	sfx.play("arc" if kind == "arc" else "shot",1.13 if kind == "word" else 1.0)
 	sfx.play("flight",.92 if not player else 1.0)
@@ -1047,6 +1083,7 @@ func change_screen(target: String) -> void:
 	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
+	campaign_background_from=chapter; campaign_background_time=.55
 	get_node("Backdrop").queue_redraw()
 	update_actors()
 	queue_redraw()
@@ -1263,6 +1300,8 @@ func _run_visual_qa() -> void:
 	save.path = "res://../.local/visual-progress.json"
 	save.data = save.defaults()
 	var directory := ProjectSettings.globalize_path("res://../.local/game-qa")
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--qa-out="): directory=ProjectSettings.globalize_path(argument.trim_prefix("--qa-out="))
 	DirAccess.make_dir_recursive_absolute(directory)
 	for view in ["home","campaign","arsenal","powers","upgrades","battle"]:
 		if view=="battle":
@@ -1349,11 +1388,20 @@ func _run_visual_qa() -> void:
 	await _qa_capture(directory+"/victory-ornate.png")
 	save.data.ui_language="sr"; mission=11; stars=3; best_word="ĐAK"
 	await _qa_capture(directory+"/victory-final-sr.png")
+	change_screen("battle"); ended=false; mission=0; hp=100; countdown=60; save.data.ui_language="en"; save.data.calm=false
+	for pose in ["idle","fire","hit"]:
+		hero.react(pose,false); hero.advance_pose(.1,false,false)
+		await _qa_capture(directory+"/hero-rig-"+pose+".png")
+	mission=0; change_screen("campaign"); settle_campaign(1)
+	campaign_background_time=.275; campaign_offset=campaign_span()*.5
+	await _qa_capture(directory+"/campaign-dissolve.png")
 	get_tree().quit()
 
 func _qa_capture(file: String) -> void:
 	update_actors()
 	queue_redraw()
+	get_node("Backdrop").queue_redraw()
+	await get_tree().process_frame
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(file)

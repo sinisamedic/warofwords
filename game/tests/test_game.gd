@@ -387,12 +387,21 @@ func run_tests() -> void:
 	check(scene.hero.rotation==0 and scene.hero.modulate.a<.3,"reduced motion uses fade without falling or shaking")
 	# Visible idle sway is anchored at the feet and fully suppressed by Reduced Motion.
 	await scene.start_battle(); scene.save.data.calm=false; scene.clock=0; scene.update_actors()
-	var head_a: Vector2=scene.hero.to_global(Vector2(0,-scene.fighters.get_height()*.38))
-	scene.clock=1.2; scene.update_actors()
-	var head_b: Vector2=scene.hero.to_global(Vector2(0,-scene.fighters.get_height()*.38))
-	check(head_a.distance_to(head_b)>3,"battle idle motion is visible at the head and shoulders")
-	var hero_boot: Vector2=scene.hero.to_global(Vector2(0,(scene.GROUND_Y-119)*scene.fighters.get_height()/137.0))
-	check(absf(hero_boot.y-scene.GROUND_Y)<.1,"hero idle keeps feet on the platform")
+	scene.hero.player.play("idle"); scene.hero.player.seek(0,true)
+	var head_a: Vector2=scene.hero.joints.Head.to_global(Vector2(0,-25))
+	var boot_a: Transform2D=scene.hero.joints.FrontLeg.global_transform
+	scene.hero.advance_pose(.9,false,false); scene.update_actors()
+	var head_b: Vector2=scene.hero.joints.Head.to_global(Vector2(0,-25))
+	check(head_a.distance_to(head_b)>1,"articulated idle moves the head separately from the legs")
+	check(scene.hero.joints.FrontLeg.global_transform==boot_a,"hero idle keeps boots planted without whole-image stretching")
+	check(absf(scene.hero.joints.Coat.rotation-scene.hero.joints.Head.rotation)>.04,"coat and head use independent animation tracks")
+	scene.hero.react("fire",false); scene.hero.advance_pose(.07,false,false)
+	check(scene.hero.joints.FrontArm.rotation<-.1,"firing recoils the weapon arm at its shoulder")
+	var arm_angle: float=scene.hero.joints.FrontArm.rotation
+	scene.hero.advance_pose(.2,false,true)
+	check(scene.hero.joints.FrontArm.rotation==arm_angle,"pause freezes articulated animation")
+	scene.hero.advance_pose(0,true,false)
+	check(scene.hero.joints.FrontArm.rotation==0,"reduced motion neutralizes joint animations")
 	scene.save.data.calm=true; scene.update_actors(); head_a=scene.hero.position
 	scene.clock=3.5; scene.update_actors()
 	check(scene.hero.position==head_a and scene.hero.rotation==0 and scene.enemy_actor.rotation==0,"Reduced Motion stops idle sway for both actors")
@@ -412,10 +421,36 @@ func run_tests() -> void:
 	check(scene.campaign_offset==0,"locked edge springs back to rest")
 	scene.save.data.unlocked=11; scene.save.data.calm=true; scene.dispatch("chapter",1)
 	check(scene.chapter==1 and scene.campaign_offset==0,"Reduced Motion changes chapter without sliding")
+	# Regression: a real finger stays down over several draw frames. The old UI removed
+	# its hit target during that interval, so only unnaturally fast taps worked.
+	scene.save.data.calm=false; scene.mission=0; scene.change_screen("campaign")
+	scene.queue_redraw(); await process_frame; await process_frame
+	var level_point: Vector2=scene.campaign_points()[2]+scene.campaign_track.position
+	scene.press(level_point)
+	for frame in 8:
+		scene.queue_redraw(); await process_frame
+	scene.release(level_point)
+	check(scene.mission==2,"held level tap survives redraws and selects completed level")
+	scene.save.data.unlocked=1; scene.mission=1
+	scene.queue_redraw(); await process_frame; await process_frame
+	scene.press(level_point)
+	for frame in 5:
+		scene.queue_redraw(); await process_frame
+	scene.release(level_point)
+	check(scene.mission==1,"held tap cannot enter a locked level")
+	scene.save.data.unlocked=11
+	scene.dispatch("chapter",1)
+	check(scene.campaign_background_from==0 and scene.campaign_background_time==0,"chapter starts background dissolve from previous location")
+	scene._process(.05)
+	check(scene.campaign_background_time>0 and scene.campaign_background_time<.55,"background transition progresses over time")
 	for i in 4:
 		var tile: Rect2=scene.settings_toggle_rect(i)
 		check(tile.size.y>=90 and tile.size.x>=150,"settings icon has large touch target %d" % i)
 		for j in range(i+1,4): check(not tile.intersects(scene.settings_toggle_rect(j)),"settings touch targets do not overlap %d/%d" % [i,j])
+	scene.change_screen("home")
+	check(scene.home_hero.visible and not scene.hero.visible,"home keeps the original uncut hero illustration")
+	scene.change_screen("battle")
+	check(scene.hero.visible and not scene.home_hero.visible,"articulated hero is used only in battle")
 	print("RESULT: %d failures" % failures)
 	quit(1 if failures else 0)
 

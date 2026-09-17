@@ -1,5 +1,16 @@
 # Production artwork
 
+## 0.1.6 preview artwork — 2026-09-17
+
+Four original built-in ImageGen outputs, copied unchanged with source identifiers and exact prompts in `prompts-0.1.6.json`:
+
+- `campaign-sunward.png`, `campaign-sky.png`, `campaign-observatory.png`: one landscape for each campaign location. Existing `map.png` was a style reference. Runtime uses a 0.55-second dissolve with slight panning between chapters.
+- `hero-parts.png`: nine-part RGBA cutout atlas based on our existing heroine in `fighters.png`. `hero_rig.gd` selects regions at runtime, places overlapping joints, and animates torso, head, arms and coat with AnimationPlayer. No bitmap slicing or external character art. Small alpha noise is suppressed by the runtime shader.
+
+After user review of the large cutout, **the home screen retains the original intact `fighters.png` illustration**. The articulated version is used only in battle and remains a preview awaiting feedback. Enemy animation is unchanged. All four new PNG files are individually below 10 MiB; no LFS patterns needed for this set. Approved screen design masters are unchanged.
+
+## Previous artwork
+
 Generated with OpenAI ImageGen on 2026-09-16 for this project, using our approved original screen designs as style references. No Slugterra screenshots or characters are shipped. Source PNGs are retained without bitmap post-processing. Exact prompts: `prompts.json`.
 
 | File | Purpose | Original generated output |

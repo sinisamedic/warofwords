@@ -8,6 +8,7 @@ const adb=(...a)=>execFileSync('adb',['-s',serial,...a],{encoding:'utf8',windows
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const check=(ok,msg)=>{if(!ok)throw Error(msg);console.log('PASS '+msg);};
 const tap=async(x,y)=>{adb('shell','input','tap',''+x,''+y);await wait(1000);};
+async function heldTap(x,y){adb('shell','input','touchscreen','motionevent','DOWN',''+x,''+y);await wait(450);adb('shell','input','touchscreen','motionevent','UP',''+x,''+y);await wait(700);}
 async function launch(){adb('shell','am','start','-W','-n',pkg+'/com.godot.game.GodotAppLauncher');const pid=adb('shell','pidof',pkg);for(let i=0;i<40;i++){if(adb('logcat','-d','--pid='+pid,'-s','godot').includes('WarOfWords: ready')){await wait(1400);return;}await wait(1000);}throw Error('Launch timeout');}
 async function swipe(left){adb('shell','input','swipe',left?'1800':'650','540',left?'650':'1800','550','450');await wait(1000);}
 function installSave(file){adb('push',file,'/data/local/tmp/wow-pages-fixture.json');adb('shell','run-as',pkg,'cp','/data/local/tmp/wow-pages-fixture.json','files/progress.json');}
@@ -35,7 +36,10 @@ async function main(){
   adb('shell','input','touchscreen','motionevent','UP','1250','540');await wait(1100);
   const map2=capture('campaign-2');check(map2!==map1&&map2!==moving,'campaign settles into the new chapter after release');
   await swipe(false);check(capture('campaign-return')===map1,'campaign reverse swipe restores map and selected mission');
-  await tap(958,510);capture('campaign-selected-enemy');
+  await heldTap(958,510);check(capture('campaign-held-level-3')!==map1,'holding level 3 across draw frames changes selection');
+  await heldTap(198,538);check(capture('campaign-held-return')===map1,'held tap can return to completed level 1');
+  await heldTap(1338,608);check(capture('campaign-held-level-4')!==map1,'held tap also selects level 4');
+  await heldTap(958,510);capture('campaign-selected-enemy');
   await tap(2080,905);await tap(2110,983);await tap(1200,80);
   const chosen=JSON.parse(adb('shell','run-as',pkg,'cat','files/progress.json'));
   check(chosen.battle.mission===2,'level beside the large enemy preview remains tappable and launches correct encounter');

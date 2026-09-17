@@ -1,50 +1,34 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-options-dialog-polish.**
+Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-worlds-hero-animation.**
 
-## Aktuelno — Android 0.1.5
+## 0.1.6 — otvoren pregled, APK se ne objavljuje još
 
-Završeno svih pet dorada posle korisnikovog testa 0.1.4:
+Korisnik želi da prvo vidi igru u simulatoru/pregledu, pre sledećeg APK-a. Vidljiv Godot prozor otvoren je lokalnim helperom .local/preview-016.gd, sa odvojenim testnim save-om, 420 novčića i svim otključanim nivoima. Ne prekidati prozor dok korisnik testira.
 
-- Staza sa nivoima prati prst u kampanji i glatko prelazi u novo poglavlje; pozadina miruje. Strelice koriste isti prelaz. Kratak pokret i zaključana granica vraćaju stazu na mesto.
-- Veći prikaz izabranog protivnika desno, iznad informativnog panela, bez prekrivanja brojeva ili Prepare dugmeta. Izbor menja sliku, naziv i borbu.
-- Četiri velika dugmeta sa ikonama u rasporedu 2 × 2: zvučnik, nota, telefon sa vibracijom i kornjača za Reduced Motion. Jasno ON/OFF stanje; kratki naziv opcije u donjoj traci nakon promene.
-- Pobeda ima krunu/lovor, ukrašeni okvir, velike zvezdice, izdvojenu nagradu i najdužu reč.
-- Pauza ima grb, ime protivnika i tri pokazatelja sa ikonama: broj reči, zdravlje, trajanje.
-- Oba borca vidljivije dišu i njišu se oko stopala, bez lebdenja. Reduced Motion uklanja klizanje i njihanje.
+Najnovija korekcija: **na naslovnoj je vraćena originalna cela ilustracija heroja; novi devetodelni 2D rig koristi se samo u borbi.** Korisniku je veliki isečeni lik delovao neprirodno. Sačekati povratnu informaciju pre novog APK-a.
 
-Pravila, balans, rečnici, efekti, muzika i napredak ostaju kompatibilni. Povezivanje slova → Bilo koja i dalje odmah menja pravilo postojeće borbe. Master dizajni i stari mokupovi nisu menjani.
+## Urađeno
 
-## Provere i paket
+- Utvrđen uzrok neklikabilnih nivoa u 0.1.5: tokom držanja prsta, iscrtavanje je uklanjalo dodirne oblasti. Sada ostaju aktivne do stvarnog klizanja. Regresija obuhvata držanje preko osam frejmova i zaključane nivoe.
+- Tri originalne ImageGen pozadine za Sunward Ruins, Sky Bridges i Observatory. Pretapanje/pomeranje 0,55 s, uz klizanje brojeva. Reduced Motion preskače prelaz.
+- Dopuna samo potrošenih polja sa ravnotežom samoglasnika i uklapanjem do tri poznate neiskorišćene reči; ograničenje pretrage 10.000 čvorova. Proširen izbor poznatih početnih reči. Rečnici prihvatanja nisu menjani.
+- Artikulisan heroj sa devet delova: nezavisna glava, ruke, telo i kaput; mirovanje, pucanje, reakcija na udar. Pauza i Reduced Motion rade. Stopala su fiksirana. Naslovna koristi staru ilustraciju.
+- Poreklo novih PNG-ova i tačni promptovi: game/assets/art/README.md i prompts-0.1.6.json. Svi pojedinačno ispod 10 MiB. Nema novih LFS obrazaca.
 
-- Godot 4.7.2 import/test/export; **290 automatskih provera, 0 grešaka** u završnom build-u.
-- Pravi renderi 16:9 i širokog telefona; srpski i engleski, uključene/isključene opcije, kampanja usred prevlačenja, pauza, pobeda i završetak kampanje. Snimci: docs/screenshots/0.1.5/.
-- Instalacija preko 0.1.4 čuva kompletan glavni save. Završni UPGRADE QA PASSED potvrđuje instalirani SHA256 i istu nastavljenu borbu/rečnik/pravilo.
-- ANDROID PAGING QA PASSED: pomeranje tokom držanog dodira, smirivanje, povratak na identičan prikaz, izbor nivoa pored velike ilustracije i pokretanje baš te misije. Privremeni glavni save vraćen; runtime log bez grešaka.
-- ANDROID QA PASSED: prava odigrana pobeda, nagrada i otključavanje, kupovina unapređenja, nastavak pauzirane borbe, trajnost četiri nove ON/OFF komande i nezavisnih jezika, prihvatanje srpske reči i ponovno pokretanje bez engine/script grešaka.
-- Paket com.sinisamedic.warofwords, **0.1.5 / code 6**, isti debug sertifikat kao ranije. **86.662.480 bajtova**.
-- SHA256: **179e9fb4ddea16d2fcc8030787896b487dd5a0aa8843ea917064836212a38459**.
-- Detalji: docs/QA-0.1.5.md. Cilj izdanja: v0.1.5-android-preview. Ishod Git push-a i objave proverava se posle tih operacija; ovaj zapis ih ne pretpostavlja unapred.
+## Provere
 
-Devet originalnih vektorskih ikonica/ukrasa može se ponovo napraviti sa node tools/build-polish-ui.cjs. Poreklo u game/assets/ui/README.md. Novi Git fajlovi su pojedinačno ispod 10 MiB. APK i lokalni testni podaci su ignorisani.
+- **300 PASS / 0 FAIL** posle vraćanja originalnog heroja na naslovnu; log bez script/engine grešaka.
+- Benchmark dopune: 768 poteza, oba jezika i pravila, pola nizova bira najkraće reči. Nova dopuna zadržala reč od 5+ polja posle svih 384 svoja poteza. Provereni zakoniti putevi, neponavljanje iskorišćenih reči, nepromenjena nepotrošena polja i budžet pretrage. To nije garancija za svaku moguću tablu.
+- Godot renderi 1280 × 576 i 1708 × 960; pregledane tri lokacije, prelaz, borba i tri poze heroja. Veliki rig na naslovnoj je potom uklonjen na zahtev korisnika; otvoreni pregled potvrđuje originalnu ilustraciju.
+- Lokalni APK 0.1.6 / code 7 je uspešno napravljen PRE poslednje korekcije. **Zastareo je u odnosu na izvor i NIJE objavljen.** Ne nuditi ga korisniku. Poslednje GitHub izdanje je v0.1.5-android-preview.
+- Android provere nove verzije još nisu izvršene; za sada samo native Godot. tools/qa-android-pages.cjs sada sadrži stvarne dodire sa držanjem 450 ms. Build i ADB testove pokretati uzastopno.
 
 ## Tačan sledeći korak
 
-Instalirati **0.1.5 preko postojeće aplikacije**, bez deinstaliranja ili brisanja podataka. Na S23 Ultra proveriti osećaj klizanja kampanje, prikaz protivnika i izbor nivoa, jasnost ikonica ON/OFF, pobedu/pauzu i jačinu idle animacije. Kornjača ON znači manje animacija; za nove animacije treba da bude OFF.
+Sačekati korisnikov komentar na otvoreni pregled. Primeniti korekcije. Zatim, kada zatraži nastavak isporuke, ponoviti import/test/export, Android upgrade/pages/full-partiju na emulatoru, proveriti isti sertifikat i hash, pa objaviti 0.1.6. Dok pregled traje ne pokretati novi APK build i ne objavljivati raniji lokalni paket.
 
-Fizički telefon, baterija i dugotrajan FPS nisu mereni. Srpski i generator ostaju za korisnički test. Nema novih odluka o monetizaciji niti iOS isporuke.
-
-## Nastavak na drugom računaru
-
-Pročitati AGENTS.md i ovaj fajl, sačuvati eventualni lokalni rad i proveriti remote/upstream, zatim:
-
-```powershell
-git fetch origin --prune
-git switch codex/campaign-options-dialog-polish
-git pull --ff-only
-```
-
-Ako grana nije lokalna: git switch --track origin/codex/campaign-options-dialog-polish. Projekat je game/project.godot. docs/setup.md i docs/android.md opisuju alate. Potpisni ključ i instalacije nisu u Git-u; main još nije aktivna grana igre.
+Radni kod: game/project.godot. Grana za nastavak: codex/campaign-worlds-hero-animation. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
 ## Istorija
 

@@ -3,6 +3,7 @@ extends RefCounted
 const Art = preload("res://scripts/ornaments.gd")
 var shots: Array[Dictionary] = []
 var bursts: Array[Dictionary] = []
+var player_muzzle := Vector2(.245,115)
 const FLIGHT_TIME := .42
 const MAX_SHOTS := 64
 
@@ -12,7 +13,7 @@ func clear() -> void:
 func launch(player: bool, kind: String, color: Color, damage: int = 0) -> void:
 	# These are live attacks, not disposable particles. Never evict one before impact.
 	shots.append({"player":player,"kind":kind,"color":color,"damage":damage,"time":0.0})
-	burst("muzzle",Vector2(.245 if player else .765,115),color,.32)
+	burst("muzzle",player_muzzle if player else Vector2(.765,115),color,.32)
 
 func impact(shot: Dictionary, blocked: bool) -> void:
 	burst("shield" if blocked else "impact",Vector2(.79 if shot.player else .21,116),Color("78bfff") if blocked else shot.color,.75)
@@ -61,7 +62,7 @@ func advance(delta: float) -> Array[Dictionary]:
 func draw(c: CanvasItem, width: float, calm: bool) -> void:
 	for shot in shots:
 		var u: float = clampf(shot.time/FLIGHT_TIME,0,1)
-		var from := Vector2(width*(.245 if shot.player else .765),115)
+		var from := Vector2(width*player_muzzle.x,player_muzzle.y) if shot.player else Vector2(width*.765,115)
 		var to := Vector2(width*(.79 if shot.player else .21),116)
 		var p := from.lerp(to,u)+Vector2(0,-sin(u*PI)*12)
 		var direction := (to-from).normalized()

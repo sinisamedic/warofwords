@@ -1,5 +1,7 @@
 # War of Words
 
+**Rad u pregledu: 0.1.6**, grana `codex/campaign-worlds-hero-animation`: popravka dodira nivoa, tri animirano promenljive pozadine kampanje, dopuna koja konstruiše reči i artikulisani heroj samo u borbi. Naslovna zadržava originalnu ilustraciju. Korisnik trenutno pregleda Godot verziju pre novog APK-a; poslednji objavljeni paket ispod je 0.1.5. Videti `STATUS.md` za nastavak.
+
 **Igriva Android verzija 0.1.5 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru

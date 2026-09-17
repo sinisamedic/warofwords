@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## 0.1.6 — trenutni pregled pre sledećeg APK-a
+
+- Popravljen izbor nivoa: držanje prsta preko više iscrtavanja više ne uklanja dodirnu oblast. Novi regresioni test zadržava dodir preko osam frejmova, uz poseban test zaključanog nivoa.
+- Korisnik je zatražio zasebne pozadine za tri lokacije kampanje. Generisane su Sunward Ruins, Sky Bridges i Observatory; promena poglavlja koristi 0,55 s pretapanja sa blagim pomeranjem. Brojevi zadržavaju svoje klizanje. Reduced Motion preskače prelaz.
+- Dopuna pokušava da uklopi do tri poznate, još neiskorišćene reči koristeći samo potrošena polja i nepromenjena preostala slova. Rad je ograničen; slučajna dopuna vodi računa o samoglasnicima. Puni rečnici i postojeće pravilo osvežavanja prazne table ostaju.
+- Prva artikulisana 2D animacija heroja ima devet delova i zasebne zglobove glave, tela, ruku i kaputa: mirovanje, pucanje i udarac. Stopala miruju, pauza zaustavlja animaciju, Reduced Motion vraća neutralnu pozu.
+- **Poslednja korisnikova korekcija: originalna nepodeljena ilustracija ostaje na naslovnoj, gde je lik velik. Novi animirani lik se koristi samo u borbi, za pregled.** Ne proširivati rig na protivnike pre povratne informacije.
+- Korisnik želi pregled uživo pre sledeće izrade APK-a. Godot pregled je otvoren sa odvojenim testnim napretkom i svim otključanim nivoima. Raniji lokalni 0.1.6 APK nastao je pre ove korekcije i nije objavljen; ne koristiti ga kao konačnu isporuku.
+
 ## Usvojeno
 
 - Mobilna igra u **landscape** položaju. Telefon je osnovni format; ne umanjivati desktop interfejs.

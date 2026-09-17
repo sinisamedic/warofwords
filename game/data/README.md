@@ -1,5 +1,13 @@
 # English dictionary
 
+## Refill construction vocabulary (0.1.6 preview)
+
+`refill-words.json` is a small, original project-authored list of familiar English and Serbian words, used only to construct playable refill paths. Entries are filtered against the existing licensed dictionaries at load time. It is not a replacement dictionary or a restriction on words the player may submit. Longer seeds also guide initial boards. Runtime favors vowel balance, then fits up to three unused words through consumed cells and fixed surviving letters, with a 10,000-node work limit. Assigned cells are locked between constructions, and unconsumed glyphs/colors stay unchanged. The existing empty-board rescue remains available.
+
+`tests/test_refill.gd` compares random and word-aware refill on identical initial generators, across both languages and connection rules, mixing shortest-word and longest-word play over 768 turns. It checks legal unused paths, untouched-cell preservation, the search budget, and long-word availability. This is a reproducible benchmark, not a guarantee for every possible board.
+
+## Dictionary source
+
 Source: [SCOWL 2020.12.07](https://downloads.sourceforge.net/project/wordlist/SCOWL/2020.12.07/scowl-2020.12.07.zip), an explicit versioned release of [en-wl/wordlist](https://github.com/en-wl/wordlist).
 
 - Archive SHA256: `dc3435e1cb56f3394aea91b5d2ab5d10d80c98bc7dd88c3fccb7348f6ab913a0`.
