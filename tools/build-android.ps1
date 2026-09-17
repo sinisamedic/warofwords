@@ -18,6 +18,8 @@ $project = Join-Path $repo 'game'
 if ($LASTEXITCODE -ne 0) { throw 'Godot import failed.' }
 & $Godot --headless --path $project --script res://tests/test_game.gd
 if ($LASTEXITCODE -ne 0) { throw 'Game tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_daily.gd
+if ($LASTEXITCODE -ne 0) { throw 'Daily challenge tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_refill.gd
 if ($LASTEXITCODE -ne 0) { throw 'Refill regression/benchmark failed.' }
 if ($TestOnly) { exit 0 }
@@ -27,7 +29,7 @@ if (-not (Test-Path -LiteralPath $template)) {
 }
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
-$apk = Join-Path $outputDir 'WarOfWords-0.1.6-android.apk'
+$apk = Join-Path $outputDir 'WarOfWords-0.1.7-android.apk'
 & $Godot --headless --path $project --export-debug Android $apk
 if ($LASTEXITCODE -ne 0) { throw 'Android export failed.' }
 $hash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()

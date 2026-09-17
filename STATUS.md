@@ -1,6 +1,26 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-worlds-hero-animation.**
+Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
+
+## 0.1.7-dev — dnevni izazov i globalna rang-lista
+
+Korisnik je odobrio rad redom: profil/nadimak, dnevni izazov i globalna rang-lista, na besplatnom Supabase projektu. Multiplayer uživo još nije započet.
+
+- Dodat zaseban ekran izazova, 120 s, en/sr i susedno/slobodno povezivanje, offline vežba, lokalno čuvanje poteza po pokušaju i prikaz serverski potvrđenih rezultata. Kampanjski save i tabla ostaju odvojeni.
+- Serverski generator/bodovanje su ponovljivi u Godotu i JavaScript-u. Server proverava reči iz punih licenciranih rečnika, putanje, duplikate i rok, pa sam računa rezultat. Direktan pristup tabelama je zabranjen klijentu.
+- **Objavljeno na korisnikovom potvrđenom projektu `phfbohgbeqjvtfsgcjwi` („War of Words”), Free, Frankfurt.** SQL migracija uspešna, anonimni profili uključeni, privatni bucket sa en/sr rečnicima i hash-evi postavljeni, Edge Function `daily` objavljena.
+- Prethodno poslati drugi Project URL nije korišćen posle korisnikove ispravke. Javni URL/ključ su u ignorisanom `game/online_config.json`; nijedan tajni Supabase ključ nije preuzet ili upisan u projekat.
+- Gateway **Verify JWT with legacy secret ostaje uključen**. Automatska provera je odbila njegovo isključivanje; nastavili smo uz postojeću kontrolu i dokazali da servis tako radi. Nema preostalog zahteva za tom promenom.
+- **Stvarni serverski test prošao 17:32:35 UTC:** posle punih 120 s, EN 70 i SR 30 poena pod profilom „QA provera”, oba na svojim globalnim listama. Ponovljen Start vraća isti pokušaj; ponovljen Submit ne menja score. Poziv bez sesije dobija 401, a prijavljeni klijent ne može direktno čitati privatne tabele. Test je Node HTTPS klijent, ne mrežna partija u Godotu/Androidu.
+- Godot: **306 postojećih + 1106 provera dnevnog režima, 0 neuspeha**, završni logovi bez grešaka/upozorenja. Dodate provere stvarnog toka dodira kroz izbor jezika, pločice i potvrdu, izolacije save-a, determinističnosti, granica vremena i srpskih digrafa. Server/Godot parity u sve četiri kategorije, Edge handler testovi i prava/ograničenja SQL migracije kroz PGlite prolaze.
+- Renderovani i pregledani početni ekran, profil/rang-lista, tabla, selekcija i rezultat na 1280 × 720. Slika rang-liste je Godot render stvarnog ranije preuzetog serverskog odgovora, **nije dokaz direktnog Godot HTTPS pristupa**. Renderi u `.local/daily-qa/`.
+
+### Otvoreno pre Android isporuke
+
+- Direktni Godot HTTPS test na ovom računaru blokira lokalni **Avast Web/Mail Shield**: Node/Windows prihvata njegov sertifikat, a Godot/mbedTLS prijavljuje TLS handshake i parsiranje tog CA sertifikata. Antivirus/TLS zaštita nisu menjani. Offline UI i serverski tok su provereni odvojeno; kompletan mrežni tok u Godotu/Androidu ostaje nepotvrđen.
+- Na ovoj mašini nisu pronađeni Android SDK, JDK, export templates ni prethodni debug signing ključ na standardnim putanjama. **Novi APK nije napravljen niti objavljen.** Izvor je 0.1.7-dev; pripremljeni Android preset je 0.1.7/code 8, sa INTERNET dozvolom i zasebnim imenom izlaznog fajla. Objavljeni 0.1.6 ostaje nepromenjen.
+- Anonimni nalog je vezan za lokalnu sesiju; brisanje podataka može dati novi profil. Nema trajne prijave, moderacije, CAPTCHA toka ni potpune zaštite od botova. To je probna rang-lista, ne završena turnirska infrastruktura.
+- Detalji, instalacija servera i testovi: `docs/daily-online.md`. Prethodni neuspešni/prekinuti live testovi ne predstavljaju uspeh; merodavan je `.local/daily-live-report.json` sa navedenim vremenom.
 
 ## 0.1.6 — objavljen Android preview
 
@@ -31,9 +51,9 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Sačekati korisnikov test APK-a 0.1.6 na fizičkom telefonu, naročito utisak o dopuni slova i pokretima heroja. Ne pokretati novi dizajn ili veliku implementaciju bez nove povratne informacije.
+Nastaviti granu `codex/daily-global-leaderboard`. Pripremiti Android SDK/JDK/export templates i bezbedno preneti postojeći signing ključ sa prethodnog računara (van Git-a), pa napraviti 0.1.7 i proveriti stvaran dnevni izazov → slanje → globalni plasman na telefonu. Alternativno prvo rešiti Godot/Avast HTTPS kompatibilnost bez isključivanja zaštite. Pre toga ne tvrditi da je Android online tok prošao. Povratna informacija o dopuni i animaciji iz 0.1.6 i dalje je korisna.
 
-Radni kod: game/project.godot. Grana za nastavak: codex/campaign-worlds-hero-animation. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
+Radni kod: game/project.godot. Grana za nastavak: codex/daily-global-leaderboard. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
 ## Istorija
 

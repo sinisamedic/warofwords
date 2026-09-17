@@ -1,5 +1,7 @@
 # War of Words
 
+**Radna nadogradnja 0.1.7-dev:** dnevni izazov, anonimni profil i globalna rang-lista na besplatnom Supabase projektu. Server je objavljen i proveren stvarnim dvominutnim partijama; novi Android APK još nije napravljen. Lokalni Godot mrežni test blokira Avast HTTPS sertifikat na ovom računaru. [Online režim i postavljanje](docs/daily-online.md). Poslednji objavljeni APK ispod ostaje 0.1.6.
+
 **Igriva Android verzija 0.1.6 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
@@ -19,15 +21,15 @@ U 0.1.6: popravljen izbor nivoa, tri pozadine lokacija sa animiranim pretapanjem
 
 ## Nastavi na drugom računaru
 
-Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/campaign-worlds-hero-animation**:
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/daily-global-leaderboard**:
 
 ```powershell
 git fetch origin --prune
-git switch codex/campaign-worlds-hero-animation
+git switch codex/daily-global-leaderboard
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/campaign-worlds-hero-animation`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
+Ako grana nije lokalna: `git switch --track origin/codex/daily-global-leaderboard`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. Javni `game/online_config.json` napraviti zasebno prema [online uputstvu](docs/daily-online.md); nije u Git-u. [Podešavanje računara](docs/setup.md).
 
 ## Struktura
 

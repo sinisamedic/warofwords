@@ -4,6 +4,8 @@
 .env.*
 !.env.example
 *.local.json
+game/online_config.json
+supabase/.temp/
 *.log
 .DS_Store
 Thumbs.db

@@ -109,6 +109,7 @@ var journal_page := 0
 var autosave_clock := 0.0
 var fps_label := false
 var debug_sample_at := 0
+var daily_screen: Control
 
 func _ready() -> void:
 	Engine.max_fps = 60
@@ -171,6 +172,12 @@ func finish_loading() -> void:
 	dictionary_thread.wait_to_finish()
 	dictionary_thread = null
 	loading = false
+	if daily_screen==null:
+		daily_screen=preload("res://scripts/daily_screen.gd").new()
+		daily_screen.host=self
+		add_child(daily_screen)
+		daily_screen.hide()
+		daily_screen.closed.connect(func(): change_screen("home"))
 	if OS.is_debug_build():
 		print("WarOfWords: ready")
 	queue_redraw()
@@ -488,11 +495,12 @@ func draw_home() -> void:
 	if not save.data.battle.is_empty():
 		action("CONTINUE DUEL",Rect2(x,418,width,44),"continue",-1,true)
 	action("OPTIONS",Rect2(22,18,205,46),"settings")
+	action("DAILY CHALLENGE",Rect2(24,size.y-96,290,48),"daily")
 	Ornaments.frame(self,Rect2(237,18,50,46))
 	Ornaments.ui_icon(self,"journal",Rect2(246,25,32,32))
 	buttons.append({"rect":Rect2(237,18,50,46),"id":"journal","value":-1,"enabled":true})
 	coin_counter(Rect2(size.x-177,18,155,46))
-	text("OFFLINE  •  SOLO CAMPAIGN",Rect2(24,size.y-36,size.x*.4,28),17,CREAM)
+	text("CAMPAIGN  •  DAILY CHALLENGE",Rect2(24,size.y-36,size.x*.4,28),17,CREAM)
 
 func home_play_rect() -> Rect2:
 	var x := size.x*.48
@@ -778,7 +786,7 @@ func draw_settings() -> void:
 	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
 	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
 	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,315,width,28),19)
-	text("Offline dictionaries  •  v0.1.6",Rect2(right,349,width,26),17)
+	text("Offline dictionaries  •  v0.1.7-dev",Rect2(right,349,width,26),17)
 	panel(Rect2(28,394,size.x-56,29),INK)
 	text(notice if notice_time>0 else "Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
@@ -904,6 +912,9 @@ func draw_overlay() -> void:
 			action("GOT IT",Rect2(middle-120,y,240,51),"resume",-1,true)
 
 func _input(event: InputEvent) -> void:
+	if screen=="daily":
+		if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE: daily_screen.leave()
+		return
 	if loading or (ended and result_delay > 0):
 		return
 	if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE:
@@ -1025,6 +1036,7 @@ func launch_attack(player: bool, kind: String, color: Color, damage: int) -> voi
 func dispatch(id: String, value: int = -1) -> void:
 	if OS.is_debug_build(): print("WarOfWords: action=%s screen=%s overlay=%s" % [id,screen,overlay])
 	match id:
+		"daily": change_screen("daily"); daily_screen.open()
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
 		"mission": mission=value
@@ -1092,6 +1104,7 @@ func change_screen(target: String) -> void:
 	queue_redraw()
 
 func back() -> void:
+	if screen=="daily": daily_screen.leave(); return
 	if ended and screen == "battle" and result_delay>0: return
 	if not overlay.is_empty():
 		if overlay=="result": change_screen("campaign")

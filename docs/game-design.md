@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Novi smer — dnevni izazov i globalna rang-lista, 2026-09-17
+
+Korisnik je usvojio početak online nadogradnje na besplatnom servisu: prvo profil/nadimak, dnevni izazov i globalna rang-lista, potom razmatranje izazivanja prijatelja i duela uživo. Ima pripremljen Supabase projekat. Ova odluka proširuje prethodni offline smer; kampanja protiv računara ostaje.
+
+Prva implementacija koristi izdvojen izazov od 120 s, četiri kategorije (rečnik × povezivanje), jedan pokušaj po anonimnom profilu/kategoriji/danu po UTC-u, proveru poteza na serveru i offline vežbu. Bodovanje `10 × pločice + 5 × max(0, pločice − 4)` i generator dopune su **probni implementacioni izbori**, ne konačan turnirski balans. Multiplayer, monetizacija i trajni nalozi nisu ovim implementirani. Detalji i stvarna ograničenja: [daily-online.md](daily-online.md).
+
 ## 0.1.6 — kampanja, dopuna i animacije
 
 - Popravljen izbor nivoa: držanje prsta preko više iscrtavanja više ne uklanja dodirnu oblast. Novi regresioni test zadržava dodir preko osam frejmova, uz poseban test zaključanog nivoa.

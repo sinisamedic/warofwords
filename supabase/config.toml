@@ -1,0 +1,6 @@
+project_id = "war-of-words"
+
+[functions.daily]
+# Keep the gateway check enabled; the handler additionally checks Auth /user.
+# Verified against the target project's current signing configuration.
+verify_jwt = true

@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Radna grana 0.1.7-dev:** novi preset/build skripta pripremaju `WarOfWords-0.1.7-android.apk` (code 8) sa INTERNET dozvolom za dnevni izazov. Paket još nije napravljen ni objavljen. Pre build-a dodati javni `game/online_config.json` prema [online uputstvu](daily-online.md), a za nadogradnju koristiti prethodni potpisni ključ. Sledeći odeljak opisuje poslednji objavljeni 0.1.6.
+
 ## Probaj na telefonu
 
 1. Preuzmi **WarOfWords-0.1.6-android.apk** na Android telefon (ili ga kopiraj sa računara u Downloads preko USB kabla).

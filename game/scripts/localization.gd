@@ -1,6 +1,9 @@
 extends RefCounted
 
 const SR := {
+"DAILY CHALLENGE":"DNEVNI IZAZOV",
+"Offline dictionaries  •  v0.1.7-dev":"Rečnici bez interneta  •  v0.1.7-dev",
+"CAMPAIGN  •  DAILY CHALLENGE":"KAMPANJA  •  DNEVNI IZAZOV",
 "%d words  •  %.0fs":"Reči: %d  •  %.0f s", "Best word: %s":"Najduža reč: %s", "CAMPAIGN COMPLETE":"KAMPANJA ZAVRŠENA",
 "PLAY":"IGRAJ",
 "SOUND EFFECTS":"ZVUČNI EFEKTI", "MUSIC":"MUZIKA", "ANY LETTERS":"BILO KOJA",

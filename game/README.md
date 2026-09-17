@@ -1,4 +1,6 @@
-# War of Words — playable Android 0.1.2
+# War of Words — development 0.1.7
+
+Current work adds a separate Daily Challenge screen and a deployed Supabase leaderboard. See [online setup and validation](../docs/daily-online.md) and [STATUS](../STATUS.md). The latest published Android package is still 0.1.6; 0.1.7 has not been exported or tested on Android. The description below records the earlier campaign foundation.
 
 Offline landscape word combat, implemented in Godot 4.7.2. Open `project.godot`, then run the main scene. Android installation/build instructions: [../docs/android.md](../docs/android.md).
 
