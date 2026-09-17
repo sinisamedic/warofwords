@@ -2,7 +2,7 @@
 const {execFileSync}=require('node:child_process');const fs=require('node:fs'),crypto=require('node:crypto');
 const arg=name=>process.argv[process.argv.indexOf(name)+1];
 const serial=arg('--serial'),apk=arg('--apk');
-if(!process.argv.includes('--serial')||!/^emulator-\d+$/.test(serial)||!process.argv.includes('--apk')||!fs.existsSync(apk))throw Error('Use --serial emulator-5554 --apk exports/WarOfWords-0.1.2-android.apk');
+if(!process.argv.includes('--serial')||!/^emulator-\d+$/.test(serial)||!process.argv.includes('--apk')||!fs.existsSync(apk))throw Error('Use --serial emulator-5554 --apk exports/WarOfWords-0.1.3-android.apk');
 const pkg='com.sinisamedic.warofwords',adb=(...a)=>execFileSync('adb',['-s',serial,...a],{encoding:'utf8',windowsHide:true,timeout:60000}).trim();
 const wait=ms=>new Promise(r=>setTimeout(r,ms)),save=()=>JSON.parse(adb('shell','run-as',pkg,'cat','files/progress.json'));
 const check=(ok,msg)=>{if(!ok)throw Error(msg);console.log('PASS '+msg);};

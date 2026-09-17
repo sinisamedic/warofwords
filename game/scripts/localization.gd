@@ -1,6 +1,10 @@
 extends RefCounted
 
 const SR := {
+"SOUND EFFECTS":"ZVUČNI EFEKTI", "MUSIC":"MUZIKA", "ANY LETTERS":"BILO KOJA",
+"Any letters: link across the board. Applies to your current duel too.":"Bilo koja: spajaj udaljena slova. Važi odmah, i za započetu borbu.",
+"Offline dictionaries  •  v0.1.3":"Rečnici bez interneta  •  v0.1.3", "Arc fired!":"Luk ispaljen!",
+"Music: Joth / TAD · CC0 recordings.":"Muzika: Joth / TAD · CC0 snimci.",
 "HINT: %s":"POMOĆ: %s",
 "LETTER CONNECTION":"POVEZIVANJE SLOVA", "ADJACENT":"SUSEDNA", "FREE":"SLOBODNO",
 "New duels use these rules. Saved duels keep theirs.":"Važi za nove borbe. Započete čuvaju svoja pravila.",

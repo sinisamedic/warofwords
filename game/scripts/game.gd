@@ -7,6 +7,7 @@ const Ornaments = preload("res://scripts/ornaments.gd")
 const Portrait = preload("res://scripts/portrait.gd")
 const Localization = preload("res://scripts/localization.gd")
 const Actor = preload("res://scripts/actor.gd")
+const EnemyArt = preload("res://scripts/enemy_art.gd")
 const CREAM := Color("fff1ce")
 const GOLD := Color("f3c569")
 const INK := Color("10283d")
@@ -26,6 +27,7 @@ var board_environment: Texture2D = preload("res://assets/art/board-environment.p
 var arena: Texture2D = preload("res://assets/art/arena.png")
 var map_art: Texture2D = preload("res://assets/art/map.png")
 var fighters: Texture2D = preload("res://assets/art/fighters.png")
+var menu_icons: Texture2D = preload("res://assets/art/menu-icons.png")
 var lex = Lexicon.new(false)
 var lexicons: Dictionary = {}
 var portraits: Array[Sprite2D] = []
@@ -34,6 +36,15 @@ var loading := true
 var dictionary_thread: Thread
 var save = SaveData.new()
 var sfx: Node
+var music: Node
+var enemy_art_mission := -1
+var hero_recoil := 0.0
+var enemy_recoil := 0.0
+var hero_hit_strength := 0.0
+var enemy_hit_strength := 0.0
+var page_gesture := false
+var page_origin := Vector2.ZERO
+var page_screen := ""
 var hero: Sprite2D
 var enemy_actor: Sprite2D
 var screen := "home"
@@ -101,6 +112,9 @@ func _ready() -> void:
 	sfx = Sound.new()
 	add_child(sfx)
 	sfx.enabled = save.data.sound
+	music = preload("res://scripts/music.gd").new()
+	add_child(music)
+	music.set_enabled(save.data.music)
 	hero = Actor.new()
 	enemy_actor = Actor.new()
 	hero.setup(fighters,false)
@@ -172,6 +186,8 @@ func _notification(what: int) -> void:
 		get_tree().quit()
 
 func _process(delta: float) -> void:
+	# A suspended app must not fast-forward projectiles or CPU turns on its first frame.
+	delta = minf(delta,.05)
 	if OS.is_debug_build() and Time.get_ticks_msec()-debug_sample_at >= 15000:
 		debug_sample_at=Time.get_ticks_msec()
 		print("WarOfWords: performance screen=%s fps=%d draw_calls=%d" % [screen,Engine.get_frames_per_second(),RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
@@ -180,6 +196,8 @@ func _process(delta: float) -> void:
 	hint_time = maxf(0,hint_time-delta)
 	attack_flash = maxf(0,attack_flash-delta)
 	hero_flash = maxf(0,hero_flash-delta)
+	music.battle = screen == "battle"
+	music.ducked = not overlay.is_empty()
 	var active := screen == "battle" and overlay.is_empty() and not ended and not loading
 	if active:
 		duration += delta
@@ -194,11 +212,9 @@ func _process(delta: float) -> void:
 			autosave_clock = 0
 			persist_battle()
 	if screen == "battle" and overlay.is_empty() and not loading:
-		for impact in fx.advance(delta):
-			sfx.play("shield" if impact.blocked else "hit" if impact.kind == "word" else "explosion",randf_range(.96,1.04))
-			haptic(28 if impact.kind == "word" else 75,.35 if impact.kind == "word" else .85)
-			if impact.player: attack_flash=.22
-			else: hero_flash=.22
+		advance_combat(delta)
+		hero_recoil=maxf(0,hero_recoil-delta)
+		enemy_recoil=maxf(0,enemy_recoil-delta)
 		if ended and result_delay > 0:
 			result_delay=maxf(0,result_delay-delta)
 			if result_delay == 0:
@@ -220,21 +236,60 @@ func update_actors() -> void:
 		portraits[i].position = Vector2(44 if i == 0 else size.x-44,33)
 	var bob := 0.0 if save.data.calm else sin(clock*2.0)*1.3
 	if screen == "battle":
+		if enemy_art_mission != mission:
+			EnemyArt.apply(enemy_actor,portraits[1],mission)
+			enemy_art_mission=mission
 		var actor_height := 137.0
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
-		enemy_actor.scale = hero.scale
-		var recoil: float = 0.0 if save.data.calm else sin(clock*85)*fx.shake*9
-		hero.position = Vector2(size.x*0.20+recoil,119+bob)
-		enemy_actor.position = Vector2(size.x*0.80-recoil,117-bob)
+		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.CELL.y
+		var hero_kick := 0.0 if save.data.calm else hit_offset(hero_recoil,hero_hit_strength)
+		var enemy_kick := 0.0 if save.data.calm else hit_offset(enemy_recoil,enemy_hit_strength)
+		hero.position = Vector2(size.x*0.20-hero_kick,119+bob)
+		enemy_actor.position = Vector2(size.x*0.80+enemy_kick,117-bob)
+		hero.rotation = -hero_kick*.0025
+		enemy_actor.rotation = enemy_kick*.0025
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 and not save.data.calm else Color.WHITE
-		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color(1,1-float(mission%4)*0.055,1)
+		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color.WHITE
 	else:
 		var actor_height := size.y*0.84
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
-		hero.position = Vector2(size.x*0.24,size.y*0.55+bob)
+		# Anchor the feet to the raised sunlit platform, with a visible breathing sway.
+		hero.position = Vector2(size.x*0.24,size.y*0.48+(0.0 if save.data.calm else sin(clock*2.1)*3.2))
+		hero.rotation = 0.0 if save.data.calm else sin(clock*1.5)*.008
 		hero.modulate = Color.WHITE
 		if screen in ["arsenal","powers"]:
 			hero.visible = false
+
+func hit_offset(remaining: float, strength: float) -> float:
+	if remaining <= 0: return 0
+	var u := 1.0-remaining/.48
+	return strength*exp(-u*4.5)*(1.0+sin(u*TAU*3.5)*.55)
+
+func advance_combat(delta: float) -> void:
+	var impacts: Array = fx.advance(delta)
+	for impact in impacts:
+		if ended: break
+		var blocked: bool = not impact.player and shield > 0
+		var damage: int = impact.damage
+		if impact.player:
+			foe_hp=maxi(0,foe_hp-damage)
+			if impact.kind == "arc":
+				countdown=interval()+3
+				message("Enemy attack interrupted")
+			attack_flash=.22; enemy_recoil=.48
+			enemy_hit_strength=11.0 if impact.kind == "word" else 25.0
+		else:
+			damage=maxi(0,damage-shield); shield=0
+			hp=maxi(0,hp-damage)
+			hero_flash=.22; hero_recoil=.48; hero_hit_strength=12.0 if blocked else 22.0
+			message("Shield absorbed the attack" if damage==0 else t("Enemy hit  −%d HP") % damage)
+		fx.impact(impact,blocked)
+		sfx.play("shield" if blocked else "hit" if impact.kind == "word" else "explosion",randf_range(.96,1.04))
+		haptic(30 if impact.kind == "word" else 90,.4 if impact.kind == "word" else .95)
+		# First lethal arrival wins; projectiles still in flight are canceled with the duel.
+		if foe_hp <= 0: finish(true)
+		elif hp <= 0: finish(false)
+	if not impacts.is_empty() and not ended: persist_battle()
 
 func _draw_backdrop(node: Node2D) -> void:
 	var tex := map_art if screen == "campaign" else arena
@@ -291,7 +346,7 @@ func coin_counter(rect: Rect2) -> void:
 func header(title: String, back_to: String = "home") -> void:
 	action("<",Rect2(22,16,54,50),back_to)
 	panel(Rect2(83,16,330,50))
-	text(title,Rect2(93,16,310,50),28,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
+	text(title,Rect2(93,16,310,50),28,CREAM,true)
 	coin_counter(Rect2(size.x-177,16,155,50))
 
 func icon(kind: int, center: Vector2, radius: float, color: Color = GOLD) -> void:
@@ -330,16 +385,26 @@ func draw_home() -> void:
 	var x := size.x*0.48
 	var width := size.x-x-42
 	var emblem_width := minf(width+14,375)
-	draw_texture_rect(title_emblem,Rect2(x+(width-emblem_width)/2,20,emblem_width,235),false)
-	action("PLAY  >",Rect2(x,240,width,66),"campaign",-1,true)
+	draw_texture_rect(title_emblem,Rect2(x+(width-emblem_width)/2,16,emblem_width,220),false)
+	action("PLAY  >",Rect2(x,222,width,66),"campaign",-1,true)
 	var split := (width-12)/2
-	action("ARSENAL",Rect2(x,314,split,82),"arsenal")
-	action("UPGRADES",Rect2(x+split+12,314,split,82),"upgrades")
+	var card_height := 114.0 if not save.data.battle.is_empty() else 151.0
+	for i in 2:
+		var rect := Rect2(x+i*(split+12),296,split,card_height)
+		var id := "arsenal" if i == 0 else "upgrades"
+		Ornaments.frame(self,rect,0,Color.WHITE.darkened(.22) if pressed_action == id else Color.WHITE)
+		var source := Rect2(25,125,925,650) if i == 0 else Rect2(950,130,800,650)
+		var icon_height := card_height-34
+		var icon_width := minf(split-18,icon_height*source.size.x/source.size.y)
+		draw_texture_rect_region(menu_icons,Rect2(rect.get_center().x-icon_width/2,rect.position.y+2,icon_width,icon_height),source)
+		text("ARSENAL" if i == 0 else "UPGRADES",Rect2(rect.position.x+12,rect.end.y-38,split-24,26),25,CREAM,true)
+		buttons.append({"rect":rect,"id":id,"value":-1,"enabled":true})
 	if not save.data.battle.is_empty():
-		action("CONTINUE DUEL",Rect2(x,405,width,48),"continue",-1,true)
-	else:
-		action("WORD JOURNAL",Rect2(x,405,width,48),"journal")
+		action("CONTINUE DUEL",Rect2(x,418,width,44),"continue",-1,true)
 	action("OPTIONS",Rect2(22,18,205,46),"settings")
+	Ornaments.frame(self,Rect2(237,18,50,46))
+	Ornaments.ui_icon(self,"journal",Rect2(246,25,32,32))
+	buttons.append({"rect":Rect2(237,18,50,46),"id":"journal","value":-1,"enabled":true})
 	coin_counter(Rect2(size.x-177,18,155,46))
 	text("OFFLINE  •  SOLO CAMPAIGN",Rect2(24,size.y-36,size.x*.4,28),17,CREAM)
 
@@ -443,8 +508,10 @@ func health_bar(rect: Rect2, current: int, maximum: int, opponent: bool) -> void
 	Ornaments.frame(self,rect)
 	var start := rect.position.x+17 if opponent else rect.position.x+38
 	var width := rect.size.x-55
-	var label := t("WARDEN" if mission%4==3 else "SENTINEL") + " · CPU" if opponent else t("YOU")
-	text(label,Rect2(start,rect.position.y+1,width-70,20),18,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
+	var label := t(ENEMIES[mission]).capitalize() if opponent else t("YOU")
+	while title_font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,16).x > width-96:
+		label=label.left(label.length()-2)+"…"
+	text(label,Rect2(start,rect.position.y+1,width-96,20),17,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT,false)
 	text("%d/%d" % [current,maximum],Rect2(start+width-82,rect.position.y+1,82,20),18,CREAM)
 	var bar := Rect2(start,rect.position.y+23,width,11)
 	draw_style_box(health_style(Color("060f20")),bar.grow(1))
@@ -550,13 +617,13 @@ func draw_settings() -> void:
 	var half := (width-10)/2
 	panel(Rect2(28,84,width+16,308))
 	panel(Rect2(right-8,84,width+16,308))
-	for i in 3:
-		var key: String = ["sound","haptics","calm"][i]
-		var label := t(["SOUND","HAPTICS","REDUCED MOTION"][i])
-		action(label+"   "+t("ON" if save.data[key] else "OFF"),Rect2(38,99+i*58,width-4,50),key,-1,save.data[key])
-	text("LETTER CONNECTION",Rect2(38,277,width-4,30),21,GOLD,true)
-	action("ADJACENT",Rect2(38,316,half-2,52),"link_rule",0,save.data.adjacent_only)
-	action("FREE",Rect2(46+half,316,half-2,52),"link_rule",1,not save.data.adjacent_only)
+	for i in 4:
+		var key: String = ["sound","music","haptics","calm"][i]
+		var label := t(["SOUND EFFECTS","MUSIC","HAPTICS","REDUCED MOTION"][i])
+		action(label+"   "+t("ON" if save.data[key] else "OFF"),Rect2(38,94+i*52,width-4,46),key,-1,save.data[key])
+	text("LETTER CONNECTION",Rect2(38,305,width-4,29),21,GOLD,true)
+	action("ADJACENT",Rect2(38,339,half-2,46),"link_rule",0,save.data.adjacent_only)
+	action("ANY LETTERS",Rect2(46+half,339,half-2,46),"link_rule",1,not save.data.adjacent_only)
 	text("INTERFACE LANGUAGE",Rect2(right,99,width,30),22,GOLD,true)
 	action("English",Rect2(right,137,half,51),"ui_language",0,save.data.ui_language=="en")
 	action("Srpski",Rect2(right+half+10,137,half,51),"ui_language",1,save.data.ui_language=="sr")
@@ -564,9 +631,9 @@ func draw_settings() -> void:
 	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
 	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
 	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,315,width,28),19)
-	text("Offline dictionaries  •  v0.1.2",Rect2(right,349,width,26),17)
+	text("Offline dictionaries  •  v0.1.3",Rect2(right,349,width,26),17)
 	panel(Rect2(28,394,size.x-56,29),INK)
-	text("New duels use these rules. Saved duels keep theirs.",Rect2(43,394,size.x-86,29),18,CREAM)
+	text("Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
 	action("CREDITS",Rect2(right,427,width,46),"credits")
 
@@ -578,14 +645,16 @@ func draw_journal() -> void:
 	list.reverse()
 	if list.is_empty():
 		text("Your discoveries will appear here after a duel.",Rect2(42,192,size.x-84,60),24)
-	for i in mini(12,maxi(0,list.size()-journal_page*12)):
-		var word: String = list[journal_page*12+i]
-		var column := i%3
-		var row: int = i/3
-		text(word,Rect2(50+column*(size.x-100)/3,153+row*43,(size.x-120)/3,39),25,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
+	for i in mini(20,maxi(0,list.size()-journal_page*20)):
+		var word: String = list[journal_page*20+i]
+		var column := i%4
+		var row: int = i/4
+		var cell := Rect2(42+column*(size.x-84)/4,147+row*47,(size.x-100)/4,43)
+		draw_line(Vector2(cell.position.x+8,cell.end.y),Vector2(cell.end.x-8,cell.end.y),Color(GOLD,.16),1)
+		text(word,cell,23,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
 	action("<",Rect2(28,size.y-62,60,46),"journal_page",journal_page-1,false,journal_page>0)
 	text(t("PAGE %d") % (journal_page+1),Rect2(size.x/2-100,size.y-62,200,46),21)
-	action(">",Rect2(size.x-88,size.y-62,60,46),"journal_page",journal_page+1,false,(journal_page+1)*12<list.size())
+	action(">",Rect2(size.x-88,size.y-62,60,46),"journal_page",journal_page+1,false,(journal_page+1)*20<list.size())
 
 func draw_overlay() -> void:
 	buttons.clear()
@@ -603,7 +672,7 @@ func draw_overlay() -> void:
 			lines=[("Link neighboring letters, including diagonals." if (lex.adjacent_only if screen=="battle" else save.data.adjacent_only) else "Link any letters. Each tile can be used once."),"Release to submit; drag back to undo a letter.","Colors charge the matching abilities. Tap READY.","Long words hit harder. Find each word once per duel.","Tap letters + ✓ also works. HINT reveals a path."]
 		"credits":
 			title="WAR OF WORDS"
-			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lato: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Full notices included in the project and app package."]
+			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lato: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
 		"result":
 			title="VICTORY" if won else "DEFEATED"
 			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.",t("%d words  •  Best: %s") % [word_count,best_word if not best_word.is_empty() else "—"],t("+%d coins   •   %.0f seconds") % [reward,duration]]
@@ -668,7 +737,10 @@ func _input(event: InputEvent) -> void:
 
 func press(p: Vector2) -> void:
 	pressed_action=""; pressed_value=-1
+	page_gesture=false
 	if buttons_state != screen+"|"+overlay: return
+	page_gesture=screen in ["campaign","journal"] and overlay.is_empty() and p.y > 75
+	page_origin=p; page_screen=screen
 	if screen=="battle" and overlay.is_empty() and not ended:
 		for i in hitboxes.size():
 			if hitboxes[i].has_point(p):
@@ -678,6 +750,8 @@ func press(p: Vector2) -> void:
 			pressed_action=b.id; pressed_value=b.value; return
 
 func move(p: Vector2) -> void:
+	if page_gesture and p.distance_to(page_origin)>18:
+		pressed_action=""; pressed_value=-1
 	if not dragging:
 		return
 	# Touch events can skip a tile during a fast swipe or a slow frame.
@@ -697,6 +771,16 @@ func trace_point(p: Vector2) -> void:
 			return
 
 func release(p: Vector2) -> void:
+	if page_gesture:
+		page_gesture=false
+		var travel := p-page_origin
+		if page_screen == screen and overlay.is_empty() and absf(travel.x)>=50 and absf(travel.x)>absf(travel.y)*1.35:
+			pressed_action=""; pressed_value=-1
+			var direction := 1 if travel.x < 0 else -1
+			if screen == "campaign": dispatch("chapter",chapter+direction)
+			elif screen == "journal": dispatch("journal_page",journal_page+direction)
+			sfx.play("tap")
+			return
 	if dragging:
 		dragging=false
 		if drag_moved:
@@ -727,8 +811,8 @@ func haptic(milliseconds: int, strength: float) -> void:
 	if save.data.haptics and OS.get_name() == "Android":
 		Input.vibrate_handheld(milliseconds,strength)
 
-func launch_attack(player: bool, kind: String, color: Color, blocked: bool = false) -> void:
-	fx.launch(player,kind,color,blocked)
+func launch_attack(player: bool, kind: String, color: Color, damage: int) -> void:
+	fx.launch(player,kind,color,damage)
 	sfx.play("arc" if kind == "arc" else "shot",1.13 if kind == "word" else 1.0)
 	sfx.play("flight",.92 if not player else 1.0)
 	haptic(18 if kind == "word" else 40,.3 if kind == "word" else .65)
@@ -739,8 +823,9 @@ func dispatch(id: String, value: int = -1) -> void:
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
 		"mission": mission=value
-		"chapter": chapter=value; mission=mini(save.data.unlocked,chapter*4)
-		"journal_page": journal_page=maxi(0,value)
+		"chapter":
+			chapter=clampi(value,0,mini(2,int(save.data.unlocked)/4)); mission=mini(save.data.unlocked,chapter*4)
+		"journal_page": journal_page=clampi(value,0,maxi(0,(save.data.dictionary.size()-1)/20))
 		"power": save.data.selected_power=value; save.save_game()
 		"upgrade": upgrade()
 		"start":
@@ -761,9 +846,10 @@ func dispatch(id: String, value: int = -1) -> void:
 		"submit": submit_word()
 		"hint": show_hint()
 		"boost": power_up()
-		"sound","haptics","calm":
+		"sound","music","haptics","calm":
 			save.data[id]=not save.data[id]
 			sfx.enabled=save.data.sound
+			music.set_enabled(save.data.music)
 			save.save_game()
 		"ui_language":
 			save.data.ui_language = ["en","sr"][value]; save.save_game()
@@ -772,6 +858,11 @@ func dispatch(id: String, value: int = -1) -> void:
 			await select_dictionary(save.data.word_language)
 		"link_rule":
 			save.data.adjacent_only = value == 0
+			lex.adjacent_only = save.data.adjacent_only
+			path.clear(); hint_path.clear(); hint_time=0
+			if not save.data.battle.is_empty():
+				save.data.battle.adjacent_only=save.data.adjacent_only
+			if screen == "battle" and not ended: persist_battle()
 			save.save_game()
 		"quit": persist_battle(); get_tree().quit()
 	queue_redraw()
@@ -783,9 +874,11 @@ func change_screen(target: String) -> void:
 	screen=target
 	overlay=""; path.clear(); dragging=false; tap_composition=false
 	fx.clear(); result_delay=0
+	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
 	get_node("Backdrop").queue_redraw()
+	update_actors()
 	queue_redraw()
 
 func back() -> void:
@@ -824,6 +917,7 @@ func start_battle() -> void:
 	duration=0; ended=false; won=false; reward=0; stars=0; freeze=0; surge=false
 	boost_used=false; enemy_attacks=0; countdown=interval()+4; shuffled=0
 	fx.clear(); sparks.clear(); hint_path.clear(); path.clear()
+	attack_flash=0; hero_flash=0
 	lex.generate()
 	if not save.data.tutorial:
 		lex.letters.assign(Array(("KAMENVAREKASUNŠTITIGRVODAMOS" if lex.language=="sr" else "STONESTREAMLINEPLANETCARDSEN").split("")))
@@ -835,6 +929,7 @@ func interval() -> float:
 	return maxf(8,14-mission*0.42)
 
 func submit_word() -> void:
+	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
 	tap_composition=false
 	if path.size()<3:
 		message("Use at least three letters"); path.clear(); return
@@ -854,47 +949,39 @@ func submit_word() -> void:
 	for i in 4: energy[i]=mini(COSTS[i],energy[i]+gain[i])
 	surge=false
 	var damage := path.size()+maxi(0,path.size()-4)*2
-	foe_hp=maxi(0,foe_hp-damage)
-	launch_attack(true,"word",GOLD)
+	launch_attack(true,"word",GOLD,damage)
 	sfx.play("word")
 	var refreshed: bool = lex.refill(path,used)
 	path.clear()
 	message(t("%s  •  %d damage%s") % [word,damage,t("  •  Board refreshed") if refreshed else ""])
-	if foe_hp<=0: finish(true)
-	else: persist_battle()
+	persist_battle()
 
 func fire(i: int) -> void:
+	if i not in [0,1,2,3] or fx.shots.size() >= fx.MAX_SHOTS: return
 	if ended or energy[i]<COSTS[i]:
 		message(t("%s needs %d matching energy") % [t(NAMES[i]),COSTS[i]]); return
 	if i==1 and shield>0: message("Your shield is already active"); return
 	if i==3 and hp>=100: message("Health is already full"); return
 	energy[i]=0
 	match i:
-		0: foe_hp=maxi(0,foe_hp-effect(i))
 		1: shield=effect(i)
-		2: foe_hp=maxi(0,foe_hp-effect(i)); countdown=interval()+3
 		3: hp=mini(100,hp+effect(i)); hero_flash=0
-	if i in [0,2]: launch_attack(true,"arc" if i == 2 else "pulse",COLORS[i])
+	if i in [0,2]: launch_attack(true,"arc" if i == 2 else "pulse",COLORS[i],effect(i))
 	else:
 		fx.burst("shield" if i == 1 else "heal",Vector2(.20,115),COLORS[i],.8)
 		sfx.play("shield" if i == 1 else "heal")
 		haptic(30,.4)
-	message(["Pulse fired!","Shield ready","Enemy attack interrupted","Health restored"][i])
-	if foe_hp<=0: finish(true)
-	else: persist_battle()
+	message(["Pulse fired!","Shield ready","Arc fired!","Health restored"][i])
+	persist_battle()
 
 func enemy_attack() -> void:
+	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
 	enemy_attacks+=1
 	var amount := 12+mission
 	if mission%4==3 and enemy_attacks%3==0: amount+=8
-	var damage := maxi(0,amount-shield)
-	var was_shielded := shield > 0
-	shield=0
-	hp=maxi(0,hp-damage)
 	countdown=interval()
-	launch_attack(false,"enemy",COLORS[2],was_shielded)
-	message("Shield absorbed the attack" if damage==0 else t("Enemy hit  −%d HP") % damage)
-	if hp<=0: finish(false)
+	launch_attack(false,"enemy",COLORS[2],amount)
+	persist_battle()
 
 func power_up() -> void:
 	if boost_used or ended: return
@@ -924,6 +1011,7 @@ func show_hint() -> void:
 func finish(victory: bool) -> void:
 	if ended: return
 	ended=true; won=victory; result_delay=.62; overlay=""; path.clear(); notice_time=0
+	fx.shots.clear()
 	stars=(3 if hp>=70 else 2 if hp>=35 else 1) if won else 0
 	var first: bool = not save.data.wins.has(str(mission))
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)
@@ -942,6 +1030,7 @@ func finish(victory: bool) -> void:
 func persist_battle() -> void:
 	if screen=="battle" and not ended and lex.letters.size()==28:
 		save.data.battle={"adjacent_only":lex.adjacent_only,"dictionary_code":lex.language,"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
+		save.data.battle.projectiles=fx.snapshot()
 	if not save.save_game(): message("Could not save progress on this device")
 
 func restore_battle() -> void:
@@ -958,7 +1047,7 @@ func restore_battle() -> void:
 	used=b.used.duplicate(); word_count=int(b.words); best_word=b.best; duration=float(b.duration)
 	lex.letters.assign(b.letters); lex.types.assign(b.types); lex.find_words(used)
 	enemy_attacks=int(b.attacks); save.data.selected_power=int(b.power)
-	ended=false; won=false; overlay="pause"; fx.clear(); sparks.clear()
+	ended=false; won=false; overlay="pause"; fx.restore(b.get("projectiles",[])); sparks.clear()
 
 func valid_snapshot(b: Dictionary) -> bool:
 	for key in ["mission","hp","foe","max","energy","shield","countdown","freeze","surge","boost_used","used","words","best","duration","letters","types","attacks","power"]:
@@ -974,6 +1063,7 @@ func valid_snapshot(b: Dictionary) -> bool:
 		if not word is String: return false
 	if b.get("dictionary_code","en") not in ["en","sr"]: return false
 	if not b.get("adjacent_only",true) is bool: return false
+	if not fx.valid_saved(b.get("projectiles",[])): return false
 	var tile_lex = Lexicon.new(false,b.get("dictionary_code","en"))
 	for letter in b.letters:
 		if not letter is String or not tile_lex.valid_tile(letter): return false
@@ -1034,17 +1124,27 @@ func _run_visual_qa() -> void:
 	path.assign([0,1,2]); tap_composition=true
 	await _qa_capture(directory+"/battle-djak.png")
 	path.clear(); tap_composition=false; set_process(false)
-	fx.clear(); fx.launch(true,"pulse",GOLD); fx.advance(.24)
+	fx.clear(); fx.launch(true,"pulse",GOLD,24); advance_combat(.24)
 	await _qa_capture(directory+"/pulse-flight.png")
-	fx.advance(.24)
+	advance_combat(.24); update_actors()
 	await _qa_capture(directory+"/pulse-impact.png")
-	fx.clear(); fx.launch(false,"enemy",COLORS[2],true); fx.advance(.5)
+	fx.clear(); shield=20; fx.launch(false,"enemy",COLORS[2],12); advance_combat(.5); update_actors()
 	await _qa_capture(directory+"/shield-impact.png")
 	save.data.calm=true
 	await _qa_capture(directory+"/reduced-motion.png")
+	save.data.calm=false; save.data.ui_language="en"
+	change_screen("journal")
+	save.data.dictionary.assign(["STONE","SUNLIGHT","BRIDGE","GUARDIAN","TEMPEST","JOURNEY","ASTRAL","COPPER","ARCHIVE","THUNDER","WORDSMITH","SENTINEL","WARDEN","CRESCENT","ORBIT","CRYSTAL","FORGE","AETHER","SKYLINE","RADIANCE","BLADE"])
+	await _qa_capture(directory+"/journal.png")
+	for encounter in 12:
+		change_screen("battle"); mission=encounter; ended=false; hp=100; foe_hp=100; foe_max=100; countdown=60
+		attack_flash=0; hero_flash=0; enemy_recoil=0; hero_recoil=0
+		update_actors()
+		await _qa_capture(directory+"/enemy-%02d.png" % encounter)
 	get_tree().quit()
 
 func _qa_capture(file: String) -> void:
+	update_actors()
 	queue_redraw()
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw

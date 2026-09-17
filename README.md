@@ -1,31 +1,31 @@
 # War of Words
 
-**Igriva Android verzija 0.1.2 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
+**Igriva Android verzija 0.1.3 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 
-- APK: [WarOfWords-0.1.2-android.apk](https://github.com/sinisamedic/warofwords/releases/download/v0.1.2-android-preview/WarOfWords-0.1.2-android.apk). Lokalni build je u ignorisanom `exports/`.
+- APK: [WarOfWords-0.1.3-android.apk](https://github.com/sinisamedic/warofwords/releases/download/v0.1.3-android-preview/WarOfWords-0.1.3-android.apk). Lokalni build je u ignorisanom `exports/`.
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
-- **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Free** dozvoljava udaljena slova. Novi rečnik i pravilo važe za nove borbe; započete čuvaju svoja.
+- **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Any letters** dozvoljava udaljena slova. Pravilo povezivanja važi odmah i za započetu borbu. Novi rečnik važi za novu borbu.
 
 ## Šta je uključeno
 
-Ukrašeni meniji, reljefni naslov, kamena tabla, svetleći spojevi i slojeviti efekti borbe. Šest osnovnih ekrana, 12 misija u tri poglavlja, četiri sposobnosti sa osam nivoa, tri besplatna power-upa, novčići i otključavanje misija, odvojen izbor jezika menija i rečnika, 76.802 engleske i 1.740.276 srpskih oblika reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
+Ukrašeni meniji, reljefni naslov, kamena tabla, svetleći spojevi i slojeviti efekti borbe. Šest osnovnih ekrana, 12 misija u tri poglavlja, četiri sposobnosti sa osam nivoa, tri besplatna power-upa, novčići i otključavanje misija, odvojen izbor jezika menija i rečnika, 76.802 engleske i 1.740.276 srpskih oblika reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. 12 različitih protivnika, orkestarska muzika sa zasebnim prekidačem, šteta pri udaru projektila, prevlačenje mape/dnevnika i 20 reči po strani. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
 
-[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.2.md) · [Status i sledeći korak](STATUS.md).
+[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.3.md) · [Status i sledeći korak](STATUS.md).
 
 ## Nastavi na drugom računaru
 
-Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/ornate-ui-combat-effects**:
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/impact-enemies-music**:
 
 ```powershell
 git fetch origin --prune
-git switch codex/ornate-ui-combat-effects
+git switch codex/impact-enemies-music
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/ornate-ui-combat-effects`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
+Ako grana nije lokalna: `git switch --track origin/codex/impact-enemies-music`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. [Podešavanje računara](docs/setup.md).
 
 ## Struktura
 

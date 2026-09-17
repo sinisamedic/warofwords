@@ -18,3 +18,10 @@ AI-generated assets follow the applicable OpenAI terms; no third-party stock lic
 The 0.1.2 emblem and playfield use the approved home/battle masters as references. Both outputs are retained unchanged, including the emblem's real alpha channel. Exact prompts and original output identifiers: `prompts-0.1.2.json`. The playfield is drawn in three horizontal regions so the central board keeps its size on wider phones. The logo is a brand asset; other UI text remains dynamic and localized.
 
 Original scalable UI frames/icons: `tools/build-ornate-ui.cjs`. Original audio sources and synthesis recipe: `../audio/README.md`.
+
+## 0.1.3 artwork (2026-09-17)
+
+- `menu-icons.png`, 1774 × 887, genuine alpha: detailed brass cannon and interlocking gears based on the user's crop of our approved home design. Source output: `exec-23050275-38a6-4905-a7ed-9b6b1b855114.png`.
+- `enemies.png`, 1448 × 1086, genuine alpha: 12 distinct opponents in a 4 × 3 atlas, in campaign order. Source output: `exec-8b2c7c7e-0f9c-4793-ba5a-6d35a5812a22.png`; a layout edit of `exec-01d4c693-d9e4-481d-9a1a-0a99d4cc5262.png` to separate the figures. `scripts/enemy_art.gd` selects the body and matching face crop. These sprites use native alpha, without the old magenta-key shader.
+
+Both production files were generated with the built-in ImageGen tool and copied unchanged. Exact prompts, reference role and source identifiers: `prompts-0.1.3.json`. No external franchise characters are included. Both assets are below 10 MiB. Original approved design masters remain unchanged. Licensed music has separate provenance in `../music/README.md`.

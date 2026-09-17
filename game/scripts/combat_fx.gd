@@ -3,17 +3,43 @@ extends RefCounted
 const Art = preload("res://scripts/ornaments.gd")
 var shots: Array[Dictionary] = []
 var bursts: Array[Dictionary] = []
-var shake := 0.0
 const FLIGHT_TIME := .42
+const MAX_SHOTS := 64
 
 func clear() -> void:
-	shots.clear(); bursts.clear(); shake=0
+	shots.clear(); bursts.clear()
 
-func launch(player: bool, kind: String, color: Color, blocked: bool = false) -> void:
-	if shots.size() >= 8: shots.pop_front()
-	shots.append({"player":player,"kind":kind,"color":color,"blocked":blocked,"time":0.0})
+func launch(player: bool, kind: String, color: Color, damage: int = 0) -> void:
+	# These are live attacks, not disposable particles. Never evict one before impact.
+	shots.append({"player":player,"kind":kind,"color":color,"damage":damage,"time":0.0})
 	burst("muzzle",Vector2(.245 if player else .765,115),color,.32)
-	shake = maxf(shake,.10 if kind == "word" else .18)
+
+func impact(shot: Dictionary, blocked: bool) -> void:
+	burst("shield" if blocked else "impact",Vector2(.79 if shot.player else .21,116),Color("78bfff") if blocked else shot.color,.75)
+
+func snapshot() -> Array:
+	var result: Array = []
+	for shot in shots:
+		result.append({"player":shot.player,"kind":shot.kind,"damage":shot.damage,"time":shot.time,"color":shot.color.to_html()})
+	return result
+
+func restore(saved: Array) -> void:
+	clear()
+	for shot in saved:
+		shots.append({"player":shot.player,"kind":shot.kind,"damage":int(shot.damage),"time":float(shot.time),"color":Color(shot.color)})
+
+static func valid_saved(saved: Variant) -> bool:
+	if not saved is Array or saved.size() > MAX_SHOTS: return false
+	for shot in saved:
+		if not shot is Dictionary: return false
+		if not shot.get("player") is bool: return false
+		if shot.get("kind") not in ["word","pulse","arc","enemy"]: return false
+		if shot.player == (shot.kind == "enemy"): return false
+		if not shot.get("color") is String or not Color.html_is_valid(shot.color): return false
+		for key in ["time","damage"]:
+			if not (shot.get(key) is int or shot.get(key) is float) or not is_finite(float(shot[key])): return false
+		if shot.time < 0 or shot.time >= FLIGHT_TIME or shot.damage < 0 or shot.damage > 200: return false
+	return true
 
 func burst(kind: String, at: Vector2, color: Color, lifetime: float = .7) -> void:
 	if bursts.size() >= 16: bursts.pop_front()
@@ -21,17 +47,15 @@ func burst(kind: String, at: Vector2, color: Color, lifetime: float = .7) -> voi
 
 func advance(delta: float) -> Array[Dictionary]:
 	var impacts: Array[Dictionary] = []
-	shake = maxf(0,shake-delta)
 	for b in bursts: b.time += delta
 	bursts = bursts.filter(func(b): return b.time < b.life)
 	for shot in shots:
 		shot.time += delta
 		if shot.time >= FLIGHT_TIME:
 			impacts.append(shot)
-			burst("shield" if shot.blocked else "impact",Vector2(.79 if shot.player else .21,116),shot.color if not shot.blocked else Color("78bfff"),.75)
-			bursts.back().time = shot.time-FLIGHT_TIME
-			shake = maxf(shake,.13 if shot.kind == "word" else .3)
 	shots = shots.filter(func(shot): return shot.time < FLIGHT_TIME)
+	# Resolve older projectiles first even after a JSON restore or a slow frame.
+	impacts.sort_custom(func(a,b): return a.time > b.time)
 	return impacts
 
 func draw(c: CanvasItem, width: float, calm: bool) -> void:

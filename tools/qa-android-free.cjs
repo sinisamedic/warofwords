@@ -17,9 +17,10 @@ async function main(){
  check(adb('shell','getprop','ro.kernel.qemu')==='1','target is an emulator');
  adb('shell','am','force-stop',pkg);const initial=save();await start();
  await tap(175,90);await tap(1491,366);await tap(1491,620);await ready(initial.word_language==='en'?1:2);
- let s=save();if(!s.sound)await tap(550,280);if(!s.haptics)await tap(550,410);if(s.calm)await tap(550,540);
- await tap(907,769);s=save();check(!s.adjacent_only,'free linking selected through Android settings');
- check(JSON.stringify(s.battle)===JSON.stringify(initial.battle),'changing rule leaves saved duel intact');await capture('settings');
+ let s=save();if(!s.sound)await tap(550,263);if(!s.haptics)await tap(550,497);if(s.calm)await tap(550,614);
+ await tap(907,815);s=save();check(!s.adjacent_only,'free linking selected through Android settings');
+ const expected=structuredClone(initial.battle);if(Object.keys(expected).length)expected.adjacent_only=false;
+ check(JSON.stringify(s.battle)===JSON.stringify(expected),'rule changes immediately while preserving the rest of the saved duel');await capture('settings');
  await tap(120,90);await tap(1730,615);await tap(2080,905);await tap(2110,983);
  if(Object.keys(initial.battle).length)await tap(1470,855);
  await tap(1200,80);s=save();check(s.battle.adjacent_only===false&&s.battle.dictionary_code==='en','new battle starts with free English rules');
@@ -29,8 +30,8 @@ async function main(){
  await tap(1590,855);await tap(496,1004);await capture('hint');await tap(1200,80);
  const before=save();adb('shell','am','force-stop',pkg);await start();await tap(1730,966);
  check(JSON.stringify(save().battle)===JSON.stringify(before.battle),'free duel survives process restart');
- await tap(1060,855);await tap(353,769);await tap(120,90);await tap(1730,966);
- s=save();check(s.adjacent_only&&s.battle.adjacent_only===false&&s.battle.used[word],'saved free duel keeps rule after selecting adjacent for new games');
+ await tap(1060,855);await tap(353,815);await tap(120,90);await tap(1730,966);
+ s=save();check(s.adjacent_only&&s.battle.adjacent_only===true&&s.battle.used[word],'switching back to adjacent immediately updates the saved duel without losing words');
  await tap(1590,855);await capture('battle');await wait(1200);await tap(1200,80);
  const pid=adb('shell','pidof',pkg),log=adb('logcat','-d','--pid='+pid,'-s','godot','AndroidRuntime');fs.writeFileSync('.local/android-free-logcat.txt',log);
  check(!/SCRIPT ERROR|E godot.*ERROR:|FATAL EXCEPTION/.test(log),'free-mode Android run has no runtime errors');console.log('FREE ANDROID QA PASSED');

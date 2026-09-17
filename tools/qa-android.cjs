@@ -63,9 +63,9 @@ async function main(){
  // Separate interface and dictionary settings, using real Android taps.
  await tap(175,90);await tap(2040,366);
  s=save();check(s.ui_language==='sr'&&s.word_language==='en','Serbian interface independent of English dictionary');
- await tap(550,300);await tap(550,410);await tap(550,540);
+ await tap(550,263);await tap(550,380);await tap(550,497);await tap(550,614);
  await tap(2040,620);await waitDictionaryLoads(2);await shot('settings-serbian');
- s=save();check(s.word_language==='sr'&&!s.sound&&!s.haptics&&s.calm,'dictionary and all three toggles persist');
+ s=save();check(s.word_language==='sr'&&!s.sound&&!s.music&&!s.haptics&&s.calm,'dictionary and all four toggles persist');
  await tap(120,90);await tap(1730,615);await tap(2080,905);await tap(2110,983);await tap(1200,80);
  s=save();check(s.battle.dictionary_code==='sr'&&s.battle.letters.length===28,'new Android duel uses Serbian dictionary');
  loadDictionary('sr');const srPath=bestPath(s.battle,true);const srWord=srPath.map(i=>s.battle.letters[i]).join('');check(srPath.length>=3,'Serbian board has a valid path');

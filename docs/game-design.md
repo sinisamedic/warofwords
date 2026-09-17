@@ -19,11 +19,11 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
 - Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktivna implementacija — 0.1.2
+## Aktivna implementacija — 0.1.3
 
 Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
 
-- Originalni Sunward Ruins svet, odrasla istraživačica i bronzani automaton. 2D, svetla pozadina i kontrastne komande. Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, opcije i dnevnik reči.
+- Originalni Sunward Ruins svet, odrasla istraživačica i 12 različitih protivnika. 2D, svetla pozadina i kontrastne komande. Šest osnovnih ekrana + pomoć, pauza, pobeda/poraz, opcije i dnevnik reči.
 - Tabla 7 × 4, polja približno 59 logičkih piksela, dodirna oblast 60 × 60 i razmak centara 65, minimalna osnova 854 × 480 (16:9) sa proširenjem širine na širim telefonima. Reči najmanje 3 slova, bez ponavljanja polja i bez iste reči u istom duelu. Dijagonale važe. Prevlačenje ili dodir + ✓; brzi pokreti prate i pređena polja između događaja dodira.
 - Samo iskorišćena polja se dopunjavaju. Solver proverava mogućnosti; prazna tabla se automatski osvežava. Četiri ugrađene reči u redovima čine nove table pristupačnim, uz dodatne dijagonalne kombinacije. Hint otkriva putanju, ne šalje reč automatski.
 - SCOWL 2020.12.07, američki engleski, 76.802 reči dužine 3–16, uključujući infleksije. [Poreklo i tačni filteri](../game/data/README.md). Nema definicija ni kurirane liste za uzrast.
@@ -37,12 +37,27 @@ Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da 
 | Mend, zelena | 5 | 24 lečenja | +6 |
 
 - Svi počinju na nivou 1, najviše nivo 8. Unapređenje košta `100 + trenutni nivo × 60`; početak sa 180 novčića. Aegis započinje duel sa 3 energije da pomogne prvoj odbrani.
-- 12 susreta, tri poglavlja, svaki četvrti boss. Svi koriste originalni automaton sa varijacijom boje i rastućim statistikama. Boss svaki treći udar dodaje 8 štete. Nema mrežnog matchmaking-a ni AI koji rešava isti rečnik.
+- 12 susreta, tri poglavlja, svaki četvrti boss. Svaki protivnik ima zaseban izgled i portret, uz rastuće statistike. Boss svaki treći udar dodaje 8 štete. Nema mrežnog matchmaking-a ni AI koji rešava isti rečnik.
 - Igrač ima 100 HP. Za indeks misije m=0…11 protivnik ima `72+13m` HP, boss još 35. Napad `12+m`, razmak `max(8,14−0.42m)` sekundi, prvi napad +4 s. Poslednje 3 s se najavljuju. Arc vraća pun razmak +3 s; Aegis se troši pri jednom udaru.
 - Izbor jednog power-upa pre borbe: Freeze 8 s, Fresh Board, Overcharge ×2 za sledeću reč. Jedna besplatna upotreba po duelu.
 - Prva pobeda `120+20m` novčića; ponavljanje `40+5m`; poraz do 25, po 2 za pronađenu reč. Zvezdice prema preostalom zdravlju: 3 za ≥70, 2 za ≥35, inače 1. Otključava se sledeća misija.
 - Lokalni save sa rezervnom kopijom, autosave borbe na 5 s i posle poteza, pauza pri gubitku fokusa. Continue Duel vraća i tablu i potrošeni power-up i počinje pauzirano. Poslednjih najviše 600 pronađenih jedinstvenih reči ulaze u dnevnik posle duela.
-- Offline bez naloga, oglasa, kupovina ili monetizacije. Zvuk se sintetiše, haptika i reduced motion se mogu isključiti/podesiti.
+- Offline bez naloga, oglasa, kupovina ili monetizacije. Zvučni efekti su sintetisani; pozadinska muzika su dve licencirane CC0 orkestarske numere. Muzika, efekti, haptika i reduced motion imaju odvojena podešavanja.
+
+## Dorade posle testa 0.1.2 — usvojeno 2026-09-17
+
+- **Šteta se obračunava tek pri dolasku projektila, nakon 0,42 s leta.** Ovo važi za reči, Pulse, Arc i CPU. Energija se troši pri ispaljivanju; Arc odlaže naredni CPU napad pri udaru. Aegis proverava i troši štit pri udaru, pa se može aktivirati tokom leta protivničkog projektila. Lečenje ostaje trenutno.
+- Napadi u letu čuvaju iznos štete i preostalo vreme. Pauza, meni i restart ih ne gube niti ponavljaju. Prvi smrtonosni projektil završava duel; ostali se otkazuju. Nagrada se upisuje samo jednom. Završni ekran ostavlja 0,62 s za reakciju na udar.
+- Jači trzaj samo pogođenog lika (Pulse/Arc do 25 logičkih piksela), nagib i smirivanje kroz 0,48 s. HUD miruje. Reduced Motion uklanja trzaj.
+- Mapa i dnevnik podržavaju horizontalno prevlačenje od najmanje 50 logičkih piksela. Strelice ostaju dostupne. Prevlačenje ne otključava zaključana poglavlja.
+- Centrirani naslovi ekrana. Dnevnik ima 4 kolone × 5 redova, 20 reči po strani, najviše 600 jedinstvenih reči iz završenih duela.
+- Glavni lik podignut na platformu, vidljivija animacija disanja/ljuljanja. Dnevnik je mala ikona knjige pored Podešavanja. Veće ilustrovane ikone topa i zupčanika u Arsenalu/Unapređenjima prate odobreni dizajn.
+- **Podešavanja → Povezivanje slova → Bilo koja** (English: **Options → Letter connection → Any letters**). Promena sada važi odmah i za sačuvanu borbu, uz očuvanje table, reči, energije i projektila. Svaku pločicu koristiš jednom; dodirima možeš birati bilo koja udaljena slova, pa ✓. Rečnik se i dalje bira za novu borbu, a započeta zadržava svoj.
+- 12 originalnih tela i odgovarajućih portreta: mannequin, copper scout, stone guardian, bronze champion, avian watcher, crystal sentinel, iron guardian, storm knight, astral sentinel, archive keeper, sunforged elite i last warden. Siluete, materijali i oprema se razlikuju. Ostaju 2D likovi sa animacijom transformacije; nema skeletne animacije.
+- **Music / Muzika** ima zaseban trajni prekidač. Joth: *Fantasy Orchestral Theme* (191,69 s) za menije; TAD: *Treasure Hunter* (65,07 s) za borbu. CC0 izvori i licence: `game/assets/music/README.md`. Postepeni prelazi, tiši miks u pauzi, zaustavljanje u pozadini. Efekti imaju nezavisan prekidač.
+- Android 0.1.3 / code 4, isti paket i potpis za nadogradnju. Balans generatora i rečnik ostaju probni; monetizacija nije uvedena.
+
+Sledeći odeljci beleže istoriju ranijih verzija; gornje odluke 0.1.3 imaju prednost.
 
 Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pritiskom, težina rečnika, dodatne animacije/različiti protivnici i dugoročna progresija. Monetizacija i iOS nisu deo verzije 0.1.0.
 

@@ -25,7 +25,7 @@ if (-not (Test-Path -LiteralPath $template)) {
 }
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
-$apk = Join-Path $outputDir 'WarOfWords-0.1.2-android.apk'
+$apk = Join-Path $outputDir 'WarOfWords-0.1.3-android.apk'
 & $Godot --headless --path $project --export-debug Android $apk
 if ($LASTEXITCODE -ne 0) { throw 'Android export failed.' }
 $hash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
