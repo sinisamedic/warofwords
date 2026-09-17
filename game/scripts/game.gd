@@ -47,6 +47,10 @@ var enemy_hit_strength := 0.0
 var page_gesture := false
 var page_origin := Vector2.ZERO
 var page_screen := ""
+var campaign_track: Control
+var campaign_offset := 0.0
+var campaign_slide_from := 0.0
+var campaign_slide_time := .32
 var hero: Sprite2D
 var enemy_actor: Sprite2D
 var screen := "home"
@@ -137,6 +141,12 @@ func _ready() -> void:
 	backdrop.z_index = -2
 	backdrop.draw.connect(_draw_backdrop.bind(backdrop))
 	add_child(backdrop)
+	campaign_track=Control.new()
+	campaign_track.name="CampaignTrack"
+	campaign_track.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	campaign_track.clip_contents=true
+	campaign_track.draw.connect(draw_campaign_track.bind(campaign_track))
+	add_child(campaign_track)
 	resized.connect(func(): queue_redraw(); backdrop.queue_redraw())
 	get_tree().auto_accept_quit = false
 	queue_redraw()
@@ -176,6 +186,8 @@ func _exit_tree() -> void:
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		if screen=="campaign":
+			page_gesture=false; touch_id=-1; pressed_action=""; settle_campaign(chapter)
 		if screen == "battle" and not ended:
 			overlay = "pause"
 			path.clear()
@@ -195,6 +207,13 @@ func _process(delta: float) -> void:
 		debug_sample_at=Time.get_ticks_msec()
 		print("WarOfWords: performance screen=%s fps=%d draw_calls=%d" % [screen,Engine.get_frames_per_second(),RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
 	clock += delta
+	if screen=="campaign" and not page_gesture and campaign_offset!=0:
+		campaign_slide_time=minf(.32,campaign_slide_time+delta)
+		campaign_offset=lerpf(campaign_slide_from,0,1-pow(1-campaign_slide_time/.32,3))
+		if save.data.calm: campaign_offset=0
+	if campaign_track != null:
+		campaign_track.visible=screen=="campaign" and overlay.is_empty() and not loading
+		if campaign_track.visible: campaign_track.queue_redraw()
 	notice_time = maxf(0,notice_time-delta)
 	hint_time = maxf(0,hint_time-delta)
 	attack_flash = maxf(0,attack_flash-delta)
@@ -238,7 +257,6 @@ func update_actors() -> void:
 	for i in portraits.size():
 		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
 		portraits[i].position = Vector2(44 if i == 0 else size.x-44,33)
-	var bob := 0.0 if save.data.calm else sin(clock*2.0)*1.3
 	if screen == "battle":
 		if enemy_art_mission != mission:
 			EnemyArt.apply(enemy_actor,portraits[1],mission)
@@ -246,14 +264,18 @@ func update_actors() -> void:
 		var actor_height := 137.0
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
 		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.CELL.y
-		if not save.data.calm: enemy_actor.scale.y *= 1.0+sin(clock*2.0)*.004
+		var idle: bool = not save.data.calm and not ended
+		var hero_breath := 1.0+sin(clock*2.1)*.027 if idle else 1.0
+		var enemy_breath := 1.0+sin(clock*1.8+.8)*.032 if idle else 1.0
+		hero.scale.y*=hero_breath
+		enemy_actor.scale.y*=enemy_breath
 		var hero_kick := 0.0 if save.data.calm else hit_offset(hero_recoil,hero_hit_strength)
 		var enemy_kick := 0.0 if save.data.calm else hit_offset(enemy_recoil,enemy_hit_strength)
-		hero.position = Vector2(size.x*0.20-hero_kick,119+bob)
-		# Animate the body while pinning the actual boot pixels to the arena floor.
-		enemy_actor.position = Vector2(size.x*0.80+enemy_kick,GROUND_Y-EnemyArt.foot_offset(mission)*enemy_actor.scale.y)
-		hero.rotation = -hero_kick*.0025
-		enemy_actor.rotation = enemy_kick*.0025
+		hero.rotation = -hero_kick*.0025+(sin(clock*1.25)*.026 if idle else 0.0)
+		enemy_actor.rotation = enemy_kick*.0025+(sin(clock*1.15+.9)*.025 if idle else 0.0)
+		# Rotation and breathing happen about the feet, keeping both fighters grounded.
+		hero.position = Vector2(size.x*.20-hero_kick,GROUND_Y)-Vector2(0,(GROUND_Y-119)*hero_breath).rotated(hero.rotation)
+		enemy_actor.position = Vector2(size.x*.80+enemy_kick,GROUND_Y)-Vector2(0,EnemyArt.foot_offset(mission)*enemy_actor.scale.y).rotated(enemy_actor.rotation)
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 and not save.data.calm else Color.WHITE
 		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color.WHITE
 		if ended:
@@ -340,14 +362,15 @@ func _draw_backdrop(node: Node2D) -> void:
 func panel(rect: Rect2, _color: Color = INK, _border: Color = GOLD, _radius: int = 14) -> void:
 	Ornaments.frame(self,rect,2 if rect.size.y > 75 else 0,Color.WHITE if _border == GOLD else _border.lightened(.55))
 
-func text(value: String, rect: Rect2, font_size: int = 22, color: Color = CREAM, heading: bool = false, align: int = HORIZONTAL_ALIGNMENT_CENTER, localize: bool = true) -> void:
+func text(value: String, rect: Rect2, font_size: int = 22, color: Color = CREAM, heading: bool = false, align: int = HORIZONTAL_ALIGNMENT_CENTER, localize: bool = true, canvas: CanvasItem = null) -> void:
 	if localize: value = t(value)
 	var face := title_font if heading else font
 	var actual := font_size
 	while face.get_string_size(value,align,-1,actual).x > rect.size.x and actual > 16:
 		actual -= 1
 	var baseline := rect.position.y+(rect.size.y+face.get_ascent(actual)-face.get_descent(actual))/2
-	draw_string(face,Vector2(rect.position.x,baseline),value,align,rect.size.x,actual,color)
+	var target: CanvasItem = self if canvas == null else canvas
+	target.draw_string(face,Vector2(rect.position.x,baseline),value,align,rect.size.x,actual,color)
 
 func action(label: String, rect: Rect2, id: String, value: int = -1, primary: bool = false, enabled: bool = true) -> void:
 	var tint := Color.WHITE if enabled else Color(.52,.57,.61)
@@ -400,7 +423,7 @@ func _draw() -> void:
 		"journal": draw_journal()
 	if not overlay.is_empty():
 		draw_overlay()
-	if notice_time > 0 and screen != "battle":
+	if notice_time > 0 and screen not in ["battle","settings"]:
 		var width := minf(570,size.x-80)
 		var notice_y := 133.0 if screen=="battle" else size.y-66
 		panel(Rect2((size.x-width)/2,notice_y,width,38),Color("e9c77e"),CREAM)
@@ -446,38 +469,69 @@ func home_play_rect() -> Rect2:
 	var play_width := minf(340,width*.78)
 	return Rect2(x+(width-play_width)/2,214,play_width,74)
 
+func campaign_points() -> Array[Vector2]:
+	var points: Array[Vector2]=[]
+	var width := size.x*.64-84
+	for i in 4: points.append(Vector2(46+i*(width-92)/3,100-sin(i*1.4)*36))
+	return points
+
+func campaign_span() -> float:
+	return size.x*.64-44
+
+func settle_campaign(target: int) -> void:
+	var next := clampi(target,0,mini(2,int(save.data.unlocked)/4))
+	if next!=chapter:
+		campaign_offset+=(next-chapter)*campaign_span()
+		chapter=next; mission=chapter*4
+	campaign_slide_from=campaign_offset; campaign_slide_time=0
+	if save.data.calm: campaign_offset=0
+
+func draw_campaign_track(canvas: Control) -> void:
+	if screen!="campaign": return
+	var points := campaign_points()
+	for page in 3:
+		var offset := campaign_offset+(page-chapter)*campaign_span()
+		if absf(offset)>canvas.size.x+45: continue
+		canvas.draw_set_transform(Vector2(offset,0))
+		for i in 3:
+			canvas.draw_line(points[i],points[i+1],Color("192f3a"),11,true)
+			canvas.draw_line(points[i],points[i+1],GOLD if page*4+i<save.data.unlocked else Color("718792"),5,true)
+		for i in 4:
+			var level := page*4+i
+			var available: bool=level<=save.data.unlocked
+			var p := points[i]
+			Ornaments.jewel(canvas,p,36,(COLORS[0] if level==mission else COLORS[1]) if available else INK,level==mission)
+			text("%02d" % (level+1) if available else "LOCK",Rect2(p-Vector2(32,30),Vector2(64,60)),24,INK if available else CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,true,canvas)
+			if save.data.wins.has(str(level)):
+				text("★".repeat(int(save.data.wins[str(level)])),Rect2(p.x-42,p.y+40,84,28),20,GOLD,false,HORIZONTAL_ALIGNMENT_CENTER,false,canvas)
+	canvas.draw_set_transform(Vector2.ZERO)
+
 func draw_campaign() -> void:
 	header("CAMPAIGN")
 	panel(Rect2(size.x*.25,80,size.x*.5,45))
 	text(REGIONS[chapter],Rect2(size.x*.25,80,size.x*.5,45),26,GOLD,true)
-	var points: Array[Vector2] = []
-	for i in 4:
-		points.append(Vector2(105+i*(size.x-210)/3,255-sin(i*1.4)*65))
-	for i in 3:
-		draw_line(points[i],points[i+1],Color("192f3a"),11,true)
-		draw_line(points[i],points[i+1],GOLD if chapter*4+i<save.data.unlocked else Color("718792"),5,true)
-	for i in 4:
-		var level := chapter*4+i
-		var completed: bool = save.data.wins.has(str(level))
-		var available: bool = level <= save.data.unlocked
-		var p := points[i]
-		draw_circle(p,37,INK)
-		draw_arc(p,37,0,TAU,48,GOLD if available else Color("809ca8"),4,true)
-		if level == mission:
-			draw_arc(p,43,0,TAU,48,CREAM,2,true)
-		text("%02d" % (level+1) if available else "LOCK",Rect2(p-Vector2(32,30),Vector2(64,60)),24,CREAM,true)
-		if completed:
-			text("★".repeat(int(save.data.wins[str(level)])),Rect2(p.x-42,p.y+40,84,28),20,GOLD)
-		buttons.append({"rect":Rect2(p-Vector2(42,42),Vector2(84,84)),"id":"mission","value":level,"enabled":available})
+	campaign_track.position=Vector2(42,139)
+	campaign_track.size=Vector2(size.x*.64-84,203)
+	campaign_track.visible=overlay.is_empty() and not loading
+	campaign_track.queue_redraw()
+	if absf(campaign_offset)<.5 and not page_gesture:
+		var points := campaign_points()
+		for i in 4:
+			buttons.append({"rect":Rect2(points[i]+campaign_track.position-Vector2(42,42),Vector2(84,84)),"id":"mission","value":chapter*4+i,"enabled":chapter*4+i<=save.data.unlocked})
 	var y := size.y-134
+	var feet := Vector2(size.x*.82,y+14)
+	Ornaments.glow(self,feet-Vector2(0,95),115,Color(.35,.72,1,.3))
+	draw_arc(feet-Vector2(0,105),92,0,TAU,64,Color(GOLD,.45),1.5,true)
 	panel(Rect2(24,y,size.x-48,112))
+	draw_set_transform(feet,0,Vector2(1,.14))
+	Ornaments.glow(self,Vector2.ZERO,72,Color(.01,.04,.07,.55))
+	draw_set_transform(Vector2.ZERO)
+	EnemyArt.draw_preview(self,mission,feet,238)
 	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
 	text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+51,size.x-320,35),19,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
-	if chapter > 0:
-		action("<",Rect2(23,86,50,46),"chapter",chapter-1)
-	if chapter < 2:
-		action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked >= (chapter+1)*4)
+	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
+	if chapter<2: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
 
 func draw_arsenal() -> void:
 	header("ARSENAL")
@@ -652,6 +706,10 @@ func draw_battle() -> void:
 func ability_center(i: int) -> Vector2:
 	return Vector2(size.x/2+(-313 if i<2 else 313),236+(i%2)*111)
 
+func settings_toggle_rect(i: int) -> Rect2:
+	var half := ((size.x-92)/2-10)/2
+	return Rect2(38+(i%2)*(half+8),94+(i/2)*103,half-2,98)
+
 func draw_settings() -> void:
 	header("OPTIONS")
 	var width := (size.x-92)/2
@@ -660,9 +718,19 @@ func draw_settings() -> void:
 	panel(Rect2(28,84,width+16,308))
 	panel(Rect2(right-8,84,width+16,308))
 	for i in 4:
-		var key: String = ["sound","music","haptics","calm"][i]
-		var label := t(["SOUND EFFECTS","MUSIC","HAPTICS","REDUCED MOTION"][i])
-		action(label+"   "+t("ON" if save.data[key] else "OFF"),Rect2(38,94+i*52,width-4,46),key,-1,save.data[key])
+		var key: String=["sound","music","haptics","calm"][i]
+		var on: bool=save.data[key]
+		var rect := settings_toggle_rect(i)
+		var tint := Color.WHITE if on else Color(.55,.65,.73)
+		if pressed_action==key: tint=tint.darkened(.2)
+		Ornaments.frame(self,rect,0,tint)
+		var center := rect.get_center()
+		draw_texture_rect(Ornaments.TOGGLES[i],Rect2(center.x-32,rect.position.y+6,64,64),false,tint)
+		var state_rect := Rect2(center.x-32,rect.end.y-26,64,21)
+		draw_style_box(health_style(Color("2d7163") if on else Color("253848")),state_rect)
+		draw_circle(Vector2(state_rect.position.x+12,state_rect.get_center().y),3.5,Color("acffdb") if on else Color("85949e"))
+		text("ON" if on else "OFF",Rect2(center.x-16,state_rect.position.y,43,21),16,CREAM,false,HORIZONTAL_ALIGNMENT_CENTER,false)
+		buttons.append({"rect":rect,"id":key,"value":-1,"enabled":true})
 	text("LETTER CONNECTION",Rect2(38,305,width-4,29),21,GOLD,true)
 	action("ADJACENT",Rect2(38,339,half-2,46),"link_rule",0,save.data.adjacent_only)
 	action("ANY LETTERS",Rect2(46+half,339,half-2,46),"link_rule",1,not save.data.adjacent_only)
@@ -673,9 +741,9 @@ func draw_settings() -> void:
 	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
 	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
 	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,315,width,28),19)
-	text("Offline dictionaries  •  v0.1.4",Rect2(right,349,width,26),17)
+	text("Offline dictionaries  •  v0.1.5",Rect2(right,349,width,26),17)
 	panel(Rect2(28,394,size.x-56,29),INK)
-	text("Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
+	text(notice if notice_time>0 else "Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
 	action("CREDITS",Rect2(right,427,width,46),"credits")
 
@@ -698,11 +766,59 @@ func draw_journal() -> void:
 	text(t("PAGE %d") % (journal_page+1),Rect2(size.x/2-100,size.y-62,200,46),21)
 	action(">",Rect2(size.x-88,size.y-62,60,46),"journal_page",journal_page+1,false,(journal_page+1)*20<list.size())
 
+func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
+	var middle := rect.get_center().x
+	panel(rect)
+	draw_texture_rect(Ornaments.FILIGREE,rect,false)
+	Ornaments.glow(self,Vector2(middle,rect.position.y+64),145,Color(1,.71,.24,.17) if victory else Color(.25,.65,1,.17))
+	draw_texture_rect(Ornaments.CRESTS[1 if victory else 0],Rect2(middle-82,rect.position.y-39,164,106),false)
+	Ornaments.plaque(self,Rect2(middle-177,rect.position.y+58,354,51))
+	text("VICTORY" if victory else "PAUSED",Rect2(middle-155,rect.position.y+62,310,40),32,GOLD,true)
+	if victory:
+		for i in 3:
+			var p := Vector2(middle+(i-1)*75,rect.position.y+141)
+			var radius := 29.0 if i==1 else 23.0
+			if i<stars:
+				Ornaments.glow(self,p,47,Color(1,.72,.25,.35))
+			Ornaments.star(self,p,radius,i<stars)
+			if i<stars and not save.data.calm:
+				var spark := p+Vector2.from_angle(clock*.7+i*2)*35
+				Ornaments.gem(self,spark,2.5)
+		Ornaments.frame(self,Rect2(middle-104,rect.position.y+181,208,44))
+		Ornaments.ui_icon(self,"coin",Rect2(middle-87,rect.position.y+185,35,35))
+		text("+%d" % reward,Rect2(middle-44,rect.position.y+183,130,38),28,GOLD,true)
+		text(t("%d words  •  %.0fs") % [word_count,duration],Rect2(rect.position.x+55,rect.position.y+234,rect.size.x-110,25),21)
+		text(t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+55,rect.position.y+262,rect.size.x-110,25),21,GOLD)
+		if mission==11: text("CAMPAIGN COMPLETE",Rect2(middle-145,rect.position.y+161,290,22),16,GOLD,true)
+	else:
+		text(ENEMIES[mission],Rect2(middle-245,rect.position.y+118,490,32),24,CREAM,true)
+		var values := [str(word_count),str(hp)+" / 100",str(int(duration))+"s"]
+		for i in 3:
+			var card := Rect2(middle-237+i*164,rect.position.y+159,146,86)
+			Ornaments.frame(self,card)
+			var icon_rect := Rect2(card.get_center().x-18,card.position.y+6,36,36)
+			if i==0: Ornaments.ui_icon(self,"journal",icon_rect)
+			else: draw_texture_rect(Ornaments.HEALTH if i==1 else Ornaments.HOURGLASS,icon_rect,false)
+			text(values[i],Rect2(card.position.x+6,card.position.y+44,134,30),25,GOLD,true)
+		text("Progress is saved on this device.",Rect2(rect.position.x+55,rect.position.y+260,rect.size.x-110,27),20)
+	var y := rect.end.y-71
+	if victory:
+		action("MAP",Rect2(middle-275,y,140,51),"campaign")
+		action("UPGRADES",Rect2(middle-119,y,185,51),"upgrades")
+		action("NEXT >" if mission<11 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
+	else:
+		action("MENU",Rect2(middle-300,y,125,51),"save_home")
+		action("OPTIONS",Rect2(middle-165,y,190,51),"settings")
+		action("RESUME",Rect2(middle+45,y,255,51),"resume",-1,true)
+
 func draw_overlay() -> void:
 	buttons.clear()
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.02,0.06,0.10,0.86))
 	var width := minf(670,size.x-60)
 	var rect := Rect2((size.x-width)/2,55,width,size.y-110)
+	if overlay=="pause" or (overlay=="result" and won):
+		draw_battle_dialog(rect,overlay=="result")
+		return
 	panel(rect,Color("133249"))
 	var title := "PAUSED"
 	var lines: Array[String] = []
@@ -764,6 +880,8 @@ func _input(event: InputEvent) -> void:
 			touch_id=-1
 			if event.canceled:
 				path.clear(); dragging=false
+				page_gesture=false
+				if screen=="campaign": settle_campaign(chapter)
 			else:
 				release(p)
 	if event is InputEventScreenDrag and event.index==touch_id:
@@ -781,6 +899,7 @@ func press(p: Vector2) -> void:
 	pressed_action=""; pressed_value=-1
 	page_gesture=false
 	if buttons_state != screen+"|"+overlay: return
+	if screen=="campaign" and absf(campaign_offset)>.5: return
 	page_gesture=screen in ["campaign","journal"] and overlay.is_empty() and p.y > 75
 	page_origin=p; page_screen=screen
 	if screen=="battle" and overlay.is_empty() and not ended:
@@ -794,6 +913,11 @@ func press(p: Vector2) -> void:
 func move(p: Vector2) -> void:
 	if page_gesture and p.distance_to(page_origin)>18:
 		pressed_action=""; pressed_value=-1
+		var travel := p-page_origin
+		if screen=="campaign" and not save.data.calm and absf(travel.x)>absf(travel.y)*1.35:
+			var direction := 1 if travel.x<0 else -1
+			var allowed := chapter+direction>=0 and chapter+direction<=mini(2,int(save.data.unlocked)/4)
+			campaign_offset=clampf(travel.x,-campaign_span()*.8,campaign_span()*.8)*(1.0 if allowed else .12)
 	if not dragging:
 		return
 	# Touch events can skip a tile during a fast swipe or a slow frame.
@@ -823,6 +947,7 @@ func release(p: Vector2) -> void:
 			elif screen == "journal": dispatch("journal_page",journal_page+direction)
 			sfx.play("tap")
 			return
+		if screen=="campaign": settle_campaign(chapter)
 	if dragging:
 		dragging=false
 		if drag_moved:
@@ -866,7 +991,7 @@ func dispatch(id: String, value: int = -1) -> void:
 		"select": selected=value
 		"mission": mission=value
 		"chapter":
-			chapter=clampi(value,0,mini(2,int(save.data.unlocked)/4)); mission=mini(save.data.unlocked,chapter*4)
+			settle_campaign(value)
 		"journal_page": journal_page=clampi(value,0,maxi(0,(save.data.dictionary.size()-1)/20))
 		"power": save.data.selected_power=value; save.save_game()
 		"upgrade": upgrade()
@@ -893,6 +1018,7 @@ func dispatch(id: String, value: int = -1) -> void:
 			sfx.enabled=save.data.sound
 			music.set_enabled(save.data.music)
 			save.save_game()
+			message({"sound":"SOUND EFFECTS","music":"MUSIC","haptics":"HAPTICS","calm":"REDUCED MOTION"}[id])
 		"ui_language":
 			save.data.ui_language = ["en","sr"][value]; save.save_game()
 		"word_language":
@@ -916,6 +1042,8 @@ func change_screen(target: String) -> void:
 	screen=target
 	overlay=""; path.clear(); dragging=false; tap_composition=false
 	fx.clear(); result_delay=0
+	campaign_offset=0; campaign_slide_time=.32
+	if campaign_track!=null: campaign_track.visible=false
 	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
@@ -1204,6 +1332,23 @@ func _run_visual_qa() -> void:
 	ended=false; hp=0; foe_hp=100; fx.clear(); finish(false)
 	result_delay=DEFEAT_DURATION-.65; fx.advance(.65)
 	await _qa_capture(directory+"/hero-defeat.png")
+	save.data.ui_language="en"; save.data.sound=true; save.data.music=false; save.data.haptics=true; save.data.calm=false
+	change_screen("settings")
+	await _qa_capture(directory+"/options-icons.png")
+	save.data.ui_language="sr"
+	await _qa_capture(directory+"/options-icons-sr.png")
+	save.data.ui_language="en"; save.data.unlocked=11
+	for page in 3:
+		mission=page*4; change_screen("campaign")
+		await _qa_capture(directory+"/campaign-%d.png" % page)
+	mission=0; change_screen("campaign"); settle_campaign(1); campaign_offset=campaign_span()*.45
+	await _qa_capture(directory+"/campaign-slide.png")
+	change_screen("battle"); ended=false; hp=64; mission=8; word_count=6; duration=43; best_word="RADIANCE"; overlay="pause"
+	await _qa_capture(directory+"/pause-ornate.png")
+	ended=true; won=true; reward=240; stars=2; overlay="result"
+	await _qa_capture(directory+"/victory-ornate.png")
+	save.data.ui_language="sr"; mission=11; stars=3; best_word="ĐAK"
+	await _qa_capture(directory+"/victory-final-sr.png")
 	get_tree().quit()
 
 func _qa_capture(file: String) -> void:

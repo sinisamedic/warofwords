@@ -25,3 +25,11 @@ static func apply(actor: Sprite2D, portrait: Sprite2D, encounter: int) -> void:
 
 static func foot_offset(encounter: int) -> float:
 	return FEET[encounter]-ROWS[encounter/4].y/2.0
+
+static func draw_preview(canvas: CanvasItem, encounter: int, feet: Vector2, height: float) -> void:
+	var row: Vector2=ROWS[encounter/4]
+	var scale := height/CELL.y
+	var region := Rect2(encounter%4*CELL.x,row.x,CELL.x,row.y)
+	canvas.draw_set_transform(feet,0,Vector2(-scale if encounter==6 else scale,scale))
+	canvas.draw_texture_rect_region(ATLAS,Rect2(-CELL.x/2,-FEET[encounter],CELL.x,row.y),region)
+	canvas.draw_set_transform(Vector2.ZERO)

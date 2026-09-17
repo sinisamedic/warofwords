@@ -1,10 +1,11 @@
 extends RefCounted
 
 const SR := {
+"%d words  •  %.0fs":"Reči: %d  •  %.0f s", "Best word: %s":"Najduža reč: %s", "CAMPAIGN COMPLETE":"KAMPANJA ZAVRŠENA",
 "PLAY":"IGRAJ",
 "SOUND EFFECTS":"ZVUČNI EFEKTI", "MUSIC":"MUZIKA", "ANY LETTERS":"BILO KOJA",
 "Any letters: link across the board. Applies to your current duel too.":"Bilo koja: spajaj udaljena slova. Važi odmah, i za započetu borbu.",
-"Offline dictionaries  •  v0.1.4":"Rečnici bez interneta  •  v0.1.4", "Arc fired!":"Luk ispaljen!",
+"Offline dictionaries  •  v0.1.5":"Rečnici bez interneta  •  v0.1.5", "Arc fired!":"Luk ispaljen!",
 "Music: Joth / TAD · CC0 recordings.":"Muzika: Joth / TAD · CC0 snimci.",
 "HINT: %s":"POMOĆ: %s",
 "LETTER CONNECTION":"POVEZIVANJE SLOVA", "ADJACENT":"SUSEDNA", "FREE":"SLOBODNO",

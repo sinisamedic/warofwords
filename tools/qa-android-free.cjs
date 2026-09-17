@@ -17,7 +17,7 @@ async function main(){
  check(adb('shell','getprop','ro.kernel.qemu')==='1','target is an emulator');
  adb('shell','am','force-stop',pkg);const initial=save();await start();
  await tap(175,90);await tap(1491,366);await tap(1491,620);await ready(initial.word_language==='en'?1:2);
- let s=save();if(!s.sound)await tap(550,263);if(!s.haptics)await tap(550,497);if(s.calm)await tap(550,614);
+ let s=save();if(!s.sound)await tap(352,330);if(!s.haptics)await tap(352,560);if(s.calm)await tap(907,560);
  await tap(907,815);s=save();check(!s.adjacent_only,'free linking selected through Android settings');
  const expected=structuredClone(initial.battle);if(Object.keys(expected).length)expected.adjacent_only=false;
  check(JSON.stringify(s.battle)===JSON.stringify(expected),'rule changes immediately while preserving the rest of the saved duel');await capture('settings');

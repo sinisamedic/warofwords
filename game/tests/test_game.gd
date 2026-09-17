@@ -312,6 +312,9 @@ func run_tests() -> void:
 	scene.save.data.unlocked=11; scene.mission=0; scene.change_screen("campaign")
 	scene.buttons_state="campaign|"; scene.press(Vector2(600,180)); scene.move(Vector2(300,185)); scene.release(Vector2(300,185))
 	check(scene.chapter==1 and scene.mission==4,"campaign left swipe advances chapter")
+	check(scene.campaign_offset>0,"incoming level route remains on screen while it slides in")
+	for i in 7: scene._process(.05)
+	check(scene.campaign_offset==0,"campaign slide settles after release")
 	scene.buttons_state="campaign|"; scene.press(Vector2(300,180)); scene.release(Vector2(600,185))
 	check(scene.chapter==0,"campaign right swipe returns")
 	scene.save.data.unlocked=0; scene.dispatch("chapter",2)
@@ -348,7 +351,8 @@ func run_tests() -> void:
 		scene.mission=encounter
 		for time in [0.0,.7,2.1]:
 			scene.clock=time; scene.update_actors()
-			check(absf(scene.enemy_actor.position.y+scene.EnemyArt.foot_offset(encounter)*scene.enemy_actor.scale.y-scene.GROUND_Y)<.1,"boots stay grounded: enemy %d / breath %.1f" % [encounter,time])
+			var boot: Vector2=scene.enemy_actor.to_global(Vector2(0,scene.EnemyArt.foot_offset(encounter)))
+			check(absf(boot.y-scene.GROUND_Y)<.1,"boots stay grounded: enemy %d / breath %.1f" % [encounter,time])
 		check(scene.enemy_actor.flip_h==(encounter==6) and scene.portraits[1].flip_h==scene.enemy_actor.flip_h,"enemy and portrait face hero: %d" % encounter)
 	# Charging gives one brief pulse, full energy stays ready, spending ends the pulse.
 	scene.save.data.word_language="en"; scene.mission=0
@@ -373,7 +377,7 @@ func run_tests() -> void:
 	scene.result_delay=.025; scene._process(.05)
 	check(scene.overlay=="result" and scene.result_delay==0,"result appears after defeat completes")
 	await scene.start_battle(); scene.update_actors()
-	check(not scene.ended and scene.enemy_actor.rotation==0 and scene.enemy_actor.modulate.a==1,"next duel restores the defeated actor")
+	check(not scene.ended and absf(scene.enemy_actor.rotation)<=.03 and scene.enemy_actor.modulate.a==1,"next duel restores the defeated actor to idle")
 	scene.touch_id=0; scene.dragging=true; scene.path.assign([0,1]); scene.pressed_action="pause"
 	scene.hp=1; scene.launch_attack(false,"enemy",scene.GOLD,12); scene.advance_combat(.43)
 	check(scene.touch_id==-1 and not scene.dragging and scene.path.is_empty() and scene.pressed_action.is_empty(),"death during a held touch leaves result buttons usable")
@@ -381,6 +385,37 @@ func run_tests() -> void:
 	check(scene.ended and not scene.won and scene.hero.rotation<-.4 and scene.enemy_actor.modulate.a==1,"lethal CPU hit animates hero defeat only")
 	scene.save.data.calm=true; scene.result_delay=scene.DEFEAT_DURATION*.1; scene.update_actors()
 	check(scene.hero.rotation==0 and scene.hero.modulate.a<.3,"reduced motion uses fade without falling or shaking")
+	# Visible idle sway is anchored at the feet and fully suppressed by Reduced Motion.
+	await scene.start_battle(); scene.save.data.calm=false; scene.clock=0; scene.update_actors()
+	var head_a: Vector2=scene.hero.to_global(Vector2(0,-scene.fighters.get_height()*.38))
+	scene.clock=1.2; scene.update_actors()
+	var head_b: Vector2=scene.hero.to_global(Vector2(0,-scene.fighters.get_height()*.38))
+	check(head_a.distance_to(head_b)>3,"battle idle motion is visible at the head and shoulders")
+	var hero_boot: Vector2=scene.hero.to_global(Vector2(0,(scene.GROUND_Y-119)*scene.fighters.get_height()/137.0))
+	check(absf(hero_boot.y-scene.GROUND_Y)<.1,"hero idle keeps feet on the platform")
+	scene.save.data.calm=true; scene.update_actors(); head_a=scene.hero.position
+	scene.clock=3.5; scene.update_actors()
+	check(scene.hero.position==head_a and scene.hero.rotation==0 and scene.enemy_actor.rotation==0,"Reduced Motion stops idle sway for both actors")
+	scene.save.data.calm=false; scene.save.data.unlocked=11; scene.mission=0; scene.change_screen("campaign")
+	scene.buttons_state="campaign|"; scene.press(Vector2(450,210)); scene.move(Vector2(360,215))
+	check(scene.campaign_offset<0 and scene.chapter==0,"campaign content follows finger before chapter selection")
+	scene.release(Vector2(360,215)); var slide_start: float=scene.campaign_offset
+	scene._process(.05)
+	check(scene.campaign_offset>0 and scene.campaign_offset<slide_start,"route interpolates instead of jumping to final position")
+	scene.buttons_state="campaign|"; scene.press(Vector2(200,210))
+	check(not scene.page_gesture and scene.pressed_action.is_empty(),"moving route cannot select a stale level hitbox")
+	for i in 7: scene._process(.05)
+	scene.save.data.unlocked=0; scene.mission=0; scene.chapter=0
+	scene.buttons_state="campaign|"; scene.press(Vector2(450,210)); scene.move(Vector2(330,210)); scene.release(Vector2(330,210))
+	check(scene.chapter==0 and absf(scene.campaign_offset)<20,"locked chapter resists drag and cannot be entered")
+	for i in 7: scene._process(.05)
+	check(scene.campaign_offset==0,"locked edge springs back to rest")
+	scene.save.data.unlocked=11; scene.save.data.calm=true; scene.dispatch("chapter",1)
+	check(scene.chapter==1 and scene.campaign_offset==0,"Reduced Motion changes chapter without sliding")
+	for i in 4:
+		var tile: Rect2=scene.settings_toggle_rect(i)
+		check(tile.size.y>=90 and tile.size.x>=150,"settings icon has large touch target %d" % i)
+		for j in range(i+1,4): check(not tile.intersects(scene.settings_toggle_rect(j)),"settings touch targets do not overlap %d/%d" % [i,j])
 	print("RESULT: %d failures" % failures)
 	quit(1 if failures else 0)
 

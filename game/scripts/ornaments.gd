@@ -10,6 +10,11 @@ const WEAVE := preload("res://assets/ui/board-weave.svg")
 const FRAMES := [preload("res://assets/ui/frame-navy.svg"),preload("res://assets/ui/frame-gold.svg"),preload("res://assets/ui/frame-panel.svg"),preload("res://assets/ui/status-plaque.svg")]
 const GLOW := preload("res://assets/ui/glow.svg")
 const SHIELD := preload("res://assets/ui/shield-field.svg")
+const TOGGLES := [preload("res://assets/ui/icon-sound.svg"),preload("res://assets/ui/icon-music.svg"),preload("res://assets/ui/icon-haptics.svg"),preload("res://assets/ui/icon-calm.svg")]
+const CRESTS := [preload("res://assets/ui/crest-pause.svg"),preload("res://assets/ui/crest-victory.svg")]
+const FILIGREE := preload("res://assets/ui/dialog-filigree.svg")
+const HEALTH := preload("res://assets/ui/icon-health.svg")
+const HOURGLASS := preload("res://assets/ui/icon-hourglass.svg")
 const ICONS := {"arsenal":preload("res://assets/ui/icon-arsenal.svg"),"upgrades":preload("res://assets/ui/icon-gears.svg"),"upgrade":preload("res://assets/ui/icon-gears.svg"),"settings":preload("res://assets/ui/icon-settings.svg"),"journal":preload("res://assets/ui/icon-journal.svg"),"coin":preload("res://assets/ui/icon-coin.svg"),"powers":preload("res://assets/ui/icon-power.svg"),"help":preload("res://assets/ui/icon-help.svg")}
 static var styles: Dictionary = {}
 const PALETTE := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
@@ -60,6 +65,15 @@ static func ui_icon(c: CanvasItem, id: String, rect: Rect2) -> void:
 
 static func glow(c: CanvasItem, p: Vector2, radius: float, color: Color) -> void:
 	c.draw_texture_rect(GLOW,Rect2(p-Vector2.ONE*radius,Vector2.ONE*radius*2),false,color)
+
+static func star(c: CanvasItem, p: Vector2, r: float, earned: bool) -> void:
+	var points := PackedVector2Array()
+	for i in 10: points.append(p+Vector2.from_angle(-PI/2+i*PI/5)*(r if i%2==0 else r*.46))
+	c.draw_colored_polygon(points,Color("ffd470") if earned else Color("243b4d"))
+	points.append(points[0])
+	c.draw_polyline(points,Color("fff0b3") if earned else Color("657780"),2,true)
+	if earned:
+		c.draw_line(p+Vector2(0,-r+4),p,Color("fffce0"),2,true)
 
 static func shield_field(c: CanvasItem, p: Vector2, time: float, calm: bool, opacity: float = 1.0) -> void:
 	var pulse := 1.0 if calm else .93+.07*sin(time*2.4)

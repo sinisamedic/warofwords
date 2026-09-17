@@ -63,7 +63,7 @@ async function main(){
  // Separate interface and dictionary settings, using real Android taps.
  await tap(175,90);await tap(2040,366);
  s=save();check(s.ui_language==='sr'&&s.word_language==='en','Serbian interface independent of English dictionary');
- await tap(550,263);await tap(550,380);await tap(550,497);await tap(550,614);
+ await tap(352,330);await tap(907,330);await tap(352,560);await tap(907,560);
  await tap(2040,620);await waitDictionaryLoads(2);await shot('settings-serbian');
  s=save();check(s.word_language==='sr'&&!s.sound&&!s.music&&!s.haptics&&s.calm,'dictionary and all four toggles persist');
  await tap(120,90);await tap(1730,615);await tap(2080,905);await tap(2110,983);await tap(1200,80);

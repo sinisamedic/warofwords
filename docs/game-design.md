@@ -19,7 +19,7 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
 - Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktivna implementacija — 0.1.4
+## Aktivna implementacija — 0.1.5
 
 Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
 
@@ -57,7 +57,7 @@ Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da 
 - **Music / Muzika** ima zaseban trajni prekidač. Joth: *Fantasy Orchestral Theme* (191,69 s) za menije; TAD: *Treasure Hunter* (65,07 s) za borbu. CC0 izvori i licence: `game/assets/music/README.md`. Postepeni prelazi, tiši miks u pauzi, zaustavljanje u pozadini. Efekti imaju nezavisan prekidač.
 - Android 0.1.4 / code 5, isti paket i potpis za nadogradnju. Balans generatora i rečnik ostaju probni; monetizacija nije uvedena.
 
-Sledeći odeljci beleže dorade po verzijama; odluke 0.1.4 imaju prednost nad starijim zapisima.
+Sledeći odeljci beleže dorade po verzijama; odluke 0.1.5 imaju prednost nad starijim zapisima.
 
 Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pritiskom, težina rečnika, dodatne animacije/različiti protivnici i dugoročna progresija. Monetizacija i iOS nisu deo verzije 0.1.0.
 
@@ -92,6 +92,15 @@ Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pri
 - Završetak prekida tekući dodir na tabli; privremeno blokira komande tokom animacije, pa Retry/Next ostaju dostupni i ako je igrač držao prst u trenutku poraza.
 - Napunjene moći imaju obojeni oreol, rotirajuće zrake i odsjaje; prelazak na punu energiju daje kratak šireći prsten. Trošenje energije uklanja taj sjaj. Reduced Motion zadržava miran oreol/štit i postepeno nestajanje poraženog lika, bez padanja, rotacije i letećih fragmenata.
 - Android 0.1.4 / code 5, isti paket i potpis. Pravila, ekonomija i balans nisu menjani.
+
+## Dorade posle testa 0.1.4 — usvojeno 2026-09-17
+
+- Kampanja zadržava pozadinu. Staza sa četiri nivoa prati horizontalni pokret prsta, pa klizi do sledećeg poglavlja za 0,32 s. Kratak potez vraća sadržaj na mesto; granice i zaključana poglavlja blago pružaju otpor. Strelice koriste isti prelaz. Tokom završnog klizanja ne mogu se slučajno aktivirati stari brojevi.
+- Brojevi su u zasebnoj oblasti levo; izabrani protivnik je veća originalna ilustracija desno, sa oreolom i stopalima koja prelaze preko gornje ivice informativnog panela. Ne prekriva dodirne oblasti nivoa ni Prepare. Slika, ime i borba odgovaraju istom izboru.
+- Četiri leve opcije su velike pločice 2 × 2: zvučnik, nota, telefon sa vibracijom i kornjača za Reduced Motion. Stanje ON/OFF je eksplicitno; isključeno ima prigušenu ikonu. Kratak naziv opcije se pojavi u donjoj traci nakon promene. Jezici i pravilo povezivanja ostaju odvojeni.
+- Pobeda dobija krunu, lovor, filigranski okvir, velike zvezdice sa jasno prikazanim neosvojenim mestima, izdvojenu nagradu i statistiku. Pauza dobija svoj grb, ime protivnika, ikonice za broj reči, zdravlje i trajanje, i poruku da je napredak sačuvan. Komande i nagrade zadržavaju svoje funkcije.
+- Vidljivije disanje i njihanje oba borca u mirovanju: promena visine oko 2,7–3,2% i nagib oko 1,5°. Transformacije se oslanjaju na stopala, pa nema vertikalnog lebdenja. Reduced Motion uklanja njihanje i klizanje, uz očuvanje svih izbora.
+- Android 0.1.5 / code 6, isti potpis i identitet paketa. Balans, rečnici i ekonomija nisu menjani.
 
 ## Istorija: usvojeni statični vizuelni dizajn
 

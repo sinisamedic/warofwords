@@ -16,7 +16,7 @@ async function main(){
  adb('wait-for-device');check(adb('shell','getprop','ro.kernel.qemu')==='1','page fixture is restricted to emulator');
  adb('shell','am','force-stop',pkg);
  const original=adb('shell','run-as',pkg,'cat','files/progress.json'),backup='.local/pages-original.json';fs.writeFileSync(backup,original);
- const fixture=JSON.parse(original);fixture.ui_language='en';fixture.word_language='en';fixture.unlocked=11;
+ const fixture=JSON.parse(original);fixture.ui_language='en';fixture.word_language='en';fixture.unlocked=11;fixture.calm=false;fixture.battle={};fixture.tutorial=true;
  fixture.dictionary=['STONE','SUNLIGHT','BRIDGE','GUARDIAN','TEMPEST','JOURNEY','ASTRAL','COPPER','ARCHIVE','THUNDER','WORDSMITH','SENTINEL','WARDEN','CRESCENT','ORBIT','CRYSTAL','FORGE','AETHER','SKYLINE','RADIANCE','BLADE','LIGHT','STORM','BOOK','SWORD','ARMOR','SHIELD','MUSIC','SPELL','GOLD','SILVER','FIRE','EARTH','WATER','WIND','TOWER','GATE','CROWN','KNIGHT','POWER','EXTRAORDINARY'];
  fixture.total_words=41;fixture.longest='EXTRAORDINARY';fs.writeFileSync('.local/pages-fixture.json',JSON.stringify(fixture));
  try {
@@ -28,8 +28,17 @@ async function main(){
   await swipe(true);const page3=capture('journal-3');check(page3!==page2,'last partial journal page is reachable');
   await swipe(true);check(capture('journal-limit')===page3,'journal cannot swipe beyond its final page');
   await tap(120,90);await tap(1730,615);await tap(109,245);await tap(109,245);
-  const map1=capture('campaign-1');await swipe(true);check(capture('campaign-2')!==map1,'campaign swipe changes the map chapter');
+  const map1=capture('campaign-1');
+  adb('shell','input','touchscreen','motionevent','DOWN','1800','540');
+  adb('shell','input','touchscreen','motionevent','MOVE','1250','540');await wait(120);
+  const moving=capture('campaign-drag');check(moving!==map1,'level route visibly follows a held drag before release');
+  adb('shell','input','touchscreen','motionevent','UP','1250','540');await wait(1100);
+  const map2=capture('campaign-2');check(map2!==map1&&map2!==moving,'campaign settles into the new chapter after release');
   await swipe(false);check(capture('campaign-return')===map1,'campaign reverse swipe restores map and selected mission');
+  await tap(958,510);capture('campaign-selected-enemy');
+  await tap(2080,905);await tap(2110,983);await tap(1200,80);
+  const chosen=JSON.parse(adb('shell','run-as',pkg,'cat','files/progress.json'));
+  check(chosen.battle.mission===2,'level beside the large enemy preview remains tappable and launches correct encounter');
   const pid=adb('shell','pidof',pkg),log=adb('logcat','-d','--pid='+pid,'-s','godot','AndroidRuntime');fs.writeFileSync('.local/android-pages-logcat.txt',log);
   check(!/SCRIPT ERROR|E godot.*ERROR:|FATAL EXCEPTION/.test(log),'paging has no runtime errors');
  } finally {
