@@ -58,7 +58,7 @@ func call_api(action: String, payload: Dictionary) -> Dictionary:
 	var auth := await ensure_session()
 	if auth.has("error"): busy=false; return auth
 	var body := payload.duplicate(true)
-	body.action=action; body.version="daily-v1"
+	body.action=action; body.version=preload("res://scripts/daily_rules.gd").VERSION
 	var result := await request_json("/functions/v1/daily",body,str(session.access_token))
 	if int(result.get("status",0))==401:
 		session.expires_at=0

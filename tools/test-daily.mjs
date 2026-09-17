@@ -28,3 +28,14 @@ const sr=new DailyRules(1,'sr',false); sr.letters.splice(0,3,'NJ','I','H');
 assert(sr.accept([0,1,2],1000,w=>w==='NJIH')); assert.equal(sr.score,30);
 assert(!sr.accept([0,1,2],1100,()=>true));
 console.log('PASS: Serbian digraph scoring and minimum move interval');
+
+const legacy=JSON.parse(readFileSync(new URL('tools/fixtures/daily-v1.json',root),'utf8'));
+for(const fixture of legacy) {
+ const rules=new DailyRules(fixture.seed,fixture.language,fixture.adjacent,'daily-v1');
+ assert.deepEqual(rules.letters,fixture.initial);
+ for(const step of fixture.steps) {
+  assert(rules.accept(step.path,step.ms,()=>true));
+  assert.deepEqual(rules.letters,step.letters); assert.equal(rules.score,step.score);
+ }
+}
+console.log('PASS: frozen v1 replays remain compatible');

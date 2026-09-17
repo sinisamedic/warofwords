@@ -1,6 +1,6 @@
 extends RefCounted
-## Portable daily-v1 rules. Keep in sync with supabase/functions/daily/rules.mjs.
-const VERSION := "daily-v1"
+## Portable daily-v2 rules. Keep in sync with supabase/functions/daily/rules.mjs.
+const VERSION := "daily-v2"
 const DURATION_MS := 120000
 const MAX_MOVES := 240
 const POOLS := {
@@ -18,6 +18,8 @@ var letters: Array[String] = []
 var used: Dictionary = {}
 var moves: Array = []
 var score := 0
+var refill_nodes := 0
+var last_refill_route: Array[int] = []
 
 func random_index(count: int) -> int:
 	state = (state * 48271) % 2147483647
@@ -77,11 +79,41 @@ func accept(path: Array, elapsed_ms: int, lexicon: RefCounted) -> bool:
 	score+=path.size()*10+maxi(0,path.size()-4)*5
 	moves.append({"path":path.duplicate(),"ms":elapsed_ms})
 	for i in path: letters[i]=random_letter()
-	# Refill only consumed cells; insert an unused familiar word along that valid path.
-	var candidates: Array=[]
-	for candidate in STARTERS[language]:
-		if not used.has(candidate) and tiles(candidate).size()<=path.size(): candidates.append(candidate)
-	if not candidates.is_empty():
-		var replacement := tiles(candidates[random_index(candidates.size())])
-		for n in replacement.size(): letters[path[n]]=replacement[n]
+	refill_crossing(path)
 	return true
+
+func refill_crossing(consumed: Array) -> void:
+	refill_nodes=0; last_refill_route.clear()
+	var candidates: Array=STARTERS[language].duplicate()
+	var offset := random_index(candidates.size())
+	var start := random_index(28)
+	for n in candidates.size():
+		var word: String=candidates[(offset+n)%candidates.size()]
+		if used.has(word): continue
+		var word_tiles := tiles(word)
+		for j in 28:
+			var route := fit_crossing(word_tiles,consumed,(start+j)%28,[],0,0)
+			if not route.is_empty():
+				for k in route.size():
+					if route[k] in consumed: letters[route[k]]=word_tiles[k]
+				last_refill_route=route; return
+			if refill_nodes>=4000: return
+
+func fit_crossing(word_tiles: Array[String], consumed: Array, cell: int, route: Array[int], fixed_count: int, fresh_count: int) -> Array[int]:
+	refill_nodes+=1
+	if refill_nodes>4000 or cell in route: return []
+	var fresh := cell in consumed
+	if not fresh and letters[cell]!=word_tiles[route.size()]: return []
+	var fixed := fixed_count+(0 if fresh else 1)
+	var changed := fresh_count+(1 if fresh else 0)
+	var next: Array[int]=route.duplicate(); next.append(cell)
+	if next.size()==word_tiles.size():
+		if fixed>=2 and changed>=1: return next
+		return []
+	if fixed+word_tiles.size()-next.size()<2: return []
+	for neighbor in 28:
+		if adjacent_only and (absi(cell%7-neighbor%7)>1 or absi(cell/7-neighbor/7)>1): continue
+		if refill_nodes>=4000: break
+		var found := fit_crossing(word_tiles,consumed,neighbor,next,fixed,changed)
+		if not found.is_empty(): return found
+	return []

@@ -29,5 +29,17 @@ await db.exec('set role service_role');
 board=(await db.query('select daily_leaderboard($1,$2,$3) as result',[a,'en',true])).rows[0].result;
 assert.equal(board.total,2); await db.exec('reset role');
 await assert.rejects(()=>db.query('update daily_attempts set score=-1 where id=$1',[first.id]));
+await db.exec(readFileSync(new URL('../supabase/migrations/202609170002_daily_v2.sql',import.meta.url),'utf8'));
+const v2=(await db.query('select daily_start_versioned($1,$2,$3,$4,$5,$6) as result',[a,'en',true,'Tester',987,'daily-v2'])).rows[0].result;
+assert.notEqual(v2.id,first.id); assert.equal(v2.seed,987); assert.equal(v2.version,'daily-v2');
+assert.equal((await start(a)).id,first.id);
+let v2board=(await db.query('select daily_leaderboard_versioned($1,$2,$3,$4) as result',[a,'en',true,'daily-v2'])).rows[0].result;
+assert.equal(v2board.total,0);
+for(const role of ['anon','authenticated']) {
+ await db.exec('set role '+role);
+ await assert.rejects(()=>db.query('select daily_start_versioned($1,$2,$3,$4,$5,$6)',[a,'en',true,'Tester',987,'daily-v2']));
+ await assert.rejects(()=>db.query('select daily_leaderboard_versioned($1,$2,$3,$4)',[a,'en',true,'daily-v2']));
+ await db.exec('reset role');
+}
 await db.close();
 console.log('PASS: SQL migration, unique attempts, canonical daily seed, category separation, ties, privacy, client access denied, service RPC, constraints');

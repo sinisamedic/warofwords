@@ -32,6 +32,16 @@ static func jewel(c: CanvasItem, p: Vector2, radius: float, color: Color, chosen
 static func gem(c: CanvasItem, p: Vector2, r: float = 5) -> void:
 	c.draw_texture_rect(GEM,Rect2(p-Vector2.ONE*r,Vector2.ONE*r*2),false)
 
+static func padlock(c: CanvasItem, p: Vector2) -> void:
+	c.draw_arc(p+Vector2(0,-6),9,PI,TAU,24,GOLD,4,true)
+	c.draw_line(p+Vector2(-9,-6),p+Vector2(-9,2),GOLD,4,true)
+	c.draw_line(p+Vector2(9,-6),p+Vector2(9,2),GOLD,4,true)
+	var body := StyleBoxFlat.new()
+	body.bg_color=GOLD; body.set_corner_radius_all(4)
+	c.draw_style_box(body,Rect2(p+Vector2(-14,-1),Vector2(28,22)))
+	c.draw_circle(p+Vector2(0,7),3,INK)
+	c.draw_line(p+Vector2(0,8),p+Vector2(0,14),INK,3,true)
+
 static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color.WHITE) -> void:
 	if kind != 2:
 		# Three horizontal slices scale the complete bevel vertically. Preserving

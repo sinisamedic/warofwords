@@ -1,5 +1,5 @@
-// Portable daily-v1 rules; intentionally no engine-specific RNG or client score input.
-export const VERSION = 'daily-v1';
+// Portable daily-v2 rules, with frozen v1 replay support for existing clients.
+export const VERSION = 'daily-v2';
 export const DURATION_MS = 120000;
 export const MAX_MOVES = 240;
 const POOLS = {
@@ -11,9 +11,10 @@ const STARTERS = {
   sr: ['KAMEN','REKA','VODA','VATRA','SNAGA','ZEMLJA','NEBO','OBLAK','SVETLO','ISKRA','IGRA','MOST'],
 };
 export class DailyRules {
-  constructor(seed, language, adjacent) {
+  constructor(seed, language, adjacent, version=VERSION) {
     if (!Number.isInteger(seed) || seed<1 || seed>2147483646 || !POOLS[language] || typeof adjacent!=='boolean') throw Error('Invalid rules');
-    this.state=seed; this.language=language; this.adjacent=adjacent;
+    if(!['daily-v1',VERSION].includes(version)) throw Error('Unsupported rules');
+    this.version=version; this.state=seed; this.language=language; this.adjacent=adjacent;
     this.used=new Set(); this.moves=[]; this.score=0;
     this.letters=Array.from({length:28},()=>this.randomLetter());
     const options=[...STARTERS[language]];
@@ -53,9 +54,45 @@ export class DailyRules {
     this.used.add(word); this.score+=path.length*10+Math.max(0,path.length-4)*5;
     this.moves.push({path:[...path],ms});
     for(const i of path) this.letters[i]=this.randomLetter();
-    const candidates=STARTERS[this.language].filter(w=>!this.used.has(w)&&this.tiles(w).length<=path.length);
-    if(candidates.length) this.tiles(candidates[this.randomIndex(candidates.length)]).forEach((tile,n)=>this.letters[path[n]]=tile);
+    if(this.version==='daily-v1') {
+      const candidates=STARTERS[this.language].filter(w=>!this.used.has(w)&&this.tiles(w).length<=path.length);
+      if(candidates.length) this.tiles(candidates[this.randomIndex(candidates.length)]).forEach((tile,n)=>this.letters[path[n]]=tile);
+    } else this.refillCrossing(path);
     return true;
+  }
+  refillCrossing(consumed) {
+    this.refillNodes=0; this.lastRefillRoute=[];
+    const candidates=STARTERS[this.language];
+    const offset=this.randomIndex(candidates.length),start=this.randomIndex(28);
+    for(let n=0;n<candidates.length;n++) {
+      const word=candidates[(offset+n)%candidates.length];
+      if(this.used.has(word)) continue;
+      const tiles=this.tiles(word);
+      for(let j=0;j<28;j++) {
+        const route=this.fitCrossing(tiles,consumed,(start+j)%28,[],0,0);
+        if(route.length) {
+          route.forEach((cell,k)=>{if(consumed.includes(cell)) this.letters[cell]=tiles[k];});
+          this.lastRefillRoute=route; return;
+        }
+        if(this.refillNodes>=4000) return;
+      }
+    }
+  }
+  fitCrossing(tiles,consumed,cell,route,fixedCount,freshCount) {
+    this.refillNodes++;
+    if(this.refillNodes>4000||route.includes(cell)) return [];
+    const fresh=consumed.includes(cell);
+    if(!fresh&&this.letters[cell]!==tiles[route.length]) return [];
+    const fixed=fixedCount+(fresh?0:1),changed=freshCount+(fresh?1:0),next=[...route,cell];
+    if(next.length===tiles.length) return fixed>=2&&changed>=1?next:[];
+    if(fixed+tiles.length-next.length<2) return [];
+    for(let neighbor=0;neighbor<28;neighbor++) {
+      if(this.adjacent&&(Math.abs(cell%7-neighbor%7)>1||Math.abs(Math.floor(cell/7)-Math.floor(neighbor/7))>1)) continue;
+      if(this.refillNodes>=4000) break;
+      const found=this.fitCrossing(tiles,consumed,neighbor,next,fixed,changed);
+      if(found.length) return found;
+    }
+    return [];
   }
 }
 

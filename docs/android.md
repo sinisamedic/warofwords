@@ -1,6 +1,8 @@
 # Android — instalacija i razvoj
 
-**Aktuelni testni paket je 0.1.7 / code 8**, sa dnevnim izazovom, globalnom listom i novim izgledom. Koristi novi potpis koji je korisnik izričito odobrio: **deinstalirati 0.1.6 ili stariju verziju jednom, zatim instalirati 0.1.7; lokalni napredak se briše.** Naredni paketi treba da koriste isti novi ključ. Ranija uputstva ispod za 0.1.6 ostaju istorijska.
+**0.1.8 / code 9:** instalira se preko 0.1.7, bez deinstalacije i uz isti potpis. Nova dopuna u kampanji/dnevnom režimu, zvuk i vibracija pri spajanju dnevnih slova i katanac umesto teksta. Novi dnevni rezultati koriste odvojenu v2 rang-listu; v1 podaci ostaju sačuvani. SHA256 APK-a: `62d6e86ba22dceb6c786cecdcb11b210a3731716103968226fe598be8d94bf28`, veličina 94.893.374 bajta. Sledeći odeljak beleži promenu potpisa koja se desila u 0.1.7.
+
+**Istorija: testni paket 0.1.7 / code 8**, sa dnevnim izazovom, globalnom listom i novim izgledom. Koristi novi potpis koji je korisnik izričito odobrio: **deinstalirati 0.1.6 ili stariju verziju jednom, zatim instalirati 0.1.7; lokalni napredak se briše.** Naredni paketi treba da koriste isti novi ključ. Ranija uputstva ispod za 0.1.6 ostaju istorijska.
 
 Novi ključ i lozinka čuvaju se u ignorisanom .local/signing/. .local/machine.json poljem androidSigningConfig pokazuje na lokalni signing.json (path, alias, password), koji build skripta učitava bez ispisa tajni. Na drugi računar preneti taj folder bezbednim kanalom, van Git-a, i prilagoditi lokalne putanje. Sertifikat SHA256: 429a2d1b4700535f04c7252e8b28c0f8c4bb584a6cd8b7d863cd08070eff0abc.
 
@@ -36,7 +38,7 @@ Može i `GODOT_EXECUTABLE`, ili `godotExecutable` u ignorisanom `.local/machine.
 
 Za potpisani build postaviti `GODOT_ANDROID_KEYSTORE_DEBUG_PATH` na postojeći ključ; po potrebi i `GODOT_ANDROID_KEYSTORE_DEBUG_USER` i `GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD`. Ključ/lozinke ostaju van Git-a. Skripta odbija potpisivanje bez eksplicitne putanje, da novi računar ne bi slučajno koristio drugi potpis. Na prethodnom računaru proveriti Godot Editor Settings → Export → Android → Debug Keystore; tipične lokacije su `%APPDATA%/Godot/keystores/debug.keystore` i `%APPDATA%/Godot/android/debug.keystore`. APK kontrolna suma sa GitHub Releases nije potpisni ključ i ne može ga zameniti.
 
-Bez ključa, `./tools/build-android.ps1 -UnsignedCheck` proverava import/testove/izvoz u `.local/WarOfWords-0.1.7-UNSIGNED-CHECK.apk`. To nije instalaciono izdanje. Skripta privremeno isključuje potpisivanje i u `finally` vraća identičan preset; ne pokretati paralelan editor/export tokom ove provere. Posle nasilnog prekida proveriti da je `package/signed=true`.
+Bez ključa, `./tools/build-android.ps1 -UnsignedCheck` proverava import/testove/izvoz u `.local/WarOfWords-0.1.8-UNSIGNED-CHECK.apk`. To nije instalaciono izdanje. Skripta privremeno isključuje potpisivanje i u `finally` vraća identičan preset; ne pokretati paralelan editor/export tokom ove provere. Posle nasilnog prekida proveriti da je `package/signed=true`.
 
 Na drugom Windows računaru 2026-09-17 instalirani su Microsoft OpenJDK 21.0.12.1, Android command-line tools 15859902, platform-tools 37.0.1, platform 35/rev 2 i build-tools 36.0.0. Zvanični Godot 4.7.2 Android šabloni su u `.local/templates/`, alati u `.local/toolchains/`; putanje su upisane u lokalni machine.json i Godot Editor Settings. Arhive su proverene prema objavljenim SHA256 vrednostima. NDK/CMake/Android Studio nisu potrebni za ovaj izvoz gotovog APK šablona bez Gradle-a.
 

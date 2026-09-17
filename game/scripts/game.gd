@@ -545,7 +545,10 @@ func draw_campaign_track(canvas: Control) -> void:
 			var available: bool=level<=save.data.unlocked
 			var p := points[i]
 			Ornaments.jewel(canvas,p,36,(COLORS[0] if level==mission else COLORS[1]) if available else INK,level==mission)
-			text("%02d" % (level+1) if available else "LOCK",Rect2(p-Vector2(32,30),Vector2(64,60)),24,INK if available else CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,true,canvas)
+			if available:
+				text("%02d" % (level+1),Rect2(p-Vector2(32,30),Vector2(64,60)),24,INK,true,HORIZONTAL_ALIGNMENT_CENTER,false,canvas)
+			else:
+				Ornaments.padlock(canvas,p)
 			if save.data.wins.has(str(level)):
 				text("★".repeat(int(save.data.wins[str(level)])),Rect2(p.x-42,p.y+40,84,28),20,GOLD,false,HORIZONTAL_ALIGNMENT_CENTER,false,canvas)
 	canvas.draw_set_transform(Vector2.ZERO)

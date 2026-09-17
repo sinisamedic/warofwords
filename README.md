@@ -1,12 +1,12 @@
 # War of Words
 
-**Radna nadogradnja 0.1.7-dev:** dnevni izazov, anonimni profil i globalna rang-lista na besplatnom Supabase projektu. Server je objavljen i proveren stvarnim dvominutnim partijama; novi Android APK još nije napravljen. Lokalni Godot mrežni test blokira Avast HTTPS sertifikat na ovom računaru. [Online režim i postavljanje](docs/daily-online.md). Poslednji objavljeni APK ispod ostaje 0.1.6.
+**Android 0.1.8:** dnevni izazov i globalna rang-lista, raznovrsnija dopuna koja povezuje nova i preostala slova, zvuk/vibracija izbora u dnevnom režimu i ikonice katanca na mapi. [Online režim i postavljanje](docs/daily-online.md).
 
-**Igriva Android verzija 0.1.6 u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Sve radi offline. Radni naziv i balans mogu se menjati nakon testa na telefonu.
+**Igriva Android verzija u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Kampanja i vežba rade offline; rangirani dnevni izazov zahteva internet. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 
-- APK: [WarOfWords-0.1.6-android.apk](https://github.com/sinisamedic/warofwords/releases/download/v0.1.6-android-preview/WarOfWords-0.1.6-android.apk). Instalirati preko postojeće igre bez deinstaliranja. Lokalni build je u ignorisanom `exports/`.
+- APK: [WarOfWords-0.1.8-android.apk](https://github.com/sinisamedic/warofwords/releases/download/v0.1.8-android-preview/WarOfWords-0.1.8-android.apk). Instalirati preko 0.1.7 bez deinstaliranja. Verzije do 0.1.6 koriste stari potpis i zahtevaju jednokratnu deinstalaciju. Lokalni build je u ignorisanom `exports/`.
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
 - **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Any letters** dozvoljava udaljena slova. Pravilo povezivanja važi odmah i za započetu borbu. Novi rečnik važi za novu borbu.

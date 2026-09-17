@@ -4,6 +4,10 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 ## Novi smer — dnevni izazov i globalna rang-lista, 2026-09-17
 
+Povratna informacija sa telefona posle 0.1.7: globalna rang-lista radi. Korisnik traži težu dopunu, jer čitave reči stalno nastaju na istoj potrošenoj putanji. U 0.1.8 dopuna može da uklopi najviše jednu poznatu reč, i ona mora da prođe kroz najmanje dva preostala polja i najmanje jedno potrošeno. Netaknuta slova ostaju na mestu; promena putanje nastaje povezivanjem novih i starih slova, a ne rotiranjem cele table. Ako ne nađe takvo uklapanje u ograničenoj pretrazi, ostaje nasumična dopuna. Kampanja zadržava postojeću zaštitu od table bez rešenja. U dnevnom režimu ovo su verzionisana pravila daily-v2, odvojena od v1 rang-liste. Korisnik je eksplicitno odobrio objavu izmene servera.
+
+Dnevni izazov i vežba dobijaju isti zvuk dodira i kratku vibraciju pri izboru novog slova kao kampanja, uz poštovanje podešavanja. Zaključani nivoi prikazuju samo nacrtanu ikonicu katanca, bez teksta „KLJUČ”/„LOCK”.
+
 Korisnik je nakon funkcionalnog prikaza zatražio da završni ekran dnevnog izazova i rang-lista budu vizuelno usklađeni sa usvojenim ekranima: ukrašeni okviri, postojeća tipografija i dugmad. Trenutni prikaz je funkcionalni prototip, nije usvojen završni dizajn. Najpre je zatražio osposobljavanje Android build okruženja. Zatim je izričito odobrio doradu izgleda, novi potpisni ključ i build 0.1.7, uz jednokratnu deinstalaciju i gubitak testnog napretka. Dorada koristi postojeću Observatory ilustraciju i ukrase ostalih ekrana, bez novih bitmap materijala.
 
 Korisnik je usvojio početak online nadogradnje na besplatnom servisu: prvo profil/nadimak, dnevni izazov i globalna rang-lista, potom razmatranje izazivanja prijatelja i duela uživo. Ima pripremljen Supabase projekat. Ova odluka proširuje prethodni offline smer; kampanja protiv računara ostaje.

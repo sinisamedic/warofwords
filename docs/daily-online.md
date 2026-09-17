@@ -2,6 +2,12 @@
 
 Radna grana: `codex/daily-global-leaderboard`. Ovo je novi režim; objavljeni APK 0.1.6 ostaje offline.
 
+## Promena pravila u 0.1.8
+
+Klijent 0.1.8 koristi `daily-v2`: više se ne ubacuje cela nova reč duž potrošene putanje. Uklapa se najviše jedna poznata reč koja povezuje najmanje dva netaknuta polja i bar jedno novo polje; inače ostaju nasumična slova. Pretraga je ograničena na 4000 čvorova. Godot/JavaScript replay je identičan u sva četiri režima. Početna tabla, vreme i bodovanje nisu promenjeni.
+
+Migracija `202609170002_daily_v2.sql` čuva stare podatke i stare RPC funkcije, dodaje verzionisane RPC funkcije sa istim ograničenjem pristupa samo za service_role. Server podržava v1 i v2, a rang-liste i pokušaji su odvojeni po verziji. Klijenti 0.1.7 i njihovi pokušaji nastavljaju da rade po v1 pravilima. Za potpuno novo okruženje primeniti obe migracije redom, pa objaviti funkciju. Javni klijent ne može direktno pristupiti tabelama ili RPC-ovima. Rečnici i njihovi hash-evi ostaju isti.
+
 ## Stanje provere 2026-09-17
 
 Servis je objavljen na korisnikovom potvrđenom projektu `phfbohgbeqjvtfsgcjwi`, Free / Frankfurt. Stvarni test preko Node HTTPS klijenta završen je u 17:32:35 UTC: EN 70 i SR 30 bodova na odvojenim listama, potvrđeni idempotentni Start/Submit, odbijen zahtev bez sesije i direktno čitanje tabela. Gateway JWT kontrola ostala je uključena. Testni profil „QA provera” je jasno označen; rezultati su stvarno izračunati na serveru.

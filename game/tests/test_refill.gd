@@ -36,6 +36,11 @@ func run() -> void:
 						if smart:
 							shuffled=lex.refill(path,used); planted+=lex.last_refill_words.size()
 							check(lex.refill_nodes<=lex.REFILL_SEARCH_BUDGET,"construction search respects its work budget")
+							for route in lex.last_refill_routes:
+								var survivors := 0
+								for cell in route:
+									if cell not in path: survivors+=1
+								check(survivors>=2,"constructed words leave the consumed path")
 						else:
 							for cell in path:
 								lex.letters[cell]=lex.pool[lex.rng.randi_range(0,lex.pool.size()-1)]

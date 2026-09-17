@@ -364,6 +364,8 @@ func add_cell(i: int) -> void:
 		var before: int=selection.back()
 		if absi(i%7-before%7)>1 or absi(i/7-before/7)>1: return
 	selection.append(i)
+	host.sfx.play("tap",1+selection.size()*.035)
+	host.haptic(10,.25)
 
 func _input(event: InputEvent) -> void:
 	if not visible or mode!="running": return

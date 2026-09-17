@@ -2,6 +2,16 @@
 
 Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
 
+## 0.1.8 — dopuna, dodirni odziv i katanci
+
+- Korisnik potvrđuje da rang-lista radi na telefonu. Tražio je uklanjanje niza gotovih reči na istoj putanji, zvuk/vibraciju izbora u dnevnom izazovu i vežbi, i ikonicu katanca umesto „KLJUČ”. Sve tri izmene implementirane.
+- Kampanja i daily-v2 dopuna ugrađuju najviše jednu poznatu reč, uz najmanje dva preostala polja i bar jedno novo. Nikada namerno ne postavljaju celu reč samo u obrisana polja. Nepotrošena slova ostaju ista; nasumična dopuna može slučajno napraviti reč. Početne table i bodovanje nisu menjani.
+- Daily server podržava i v1 i v2; migracija čuva stare pokušaje/rezultate i odvaja nove rang-liste. Migracija i nova funkcija su objavljene. Automatska provera prvo je zaustavila deploy; posle izričite korisnikove potvrde objava je uspešna. JWT kontrola ostaje uključena.
+- APK `exports/WarOfWords-0.1.8-android.apk`, code 9, 94.893.374 bajta, SHA256 `62d6e86ba22dceb6c786cecdcb11b210a3731716103968226fe598be8d94bf28`. Isti potpis kao 0.1.7, potvrđen apksigner-om; zipalign prolazi. Instalirati preko 0.1.7 bez deinstalacije.
+- Završni build: 1487 PASS provera igre/dnevnog režima, refill benchmark bez neuspeha, log bez script/engine grešaka. Kampanjska nova dopuna imala je 5+ reč na svih 384 testiranih tabli; maksimum dopune oko 20 ms na ovom računaru. To nije garancija za svaki slučaj.
+- Node/Godot parity u sva četiri režima, zamrznuti v1 replay, handler validacija i obe SQL migracije/prava pristupa prolaze. **Stvarni Godot v2 test 8/8 prolazi**, uključujući 120 s → potvrdu → globalni plasman i srpsku kategoriju. Stvarni read-only pozivi potvrđuju dostupnost obe verzije liste. Logovi: `.local/android-018-build.log`, `.local/daily-v2-live.log`, `.local/legacy-live.log`.
+- Katanac pregledan na renderu 1280×576. Zvuk izbora testiran preko stvarnog audio dispatch-a: jedan događaj za novo polje, bez dupliranja i bez zvuka kad je utišan. Stvarna vibracija na telefonu ostaje korisnička proba; kod koristi isti Android haptic poziv i podešavanje kao kampanja.
+
 ## 0.1.7 — novi izgled i novi potpis, APK spreman
 
 Objavljeno i provereno: [v0.1.7-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.7-android-preview), izvorni commit `88de060`. APK i SHA256 su uploadovani; GitHub digest/veličina odgovaraju lokalnom paketu. Izdanje je prerelease, nije draft.
@@ -66,7 +76,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/daily-global-leaderboard`. Probati potpisani APK 0.1.7 na telefonu: deinstalirati staru verziju jednom, instalirati novu, proveriti novi izgled, vežbu i rangirani izazov → slanje → globalni plasman. Novi potpis je odobren; stari ključ više nije potreban. Za sledeći računar sačuvati/preneti novi signing folder van Git-a. Desktop Godot HTTPS tok prolazi posle Avast izuzetka.
+Nastaviti granu `codex/daily-global-leaderboard`. Probati 0.1.8 preko 0.1.7 na telefonu: da li nova dopuna daje zanimljivije putanje, da li se čuju dodiri i oseća vibracija u vežbi/rangiranom izazovu i da li katanac odgovara. Rang-lista za v2 je nova; prethodni rezultati ostaju na v1. Za sledeći računar sačuvati/preneti `.local/signing/` van Git-a. Desktop v2 mrežni tok prolazi.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/daily-global-leaderboard. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 

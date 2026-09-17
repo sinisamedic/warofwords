@@ -1,11 +1,12 @@
 import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
+import {VERSION} from '../supabase/functions/daily/rules.mjs';
 const root=new URL('../',import.meta.url), local=new URL('.local/',root);
 const file=readdirSync(local).filter(n=>/^daily-node-session(-\d+)?\.json$/.test(n)).sort((a,b)=>statSync(new URL(b,local)).mtimeMs-statSync(new URL(a,local)).mtimeMs)[0];
 if(!file) throw Error('Run the opt-in live test first.');
 const session=JSON.parse(readFileSync(new URL(file,local),'utf8'));
 const config=JSON.parse(readFileSync(new URL('game/online_config.json',root),'utf8'));
 if(session.project_url!==config.url) throw Error('Test session belongs to another project.');
-const response=await fetch(config.url+'/functions/v1/daily',{method:'POST',headers:{apikey:config.publishable_key,Authorization:`Bearer ${session.access_token}`,'Content-Type':'application/json'},body:JSON.stringify({action:'leaderboard',language:'en',adjacent:true,version:'daily-v1'})});
+const response=await fetch(config.url+'/functions/v1/daily',{method:'POST',headers:{apikey:config.publishable_key,Authorization:`Bearer ${session.access_token}`,'Content-Type':'application/json'},body:JSON.stringify({action:'leaderboard',language:'en',adjacent:true,version:VERSION})});
 if(!response.ok) throw Error(`Leaderboard HTTP ${response.status}`);
 const board=await response.json();
 writeFileSync(new URL('daily-live-leaderboard.json',local),JSON.stringify(board,null,2));

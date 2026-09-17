@@ -24,6 +24,11 @@ func run_tests() -> void:
 				var path: Array=lex.solutions[word]
 				var before: Array=a.letters.duplicate()
 				check(a.accept(path,n*1000,lex),"valid move accepted")
+				var surviving := 0
+				for cell in a.last_refill_route:
+					if cell not in path: surviving+=1
+				check(a.last_refill_route.is_empty() or surviving>=2,"planted word crosses at least two surviving tiles")
+				check(a.refill_nodes<=4000,"daily refill work is bounded")
 				check(b.accept(path,n*1000,lex) and a.letters==b.letters and a.score==b.score,"deterministic replay")
 				for i in 28:
 					if i not in path: check(before[i]==a.letters[i],"unused tile retained")
@@ -74,6 +79,14 @@ func run_tests() -> void:
 		Input.parse_input_event(touch); await process_frame
 		touch=touch.duplicate(); touch.pressed=false; Input.parse_input_event(touch); await process_frame
 	check(daily.selection==solution,"touch input composes a real word")
+	# Exercise the real sound preference and voice dispatch, not a mirrored stub.
+	daily.selection.clear(); game.sfx.enabled=true
+	var cursor_before: int=game.sfx.cursor
+	daily.add_cell(solution[0]); daily.add_cell(solution[0]); daily.add_cell(-1)
+	check(game.sfx.cursor==cursor_before+1,"one sound for a newly selected tile, none for duplicate or invalid cells")
+	game.sfx.enabled=false; daily.add_cell(solution[1])
+	check(game.sfx.cursor==cursor_before+1,"muted daily selection stays silent")
+	daily.selection.assign(solution)
 	var submit_button: Button
 	for control in daily.ui.get_children():
 		if control is Button and control.text=="SUBMIT": submit_button=control

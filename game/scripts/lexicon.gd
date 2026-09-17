@@ -16,6 +16,8 @@ const REFILL_SEARCH_BUDGET := 10000
 var refill_candidates: Array[Dictionary] = []
 var refill_nodes := 0
 var last_refill_words: Array[String] = []
+var refill_consumed: Dictionary = {}
+var last_refill_routes: Array = []
 var neighbors: Array[Array] = []
 
 func _init(load_now: bool = true, code: String = "en") -> void:
@@ -106,10 +108,12 @@ func generate(used: Dictionary = {}) -> void:
 func refill(path: Array[int], used: Dictionary) -> bool:
 	var writable: Dictionary={}
 	last_refill_words.clear(); refill_nodes=0
+	last_refill_routes.clear(); refill_consumed.clear()
 	for i in path:
 		letters[i] = balanced_letter()
 		types[i] = rng.randi_range(0,3)
 		writable[i]=true
+		refill_consumed[i]=true
 	# Find words through fixed existing letters and the just-consumed wildcard cells.
 	# Lock assignments after each word so a second word cannot destroy the first.
 	var order: Array[int]=[]
@@ -119,7 +123,7 @@ func refill(path: Array[int], used: Dictionary) -> bool:
 		var j := rng.randi_range(0,i); var swap := order[i]; order[i]=order[j]; order[j]=swap
 	for minimum in [5,4]:
 		for index in order:
-			if refill_nodes>=REFILL_SEARCH_BUDGET or writable.is_empty() or last_refill_words.size()>=3: break
+			if refill_nodes>=REFILL_SEARCH_BUDGET or writable.is_empty() or last_refill_words.size()>=1: break
 			var candidate: Dictionary=refill_candidates[index]
 			if candidate.tiles.size()<minimum or candidate.word in last_refill_words: continue
 			var fit := fit_refill_word(candidate.tiles,writable)
@@ -128,6 +132,7 @@ func refill(path: Array[int], used: Dictionary) -> bool:
 				if writable.has(fit[n]):
 					letters[fit[n]]=candidate.tiles[n]; writable.erase(fit[n])
 			last_refill_words.append(candidate.word)
+			last_refill_routes.append(fit.duplicate())
 	find_words(used)
 	if solutions.is_empty():
 		generate(used)
@@ -161,7 +166,11 @@ func fit_refill_step(tiles: Array[String], writable: Dictionary, cell: int, dept
 	if not blank and letters[cell]!=tiles[depth]: return []
 	var next: Array[int]=route.duplicate(); next.append(cell)
 	if depth==tiles.size()-1:
-		if changed or blank: return next
+		var surviving := 0
+		for index in next:
+			if not refill_consumed.has(index): surviving+=1
+		# Cross the old/new boundary; never serve another word inside the cleared path.
+		if (changed or blank) and surviving>=2: return next
 		return []
 	var choices: Array=neighbors[cell] if adjacent_only else range(28)
 	for neighbor in choices:

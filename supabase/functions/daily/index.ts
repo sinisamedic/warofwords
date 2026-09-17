@@ -47,30 +47,32 @@ Deno.serve(async(request:Request)=>{
     raw+=decoder.decode();
     let input; try { input=JSON.parse(raw); } catch { return respond({error:'Invalid request'},400); }
     if(!input||typeof input!=='object') return respond({error:'Invalid request'},400);
-    if(!['en','sr'].includes(input.language)||typeof input.adjacent!=='boolean'||input.version!==VERSION) return respond({error:'Unsupported rules'},400);
-    if(input.action==='leaderboard') return respond(await database('rpc/daily_leaderboard',{p_user:user.id,p_language:input.language,p_adjacent:input.adjacent}));
+    if(!['en','sr'].includes(input.language)||typeof input.adjacent!=='boolean'||!['daily-v1',VERSION].includes(input.version)) return respond({error:'Unsupported rules'},400);
+    const versioned=input.version===VERSION;
+    const versionArgs=versioned?{p_version:input.version}:{};
+    if(input.action==='leaderboard') return respond(await database(versioned?'rpc/daily_leaderboard_versioned':'rpc/daily_leaderboard',{p_user:user.id,p_language:input.language,p_adjacent:input.adjacent,...versionArgs}));
     if(input.action==='start') {
       if(typeof input.nickname!=='string'||!/^[\p{L}\p{N} _-]{3,20}$/u.test(input.nickname.trim())) return respond({error:'Nickname must have 3–20 letters, numbers, spaces, _ or -'},400);
       // Load and verify the dictionary before consuming the player's daily attempt.
       await dictionary(input.language);
       const day=new Date().toISOString().slice(0,10);
-      const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${serviceKey}:${day}:${input.language}:${input.adjacent}:${VERSION}`)));
+      const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${serviceKey}:${day}:${input.language}:${input.adjacent}:${input.version}`)));
       const seed=new DataView(digest.buffer).getUint32(0)%2147483646+1;
-      const attempt=await database('rpc/daily_start',{p_user:user.id,p_language:input.language,p_adjacent:input.adjacent,p_nickname:input.nickname.trim(),p_seed:seed});
+      const attempt=await database(versioned?'rpc/daily_start_versioned':'rpc/daily_start',{p_user:user.id,p_language:input.language,p_adjacent:input.adjacent,p_nickname:input.nickname.trim(),p_seed:seed,...versionArgs});
       return respond({id:attempt.id,day:attempt.day,seed:attempt.seed,version:attempt.version,started_at:attempt.started_at,remaining_ms:Math.max(0,Date.parse(attempt.started_at)+DURATION_MS-Date.now()),score:attempt.score,finished:!!attempt.finished_at});
     }
     if(input.action!=='submit'||typeof input.id!=='string'||!/^[0-9a-f-]{36}$/i.test(input.id)) return respond({error:'Invalid action'},400);
     const rows=await database(`daily_attempts?id=eq.${input.id}&user_id=eq.${user.id}&select=*`,undefined,'GET');
     const attempt=rows[0];
     if(!attempt) return respond({error:'Attempt not found'},404);
-    if(attempt.language!==input.language||attempt.adjacent!==input.adjacent||attempt.version!==VERSION) return respond({error:'Attempt category mismatch'},400);
+    if(attempt.language!==input.language||attempt.adjacent!==input.adjacent||attempt.version!==input.version) return respond({error:'Attempt category mismatch'},400);
     if(attempt.finished_at) return respond({score:attempt.score,word_count:attempt.word_count,verified:true});
     const age=Date.now()-Date.parse(attempt.started_at);
     if(age<DURATION_MS) return respond({error:'Challenge still running'},409);
     if(age>DURATION_MS+30000) return respond({error:'Submission window expired'},410);
     if(!Array.isArray(input.moves)||input.moves.length>MAX_MOVES) return respond({error:'Invalid moves'},400);
     const text=await dictionary(attempt.language);
-    const rules=new DailyRules(attempt.seed,attempt.language,attempt.adjacent);
+    const rules=new DailyRules(attempt.seed,attempt.language,attempt.adjacent,attempt.version);
     for(const move of input.moves) if(!move||!rules.accept(move.path,move.ms,(word:string)=>dictionaryContains(text,word))) return respond({error:'Invalid move'},400);
     // Atomic first write: concurrent retries never replace an already verified score.
     const updated=await database(`daily_attempts?id=eq.${attempt.id}&user_id=eq.${user.id}&finished_at=is.null`,{score:rules.score,word_count:rules.moves.length,finished_at:new Date().toISOString()},'PATCH');
