@@ -5,14 +5,16 @@ const ATLAS := preload("res://assets/art/hero-parts.png")
 var joints: Dictionary = {}
 var player: AnimationPlayer
 var muzzle: Marker2D
+var defeated := false
+var defeat_start: Dictionary={}
 
 func _init() -> void:
 	var clean := Shader.new()
 	clean.code="shader_type canvas_item; varying vec4 tint; void vertex(){tint=COLOR;} void fragment(){ vec4 c=texture(TEXTURE,UV); COLOR=vec4(c.rgb,c.a*smoothstep(0.02,0.12,c.a))*tint; }"
 	var mat := ShaderMaterial.new(); mat.shader=clean
 	# Legs stay grounded. Upper-body and clothing joints animate independently.
-	part("BackLeg",self,Vector2(-4,-65),Rect2(435,786,321,431),Vector2(266,40),.166,mat)
-	part("FrontLeg",self,Vector2(4,-65),Rect2(903,784,332,429),Vector2(61,40),.168,mat)
+	leg("BackLeg",Vector2(-4,-65),Rect2(435,786,321,431),Vector2(266,40),.166,Vector2(145,220),Vector2(71,340),mat)
+	leg("FrontLeg",Vector2(4,-65),Rect2(903,784,332,429),Vector2(61,40),.168,Vector2(151,206),Vector2(219,339),mat)
 	var body := Node2D.new(); body.name="Body"; body.position=Vector2(0,-65); add_child(body); joints.Body=body
 	part("Coat",body,Vector2(-3,-1),Rect2(843,68,386,326),Vector2(268,25),.175,mat).z_index=-1
 	var rear := part("BackArm",body,Vector2(-19,-34),Rect2(92,457,282,285),Vector2(221,51),.10,mat)
@@ -67,15 +69,69 @@ func track(clip: Animation, path: String, times: Array, values: Array) -> void:
 	for n in times.size(): clip.track_insert_key(i,times[n],values[n])
 
 func advance_pose(delta: float, calm: bool, frozen: bool) -> void:
+	if defeated: return
 	if calm:
 		player.play("idle"); player.seek(0,true)
 	elif not frozen:
 		player.advance(delta)
 
 func react(clip: String, calm: bool) -> void:
-	if calm: return
+	if calm or defeated: return
 	# Reset non-keyed joints before one-shot actions, then blend back into breathing.
 	player.play("idle"); player.seek(0,true); player.play(clip); player.advance(0)
 
 func muzzle_position() -> Vector2:
 	return muzzle.global_position
+
+func leg(id: String, at: Vector2, region: Rect2, pivot: Vector2, factor: float, knee: Vector2, ankle: Vector2, mat: ShaderMaterial) -> void:
+	var node=preload("res://scripts/hero_leg.gd").new()
+	node.name=id; node.position=at; add_child(node); joints[id]=node
+	node.setup(ATLAS,region,pivot,factor,knee,ankle,mat)
+
+func reset_pose() -> void:
+	defeated=false
+	for id in joints:
+		joints[id].rotation=0
+	joints.BackLeg.reset_pose(); joints.FrontLeg.reset_pose()
+	player.play("idle"); player.seek(0,true)
+
+func begin_defeat() -> void:
+	defeated=true; defeat_start.clear()
+	for id in joints: defeat_start[id]={"position":joints[id].position,"rotation":joints[id].rotation}
+	player.stop(true)
+
+func defeat_pose(u: float, calm: bool) -> void:
+	if not defeated: begin_defeat()
+	if calm: return
+	# Recoil, knees giving way, weight landing on the hand, then a settled collapse.
+	var fall := smoothstep(.12,.76,u)
+	var settle := sin(clampf((u-.64)/.20,0,1)*PI)*2.0
+	var body: Node2D=joints.Body
+	body.position=Vector2(-5*sin(u*PI),lerpf(-65,-10,fall)+settle)
+	body.rotation=lerpf(0,1.37,smoothstep(.25,.82,u))-.08*sin(clampf(u/.24,0,1)*PI)
+	var entering := smoothstep(0,.12,u)
+	body.position=defeat_start.Body.position.lerp(body.position,entering)
+	joints.Head.rotation=lerpf(defeat_start.Head.rotation,.36,smoothstep(.08,.58,u))
+	joints.Coat.rotation=lerpf(defeat_start.Coat.rotation,-.62,smoothstep(.22,.94,u))
+	joints.BackLeg.collapse(body.position+Vector2(-4,0).rotated(body.rotation),smoothstep(.08,.32,u))
+	joints.FrontLeg.collapse(body.position+Vector2(4,0).rotated(body.rotation),smoothstep(.10,.34,u))
+	joints.FrontArm.rotation=lerpf(defeat_start.FrontArm.rotation,.75,smoothstep(.12,.48,u))
+	joints.FrontHand.rotation=lerpf(defeat_start.FrontHand.rotation,.7,smoothstep(.18,.5,u))
+	joints.BackArm.rotation=lerpf(defeat_start.BackArm.rotation,-.5,smoothstep(.12,.52,u))
+	joints.BackHand.rotation=lerpf(defeat_start.BackHand.rotation,-.5,smoothstep(.12,.52,u))
+	var brace := smoothstep(.38,.76,u)
+	place_hand(joints.FrontArm,joints.FrontHand,Vector2(35,3),Vector2(54,-4),-1,brace)
+	place_hand(joints.BackArm,joints.BackHand,Vector2(-12,18),Vector2(10,-3),1,brace)
+
+func place_hand(arm: Node2D, hand: Node2D, tip: Vector2, target: Vector2, bend: float, weight: float) -> void:
+	var shoulder: Vector2=joints.Body.transform*arm.position
+	var relative := target-shoulder
+	var a := hand.position.length(); var b := tip.length()
+	var distance := clampf(relative.length(),absf(a-b)+.01,a+b-.01)
+	var spread := acos(clampf((a*a+distance*distance-b*b)/(2*a*distance),-1,1))
+	var upper := relative.angle()+spread*bend
+	var elbow := shoulder+Vector2.from_angle(upper)*a
+	var arm_rotation: float=upper-hand.position.angle()-joints.Body.rotation
+	var hand_rotation: float=(target-elbow).angle()-tip.angle()-joints.Body.rotation-arm_rotation
+	arm.rotation=lerp_angle(arm.rotation,arm_rotation,weight)
+	hand.rotation=lerp_angle(hand.rotation,hand_rotation,weight)

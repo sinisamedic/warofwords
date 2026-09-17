@@ -22,3 +22,8 @@ and pause crests, and dialog filigree. Run `node tools/build-polish-ui.cjs` to
 reproduce exactly these assets. The turtle denotes Reduced Motion; the interface
 also briefly identifies a setting after it is tapped. No new raster generation
 or third-party icon library was used for this set.
+
+`enemy-defeat.gdshader` (2026-09-17) is original runtime shader code. It dissolves
+an enemy's existing atlas region through a glowing fragmented edge, without
+rotating the whole illustration or changing its source bitmap. Reduced Motion
+uses the actor's ordinary opacity fade instead.

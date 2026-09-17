@@ -83,6 +83,14 @@ func draw(c: CanvasItem, width: float, calm: bool) -> void:
 		var alpha: float = pow(1-u,1.5)
 		var color := Color(b.color,alpha)
 		var radius: float = (22+u*49)*(0.65 if calm else 1.0)
+		if b.kind == "fall_dust":
+			var landed := smoothstep(.48,.70,u)
+			var fade := 1.0-smoothstep(.72,1.0,u)
+			if calm or landed==0: continue
+			for i in 7:
+				var dust := Vector2(p.x+(i-3)*landed*11,174-sin(i*1.7)*3-landed*2)
+				Art.glow(c,dust,8+landed*12,Color(.79,.68,.48,landed*fade*.22))
+			continue
 		if b.kind == "defeat":
 			# A core overload, falling fragments and ground dust distinguish defeat from a hit.
 			var expansion: float = smoothstep(0,.55,u)

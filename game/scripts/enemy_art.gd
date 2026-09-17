@@ -11,11 +11,14 @@ const FACES := [Vector2(.48,.23),Vector2(.43,.22),Vector2(.50,.21),Vector2(.51,.
 
 static func apply(actor: Sprite2D, portrait: Sprite2D, encounter: int) -> void:
 	actor.texture=ATLAS
-	actor.material=null
+	var material := ShaderMaterial.new()
+	material.shader=preload("res://assets/ui/enemy-defeat.gdshader")
+	actor.material=material
 	actor.hframes=1; actor.vframes=1; actor.frame=0
 	actor.region_enabled=true
 	var row: Vector2=ROWS[encounter/4]
 	actor.region_rect=Rect2(encounter%4*CELL.x,row.x,CELL.x,row.y)
+	material.set_shader_parameter("region_uv",Vector4(actor.region_rect.position.x/ATLAS.get_width(),actor.region_rect.position.y/ATLAS.get_height(),CELL.x/ATLAS.get_width(),row.y/ATLAS.get_height()))
 	actor.flip_h=encounter == 6
 	actor.set_meta("encounter",encounter)
 	var origin := Vector2(encounter%4,encounter/4)*CELL

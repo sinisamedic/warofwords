@@ -7,7 +7,7 @@ Four original built-in ImageGen outputs, copied unchanged with source identifier
 - `campaign-sunward.png`, `campaign-sky.png`, `campaign-observatory.png`: one landscape for each campaign location. Existing `map.png` was a style reference. Runtime uses a 0.55-second dissolve with slight panning between chapters.
 - `hero-parts.png`: nine-part RGBA cutout atlas based on our existing heroine in `fighters.png`. `hero_rig.gd` selects regions at runtime, places overlapping joints, and animates torso, head, arms and coat with AnimationPlayer. No bitmap slicing or external character art. Small alpha noise is suppressed by the runtime shader.
 
-After user review of the large cutout, **the home screen retains the original intact `fighters.png` illustration**. The articulated version is used only in battle and remains a preview awaiting feedback. Enemy animation is unchanged. All four new PNG files are individually below 10 MiB; no LFS patterns needed for this set. Approved screen design masters are unchanged.
+After user review of the large cutout, **the home screen retains the original intact `fighters.png` illustration**. The articulated version is used only in battle. Its defeat pose now bends the existing leg regions with small Polygon2D meshes (`hero_leg.gd`) while separate torso, head, coat and arm joints collapse. UVs sample the unchanged atlas. Enemies use a runtime disintegration shader for defeat. All four new PNG files are individually below 10 MiB; no LFS patterns needed for this set. Approved screen design masters are unchanged.
 
 ## Previous artwork
 

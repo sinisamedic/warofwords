@@ -13,7 +13,7 @@ const CREAM := Color("fff1ce")
 const GOLD := Color("f3c569")
 const INK := Color("10283d")
 const GROUND_Y := 177.0
-const DEFEAT_DURATION := 1.35
+const DEFEAT_DURATION := 1.65
 const COLORS := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
 const NAMES := ["PULSE","AEGIS","ARC","MEND"]
 const ROLES := ["Direct energy blast","Block the next attack","Strike and interrupt","Restore your health"]
@@ -272,6 +272,7 @@ func update_actors() -> void:
 		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
 		portraits[i].position = Vector2(44 if i == 0 else size.x-44,33)
 	if screen == "battle":
+		if not ended and hero.defeated: hero.reset_pose()
 		if enemy_art_mission != mission:
 			EnemyArt.apply(enemy_actor,portraits[1],mission)
 			enemy_art_mission=mission
@@ -289,6 +290,7 @@ func update_actors() -> void:
 		enemy_actor.position = Vector2(size.x*.80+enemy_kick,GROUND_Y)-Vector2(0,EnemyArt.foot_offset(mission)*enemy_actor.scale.y).rotated(enemy_actor.rotation)
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 and not save.data.calm else Color.WHITE
 		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color.WHITE
+		enemy_actor.material.set_shader_parameter("dissolve",0.0)
 		if ended:
 			animate_defeat(enemy_actor if won else hero,won)
 	else:
@@ -307,15 +309,15 @@ func hit_offset(remaining: float, strength: float) -> float:
 func animate_defeat(actor: Node2D, opponent: bool) -> void:
 	var u := clampf(1.0-result_delay/DEFEAT_DURATION,0,1)
 	actor.modulate=Color.WHITE
-	actor.modulate.a=1.0-smoothstep(.30 if opponent else .65,1.0,u)
-	if save.data.calm: return
-	var pivot := Vector2(actor.position.x,GROUND_Y)
-	var feet := Vector2(0,GROUND_Y-actor.position.y)
-	var fall := smoothstep(.10,.86,u)
-	actor.rotation=(1.1 if opponent else -1.25)*fall
-	var shrink := 1.0-(.22 if opponent else .06)*fall
-	actor.scale*=shrink
-	actor.position=pivot-(feet*shrink).rotated(actor.rotation)
+	actor.rotation=0
+	if save.data.calm:
+		actor.modulate.a=1.0-smoothstep(.30,1.0,u)
+		return
+	if opponent:
+		actor.material.set_shader_parameter("dissolve",smoothstep(.12,.88,u))
+	else:
+		hero.defeat_pose(u,false)
+		actor.modulate.a=1.0-smoothstep(.88,1.0,u)
 
 func advance_combat(delta: float) -> void:
 	var impacts: Array = fx.advance(delta)
@@ -1083,6 +1085,7 @@ func change_screen(target: String) -> void:
 	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
+	if target=="battle" and not ended: hero.reset_pose()
 	campaign_background_from=chapter; campaign_background_time=.55
 	get_node("Backdrop").queue_redraw()
 	update_actors()
@@ -1227,7 +1230,8 @@ func finish(victory: bool) -> void:
 	touch_id=-1; dragging=false; drag_moved=false; tap_composition=false; pressed_action=""
 	fx.shots.clear()
 	hero_recoil=0; enemy_recoil=0
-	fx.burst("defeat",Vector2(.80 if won else .20,128),GOLD if won else COLORS[1],DEFEAT_DURATION)
+	if not won: hero.begin_defeat()
+	fx.burst("defeat" if won else "fall_dust",Vector2(.80 if won else .20,128),GOLD if won else COLORS[1],DEFEAT_DURATION)
 	sfx.play("explosion",.78)
 	stars=(3 if hp>=70 else 2 if hp>=35 else 1) if won else 0
 	var first: bool = not save.data.wins.has(str(mission))

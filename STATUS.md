@@ -4,9 +4,9 @@ Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-worlds-hero-animation.**
 
 ## 0.1.6 — otvoren pregled, APK se ne objavljuje još
 
-Korisnik želi da prvo vidi igru u simulatoru/pregledu, pre sledećeg APK-a. Vidljiv Godot prozor otvoren je lokalnim helperom .local/preview-016.gd, sa odvojenim testnim save-om, 420 novčića i svim otključanim nivoima. Ne prekidati prozor dok korisnik testira.
+Korisnik želi da prvo vidi igru u simulatoru/pregledu, pre sledećeg APK-a. Lokalni helper .local/preview-death.gd otvara Godot pregled sa odvojenim testnim save-om, 420 novčića i svim otključanim nivoima. H ponavlja smrtonosni udar na heroja, E na protivnika, R započinje novu borbu. Ne prekidati prozor dok korisnik testira.
 
-Najnovija korekcija: **na naslovnoj je vraćena originalna cela ilustracija heroja; novi devetodelni 2D rig koristi se samo u borbi.** Korisniku je veliki isečeni lik delovao neprirodno. Sačekati povratnu informaciju pre novog APK-a.
+Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. **Heroj sada klone kroz zglobove, savija kolena i oslanja ruke o tlo; protivnik se raspada kroz svetleću dezintegraciju i fragmente.** Na naslovnoj ostaje originalna cela ilustracija; devetodelni rig koristi se samo u borbi. Sačekati povratnu informaciju pre novog APK-a.
 
 ## Urađeno
 
@@ -14,13 +14,15 @@ Najnovija korekcija: **na naslovnoj je vraćena originalna cela ilustracija hero
 - Tri originalne ImageGen pozadine za Sunward Ruins, Sky Bridges i Observatory. Pretapanje/pomeranje 0,55 s, uz klizanje brojeva. Reduced Motion preskače prelaz.
 - Dopuna samo potrošenih polja sa ravnotežom samoglasnika i uklapanjem do tri poznate neiskorišćene reči; ograničenje pretrage 10.000 čvorova. Proširen izbor poznatih početnih reči. Rečnici prihvatanja nisu menjani.
 - Artikulisan heroj sa devet delova: nezavisna glava, ruke, telo i kaput; mirovanje, pucanje, reakcija na udar. Pauza i Reduced Motion rade. Stopala su fiksirana. Naslovna koristi staru ilustraciju.
+- Poraz traje 1,65 s: heroj prvo gubi oslonac, savija noge kroz teksturisanu mrežu, spušta telo i oslanja ruke uz prašinu; tek potom izbledi. Protivnik ostaje uspravan dok se njegova slika raspada kroz shader, energiju i fragmente. Reduced Motion koristi samo postepeno nestajanje. Nova borba vraća sve zglobove, mrežu nogu i shader; nema novih bitmapa.
 - Poreklo novih PNG-ova i tačni promptovi: game/assets/art/README.md i prompts-0.1.6.json. Svi pojedinačno ispod 10 MiB. Nema novih LFS obrazaca.
 
 ## Provere
 
-- **300 PASS / 0 FAIL** posle vraćanja originalnog heroja na naslovnu; log bez script/engine grešaka.
+- **306 PASS / 0 FAIL** posle dorade poraza; test log bez script/engine grešaka. Provereni odloženi rezultat, jednokratna nagrada, pad kroz zglobove, deterministična poza, dodir tla pre nestajanja, dezintegracija i potpuno vraćanje likova u sledećoj borbi.
 - Benchmark dopune: 768 poteza, oba jezika i pravila, pola nizova bira najkraće reči. Nova dopuna zadržala reč od 5+ polja posle svih 384 svoja poteza. Provereni zakoniti putevi, neponavljanje iskorišćenih reči, nepromenjena nepotrošena polja i budžet pretrage. To nije garancija za svaku moguću tablu.
 - Godot renderi 1280 × 576 i 1708 × 960; pregledane tri lokacije, prelaz, borba i tri poze heroja. Veliki rig na naslovnoj je potom uklonjen na zahtev korisnika; otvoreni pregled potvrđuje originalnu ilustraciju.
+- Za novi poraz snimljeno po sedam kadrova heroja/protivnika u 1708 × 960; pregledani kontakt sa tlom i raspad protivnika, uz uspravnog pobednika. Render log bez grešaka/upozorenja. Otvoren poseban interaktivni pregled 1280 × 576 sa H/E/R komandama; nije Android emulator.
 - Lokalni APK 0.1.6 / code 7 je uspešno napravljen PRE poslednje korekcije. **Zastareo je u odnosu na izvor i NIJE objavljen.** Ne nuditi ga korisniku. Poslednje GitHub izdanje je v0.1.5-android-preview.
 - Android provere nove verzije još nisu izvršene; za sada samo native Godot. tools/qa-android-pages.cjs sada sadrži stvarne dodire sa držanjem 450 ms. Build i ADB testove pokretati uzastopno.
 
