@@ -4,6 +4,8 @@ Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
 
 ## 0.1.8 — dopuna, dodirni odziv i katanci
 
+**APK je gotov lokalno, nije objavljen na GitHub-u.** Izvorni commit `48068a8` je push-ovan. GitHub draft `v0.1.8-android-preview` (release ID 390972680) sadrži samo SHA256 prilog. Dva CLI uploada su zastala; direktan GitHub API potom je dva puta vratio HTTP 500 `Error saving asset`. Nema APK asset-a. Ne nuditi release download link dok upload i digest nisu potvrđeni. Lokalni paket je korisniku dat za probu.
+
 - Korisnik potvrđuje da rang-lista radi na telefonu. Tražio je uklanjanje niza gotovih reči na istoj putanji, zvuk/vibraciju izbora u dnevnom izazovu i vežbi, i ikonicu katanca umesto „KLJUČ”. Sve tri izmene implementirane.
 - Kampanja i daily-v2 dopuna ugrađuju najviše jednu poznatu reč, uz najmanje dva preostala polja i bar jedno novo. Nikada namerno ne postavljaju celu reč samo u obrisana polja. Nepotrošena slova ostaju ista; nasumična dopuna može slučajno napraviti reč. Početne table i bodovanje nisu menjani.
 - Daily server podržava i v1 i v2; migracija čuva stare pokušaje/rezultate i odvaja nove rang-liste. Migracija i nova funkcija su objavljene. Automatska provera prvo je zaustavila deploy; posle izričite korisnikove potvrde objava je uspešna. JWT kontrola ostaje uključena.
@@ -76,7 +78,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/daily-global-leaderboard`. Probati 0.1.8 preko 0.1.7 na telefonu: da li nova dopuna daje zanimljivije putanje, da li se čuju dodiri i oseća vibracija u vežbi/rangiranom izazovu i da li katanac odgovara. Rang-lista za v2 je nova; prethodni rezultati ostaju na v1. Za sledeći računar sačuvati/preneti `.local/signing/` van Git-a. Desktop v2 mrežni tok prolazi.
+Nastaviti granu `codex/daily-global-leaderboard`. Probati lokalni 0.1.8 preko 0.1.7 na telefonu: da li nova dopuna daje zanimljivije putanje, da li se čuju dodiri i oseća vibracija u vežbi/rangiranom izazovu i da li katanac odgovara. Kasnije ponoviti upload APK-a u postojeći GitHub draft, proveriti digest pa objaviti; ne praviti duplikat izdanja. Rang-lista za v2 je nova; prethodni rezultati ostaju na v1. Za sledeći računar sačuvati/preneti `.local/signing/` van Git-a. Desktop v2 mrežni tok prolazi.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/daily-global-leaderboard. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
