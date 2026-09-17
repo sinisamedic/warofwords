@@ -2,9 +2,11 @@
 
 Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-worlds-hero-animation.**
 
-## 0.1.6 — finalni APK
+## 0.1.6 — objavljen Android preview
 
 Korisnik je posle pregleda uživo i korekcije poraza izričito zatražio novi APK. Napravljen je nov paket `exports/WarOfWords-0.1.6-android.apk`, versionCode 7, 94.859.979 bajtova. SHA256: `9afb875fec3100f2b44b6c480082c76827419d57460f47ce9b6a1a86d8d150a7`. Koristi isti potpis kao prethodna izdanja; instalira se preko postojeće aplikacije bez deinstaliranja.
+
+Objava proverena: [v0.1.6-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.6-android-preview), release commit `ae22331`. APK i SHA256 su dostupni, GitHub veličine/hash-evi odgovaraju lokalnim fajlovima; izdanje više nije draft.
 
 Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. **Heroj sada klone kroz zglobove, savija kolena i oslanja ruke o tlo; protivnik se raspada kroz svetleću dezintegraciju i fragmente.** Na naslovnoj ostaje originalna cela ilustracija; devetodelni rig koristi se samo u borbi.
 
@@ -29,7 +31,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Sačuvati dokumentaciju i objaviti provereni APK i SHA256 kao `v0.1.6-android-preview`. Zatim sačekati korisnikov test na fizičkom telefonu, naročito utisak o dopuni slova i pokretima heroja. Ne pokretati novi dizajn ili veliku implementaciju bez nove povratne informacije.
+Sačekati korisnikov test APK-a 0.1.6 na fizičkom telefonu, naročito utisak o dopuni slova i pokretima heroja. Ne pokretati novi dizajn ili veliku implementaciju bez nove povratne informacije.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/campaign-worlds-hero-animation. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
