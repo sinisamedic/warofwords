@@ -9,6 +9,7 @@ const GEM := preload("res://assets/ui/gold-gem.svg")
 const WEAVE := preload("res://assets/ui/board-weave.svg")
 const FRAMES := [preload("res://assets/ui/frame-navy.svg"),preload("res://assets/ui/frame-gold.svg"),preload("res://assets/ui/frame-panel.svg"),preload("res://assets/ui/status-plaque.svg")]
 const GLOW := preload("res://assets/ui/glow.svg")
+const SHIELD := preload("res://assets/ui/shield-field.svg")
 const ICONS := {"arsenal":preload("res://assets/ui/icon-arsenal.svg"),"upgrades":preload("res://assets/ui/icon-gears.svg"),"upgrade":preload("res://assets/ui/icon-gears.svg"),"settings":preload("res://assets/ui/icon-settings.svg"),"journal":preload("res://assets/ui/icon-journal.svg"),"coin":preload("res://assets/ui/icon-coin.svg"),"powers":preload("res://assets/ui/icon-power.svg"),"help":preload("res://assets/ui/icon-help.svg")}
 static var styles: Dictionary = {}
 const PALETTE := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
@@ -59,6 +60,34 @@ static func ui_icon(c: CanvasItem, id: String, rect: Rect2) -> void:
 
 static func glow(c: CanvasItem, p: Vector2, radius: float, color: Color) -> void:
 	c.draw_texture_rect(GLOW,Rect2(p-Vector2.ONE*radius,Vector2.ONE*radius*2),false,color)
+
+static func shield_field(c: CanvasItem, p: Vector2, time: float, calm: bool, opacity: float = 1.0) -> void:
+	var pulse := 1.0 if calm else .93+.07*sin(time*2.4)
+	glow(c,p,66,Color(.12,.62,1,.18*opacity))
+	c.draw_texture_rect(SHIELD,Rect2(p-Vector2(45,58),Vector2(90,116)),false,Color(1,1,1,opacity*pulse))
+	if not calm:
+		var angle := time*.7
+		for i in 3:
+			var v := Vector2(cos(angle+i*TAU/3)*39,sin(angle+i*TAU/3)*53)
+			glow(c,p+v,7,Color(.65,.93,1,.7*opacity))
+
+static func ready_aura(c: CanvasItem, p: Vector2, color: Color, time: float, calm: bool, flash: float) -> void:
+	var pulse := 1.0 if calm else .86+.14*sin(time*2.6)
+	glow(c,p,79,Color(color,.70*pulse))
+	c.draw_arc(p,51,0,TAU,64,Color(color,.75),2,true)
+	if calm: return
+	var rays := PackedVector2Array()
+	for i in 12:
+		var direction := Vector2.from_angle(i*TAU/12+time*.16)
+		var reach := 65+6*sin(time*1.8+i*2.4)
+		rays.append_array([p+direction*49,p+direction*reach])
+	c.draw_multiline(rays,Color(color,.38*pulse),3,true)
+	for i in 3:
+		var v := Vector2.from_angle(time*.65+i*TAU/3)*54
+		glow(c,p+v,8,Color(color.lightened(.7),.9))
+	if flash > 0:
+		var u := 1.0-flash/1.15
+		c.draw_arc(p,50+u*23,0,TAU,64,Color(color.lightened(.65),(1-u)*.8),2.5,true)
 
 static func art(c: CanvasItem, kind: int, p: Vector2, radius: float, tint: Color = Color.WHITE) -> void:
 	# UV sampling preserves the original atlas; only the round illustration is drawn.

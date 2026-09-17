@@ -19,7 +19,7 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
 - Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktivna implementacija — 0.1.3
+## Aktivna implementacija — 0.1.4
 
 Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
 
@@ -47,7 +47,7 @@ Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da 
 ## Dorade posle testa 0.1.2 — usvojeno 2026-09-17
 
 - **Šteta se obračunava tek pri dolasku projektila, nakon 0,42 s leta.** Ovo važi za reči, Pulse, Arc i CPU. Energija se troši pri ispaljivanju; Arc odlaže naredni CPU napad pri udaru. Aegis proverava i troši štit pri udaru, pa se može aktivirati tokom leta protivničkog projektila. Lečenje ostaje trenutno.
-- Napadi u letu čuvaju iznos štete i preostalo vreme. Pauza, meni i restart ih ne gube niti ponavljaju. Prvi smrtonosni projektil završava duel; ostali se otkazuju. Nagrada se upisuje samo jednom. Završni ekran ostavlja 0,62 s za reakciju na udar.
+- Napadi u letu čuvaju iznos štete i preostalo vreme. Pauza, meni i restart ih ne gube niti ponavljaju. Prvi smrtonosni projektil završava duel; ostali se otkazuju. Nagrada se upisuje samo jednom. Završni ekran čeka 1,35 s za pad/eksploziju poraženog lika.
 - Jači trzaj samo pogođenog lika (Pulse/Arc do 25 logičkih piksela), nagib i smirivanje kroz 0,48 s. HUD miruje. Reduced Motion uklanja trzaj.
 - Mapa i dnevnik podržavaju horizontalno prevlačenje od najmanje 50 logičkih piksela. Strelice ostaju dostupne. Prevlačenje ne otključava zaključana poglavlja.
 - Centrirani naslovi ekrana. Dnevnik ima 4 kolone × 5 redova, 20 reči po strani, najviše 600 jedinstvenih reči iz završenih duela.
@@ -55,9 +55,9 @@ Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da 
 - **Podešavanja → Povezivanje slova → Bilo koja** (English: **Options → Letter connection → Any letters**). Promena sada važi odmah i za sačuvanu borbu, uz očuvanje table, reči, energije i projektila. Svaku pločicu koristiš jednom; dodirima možeš birati bilo koja udaljena slova, pa ✓. Rečnik se i dalje bira za novu borbu, a započeta zadržava svoj.
 - 12 originalnih tela i odgovarajućih portreta: mannequin, copper scout, stone guardian, bronze champion, avian watcher, crystal sentinel, iron guardian, storm knight, astral sentinel, archive keeper, sunforged elite i last warden. Siluete, materijali i oprema se razlikuju. Ostaju 2D likovi sa animacijom transformacije; nema skeletne animacije.
 - **Music / Muzika** ima zaseban trajni prekidač. Joth: *Fantasy Orchestral Theme* (191,69 s) za menije; TAD: *Treasure Hunter* (65,07 s) za borbu. CC0 izvori i licence: `game/assets/music/README.md`. Postepeni prelazi, tiši miks u pauzi, zaustavljanje u pozadini. Efekti imaju nezavisan prekidač.
-- Android 0.1.3 / code 4, isti paket i potpis za nadogradnju. Balans generatora i rečnik ostaju probni; monetizacija nije uvedena.
+- Android 0.1.4 / code 5, isti paket i potpis za nadogradnju. Balans generatora i rečnik ostaju probni; monetizacija nije uvedena.
 
-Sledeći odeljci beleže istoriju ranijih verzija; gornje odluke 0.1.3 imaju prednost.
+Sledeći odeljci beleže dorade po verzijama; odluke 0.1.4 imaju prednost nad starijim zapisima.
 
 Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pritiskom, težina rečnika, dodatne animacije/različiti protivnici i dugoročna progresija. Monetizacija i iOS nisu deo verzije 0.1.0.
 
@@ -82,6 +82,16 @@ Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pri
 - Originalni slojeviti WAV efekti za ispaljivanje, let, udar, eksploziju, štit, električni napad, lečenje i Freeze. Zvuk udara i haptika okidaju se pri dolasku projektila (0,42 s), a ne ponovo u svakom frejmu. Logička šteta se i dalje obračunava odmah; završni ekran čeka 0,62 s da se vidi završni udar.
 - Bljesak cevi, rep projektila, električne grane, udarni talas, varnice, udar u štit, aura lečenja/zamrzavanja i blag trzaj likova. Broj efekata je ograničen; HUD i dodirne oblasti ne podrhtavaju. Pauza zaustavlja let i odložene efekte. Reduced Motion uklanja trzaje, varnice i pulsiranje, a zadržava mirniju povratnu informaciju. Sound OFF odmah prekida aktivne glasove; haptika ima nezavisno podešavanje.
 - Android 0.1.2 / code 3, isti identitet paketa i potpis. Balans, monetizacija i tema nisu dodatno zaključani.
+
+## Dorade posle fizičkog testa 0.1.3 — usvojeno 2026-09-17
+
+- PLAY je uže i centrirano nad karticama Arsenala/Unapređenja; veći naslov i zasebna strelica. Širina je ograničena i na širokim telefonima.
+- Aegis je providno plavo energetsko polje sa dvostrukim rubom, šestougaonim ćelijama, amblemom i pokretnim odsjajima. Aktivacija i blokirani udar naglašavaju celo polje.
+- Stopala svih 12 protivnika poravnata su prema stvarnim neprovidnim pikselima atlasa sa linijom tla, uz kontaktnu senku. Disanje menja visinu tela, ali ne podiže stopala. Bridge Guardian i njegov portret okrenuti su ka igraču.
+- Smrtonosni udar pokreće eksploziju energije, fragmente, prašinu i pad poraženog lika. Rezultat dolazi posle 1,35 s. Važi i za heroja i za protivnike. Nagrada ostaje upisana odmah i samo jednom, tako da prekid aplikacije ne može da je izgubi ili duplira. Preostali projektili se uklanjaju.
+- Završetak prekida tekući dodir na tabli; privremeno blokira komande tokom animacije, pa Retry/Next ostaju dostupni i ako je igrač držao prst u trenutku poraza.
+- Napunjene moći imaju obojeni oreol, rotirajuće zrake i odsjaje; prelazak na punu energiju daje kratak šireći prsten. Trošenje energije uklanja taj sjaj. Reduced Motion zadržava miran oreol/štit i postepeno nestajanje poraženog lika, bez padanja, rotacije i letećih fragmenata.
+- Android 0.1.4 / code 5, isti paket i potpis. Pravila, ekonomija i balans nisu menjani.
 
 ## Istorija: usvojeni statični vizuelni dizajn
 

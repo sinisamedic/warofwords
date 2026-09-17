@@ -1,38 +1,39 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-17. **Aktivna grana: codex/impact-enemies-music.**
+Ažurirano: 2026-09-17. **Aktivna grana: codex/shields-defeat-ready-effects.**
 
-## Aktuelno — Android 0.1.3
+## Aktuelno — Android 0.1.4
 
-Završene dorade posle korisnikovog testa 0.1.2:
+Završeno svih šest dorada posle korisnikovog testa 0.1.3:
 
-- Šteta tek pri udaru reči/Pulse/Arc/CPU projektila. Arc tada odlaže naredni napad; štit podignut tokom leta važi pri udaru.
-- Projektili u letu čuvaju se kroz pauzu, meni i restart. Prvi smrtonosni dolazak završava duel, nagrada se upisuje jednom.
-- Jači trzaj samo pogođenog lika; Reduced Motion ga uklanja.
-- Mapa i dnevnik imaju horizontalno prevlačenje i strelice. Centrirani naslovi; dnevnik 4 kolone × 5 redova, 20 reči po strani.
-- Glavni lik podignut na platformu, vidljivija animacija; dnevnik je ikona knjige pored Podešavanja. Veće ilustrovane ikone Arsenala/Unapređenja prema master dizajnu.
-- **Povezivanje slova → Bilo koja / Any letters** sada važi odmah i za započetu borbu. Tabla, energija, reči i projektili ostaju sačuvani. Rečnik se i dalje bira za nove borbe.
-- 12 zasebnih protivnika i njihovih portreta. Izvorne PNG datoteke sa alfa kanalom i tačni ImageGen promptovi u repou.
-- Dve CC0 orkestarske numere (Joth / TAD), zaseban prekidač Muzika, postepeni prelazi, tiši miks u pauzi i zaustavljanje u pozadini. Poreklo i licenca u game/assets/music/ i game/licenses/.
-- Novi binarni izvori su pojedinačno ispod 10 MiB. APK ostaje u ignorisanom exports/ i objavljuje se kroz GitHub Release. Prethodni dizajni/mokupovi nisu menjani.
+- Uže, centrirano PLAY dugme sa većim naslovom i strelicom; ograničena širina i na širokom telefonu.
+- Detaljno plavo energetsko polje štita: dvostruki rub, mreža šestougaonika, amblem i pokretni odsjaji.
+- Svih 12 protivnika poravnato stopalima sa tlom prema stvarnim pikselima atlasa; kontaktna senka, disanje bez lebdenja.
+- Bridge Guardian sa plavim čekićem i njegov portret okrenuti ka igraču.
+- Smrtonosni udar pokreće eksploziju energije, fragmente, prašinu i pad poraženog lika. Radi za heroja i protivnike; rezultat posle 1,35 s. Nagrada se čuva odmah i samo jednom.
+- Spremne moći imaju obojeni oreol, zrake i odsjaje, uz puls pri punjenju. Reduced Motion zadržava mirne signale i fade poraženog lika.
+- Smrt usred držanja prsta čisti gest, pa Retry/Next ostaju upotrebljivi.
 
-## Provere
+Pravila povezivanja, balans, rečnici, zvuk/muzika i napredak ostaju kompatibilni sa prethodnom verzijom. U podešavanjima **Povezivanje slova → Bilo koja** i dalje odmah važi za postojeću borbu.
 
-- Godot import + **210 automatskih provera, 0 grešaka**, u završnom build-u.
-- Stvarni renderi 16:9 i širokog telefona; pregledani meni, opcije, dnevnik, Đ i novi protivnici. Popravljeno kadriranje visokih kruna.
-- Nadogradnja preko 0.1.2 čuva napredak. Završni instalirani base.apk potvrđen SHA256 otiskom.
-- Puna Android partija: STONE prevlačenjem, pobeda preko REPAIRMAN/SENTINELS, novčići, unapređenje i restart. Srpski OBURVANJE i nezavisni jezici; sva četiri prekidača se čuvaju.
-- Slobodno povezivanje: ADDITIVES preko udaljenih pločica, pomoć, restart i trenutno menjanje pravila postojeće borbe. Runtime logovi bez grešaka.
-- Android mapa/dnevnik: oba smera prevlačenja, strelice, 20 reči po strani i granica poslednje strane. Privremeni podaci vraćeni u originalni save; runtime log bez grešaka.
-- Paket com.sinisamedic.warofwords, 0.1.3 / code 4, isti debug sertifikat kao ranija izdanja. 86.512.940 bajta.
-- SHA256: b13ee2f88d3ea67dbd1643db42f3072c033ab815908f89f4b9269e207ac60c6d.
-- Detalji i granice: **docs/QA-0.1.3.md**. Cilj izdanja: v0.1.3-android-preview. Ishod Git push-a i objave proverava se posle tih operacija; nije unapred pretpostavljen ovim zapisom.
+## Provere i paket
+
+- Godot 4.7.2 import/export, **269 automatskih provera, 0 grešaka** u završnom build-u.
+- Pravi renderi 16:9 i širokog telefona: PLAY, štit, oreoli, protivnici i obe animacije poraza. Odabrani snimci u docs/screenshots/0.1.4/.
+- Nadogradnja 0.1.3 → 0.1.4 čuva kompletan glavni save. SHA256 instaliranog base.apk jednak pripremljenom APK-u.
+- Android borbeni test: pune moći i aktivan štit, pobeda, sledeća misija, poraz tokom dodira, Retry i jednokratne nagrade. Originalni glavni save vraćen nakon privremenih podataka; runtime logovi bez grešaka.
+- Puna Android partija: STONE prevlačenjem, SEAPLANES/UPREARED, pobeda, unapređenje i restart; srpski RASPARAĆE, čuvanje i promena menija uz očuvan rečnik duela. Svi prekidači sačuvani. ANDROID QA PASSED, runtime log bez grešaka.
+- Paket com.sinisamedic.warofwords, 0.1.4 / code 5, isti debug sertifikat kao ranije. **86.562.301 bajt**.
+- SHA256: **8471ea007dcb9279d3cab6563915b81a7529e2a7a86a141714a985d3a29f4200**.
+- Detalji: docs/QA-0.1.4.md. Cilj izdanja: **v0.1.4-android-preview**. Ishod Git push-a i objave proverava se posle tih operacija; ovaj zapis ih ne pretpostavlja unapred.
+
+Novi izvor štita je originalni SVG sa dokumentovanim poreklom. Nijedan novi fajl za Git nije preko 10 MiB. APK i lokalni testni podaci su ignorisani. Master dizajni i mokupovi nisu menjani.
 
 ## Tačan sledeći korak
 
-Instalirati **0.1.3 preko postojeće aplikacije**, bez deinstaliranja/brisanja podataka. Na S23 Ultra proveriti trenutak udara i health-a, jačinu reakcije/vibracije, nove protivnike i muzički miks. Za lakše sastavljanje dugih reči: Podešavanja → Povezivanje slova → Bilo koja; odmah važi i kada se nastavi postojeća borba. Ikona knjige pored podešavanja otvara dnevnik.
+Instalirati **0.1.4 preko postojeće aplikacije**, bez deinstaliranja ili brisanja podataka. Na S23 Ultra proveriti širinu PLAY, novu zaštitu, visinu protivnika, smer čuvara, čitljivost sjaja spremnih moći i utisak pada/eksplozije pri pobedi i porazu.
 
-Telefon, baterija, zvučnici i trajni FPS nisu provereni ovde. Srpski i težina generatora ostaju za dalji korisnički test. Nema dodatno zaključane monetizacije niti iOS isporuke.
+Fizički telefon, baterija i dugotrajan FPS nisu mereni. Srpski rečnik i težina generatora ostaju za korisnički test. Nema dodatno zaključane monetizacije niti iOS isporuke.
 
 ## Nastavak na drugom računaru
 
@@ -40,15 +41,16 @@ Pročitati AGENTS.md i ovaj fajl, sačuvati eventualni lokalni rad i proveriti r
 
 ```powershell
 git fetch origin --prune
-git switch codex/impact-enemies-music
+git switch codex/shields-defeat-ready-effects
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: git switch --track origin/codex/impact-enemies-music. Aktivni projekat je game/project.godot. docs/setup.md i docs/android.md opisuju alate. Signing ključ i instalacije nisu u Git-u; main još nije aktivna grana igre.
+Ako grana nije lokalna: git switch --track origin/codex/shields-defeat-ready-effects. Aktivni projekat je game/project.godot. docs/setup.md i docs/android.md opisuju alate. Signing ključ i instalacije nisu u Git-u; main još nije aktivna grana igre.
 
 ## Istorija
 
+- codex/impact-enemies-music, 210e1a2, v0.1.3-android-preview: šteta pri udaru, 12 protivnika, muzika, mapa/dnevnik i odmah primenjivo slobodno povezivanje.
 - codex/ornate-ui-combat-effects, bac0e4b, v0.1.2-android-preview: ukrašeni UI, efekti i početno slobodno povezivanje.
 - codex/battle-polish-serbian, a499b75, v0.1.1-android-preview: srpski rečnik i dorada borbe.
 - codex/android-playable, 0942094, v0.1.0-android-preview: prva igriva Android verzija.
-- design/: šest usvojenih statičnih dizajna, masteri neizmenjeni. V3 mokup/ i mockups/ sačuvani.
+- design/: šest usvojenih statičnih dizajna. V3 mokup/ i mockups/ sačuvani.

@@ -11,6 +11,8 @@ const EnemyArt = preload("res://scripts/enemy_art.gd")
 const CREAM := Color("fff1ce")
 const GOLD := Color("f3c569")
 const INK := Color("10283d")
+const GROUND_Y := 177.0
+const DEFEAT_DURATION := 1.35
 const COLORS := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
 const NAMES := ["PULSE","AEGIS","ARC","MEND"]
 const ROLES := ["Direct energy blast","Block the next attack","Strike and interrupt","Restore your health"]
@@ -72,6 +74,7 @@ var attack_flash := 0.0
 var hero_flash := 0.0
 var fx = preload("res://scripts/combat_fx.gd").new()
 var result_delay := 0.0
+var ready_flash: Array[float] = [0.0,0.0,0.0,0.0]
 var sparks: Array[Dictionary] = []
 var hp := 100
 var foe_hp := 80
@@ -213,6 +216,7 @@ func _process(delta: float) -> void:
 			persist_battle()
 	if screen == "battle" and overlay.is_empty() and not loading:
 		advance_combat(delta)
+		for i in 4: ready_flash[i]=maxf(0,ready_flash[i]-delta)
 		hero_recoil=maxf(0,hero_recoil-delta)
 		enemy_recoil=maxf(0,enemy_recoil-delta)
 		if ended and result_delay > 0:
@@ -242,14 +246,18 @@ func update_actors() -> void:
 		var actor_height := 137.0
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
 		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.CELL.y
+		if not save.data.calm: enemy_actor.scale.y *= 1.0+sin(clock*2.0)*.004
 		var hero_kick := 0.0 if save.data.calm else hit_offset(hero_recoil,hero_hit_strength)
 		var enemy_kick := 0.0 if save.data.calm else hit_offset(enemy_recoil,enemy_hit_strength)
 		hero.position = Vector2(size.x*0.20-hero_kick,119+bob)
-		enemy_actor.position = Vector2(size.x*0.80+enemy_kick,117-bob)
+		# Animate the body while pinning the actual boot pixels to the arena floor.
+		enemy_actor.position = Vector2(size.x*0.80+enemy_kick,GROUND_Y-EnemyArt.foot_offset(mission)*enemy_actor.scale.y)
 		hero.rotation = -hero_kick*.0025
 		enemy_actor.rotation = enemy_kick*.0025
 		hero.modulate = Color(1,0.55,0.45) if hero_flash > 0 and not save.data.calm else Color.WHITE
 		enemy_actor.modulate = Color(1.4,1.1,0.6) if attack_flash > 0 and not save.data.calm else Color.WHITE
+		if ended:
+			animate_defeat(enemy_actor if won else hero,won)
 	else:
 		var actor_height := size.y*0.84
 		hero.scale = Vector2.ONE*actor_height/fighters.get_height()
@@ -264,6 +272,19 @@ func hit_offset(remaining: float, strength: float) -> float:
 	if remaining <= 0: return 0
 	var u := 1.0-remaining/.48
 	return strength*exp(-u*4.5)*(1.0+sin(u*TAU*3.5)*.55)
+
+func animate_defeat(actor: Sprite2D, opponent: bool) -> void:
+	var u := clampf(1.0-result_delay/DEFEAT_DURATION,0,1)
+	actor.modulate=Color.WHITE
+	actor.modulate.a=1.0-smoothstep(.30 if opponent else .65,1.0,u)
+	if save.data.calm: return
+	var pivot := Vector2(actor.position.x,GROUND_Y)
+	var feet := Vector2(0,GROUND_Y-actor.position.y)
+	var fall := smoothstep(.10,.86,u)
+	actor.rotation=(1.1 if opponent else -1.25)*fall
+	var shrink := 1.0-(.22 if opponent else .06)*fall
+	actor.scale*=shrink
+	actor.position=pivot-(feet*shrink).rotated(actor.rotation)
 
 func advance_combat(delta: float) -> void:
 	var impacts: Array = fx.advance(delta)
@@ -307,6 +328,12 @@ func _draw_backdrop(node: Node2D) -> void:
 		region.size.y = tw/ratio
 		region.position.y = (th-region.size.y)*0.35
 	node.draw_texture_rect_region(tex,target,region)
+	if screen == "battle":
+		for x in [.20,.80]:
+			node.draw_set_transform(Vector2(size.x*x,GROUND_Y-1),0,Vector2(1,.14))
+			node.draw_circle(Vector2.ZERO,29,Color(.025,.07,.10,.28))
+			node.draw_circle(Vector2.ZERO,21,Color(.025,.07,.10,.19))
+		node.draw_set_transform(Vector2.ZERO)
 	if screen != "battle":
 		node.draw_rect(Rect2(Vector2.ZERO,size),Color(0.03,0.09,0.14,0.16))
 
@@ -386,7 +413,12 @@ func draw_home() -> void:
 	var width := size.x-x-42
 	var emblem_width := minf(width+14,375)
 	draw_texture_rect(title_emblem,Rect2(x+(width-emblem_width)/2,16,emblem_width,220),false)
-	action("PLAY  >",Rect2(x,222,width,66),"campaign",-1,true)
+	var play := home_play_rect()
+	Ornaments.frame(self,play,1,Color.WHITE.darkened(.22) if pressed_action == "campaign" else Color.WHITE)
+	text("PLAY",Rect2(play.position.x+25,play.position.y,play.size.x-83,play.size.y),38,INK,true)
+	var arrow := Vector2(play.end.x-46,play.get_center().y)
+	draw_colored_polygon(PackedVector2Array([arrow+Vector2(-7,-12),arrow+Vector2(9,0),arrow+Vector2(-7,12)]),INK)
+	buttons.append({"rect":play,"id":"campaign","value":-1,"enabled":true})
 	var split := (width-12)/2
 	var card_height := 114.0 if not save.data.battle.is_empty() else 151.0
 	for i in 2:
@@ -407,6 +439,12 @@ func draw_home() -> void:
 	buttons.append({"rect":Rect2(237,18,50,46),"id":"journal","value":-1,"enabled":true})
 	coin_counter(Rect2(size.x-177,18,155,46))
 	text("OFFLINE  •  SOLO CAMPAIGN",Rect2(24,size.y-36,size.x*.4,28),17,CREAM)
+
+func home_play_rect() -> Rect2:
+	var x := size.x*.48
+	var width := size.x-x-42
+	var play_width := minf(340,width*.78)
+	return Rect2(x+(width-play_width)/2,214,play_width,74)
 
 func draw_campaign() -> void:
 	header("CAMPAIGN")
@@ -539,6 +577,8 @@ func draw_battle() -> void:
 		var target_x: float = [0.0,side_width,side_width+490][part]
 		var target_width: float = [side_width,490.0,side_width][part]
 		draw_texture_rect_region(board_environment,Rect2(target_x,177,target_width,size.y-177),Rect2(source_x,0,source_width,source_size.y))
+	if shield>0 and not ended:
+		Ornaments.shield_field(self,Vector2(size.x*.20,119),clock,save.data.calm)
 	fx.draw(self,size.x,save.data.calm)
 	var board := board_rect()
 	for x in 6:
@@ -551,11 +591,10 @@ func draw_battle() -> void:
 	text("II",Rect2(size.x/2-20,10,40,44),29,GOLD,true)
 	buttons.append({"rect":Rect2(size.x/2-27,6,54,54),"id":"pause","value":-1,"enabled":true})
 	var intent := t("FROZEN  %.1fs") % freeze if freeze > 0 else t("INCOMING  %.1fs") % countdown if countdown<3 else t("Next attack  %ds") % int(ceil(countdown))
+	if ended: intent=t("VICTORY" if won else "DEFEATED")
 	Ornaments.plaque(self,Rect2(size.x/2-177,164,354,39))
 	if path.is_empty():
 		text(notice if notice_time > 0 else intent,Rect2(size.x/2-155,167,310,32),20,GOLD if notice_time > 0 else CREAM)
-	if shield>0:
-		draw_arc(Vector2(size.x*.20,120),55,-PI*.5,PI*.5,32,COLORS[1],3,true)
 	if not path.is_empty():
 		var word := ""
 		for i in path: word += lex.letters[i]
@@ -585,6 +624,9 @@ func draw_battle() -> void:
 	for i in 28:
 		var p := tile_center(i)
 		text(["ϟ","◆","≈","+"][lex.types[i]],Rect2(p.x-12,p.y+12,24,16),16,Color("193a46"))
+	if not ended:
+		for i in 4:
+			if energy[i]>=COSTS[i]: Ornaments.ready_aura(self,ability_center(i),COLORS[i],clock+i*.7,save.data.calm,ready_flash[i])
 	for i in 4:
 		var center := ability_center(i)
 		var ready: bool = energy[i] >= COSTS[i]
@@ -631,7 +673,7 @@ func draw_settings() -> void:
 	action("English",Rect2(right,250,half,51),"word_language",0,save.data.word_language=="en")
 	action("Srpski",Rect2(right+half+10,250,half,51),"word_language",1,save.data.word_language=="sr")
 	text("LJ · NJ · DŽ · Č · Ć · Š · Đ · Ž" if save.data.word_language=="sr" else "A–Z · 76,802 words",Rect2(right,315,width,28),19)
-	text("Offline dictionaries  •  v0.1.3",Rect2(right,349,width,26),17)
+	text("Offline dictionaries  •  v0.1.4",Rect2(right,349,width,26),17)
 	panel(Rect2(28,394,size.x-56,29),INK)
 	text("Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
@@ -882,6 +924,7 @@ func change_screen(target: String) -> void:
 	queue_redraw()
 
 func back() -> void:
+	if ended and screen == "battle" and result_delay>0: return
 	if not overlay.is_empty():
 		if overlay=="result": change_screen("campaign")
 		else: overlay=""
@@ -917,6 +960,7 @@ func start_battle() -> void:
 	duration=0; ended=false; won=false; reward=0; stars=0; freeze=0; surge=false
 	boost_used=false; enemy_attacks=0; countdown=interval()+4; shuffled=0
 	fx.clear(); sparks.clear(); hint_path.clear(); path.clear()
+	ready_flash.assign([0.0,0.0,0.0,0.0])
 	attack_flash=0; hero_flash=0
 	lex.generate()
 	if not save.data.tutorial:
@@ -946,7 +990,10 @@ func submit_word() -> void:
 		gain[lex.types[i]]+=multiplier
 		for n in 3:
 			sparks.append({"pos":tile_center(i),"vel":Vector2(randf_range(-50,50),randf_range(-80,-15)),"time":0.0,"color":COLORS[lex.types[i]]})
-	for i in 4: energy[i]=mini(COSTS[i],energy[i]+gain[i])
+	for i in 4:
+		var previous_energy: int=energy[i]
+		energy[i]=mini(COSTS[i],energy[i]+gain[i])
+		if previous_energy<COSTS[i] and energy[i]>=COSTS[i]: ready_flash[i]=1.15
 	surge=false
 	var damage := path.size()+maxi(0,path.size()-4)*2
 	launch_attack(true,"word",GOLD,damage)
@@ -963,6 +1010,7 @@ func fire(i: int) -> void:
 	if i==1 and shield>0: message("Your shield is already active"); return
 	if i==3 and hp>=100: message("Health is already full"); return
 	energy[i]=0
+	ready_flash[i]=0
 	match i:
 		1: shield=effect(i)
 		3: hp=mini(100,hp+effect(i)); hero_flash=0
@@ -1010,8 +1058,12 @@ func show_hint() -> void:
 
 func finish(victory: bool) -> void:
 	if ended: return
-	ended=true; won=victory; result_delay=.62; overlay=""; path.clear(); notice_time=0
+	ended=true; won=victory; result_delay=DEFEAT_DURATION; overlay=""; path.clear(); notice_time=0
+	touch_id=-1; dragging=false; drag_moved=false; tap_composition=false; pressed_action=""
 	fx.shots.clear()
+	hero_recoil=0; enemy_recoil=0
+	fx.burst("defeat",Vector2(.80 if won else .20,128),GOLD if won else COLORS[1],DEFEAT_DURATION)
+	sfx.play("explosion",.78)
 	stars=(3 if hp>=70 else 2 if hp>=35 else 1) if won else 0
 	var first: bool = not save.data.wins.has(str(mission))
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)
@@ -1043,6 +1095,7 @@ func restore_battle() -> void:
 	change_screen("battle")
 	mission=int(b.mission); hp=int(b.hp); foe_hp=int(b.foe); foe_max=int(b.max)
 	energy.assign(b.energy); shield=int(b.shield); countdown=float(b.countdown)
+	ready_flash.assign([0.0,0.0,0.0,0.0])
 	freeze=float(b.freeze); surge=bool(b.surge); boost_used=bool(b.boost_used)
 	used=b.used.duplicate(); word_count=int(b.words); best_word=b.best; duration=float(b.duration)
 	lex.letters.assign(b.letters); lex.types.assign(b.types); lex.find_words(used)
@@ -1141,6 +1194,16 @@ func _run_visual_qa() -> void:
 		attack_flash=0; hero_flash=0; enemy_recoil=0; hero_recoil=0
 		update_actors()
 		await _qa_capture(directory+"/enemy-%02d.png" % encounter)
+	mission=6; shield=20; energy.assign(COSTS); ready_flash.assign([.6,.6,.6,.6]); fx.clear()
+	await _qa_capture(directory+"/shield-ready.png")
+	save.data.calm=true
+	await _qa_capture(directory+"/shield-ready-calm.png")
+	save.data.calm=false; shield=0; foe_hp=0; finish(true)
+	result_delay=DEFEAT_DURATION-.48; fx.advance(.48)
+	await _qa_capture(directory+"/enemy-defeat.png")
+	ended=false; hp=0; foe_hp=100; fx.clear(); finish(false)
+	result_delay=DEFEAT_DURATION-.65; fx.advance(.65)
+	await _qa_capture(directory+"/hero-defeat.png")
 	get_tree().quit()
 
 func _qa_capture(file: String) -> void:

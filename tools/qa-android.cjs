@@ -56,7 +56,7 @@ async function main(){
   if(s.battle.energy[3]>=5&&s.battle.hp<100)await tap(1904,781);
   await tap(1200,80);
  }
- s=save();check(s.wins['0']>=1&&s.unlocked===1&&s.coins===300,'actual touch gameplay wins, awards coins and unlocks mission');await shot('victory');
+ s=save();check(s.wins['0']>=1&&s.unlocked===1&&s.coins===300,'actual touch gameplay wins, awards coins and unlocks mission');await sleep(1600);await shot('victory');
  await tap(1150,855);await shot('upgrades-before');await tap(1810,780);await shot('upgrades');
  s=save();check(s.levels[0]===2&&s.coins===140,'upgrade spends 160 coins');
  adb('shell','am','force-stop',pkg);await start();s=save();check(s.levels[0]===2&&s.coins===140&&s.unlocked===1,'campaign and upgrades persist after restart');

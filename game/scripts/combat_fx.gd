@@ -82,10 +82,35 @@ func draw(c: CanvasItem, width: float, calm: bool) -> void:
 		var alpha: float = pow(1-u,1.5)
 		var color := Color(b.color,alpha)
 		var radius: float = (22+u*49)*(0.65 if calm else 1.0)
+		if b.kind == "defeat":
+			# A core overload, falling fragments and ground dust distinguish defeat from a hit.
+			var expansion: float = smoothstep(0,.55,u)
+			Art.glow(c,p,45+expansion*66,Color(b.color,alpha*(.22 if calm else .75)))
+			if not calm:
+				Art.glow(c,p,32*(1-u),Color("fff9df",alpha))
+				c.draw_arc(p,20+expansion*67,0,TAU,64,Color(b.color,alpha*.8),3,true)
+				c.draw_arc(p,14+expansion*49,0,TAU,64,Color("fff4ce",alpha*.65),1.5,true)
+				var trails := PackedVector2Array()
+				for n in 18:
+					var angle := n*2.39996
+					var ray := Vector2.from_angle(angle)
+					var distance := u*(38+(n%5)*14)
+					var shard := p+ray*distance+Vector2(0,u*u*53)
+					shard.y=minf(175,shard.y)
+					trails.append_array([shard-ray*7*(1-u),shard])
+					if n%3 == 0:
+						var r := 3.5*(1-u)
+						c.draw_colored_polygon(PackedVector2Array([shard+Vector2(-r,-r),shard+Vector2(r*1.5,0),shard+Vector2(-r*.4,r*2)]),Color(b.color.lightened(.35),alpha))
+				c.draw_multiline(trails,Color("fff0b8",alpha),2,true)
+				c.draw_set_transform(Vector2(p.x,175),0,Vector2(1,.18))
+				Art.glow(c,Vector2.ZERO,35+u*65,Color(b.color,alpha*.45))
+				c.draw_set_transform(Vector2.ZERO)
+			continue
 		if b.kind == "muzzle":
 			Art.glow(c,p,18+u*25,Color(b.color,alpha*.9))
 			c.draw_arc(p,8+u*22,0,TAU,24,color,2,true)
 		elif b.kind in ["shield","heal","freeze"]:
+			if b.kind == "shield": Art.shield_field(c,p,b.time,calm,alpha)
 			Art.glow(c,p,55,Color(b.color,alpha*.24))
 			c.draw_arc(p,radius,0,TAU,48,color,3,true)
 			c.draw_arc(p,radius*.8,-PI*.6,PI*.6,32,Color("e7ffff",alpha),1.5,true)

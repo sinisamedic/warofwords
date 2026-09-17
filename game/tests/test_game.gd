@@ -342,6 +342,45 @@ func run_tests() -> void:
 	for encounter in 12:
 		scene.mission=encounter; scene.screen="battle"; scene.update_actors()
 		check(scene.enemy_actor.get_meta("encounter")==encounter and scene.enemy_actor.texture==scene.EnemyArt.ATLAS,"distinct enemy sprite and portrait for encounter %d" % encounter)
+	# Grounding is based on opaque boot pixels, including different atlas row heights.
+	scene.ended=false; scene.enemy_recoil=0; scene.hero_recoil=0; scene.save.data.calm=false
+	for encounter in 12:
+		scene.mission=encounter
+		for time in [0.0,.7,2.1]:
+			scene.clock=time; scene.update_actors()
+			check(absf(scene.enemy_actor.position.y+scene.EnemyArt.foot_offset(encounter)*scene.enemy_actor.scale.y-scene.GROUND_Y)<.1,"boots stay grounded: enemy %d / breath %.1f" % [encounter,time])
+		check(scene.enemy_actor.flip_h==(encounter==6) and scene.portraits[1].flip_h==scene.enemy_actor.flip_h,"enemy and portrait face hero: %d" % encounter)
+	# Charging gives one brief pulse, full energy stays ready, spending ends the pulse.
+	scene.save.data.word_language="en"; scene.mission=0
+	await scene.start_battle()
+	scene.lex.letters.assign(Array("STONE".split(""))+scene.lex.letters.slice(5))
+	for i in 5: scene.lex.types[i]=0
+	scene.energy.assign([3,0,0,0]); scene.path.assign([0,1,2,3,4]); scene.submit_word()
+	check(scene.energy[0]==4 and scene.ready_flash[0]>1.0,"crossing charge threshold starts ready pulse")
+	scene.fire(0)
+	check(scene.energy[0]==0 and scene.ready_flash[0]==0,"firing ends ready pulse")
+	# Death presentation cannot interrupt the outcome, replay the reward or hide the winner.
+	scene.fx.clear(); scene.foe_hp=1; scene.launch_attack(true,"pulse",scene.GOLD,24)
+	scene.advance_combat(.43)
+	check(scene.ended and scene.overlay.is_empty() and scene.result_delay>1.0,"lethal hit starts defeat before showing results")
+	coins_after=scene.save.data.coins
+	scene.back()
+	check(scene.overlay.is_empty() and scene.screen=="battle","back cannot bypass defeat presentation")
+	scene.result_delay=scene.DEFEAT_DURATION*.5; scene.update_actors()
+	check(scene.enemy_actor.rotation>.4 and scene.enemy_actor.modulate.a<1 and scene.hero.modulate.a==1,"defeated enemy falls and dissolves while winner stays visible")
+	scene.finish(true)
+	check(scene.save.data.coins==coins_after,"defeat animation cannot grant reward twice")
+	scene.result_delay=.025; scene._process(.05)
+	check(scene.overlay=="result" and scene.result_delay==0,"result appears after defeat completes")
+	await scene.start_battle(); scene.update_actors()
+	check(not scene.ended and scene.enemy_actor.rotation==0 and scene.enemy_actor.modulate.a==1,"next duel restores the defeated actor")
+	scene.touch_id=0; scene.dragging=true; scene.path.assign([0,1]); scene.pressed_action="pause"
+	scene.hp=1; scene.launch_attack(false,"enemy",scene.GOLD,12); scene.advance_combat(.43)
+	check(scene.touch_id==-1 and not scene.dragging and scene.path.is_empty() and scene.pressed_action.is_empty(),"death during a held touch leaves result buttons usable")
+	scene.result_delay=scene.DEFEAT_DURATION*.5; scene.update_actors()
+	check(scene.ended and not scene.won and scene.hero.rotation<-.4 and scene.enemy_actor.modulate.a==1,"lethal CPU hit animates hero defeat only")
+	scene.save.data.calm=true; scene.result_delay=scene.DEFEAT_DURATION*.1; scene.update_actors()
+	check(scene.hero.rotation==0 and scene.hero.modulate.a<.3,"reduced motion uses fade without falling or shaking")
 	print("RESULT: %d failures" % failures)
 	quit(1 if failures else 0)
 
