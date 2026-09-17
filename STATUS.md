@@ -4,6 +4,8 @@ Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
 
 ## 0.1.7 — novi izgled i novi potpis, APK spreman
 
+Objavljeno i provereno: [v0.1.7-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.7-android-preview), izvorni commit `88de060`. APK i SHA256 su uploadovani; GitHub digest/veličina odgovaraju lokalnom paketu. Izdanje je prerelease, nije draft.
+
 Korisnik je izričito odobrio novi ključ, jednu deinstalaciju stare testne aplikacije i gubitak lokalnog napretka. Stari ključ više nije prepreka ovoj isporuci.
 
 - Dnevni izazov, tabla i rezultat koriste postojeću Observatory ilustraciju, pravilno skalirane ukrašene panele, reljefna dugmad, naslovni font, zlatne žetone, krunu i istaknut sopstveni red na listi. Nisu dodate nove spoljne slike. Tekst se prilagođava širini; oba jezika zadržana.
