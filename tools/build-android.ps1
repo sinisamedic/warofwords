@@ -15,6 +15,18 @@ if (-not $Godot -or -not (Test-Path -LiteralPath $Godot)) {
     throw 'Set GODOT_EXECUTABLE or pass -Godot with the Godot 4.7.2 console executable path.'
 }
 $project = Join-Path $repo 'game'
+if (-not $UnsignedCheck -and -not $TestOnly -and -not $env:GODOT_ANDROID_KEYSTORE_DEBUG_PATH) {
+    $machinePath = Join-Path $repo '.local/machine.json'
+    if (Test-Path -LiteralPath $machinePath) {
+        $localConfig = Get-Content -LiteralPath $machinePath -Raw | ConvertFrom-Json
+        if ($localConfig.androidSigningConfig) {
+            $signing = Get-Content -LiteralPath $localConfig.androidSigningConfig -Raw | ConvertFrom-Json
+            $env:GODOT_ANDROID_KEYSTORE_DEBUG_PATH = $signing.path
+            $env:GODOT_ANDROID_KEYSTORE_DEBUG_USER = $signing.alias
+            $env:GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD = $signing.password
+        }
+    }
+}
 & $Godot --headless --path $project --editor --import --quit
 if ($LASTEXITCODE -ne 0) { throw 'Godot import failed.' }
 & $Godot --headless --path $project --script res://tests/test_game.gd

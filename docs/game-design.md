@@ -4,7 +4,7 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 ## Novi smer — dnevni izazov i globalna rang-lista, 2026-09-17
 
-Korisnik je nakon funkcionalnog prikaza zatražio da završni ekran dnevnog izazova i rang-lista budu vizuelno usklađeni sa usvojenim ekranima: ukrašeni okviri, postojeća tipografija i dugmad. Trenutni prikaz je funkcionalni prototip, nije usvojen završni dizajn. Najpre je zatražio osposobljavanje Android build okruženja.
+Korisnik je nakon funkcionalnog prikaza zatražio da završni ekran dnevnog izazova i rang-lista budu vizuelno usklađeni sa usvojenim ekranima: ukrašeni okviri, postojeća tipografija i dugmad. Trenutni prikaz je funkcionalni prototip, nije usvojen završni dizajn. Najpre je zatražio osposobljavanje Android build okruženja. Zatim je izričito odobrio doradu izgleda, novi potpisni ključ i build 0.1.7, uz jednokratnu deinstalaciju i gubitak testnog napretka. Dorada koristi postojeću Observatory ilustraciju i ukrase ostalih ekrana, bez novih bitmap materijala.
 
 Korisnik je usvojio početak online nadogradnje na besplatnom servisu: prvo profil/nadimak, dnevni izazov i globalna rang-lista, potom razmatranje izazivanja prijatelja i duela uživo. Ima pripremljen Supabase projekat. Ova odluka proširuje prethodni offline smer; kampanja protiv računara ostaje.
 

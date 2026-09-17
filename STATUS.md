@@ -2,7 +2,17 @@
 
 Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
 
-## 0.1.7-dev — dnevni izazov i globalna rang-lista
+## 0.1.7 — novi izgled i novi potpis, APK spreman
+
+Korisnik je izričito odobrio novi ključ, jednu deinstalaciju stare testne aplikacije i gubitak lokalnog napretka. Stari ključ više nije prepreka ovoj isporuci.
+
+- Dnevni izazov, tabla i rezultat koriste postojeću Observatory ilustraciju, pravilno skalirane ukrašene panele, reljefna dugmad, naslovni font, zlatne žetone, krunu i istaknut sopstveni red na listi. Nisu dodate nove spoljne slike. Tekst se prilagođava širini; oba jezika zadržana.
+- Napravljen potpisani APK exports/WarOfWords-0.1.7-android.apk, code 8, 94.889.278 bajtova; SHA256 118ad610bbba0e84a687975e4f11d4e0531244412fc978ae9b0357723bbf2d36.
+- Novi namenski RSA 3072 ključ: sertifikat SHA256 429a2d1b4700535f04c7252e8b28c0f8c4bb584a6cd8b7d863cd08070eff0abc. Ključ i lokalni signing.json ostaju isključivo u ignorisanom .local/signing/; machine.json pokazuje na konfiguraciju. **Pre prelaska na drugi računar bezbedno preneti ceo signing folder van Git-a i napraviti rezervnu kopiju.** To nije stari niti automatski generisan Godot ključ.
+- Provere: 306 postojećih + 1106 dnevnih provera i refill benchmark bez neuspeha; import/export log bez engine grešaka/upozorenja. Potpis v2/v3 i zipalign validni; API 24–36, ARM64/x86_64, INTERNET/VIBRATE. Godot renderi pregledani na 1280×720 i 1280×576. Pravi desktop Godot online tok prethodno potvrđen sa 8/8 provera; mrežni kod nije menjan ovom doradom.
+- Telefon nije povezan preko ADB-a; instalacija i online partija na fizičkom uređaju ostaju korisnička proba. Potrebna deinstalacija verzija do 0.1.6 pre instalacije 0.1.7.
+
+## Prethodna faza 0.1.7-dev — istorija implementacije
 
 Korisnik je odobrio rad redom: profil/nadimak, dnevni izazov i globalna rang-lista, na besplatnom Supabase projektu. Multiplayer uživo još nije započet.
 
@@ -54,7 +64,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/daily-global-leaderboard`. Alati i nepotpisani izvoz su provereni. Sa prethodnog računara bezbedno preneti postojeći signing ključ (van Git-a), proveriti fingerprint prema 0.1.6, doraditi izgled dnevnog režima, pa napraviti potpisani 0.1.7 i proveriti stvaran dnevni izazov → slanje → globalni plasman na telefonu. Avast izuzetak za tačan host `phfbohgbeqjvtfsgcjwi.supabase.co` je potvrđen i stvarni Godot mrežni tok prolazi; preostaje provera na Androidu.
+Nastaviti granu `codex/daily-global-leaderboard`. Probati potpisani APK 0.1.7 na telefonu: deinstalirati staru verziju jednom, instalirati novu, proveriti novi izgled, vežbu i rangirani izazov → slanje → globalni plasman. Novi potpis je odobren; stari ključ više nije potreban. Za sledeći računar sačuvati/preneti novi signing folder van Git-a. Desktop Godot HTTPS tok prolazi posle Avast izuzetka.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/daily-global-leaderboard. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 

@@ -37,6 +37,7 @@ var pending_path := "user://daily-pending.json"
 var requesting := false
 var local_nickname := ""
 var busy_label := ""
+const BACKDROP = preload("res://assets/art/campaign-observatory.png")
 var previous_touch_emulation := false
 
 func tr_daily(en: String, sr: String) -> String:
@@ -69,12 +70,15 @@ func button(label: String, rect: Rect2, callback: Callable, enabled := true) -> 
 	item.disabled=not enabled or requesting
 	item.add_theme_font_override("font",host.font)
 	item.add_theme_font_size_override("font_size",19)
-	item.add_theme_color_override("font_color",CREAM)
-	for style_name in ["normal","hover","pressed","disabled"]:
-		var style := StyleBoxFlat.new()
-		style.bg_color=INK.lightened(.15 if style_name=="hover" else .05)
-		style.border_color=GOLD.darkened(.5 if style_name=="disabled" else .05)
-		style.set_border_width_all(2); style.set_corner_radius_all(10)
+	var primary := label in ["PLAY RANKED","RANGIRANI POKUŠAJ","SUBMIT","POTVRDI","LEADERBOARD","RANG-LISTA"]
+	for color_name in ["font_color","font_hover_color","font_pressed_color","font_focus_color"]:
+		item.add_theme_color_override(color_name,INK if primary else CREAM)
+	item.add_theme_color_override("font_disabled_color",Color("85939c"))
+	for style_name in ["normal","hover","pressed","disabled","focus"]:
+		var style := StyleBoxTexture.new()
+		style.texture=Ornaments.FRAMES[1 if primary else 0]
+		style.texture_margin_left=18; style.texture_margin_right=18
+		style.modulate_color=Color(.55,.55,.55) if style_name=="disabled" else Color(.8,.8,.8) if style_name=="pressed" else Color(1.12,1.12,1.12) if style_name in ["hover","focus"] else Color.WHITE
 		item.add_theme_stylebox_override(style_name,style)
 	item.pressed.connect(callback); ui.add_child(item)
 
@@ -90,23 +94,31 @@ func rebuild() -> void:
 		nickname.placeholder_text=tr_daily("Nickname (3–20 characters)","Nadimak (3–20 znakova)")
 		nickname.max_length=20; nickname.position=Vector2(38,117); nickname.size=Vector2(w,42)
 		nickname.add_theme_font_override("font",host.font); nickname.add_theme_font_size_override("font_size",20)
+		nickname.add_theme_color_override("font_color",CREAM)
+		nickname.add_theme_color_override("font_placeholder_color",Color("acbcc3"))
+		var entry := StyleBoxFlat.new()
+		entry.bg_color=Color("091d2e"); entry.border_color=Color("a88a51")
+		entry.set_border_width_all(1); entry.set_corner_radius_all(7)
+		entry.content_margin_left=12; entry.content_margin_right=12
+		nickname.add_theme_stylebox_override("normal",entry)
+		nickname.add_theme_stylebox_override("focus",entry)
 		nickname.editable=not requesting; ui.add_child(nickname)
 		button("EN" if language=="en" else "SR",Rect2(38,174,90,42),toggle_language)
 		button(tr_daily("Adjacent","Susedna") if adjacent else tr_daily("Any letters","Bilo koja"),Rect2(140,174,w-102,42),toggle_rule)
 		button(tr_daily("PLAY RANKED","RANGIRANI POKUŠAJ"),Rect2(38,276,w,48),start_ranked,service.configured())
 		button(tr_daily("PRACTICE","VEŽBAJ"),Rect2(38,337,w,48),start_practice)
 		button(tr_daily("REFRESH","OSVEŽI"),Rect2(size.x-174,91,136,40),refresh_leaderboard,service.configured())
-		button("<",Rect2(size.x*.53,394,48,36),func(): page=maxi(0,page-1); queue_redraw())
-		button(">",Rect2(size.x-86,394,48,36),func(): page=mini(maxi(0,(leaderboard.get("rows",[]).size()-1)/6),page+1); queue_redraw())
+		button("<",Rect2(size.x*.53,390,48,44),func(): page=maxi(0,page-1); queue_redraw())
+		button(">",Rect2(size.x-86,390,48,44),func(): page=mini(maxi(0,(leaderboard.get("rows",[]).size()-1)/6),page+1); queue_redraw())
 	elif mode=="running":
 		button(tr_daily("CLEAR","OBRIŠI"),Rect2(size.x/2-170,432,150,38),func(): selection.clear(); queue_redraw())
 		button(tr_daily("SUBMIT","POTVRDI"),Rect2(size.x/2+20,432,150,38),submit_word)
 	elif mode=="result":
-		button(tr_daily("LEADERBOARD","RANG-LISTA"),Rect2(size.x/2-230,350,220,48),show_lobby)
+		button(tr_daily("LEADERBOARD","RANG-LISTA"),Rect2(size.x/2-230,374,220,48),show_lobby)
 		if ranked and not bool(attempt.get("verified",false)) and not bool(attempt.get("expired",false)):
-			button(tr_daily("RETRY UPLOAD","PONOVI SLANJE"),Rect2(size.x/2+10,350,220,48),upload_result)
+			button(tr_daily("RETRY UPLOAD","PONOVI SLANJE"),Rect2(size.x/2+10,374,220,48),upload_result)
 		else:
-			button(tr_daily("PRACTICE AGAIN","VEŽBAJ PONOVO"),Rect2(size.x/2+10,350,220,48),start_practice)
+			button(tr_daily("PRACTICE AGAIN","VEŽBAJ PONOVO"),Rect2(size.x/2+10,374,220,48),start_practice)
 	queue_redraw()
 
 func toggle_language() -> void:
@@ -260,23 +272,34 @@ func _notification(what: int) -> void:
 		selection.clear(); dragging=false; pointer=-1
 	if what==NOTIFICATION_RESIZED and is_instance_valid(ui): rebuild()
 
-func label(value: String, rect: Rect2, font_size := 22, color := CREAM) -> void:
-	draw_string(host.font,Vector2(rect.position.x,rect.position.y+(rect.size.y-host.font.get_height(font_size))/2+host.font.get_ascent(font_size)),value,HORIZONTAL_ALIGNMENT_CENTER,rect.size.x,font_size,color)
+func label(value: String, rect: Rect2, font_size := 22, color := CREAM, heading := false) -> void:
+	var face: Font=host.title_font if heading else host.font
+	while font_size>12 and face.get_string_size(value,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size).x>rect.size.x:
+		font_size-=1
+	draw_string(face,Vector2(rect.position.x,rect.position.y+(rect.size.y-face.get_height(font_size))/2+face.get_ascent(font_size)),value,HORIZONTAL_ALIGNMENT_CENTER,rect.size.x,font_size,color)
 
 func tile_rect(i: int) -> Rect2:
 	return Rect2(size.x/2-224+(i%7)*64,164+(i/7)*64,56,56)
 
 func _draw() -> void:
 	if host==null: return
-	draw_rect(Rect2(Vector2.ZERO,size),Color(0.025,0.07,0.12,.96))
-	label(tr_daily("DAILY CHALLENGE","DNEVNI IZAZOV"),Rect2(140,16,size.x-280,46),30,GOLD)
+	var source := Rect2(Vector2.ZERO,BACKDROP.get_size())
+	var ratio := size.x/size.y
+	if source.size.x/source.size.y>ratio:
+		source.size.x=source.size.y*ratio; source.position.x=(BACKDROP.get_width()-source.size.x)/2
+	else:
+		source.size.y=source.size.x/ratio; source.position.y=(BACKDROP.get_height()-source.size.y)*.35
+	draw_texture_rect_region(BACKDROP,Rect2(Vector2.ZERO,size),source)
+	draw_rect(Rect2(Vector2.ZERO,size),Color(.015,.045,.085,.47))
+	Ornaments.plaque(self,Rect2(size.x/2-215,12,430,54))
+	label(tr_daily("DAILY CHALLENGE","DNEVNI IZAZOV"),Rect2(size.x/2-190,16,380,42),28,GOLD,true)
 	if mode=="lobby":
-		Ornaments.frame(self,Rect2(22,85,size.x*.48-12,345))
-		Ornaments.frame(self,Rect2(size.x*.51,85,size.x*.49-22,345))
-		label(tr_daily("YOUR PROFILE","TVOJ PROFIL"),Rect2(38,87,size.x*.48-44,27),18,INK)
+		Ornaments.frame(self,Rect2(22,85,size.x*.48-12,350),2)
+		Ornaments.frame(self,Rect2(size.x*.51,85,size.x*.49-22,350),2)
+		label(tr_daily("YOUR PROFILE","TVOJ PROFIL"),Rect2(38,87,size.x*.48-44,27),18,GOLD,true)
 		label(tr_daily("120 seconds · no hints or upgrades","120 sekundi · bez pomoći i unapređenja"),Rect2(32,226,size.x*.48-25,25),16)
 		label(tr_daily("One ranked attempt per day/category","Jedan pokušaj dnevno po kategoriji"),Rect2(32,250,size.x*.48-25,22),16)
-		label(tr_daily("GLOBAL RANKING","RANG-LISTA"),Rect2(size.x*.52,94,size.x*.48-214,27),17,INK)
+		label(tr_daily("GLOBAL RANKING","RANG-LISTA"),Rect2(size.x*.52,94,size.x*.48-214,27),17,GOLD,true)
 		if not service.configured():
 			label(tr_daily("Online service is not connected yet.","Online servis još nije povezan."),Rect2(size.x*.52,209,size.x*.48-40,30),18)
 			label(tr_daily("Practice is available.","Vežbanje je dostupno."),Rect2(size.x*.52,242,size.x*.48-40,30),18)
@@ -288,31 +311,43 @@ func _draw() -> void:
 			for i in mini(6,maxi(0,rows.size()-page*6)):
 				var row: Dictionary=rows[page*6+i]
 				var row_color := GOLD if row.get("own",false) else CREAM
+				var row_rect := Rect2(size.x*.52+8,145+i*39,size.x*.48-42,35)
+				draw_rect(row_rect,Color(.65,.46,.16,.23) if row.get("own",false) else Color(.4,.65,.8,.055) if i%2==0 else Color(0,0,0,.1))
+				if row.get("own",false): draw_rect(Rect2(row_rect.position,Vector2(3,35)),GOLD)
 				label(str(int(row.position))+".",Rect2(size.x*.52,145+i*39,44,35),19,row_color)
 				label(str(row.nickname).left(20),Rect2(size.x*.52+48,145+i*39,size.x*.48-165,35),18,row_color)
 				label(str(int(row.score)),Rect2(size.x-112,145+i*39,76,35),19,row_color)
 			label(str(leaderboard.get("day",""))+" UTC · "+str(int(leaderboard.get("total",0))),Rect2(size.x*.59,397,size.x*.28,28),14)
 	elif mode=="running":
+		Ornaments.frame(self,Rect2(size.x/2-243,153,486,273),2)
+		draw_texture_rect(Ornaments.WEAVE,Rect2(size.x/2-228,162,456,253),true,Color(1,1,1,.28))
+		Ornaments.frame(self,Rect2(22,78,240,42))
+		Ornaments.frame(self,Rect2(size.x-262,78,240,42))
 		var seconds := maxi(0,int(ceil(remaining_ms()/1000.0)))
 		label((tr_daily("RANKED","RANGIRANO") if ranked else tr_daily("PRACTICE","VEŽBA"))+"  ·  "+language.to_upper(),Rect2(22,78,240,42),22,GOLD)
-		label("%d:%02d" % [seconds/60,seconds%60],Rect2(size.x/2-90,75,180,45),34,GOLD)
+		label("%d:%02d" % [seconds/60,seconds%60],Rect2(size.x/2-90,75,180,45),34,Color("ff997e") if seconds<=15 else GOLD)
 		label(tr_daily("Score: ","Bodovi: ")+str(rules.score),Rect2(size.x-260,78,240,42),24)
 		var selected_word := ""
 		for index in selection: selected_word+=rules.letters[index]
 		label(selected_word if not selected_word.is_empty() else status,Rect2(24,123,size.x-48,32),21)
 		for i in 28:
 			var rect := tile_rect(i)
-			draw_circle(rect.get_center(),28,GOLD if i in selection else Color("416779"))
-			draw_arc(rect.get_center(),27,0,TAU,40,GOLD,2,true)
+			Ornaments.jewel(self,rect.get_center(),27,Ornaments.PALETTE[0] if i in selection else Color("416779"),i in selection)
 			label(rules.letters[i],rect,27,INK if i in selection else CREAM)
 		for i in range(1,selection.size()): draw_line(tile_rect(selection[i-1]).get_center(),tile_rect(selection[i]).get_center(),Color(1,.85,.4,.4),4,true)
 	elif mode=="result":
-		Ornaments.frame(self,Rect2(size.x/2-300,105,600,305))
-		label(tr_daily("CHALLENGE COMPLETE","IZAZOV ZAVRŠEN"),Rect2(size.x/2-280,132,560,42),28,GOLD)
-		label(str(rules.score),Rect2(size.x/2-200,179,400,72),56,GOLD)
-		label(tr_daily("POINTS","BODOVA"),Rect2(size.x/2-200,253,400,28),20)
-		label(status,Rect2(size.x/2-285,296,570,32),17)
+		var panel := Rect2(size.x/2-300,110,600,328)
+		Ornaments.frame(self,panel,2)
+		draw_texture_rect(Ornaments.FILIGREE,panel,false)
+		Ornaments.glow(self,Vector2(size.x/2,228),132,Color(1,.72,.24,.24))
+		draw_texture_rect(Ornaments.CRESTS[1],Rect2(size.x/2-77,72,154,100),false)
+		label(tr_daily("CHALLENGE COMPLETE","IZAZOV ZAVRŠEN"),Rect2(size.x/2-275,166,550,35),26,GOLD,true)
+		label(str(rules.score),Rect2(size.x/2-200,206,400,73),64,GOLD,true)
+		label(tr_daily("POINTS","BODOVA"),Rect2(size.x/2-200,280,400,24),17)
+		label(language.to_upper()+"  ·  "+(tr_daily("ADJACENT","SUSEDNA SLOVA") if adjacent else tr_daily("ANY LETTERS","BILO KOJA SLOVA")),Rect2(size.x/2-260,311,520,23),15,Color("a8c5d4"))
+		label(status,Rect2(size.x/2-275,340,550,26),17,Color("9ee3c6") if attempt.get("verified",false) else CREAM)
 	elif mode=="confirm_leave":
+		Ornaments.frame(self,Rect2(size.x/2-320,140,640,220),2)
 		label(tr_daily("Leave? The challenge timer keeps running.","Napusti izazov? Vreme nastavlja da teče."),Rect2(30,175,size.x-60,65),25,GOLD)
 	if mode=="lobby": label(status,Rect2(24,443,size.x-48,26),17,GOLD)
 

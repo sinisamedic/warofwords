@@ -1,6 +1,11 @@
 # Android — instalacija i razvoj
 
-**Radna grana 0.1.7-dev:** novi preset/build skripta pripremaju `WarOfWords-0.1.7-android.apk` (code 8) sa INTERNET dozvolom za dnevni izazov. Potpisani paket još nije napravljen ni objavljen. Pre build-a dodati javni `game/online_config.json` prema [online uputstvu](daily-online.md), a za nadogradnju koristiti prethodni potpisni ključ. Sledeći odeljak opisuje poslednji objavljeni 0.1.6.
+**Aktuelni testni paket je 0.1.7 / code 8**, sa dnevnim izazovom, globalnom listom i novim izgledom. Koristi novi potpis koji je korisnik izričito odobrio: **deinstalirati 0.1.6 ili stariju verziju jednom, zatim instalirati 0.1.7; lokalni napredak se briše.** Naredni paketi treba da koriste isti novi ključ. Ranija uputstva ispod za 0.1.6 ostaju istorijska.
+
+Novi ključ i lozinka čuvaju se u ignorisanom .local/signing/. .local/machine.json poljem androidSigningConfig pokazuje na lokalni signing.json (path, alias, password), koji build skripta učitava bez ispisa tajni. Na drugi računar preneti taj folder bezbednim kanalom, van Git-a, i prilagoditi lokalne putanje. Sertifikat SHA256: 429a2d1b4700535f04c7252e8b28c0f8c4bb584a6cd8b7d863cd08070eff0abc.
+
+APK SHA256: 118ad610bbba0e84a687975e4f11d4e0531244412fc978ae9b0357723bbf2d36; veličina 94.889.278 bajtova. Instalacija na telefonu još nije proverena; desktop testovi i verifikacija potpisa/poravnanja prolaze.
+
 
 ## Probaj na telefonu
 
