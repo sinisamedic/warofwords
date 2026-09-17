@@ -1,6 +1,6 @@
 # Android — instalacija i razvoj
 
-**Radna grana 0.1.7-dev:** novi preset/build skripta pripremaju `WarOfWords-0.1.7-android.apk` (code 8) sa INTERNET dozvolom za dnevni izazov. Paket još nije napravljen ni objavljen. Pre build-a dodati javni `game/online_config.json` prema [online uputstvu](daily-online.md), a za nadogradnju koristiti prethodni potpisni ključ. Sledeći odeljak opisuje poslednji objavljeni 0.1.6.
+**Radna grana 0.1.7-dev:** novi preset/build skripta pripremaju `WarOfWords-0.1.7-android.apk` (code 8) sa INTERNET dozvolom za dnevni izazov. Potpisani paket još nije napravljen ni objavljen. Pre build-a dodati javni `game/online_config.json` prema [online uputstvu](daily-online.md), a za nadogradnju koristiti prethodni potpisni ključ. Sledeći odeljak opisuje poslednji objavljeni 0.1.6.
 
 ## Probaj na telefonu
 
@@ -28,6 +28,14 @@ Godot **4.7.2 standard**, bez .NET. Importuj `game/project.godot` i F6/F5 (glavn
 ```
 
 Može i `GODOT_EXECUTABLE`, ili `godotExecutable` u ignorisanom `.local/machine.json`. Rezultat i SHA256 idu u `exports/`. Skripta prvo uvozi resurse i pokreće testove. Samo provere: dodati `-TestOnly`.
+
+Za potpisani build postaviti `GODOT_ANDROID_KEYSTORE_DEBUG_PATH` na postojeći ključ; po potrebi i `GODOT_ANDROID_KEYSTORE_DEBUG_USER` i `GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD`. Ključ/lozinke ostaju van Git-a. Skripta odbija potpisivanje bez eksplicitne putanje, da novi računar ne bi slučajno koristio drugi potpis. Na prethodnom računaru proveriti Godot Editor Settings → Export → Android → Debug Keystore; tipične lokacije su `%APPDATA%/Godot/keystores/debug.keystore` i `%APPDATA%/Godot/android/debug.keystore`. APK kontrolna suma sa GitHub Releases nije potpisni ključ i ne može ga zameniti.
+
+Bez ključa, `./tools/build-android.ps1 -UnsignedCheck` proverava import/testove/izvoz u `.local/WarOfWords-0.1.7-UNSIGNED-CHECK.apk`. To nije instalaciono izdanje. Skripta privremeno isključuje potpisivanje i u `finally` vraća identičan preset; ne pokretati paralelan editor/export tokom ove provere. Posle nasilnog prekida proveriti da je `package/signed=true`.
+
+Na drugom Windows računaru 2026-09-17 instalirani su Microsoft OpenJDK 21.0.12.1, Android command-line tools 15859902, platform-tools 37.0.1, platform 35/rev 2 i build-tools 36.0.0. Zvanični Godot 4.7.2 Android šabloni su u `.local/templates/`, alati u `.local/toolchains/`; putanje su upisane u lokalni machine.json i Godot Editor Settings. Arhive su proverene prema objavljenim SHA256 vrednostima. NDK/CMake/Android Studio nisu potrebni za ovaj izvoz gotovog APK šablona bez Gradle-a.
+
+Na ovom računaru SDK preuzimanja traže Windows CA skladište zbog Avast HTTPS inspekcije: za proces SDK menadžera korišćen je `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE`. TLS validacija ostaje uključena. Ovo nije rešilo zasebni Godot/mbedTLS problem; za njega je korisniku dat Avast izuzetak ograničen na host projekta.
 
 Paket sadrži ARM64 za Samsung S23 Ultra i druge moderne telefone, kao i x86_64 za emulator. Minimum Android 7 (API 24), cilj API 36 — provereno iz finalnog Android manifesta. Compatibility renderer, landscape, immersive. Jedina tražena funkcionalna dozvola je vibracija; nema mrežnih poziva, analitike, reklama ili kupovina.
 

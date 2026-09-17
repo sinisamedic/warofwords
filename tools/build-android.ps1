@@ -1,6 +1,7 @@
 param(
     [string]$Godot = $env:GODOT_EXECUTABLE,
-    [switch]$TestOnly
+    [switch]$TestOnly,
+    [switch]$UnsignedCheck
 )
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
@@ -30,8 +31,29 @@ if (-not (Test-Path -LiteralPath $template)) {
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
 $apk = Join-Path $outputDir 'WarOfWords-0.1.7-android.apk'
-& $Godot --headless --path $project --export-debug Android $apk
-if ($LASTEXITCODE -ne 0) { throw 'Android export failed.' }
+if ($UnsignedCheck) {
+    # Validate export without signing the artifact with this machine's new debug key.
+    $apk = Join-Path $repo '.local/WarOfWords-0.1.7-UNSIGNED-CHECK.apk'
+    $presetPath = Join-Path $project 'export_presets.cfg'
+    $presetBytes = [IO.File]::ReadAllBytes($presetPath)
+    $presetText = [Text.Encoding]::UTF8.GetString($presetBytes)
+    if (-not $presetText.Contains('package/signed=true')) { throw 'Expected signed Android preset.' }
+    try {
+        [IO.File]::WriteAllText($presetPath, $presetText.Replace('package/signed=true', 'package/signed=false'))
+        & $Godot --headless --path $project --export-debug Android $apk
+        if ($LASTEXITCODE -ne 0) { throw 'Unsigned Android export failed.' }
+    } finally {
+        [IO.File]::WriteAllBytes($presetPath, $presetBytes)
+    }
+} else {
+    $key = $env:GODOT_ANDROID_KEYSTORE_DEBUG_PATH
+    if (-not $key) {
+        throw 'Set GODOT_ANDROID_KEYSTORE_DEBUG_PATH to the existing signing key, or use -UnsignedCheck to validate export without it. See docs/android.md.'
+    }
+    if (-not (Test-Path -LiteralPath $key)) { throw 'Signing key does not exist.' }
+    & $Godot --headless --path $project --export-debug Android $apk
+    if ($LASTEXITCODE -ne 0) { throw 'Android export failed.' }
+}
 $hash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
 [IO.File]::WriteAllText($apk + '.sha256', $hash + '  ' + [IO.Path]::GetFileName($apk) + "`n")
 Write-Output "APK: $apk"
