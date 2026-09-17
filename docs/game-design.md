@@ -2,7 +2,7 @@
 
 Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
-## 0.1.6 — trenutni pregled pre sledećeg APK-a
+## 0.1.6 — kampanja, dopuna i animacije
 
 - Popravljen izbor nivoa: držanje prsta preko više iscrtavanja više ne uklanja dodirnu oblast. Novi regresioni test zadržava dodir preko osam frejmova, uz poseban test zaključanog nivoa.
 - Korisnik je zatražio zasebne pozadine za tri lokacije kampanje. Generisane su Sunward Ruins, Sky Bridges i Observatory; promena poglavlja koristi 0,55 s pretapanja sa blagim pomeranjem. Brojevi zadržavaju svoje klizanje. Reduced Motion preskače prelaz.
@@ -10,7 +10,7 @@ Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Prva artikulisana 2D animacija heroja ima devet delova i zasebne zglobove glave, tela, ruku i kaputa: mirovanje, pucanje i udarac. Stopala miruju, pauza zaustavlja animaciju, Reduced Motion vraća neutralnu pozu.
 - Posle komentara da smrt izgleda kao okretanje slike, poraz heroja koristi zaseban pokret tela, glave, ruku i kaputa, savijanje kolena kroz teksturisanu mrežu i oslanjanje šaka na tlo. Prašina prati spuštanje; nestajanje počinje tek posle pada. Protivnik se dezintegrira u energiju i fragmente bez obrtanja celog sprite-a. Prikaz traje 1,65 s pre rezultata; Reduced Motion ostaje blago postepeno nestajanje. Nagrada se i dalje beleži odmah i samo jednom.
 - **Poslednja korisnikova korekcija: originalna nepodeljena ilustracija ostaje na naslovnoj, gde je lik velik. Novi animirani lik se koristi samo u borbi, za pregled.** Ne proširivati rig na protivnike pre povratne informacije.
-- Korisnik želi pregled uživo pre sledeće izrade APK-a. Godot pregled je otvoren sa odvojenim testnim napretkom i svim otključanim nivoima. Raniji lokalni 0.1.6 APK nastao je pre ove korekcije i nije objavljen; ne koristiti ga kao konačnu isporuku.
+- Posle pregleda uživo i dorade smrti korisnik je 2026-09-17 izričito zatražio novi APK. Finalni 0.1.6 build obuhvata ceo originalni lik na naslovnoj i nove animacije poraza. Provere i identitet paketa: `QA-0.1.6.md`.
 
 ## Usvojeno
 

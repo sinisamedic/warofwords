@@ -9,7 +9,7 @@ const adb=(...a)=>execFileSync('adb',['-s',serial,...a],{encoding:'utf8',windows
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const check=(ok,msg)=>{if(!ok)throw Error(msg);console.log('PASS '+msg);};
 const save=()=>JSON.parse(adb('shell','run-as',pkg,'cat','files/progress.json'));
-const tap=async(x,y,delay=1000)=>{adb('shell','input','tap',''+x,''+y);await wait(delay);};
+const tap=async(x,y,delay=1000)=>{adb('shell','input','swipe',''+x,''+y,''+x,''+y,'150');await wait(delay);};
 function installSave(file){adb('push',file,'/data/local/tmp/wow-combat-fixture.json');adb('shell','run-as',pkg,'cp','/data/local/tmp/wow-combat-fixture.json','files/progress.json');}
 function capture(name){adb('shell','screencap','-p','/sdcard/wow-combat.png');adb('pull','/sdcard/wow-combat.png','.local/android-combat-'+name+'.png');}
 function logs(name){const pid=adb('shell','pidof',pkg),log=adb('logcat','-d','--pid='+pid,'-s','godot','AndroidRuntime');fs.writeFileSync('.local/android-combat-'+name+'.log',log);check(!/SCRIPT ERROR|E godot.*ERROR:|FATAL EXCEPTION/.test(log),name+' has no runtime errors');}
@@ -38,18 +38,23 @@ async function main(){
  }
  try {
   await scenario('ready',{});capture('shield-ready');
-  await tap(496,531);await tap(1200,80);
+  await tap(496,531,2500);await tap(1200,80);
+  // The game caps frame delta after stalls. Slow host-GPU shader compilation
+  // can leave the projectile in flight even after a second of wall-clock time.
+  for(let attempt=0;attempt<5&&save().battle.projectiles?.length;attempt++){
+   await tap(1590,855,2000);await tap(1200,80);
+  }
   check(save().battle.foe<150&&save().battle.energy[0]===0&&save().battle.shield===20,'ready Pulse fires while shield remains active');
   logs('ready');
   const victory=await scenario('victory',{foe:1,shield:0});
-  await tap(496,531,2400);capture('victory');
+  await tap(496,531,6500);capture('victory');
   const won=save();check(won.wins['6']>=1&&Object.keys(won.battle).length===0&&won.coins>victory.coins,'lethal Pulse completes victory and saves reward');
   await tap(1600,855);await tap(2110,983);await tap(1200,80);
   check(save().battle.mission===7,'Next button starts the following duel after defeat animation');
   check(save().coins===won.coins,'leaving result does not duplicate victory reward');logs('victory');
   const defeat=await scenario('defeat',{hp:1,shield:0,countdown:1.0});
   // Death happens during this held touch; releasing after it must not lock result input.
-  adb('shell','input','swipe','761','533','907','533','3200');await wait(2200);capture('defeat');
+  adb('shell','input','swipe','761','533','907','533','3200');await wait(6500);capture('defeat');
   const lost=save();check(Object.keys(lost.battle).length===0&&lost.coins===defeat.coins+2,'CPU lethal hit finishes defeat during held gesture');
   await tap(1600,855);await tap(2110,983);await tap(1200,80);
   check(save().battle.mission===6&&save().battle.hp===100,'Retry works after death interrupted a touch');

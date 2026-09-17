@@ -13,6 +13,16 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const tap=async(x,y)=>{adb('shell','input','tap',String(x),String(y));await sleep(750);};
 const save=()=>JSON.parse(adb('shell','run-as',pkg,'cat','files/progress.json'));
 function check(ok,msg){if(!ok)throw Error(msg);console.log('PASS '+msg);}
+// Language choices are idempotent. On a slow emulator the first frame after
+// opening Options can still be rendering; confirm the saved choice before leaving.
+async function chooseLanguage(x,y,key,value){
+ for(let attempt=0;attempt<3;attempt++){
+  adb('shell','input','swipe',String(x),String(y),String(x),String(y),'150');
+  await sleep(1000);
+  if(save()[key]===value)return;
+ }
+ throw Error('Language control did not select '+key+'='+value);
+}
 async function shot(name){await sleep(350);adb('shell','screencap','-p','/sdcard/wow-qa.png');adb('pull','/sdcard/wow-qa.png','.local/android-'+name+'.png');}
 async function start(){adb('shell','am','start','-W','-n',pkg+'/com.godot.game.GodotAppLauncher');const pid=adb('shell','pidof',pkg);for(let i=0;i<30;i++){await sleep(1000);if(adb('logcat','-d','--pid='+pid,'-s','godot').includes('WarOfWords: ready')){await sleep(1200);return;}}throw Error('Game did not become ready within 30 seconds');}
 async function waitDictionaryLoads(count){const pid=adb('shell','pidof',pkg);for(let i=0;i<30;i++){const log=adb('logcat','-d','--pid='+pid,'-s','godot');if((log.match(/WarOfWords: ready/g)||[]).length>=count){await sleep(1200);return;}await sleep(1000);}throw Error('Dictionary loading did not finish within 30 seconds');}
@@ -77,7 +87,7 @@ async function main(){
  adb('shell','am','force-stop',pkg);await start();await tap(1730,966);s=save();
  check(JSON.stringify(s.battle)===srSnapshot&&s.ui_language==='sr'&&s.word_language==='sr','Serbian battle and settings survive restart');
  await tap(1060,855); // pause -> settings
- await tap(1491,366);await tap(1491,620);await sleep(1300);await tap(120,90);await tap(1730,966);
+ await chooseLanguage(1491,366,'ui_language','en');await chooseLanguage(1491,620,'word_language','en');await sleep(1300);await tap(120,90);await tap(1730,966);
  s=save();check(s.word_language==='en'&&s.ui_language==='en'&&s.battle.dictionary_code==='sr','saved Serbian duel keeps dictionary after switching menus and new duels to English');
  await tap(1590,855);await shot('battle-serbian-english-ui');await tap(1200,80);
  const pid=adb('shell','pidof',pkg);const log=adb('logcat','-d','--pid='+pid,'-s','godot','Godot','AndroidRuntime');fs.writeFileSync('.local/android-final-logcat.txt',log);check(!/SCRIPT ERROR|E godot.*ERROR:|FATAL EXCEPTION/.test(log),'latest Android launch has no engine/script error');

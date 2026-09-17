@@ -2,11 +2,11 @@
 
 Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-worlds-hero-animation.**
 
-## 0.1.6 — otvoren pregled, APK se ne objavljuje još
+## 0.1.6 — finalni APK
 
-Korisnik želi da prvo vidi igru u simulatoru/pregledu, pre sledećeg APK-a. Lokalni helper .local/preview-death.gd otvara Godot pregled sa odvojenim testnim save-om, 420 novčića i svim otključanim nivoima. H ponavlja smrtonosni udar na heroja, E na protivnika, R započinje novu borbu. Ne prekidati prozor dok korisnik testira.
+Korisnik je posle pregleda uživo i korekcije poraza izričito zatražio novi APK. Napravljen je nov paket `exports/WarOfWords-0.1.6-android.apk`, versionCode 7, 94.859.979 bajtova. SHA256: `9afb875fec3100f2b44b6c480082c76827419d57460f47ce9b6a1a86d8d150a7`. Koristi isti potpis kao prethodna izdanja; instalira se preko postojeće aplikacije bez deinstaliranja.
 
-Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. **Heroj sada klone kroz zglobove, savija kolena i oslanja ruke o tlo; protivnik se raspada kroz svetleću dezintegraciju i fragmente.** Na naslovnoj ostaje originalna cela ilustracija; devetodelni rig koristi se samo u borbi. Sačekati povratnu informaciju pre novog APK-a.
+Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. **Heroj sada klone kroz zglobove, savija kolena i oslanja ruke o tlo; protivnik se raspada kroz svetleću dezintegraciju i fragmente.** Na naslovnoj ostaje originalna cela ilustracija; devetodelni rig koristi se samo u borbi.
 
 ## Urađeno
 
@@ -23,12 +23,13 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 - Benchmark dopune: 768 poteza, oba jezika i pravila, pola nizova bira najkraće reči. Nova dopuna zadržala reč od 5+ polja posle svih 384 svoja poteza. Provereni zakoniti putevi, neponavljanje iskorišćenih reči, nepromenjena nepotrošena polja i budžet pretrage. To nije garancija za svaku moguću tablu.
 - Godot renderi 1280 × 576 i 1708 × 960; pregledane tri lokacije, prelaz, borba i tri poze heroja. Veliki rig na naslovnoj je potom uklonjen na zahtev korisnika; otvoreni pregled potvrđuje originalnu ilustraciju.
 - Za novi poraz snimljeno po sedam kadrova heroja/protivnika u 1708 × 960; pregledani kontakt sa tlom i raspad protivnika, uz uspravnog pobednika. Render log bez grešaka/upozorenja. Otvoren poseban interaktivni pregled 1280 × 576 sa H/E/R komandama; nije Android emulator.
-- Lokalni APK 0.1.6 / code 7 je uspešno napravljen PRE poslednje korekcije. **Zastareo je u odnosu na izvor i NIJE objavljen.** Ne nuditi ga korisniku. Poslednje GitHub izdanje je v0.1.5-android-preview.
-- Android provere nove verzije još nisu izvršene; za sada samo native Godot. tools/qa-android-pages.cjs sada sadrži stvarne dodire sa držanjem 450 ms. Build i ADB testove pokretati uzastopno.
+- Finalni APK 0.1.6 / code 7 zamenjuje raniji neobjavljeni lokalni build. Potpis i manifest su provereni: ARM64 + x86_64, API 24–36, samo VIBRATE dozvola. Novi import/test/export log bez grešaka i upozorenja.
+- Android nadogradnja sa 0.1.5 čuva kompletan save i započetu borbu; instalirani hash odgovara APK-u. Kampanja/dnevnik prolaze prevlačenja, povratak i zadržane dodire nivoa. Puna partija prolazi pobedu, nagradu, unapređenje, restart, srpsku reč i nezavisne jezike. Detalji i ograničenja: `docs/QA-0.1.6.md`.
+- **ANDROID COMBAT QA PASSED:** Pulse sa štitom, pobeda/Next, smrt tokom dodira/Retry, bez dupliranja nagrada i runtime grešaka. Android harness sada potvrđuje promenu jezika i čeka završetak leta pri sporom radu emulatora. APK nije menjan posle nadogradnje i instalirane hash provere.
 
 ## Tačan sledeći korak
 
-Sačekati korisnikov komentar na otvoreni pregled. Primeniti korekcije. Zatim, kada zatraži nastavak isporuke, ponoviti import/test/export, Android upgrade/pages/full-partiju na emulatoru, proveriti isti sertifikat i hash, pa objaviti 0.1.6. Dok pregled traje ne pokretati novi APK build i ne objavljivati raniji lokalni paket.
+Sačuvati dokumentaciju i objaviti provereni APK i SHA256 kao `v0.1.6-android-preview`. Zatim sačekati korisnikov test na fizičkom telefonu, naročito utisak o dopuni slova i pokretima heroja. Ne pokretati novi dizajn ili veliku implementaciju bez nove povratne informacije.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/campaign-worlds-hero-animation. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
