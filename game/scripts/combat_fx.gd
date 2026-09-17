@@ -34,7 +34,7 @@ static func valid_saved(saved: Variant) -> bool:
 	for shot in saved:
 		if not shot is Dictionary: return false
 		if not shot.get("player") is bool: return false
-		if shot.get("kind") not in ["word","pulse","arc","enemy"]: return false
+		if shot.get("kind") not in ["word","long_word","pulse","breach","arc","enemy"]: return false
 		if shot.player == (shot.kind == "enemy"): return false
 		if not shot.get("color") is String or not Color.html_is_valid(shot.color): return false
 		for key in ["time","damage"]:

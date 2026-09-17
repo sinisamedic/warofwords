@@ -1,6 +1,17 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-17. **Aktivna grana: codex/daily-global-leaderboard.**
+Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-tactics.**
+
+## 0.1.9 — taktika kampanje i poraz
+
+Korisnik je odobrio tri tipa protivnika, novo oružje kao nagradu kampanje i sređivanje ekrana poraza. Trajni profil je odložen; veća kampanja i kolekcija ostaju predlozi.
+
+- Prvi susret je obuka; ostali imaju teški drugi udar, otkazivo lečenje ili oklop koji se razbija rečju od šest pločica. Najave i savet postoje u pripremi, borbi i porazu. Broj nivoa ostaje 12.
+- Proboj se dobija pobedom na četvrtom susretu. Zamenjuje Puls po izboru u Arsenalu: razbija oklop, ali nanosi 6 manje štete; deli nivo unapređenja. Stari igrači sa tom pobedom ga već imaju. Oprema i oklop sačuvane borbe pravilno se nastavljaju.
+- Novi poraz: ukrašeni panel, protivnik i preostalo zdravlje, reči/vreme/nagrada, najduža reč, taktički savet, Mapa/Arsenal/Ponovi. Pregledani EN/SR prikazi na 1280×720 i 1280×576.
+- Lokalni **exports/WarOfWords-0.1.9-android.apk**, code 10, 94.897.470 bajtova, SHA256 `4d2d64722789d51d2d1658d82e86d1d75e3e2f3c668619dc777dc8b04251b89b`. Potpis je isti kao 0.1.7/0.1.8, apksigner i zipalign prolaze. **Nije objavljen na GitHub Releases.**
+- 1511 PASS provera igre/taktike/dnevnog režima i refill benchmark bez neuspeha. Završni build nema script/engine greške. Test taktike je pri izlasku zadržavao dva MP3 audio objekta; test sada sačeka gašenje audio servera i zasebna završna provera prolazi bez upozorenja. Runtime kod nije menjan tom korekcijom testnog gašenja. Logovi `.local/android-019-build.log`, `.local/tactics-final.log`, renderi `.local/tactics-qa/`.
+- Supabase/daily server nije menjan. Fizička proba novog balansa i ekrana poraza tek sledi. Detalji i početne brojke: `docs/game-design.md`.
 
 ## 0.1.8 — dopuna, dodirni odziv i katanci
 
@@ -78,9 +89,9 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/daily-global-leaderboard`. Probati lokalni 0.1.8 preko 0.1.7 na telefonu: da li nova dopuna daje zanimljivije putanje, da li se čuju dodiri i oseća vibracija u vežbi/rangiranom izazovu i da li katanac odgovara. Kasnije ponoviti upload APK-a u postojeći GitHub draft, proveriti digest pa objaviti; ne praviti duplikat izdanja. Rang-lista za v2 je nova; prethodni rezultati ostaju na v1. Za sledeći računar sačuvati/preneti `.local/signing/` van Git-a. Desktop v2 mrežni tok prolazi.
+Nastaviti granu `codex/campaign-tactics`. Probati lokalni 0.1.9 preko 0.1.7/0.1.8 na telefonu: drugi susret snažan udar, treći lečenje i prekid Lukom, četvrti oklop i nagrada Proboj; zatim Proboj na sedmom susretu. Pregledati poraz i povratak u pripremu, kao i nastavak sačuvane borbe. Po utisku podesiti balans pre širenja broja nivoa. 0.1.9 je lokalni paket; stari GitHub draft 0.1.8 ostaje neobjavljen. Za drugi računar preneti `.local/signing/` bezbedno van Git-a.
 
-Radni kod: game/project.godot. Grana za nastavak: codex/daily-global-leaderboard. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
+Radni kod: game/project.godot. Grana za nastavak: codex/campaign-tactics. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
 ## Istorija
 

@@ -1,12 +1,12 @@
 # War of Words
 
-**Android 0.1.8:** dnevni izazov i globalna rang-lista, raznovrsnija dopuna koja povezuje nova i preostala slova, zvuk/vibracija izbora u dnevnom režimu i ikonice katanca na mapi. [Online režim i postavljanje](docs/daily-online.md).
+**Android 0.1.9:** tri taktička tipa protivnika, Proboj koji se osvaja kod prvog bossa i nov detaljan ekran poraza. Dnevni izazov i globalna rang-lista ostaju dostupni. [Online režim i postavljanje](docs/daily-online.md).
 
 **Igriva Android verzija u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Kampanja i vežba rade offline; rangirani dnevni izazov zahteva internet. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 
-- Novi APK 0.1.8 je u lokalnom ignorisanom `exports/WarOfWords-0.1.8-android.apk`; GitHub upload nije uspeo zbog serverske greške 500 i izdanje ostaje draft. Instalirati preko 0.1.7 bez deinstaliranja. [Poslednje objavljeno izdanje 0.1.7](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.7-android-preview). Verzije do 0.1.6 koriste stari potpis i zahtevaju jednokratnu deinstalaciju.
+- Novi APK 0.1.9 je u lokalnom ignorisanom `exports/WarOfWords-0.1.9-android.apk`; nije objavljen na GitHub Releases. Instalirati preko 0.1.7/0.1.8 bez deinstaliranja. [Poslednje objavljeno izdanje 0.1.7](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.7-android-preview). Raniji 0.1.8 upload nije uspeo i ostaje draft. Verzije do 0.1.6 koriste stari potpis i zahtevaju jednokratnu deinstalaciju.
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
 - **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Any letters** dozvoljava udaljena slova. Pravilo povezivanja važi odmah i za započetu borbu. Novi rečnik važi za novu borbu.
@@ -21,15 +21,15 @@ U 0.1.6: popravljen izbor nivoa, tri pozadine lokacija sa animiranim pretapanjem
 
 ## Nastavi na drugom računaru
 
-Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/daily-global-leaderboard**:
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/campaign-tactics**:
 
 ```powershell
 git fetch origin --prune
-git switch codex/daily-global-leaderboard
+git switch codex/campaign-tactics
 git pull --ff-only
 ```
 
-Ako grana nije lokalna: `git switch --track origin/codex/daily-global-leaderboard`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. Javni `game/online_config.json` napraviti zasebno prema [online uputstvu](docs/daily-online.md); nije u Git-u. [Podešavanje računara](docs/setup.md).
+Ako grana nije lokalna: `git switch --track origin/codex/campaign-tactics`. GitHub prenosi izvor i asset-e; Godot, Android SDK, JDK i export templates se instaliraju zasebno. Javni `game/online_config.json` napraviti zasebno prema [online uputstvu](docs/daily-online.md); nije u Git-u. [Podešavanje računara](docs/setup.md).
 
 ## Struktura
 

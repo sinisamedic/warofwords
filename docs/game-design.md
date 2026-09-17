@@ -2,6 +2,20 @@
 
 Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## 0.1.9 — taktika kampanje i ekran poraza
+
+Korisnik je usvojio prvi mali korak posle poređenja sa Slug It Out 2: tri različita tipa protivnika, jedno oružje koje se osvaja u kampanji i lepši, detaljniji ekran poraza. Trajni profil je odložen za razmišljanje. Proširenje na 24–30 susreta i veća kolekcija ostaju predlozi, nisu deo ove izmene.
+
+- Prvi susret ostaje obuka. U preostalih 11 postojećih susreta raspoređeni su teški napadači, iscelitelji i oklopljeni protivnici. Broj nivoa ostaje 12. Mapa i priprema prikazuju pravilo protivnika.
+- Teški napadač svakom drugom udaru dodaje 12 štete; igrač ga unapred vidi kao snažan udar. Aegis i dalje može da zaštiti igrača dok projektil leti. Postojeći boss bonus svake treće akcije ostaje.
+- Iscelitelj umesto svakog drugog napada vraća `16 + indeks misije` HP, najviše do početnog zdravlja. Arc koji pogodi pre lečenja otkazuje taj potez i vraća odbrojavanje; ne može retroaktivno poništiti već izvršeno lečenje. Posebna najava ostaje vidljiva i pri slaganju reči.
+- Oklop prepolovljava primljenu štetu (najmanje 1). Reč od najmanje šest **pločica**, uključujući srpske digrafe, razbija oklop na udaru i nanosi punu štetu. Oklop se ne obnavlja tokom duela; prikazan je vizuelnim štitom i oznakom. Rečnici i generator nisu menjani.
+- Pobeda nad Bronzanim čuvarom (četvrti susret) otključava **Proboj / Breach**. To je alternativa Pulsu u istom zlatnom slotu: ista 4 energije, 6 manje štete od odgovarajućeg nivoa Pulsa, ali razbija oklop. Arsenal dozvoljava zamenu. Oba dele nivo unapređenja zlatnog oružja; nema novih valuta ni kupovine oružja. Postojeći igrači koji već imaju tu pobedu automatski imaju pristup.
+- Izabrano oružje i stanje oklopa čuvaju se uz duel, uključujući projektile u letu. Zamena u Arsenalu važi za novu borbu; nastavak koristi zatečenu opremu. Stare borbe bez novih polja nastavljaju sa Pulsom i bez dodatog oklopa. Postojeći save format i napredak ostaju kompatibilni.
+- Poraz dobija ukrašeni panel u stilu ostalih ekrana, ime protivnika, njegovo preostalo zdravlje i traku, broj reči, vreme, zadržanu nagradu, najdužu reč i taktički savet. Mapa, Arsenal i Ponovi vode u odgovarajući tok pripreme. Nagrada se knjiži samo jednom. Srpski i engleski prikaz su podržani.
+
+Brojke su početni balans za probu na telefonu. Dnevni izazov, rang-lista i serverska pravila ostaju nezavisni od kampanjskih sposobnosti.
+
 ## Novi smer — dnevni izazov i globalna rang-lista, 2026-09-17
 
 Povratna informacija sa telefona posle 0.1.7: globalna rang-lista radi. Korisnik traži težu dopunu, jer čitave reči stalno nastaju na istoj potrošenoj putanji. U 0.1.8 dopuna može da uklopi najviše jednu poznatu reč, i ona mora da prođe kroz najmanje dva preostala polja i najmanje jedno potrošeno. Netaknuta slova ostaju na mestu; promena putanje nastaje povezivanjem novih i starih slova, a ne rotiranjem cele table. Ako ne nađe takvo uklapanje u ograničenoj pretrazi, ostaje nasumična dopuna. Kampanja zadržava postojeću zaštitu od table bez rešenja. U dnevnom režimu ovo su verzionisana pravila daily-v2, odvojena od v1 rang-liste. Korisnik je eksplicitno odobrio objavu izmene servera.

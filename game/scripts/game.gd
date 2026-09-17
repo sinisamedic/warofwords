@@ -110,6 +110,32 @@ var autosave_clock := 0.0
 var fps_label := false
 var debug_sample_at := 0
 var daily_screen: Control
+var foe_guard := false
+var battle_weapon := "pulse"
+var weapon_unlocked_now := false
+
+# The tutorial remains simple; later encounters teach one readable counter at a time.
+func enemy_style() -> String:
+	return ["training","heavy","healer","armored","heavy","healer","armored","heavy","healer","armored","heavy","armored"][mission]
+
+func enemy_lesson() -> String:
+	match enemy_style():
+		"heavy": return "Every second hit is heavy. Save Aegis."
+		"healer": return "Every second turn heals. Interrupt with Arc."
+		"armored": return "Armor halves damage. Break it with a 6-tile word."
+	return "Find words to charge your abilities."
+
+func breach_unlocked() -> bool:
+	return save.data.wins.has("3")
+
+func ability_name(i: int) -> String:
+	var weapon: String = battle_weapon if screen=="battle" else save.data.get("weapon","pulse")
+	return "BREACH" if i==0 and weapon=="breach" and breach_unlocked() else NAMES[i]
+
+func next_enemy_move() -> String:
+	if enemy_style()=="healer" and (enemy_attacks+1)%2==0: return "HEAL"
+	if enemy_style()=="heavy" and (enemy_attacks+1)%2==0: return "HEAVY HIT"
+	return "ATTACK"
 
 func _ready() -> void:
 	Engine.max_fps = 60
@@ -333,12 +359,19 @@ func advance_combat(delta: float) -> void:
 		var blocked: bool = not impact.player and shield > 0
 		var damage: int = impact.damage
 		if impact.player:
+			if impact.kind in ["breach","long_word"] and foe_guard:
+				foe_guard=false
+				message("Armor broken!")
+			elif foe_guard:
+				damage=maxi(1,damage/2)
 			foe_hp=maxi(0,foe_hp-damage)
 			if impact.kind == "arc":
+				if enemy_style()=="healer" and (enemy_attacks+1)%2==0:
+					enemy_attacks+=1 # Cancel this healing turn, not merely its animation.
 				countdown=interval()+3
 				message("Enemy attack interrupted")
 			attack_flash=.22; enemy_recoil=.48
-			enemy_hit_strength=11.0 if impact.kind == "word" else 25.0
+			enemy_hit_strength=11.0 if impact.kind in ["word","long_word"] else 25.0
 		else:
 			damage=maxi(0,damage-shield); shield=0
 			hp=maxi(0,hp-damage)
@@ -346,8 +379,8 @@ func advance_combat(delta: float) -> void:
 			hero_flash=.22; hero_recoil=.48; hero_hit_strength=12.0 if blocked else 22.0
 			message("Shield absorbed the attack" if damage==0 else t("Enemy hit  −%d HP") % damage)
 		fx.impact(impact,blocked)
-		sfx.play("shield" if blocked else "hit" if impact.kind == "word" else "explosion",randf_range(.96,1.04))
-		haptic(30 if impact.kind == "word" else 90,.4 if impact.kind == "word" else .95)
+		sfx.play("shield" if blocked else "hit" if impact.kind in ["word","long_word"] else "explosion",randf_range(.96,1.04))
+		haptic(30 if impact.kind in ["word","long_word"] else 90,.4 if impact.kind in ["word","long_word"] else .95)
 		# First lethal arrival wins; projectiles still in flight are canceled with the duel.
 		if foe_hp <= 0: finish(true)
 		elif hp <= 0: finish(false)
@@ -439,6 +472,17 @@ func header(title: String, back_to: String = "home") -> void:
 
 func icon(kind: int, center: Vector2, radius: float, color: Color = GOLD) -> void:
 	Ornaments.medallion(self,kind,center,radius,color)
+	if kind==0 and ability_name(0)=="BREACH": draw_breach_icon(center,radius)
+
+func draw_breach_icon(center: Vector2, radius: float) -> void:
+	# A split shield and piercing bolt keep the new weapon recognizable at thumb size.
+	draw_circle(center,radius*.78,INK)
+	Ornaments.glow(self,center,radius*.85,Color(1,.67,.16,.24))
+	var r := radius*.5
+	draw_polyline(PackedVector2Array([center+Vector2(-r,-r*.65),center+Vector2(-r,r*.1),center+Vector2(-r*.3,r),center+Vector2(-r*.3,-r*.8)]),GOLD,2.5,true)
+	draw_polyline(PackedVector2Array([center+Vector2(r*.3,-r*.8),center+Vector2(r*.3,r),center+Vector2(r,r*.1),center+Vector2(r,-r*.65)]),GOLD,2.5,true)
+	draw_line(center+Vector2(-r*1.25,r*.4),center+Vector2(r*1.2,-r*.4),CREAM,4,true)
+	draw_colored_polygon(PackedVector2Array([center+Vector2(r*1.35,-r*.46),center+Vector2(r*.65,-r*.72),center+Vector2(r*.85,r*.08)]),GOLD)
 
 func _draw() -> void:
 	buttons_state = screen+"|"+overlay
@@ -576,7 +620,8 @@ func draw_campaign() -> void:
 	draw_set_transform(Vector2.ZERO)
 	EnemyArt.draw_preview(self,mission,feet,238)
 	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
-	text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+51,size.x-320,35),19,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
+	text(enemy_lesson(),Rect2(44,y+49,size.x-320,24),18,CREAM,false,HORIZONTAL_ALIGNMENT_LEFT)
+	text("Win here to unlock BREACH" if mission==3 and not breach_unlocked() else t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+77,size.x-320,24),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
 	if chapter<2: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
@@ -588,19 +633,23 @@ func draw_arsenal() -> void:
 		var rect := Rect2(20+i*(width+10),90,width,270)
 		panel(rect,INK,GOLD if i==selected else COLORS[i])
 		icon(i,Vector2(rect.get_center().x,173),54,COLORS[i])
-		text(NAMES[i],Rect2(rect.position.x+5,235,width-10,36),27,CREAM,true)
+		text(ability_name(i),Rect2(rect.position.x+5,235,width-10,36),27,CREAM,true)
 		text(t("LEVEL %d") % int(save.data.levels[i]),Rect2(rect.position.x,282,width,30),21,GOLD)
 		text("EQUIPPED",Rect2(rect.position.x,320,width,28),18,COLORS[i])
 		buttons.append({"rect":rect,"id":"select","value":i,"enabled":true})
 	panel(Rect2(size.x*.2,368,size.x*.6,35),INK,Color("547283"),8)
-	text(t(ROLES[selected])+t("  •  %d ENERGY") % COSTS[selected],Rect2(20,369,size.x-40,34),22)
+	text(t("Break armor • 6 less damage" if selected==0 and save.data.get("weapon","pulse")=="breach" else ROLES[selected])+t("  •  %d ENERGY") % COSTS[selected],Rect2(20,369,size.x-40,34),22)
 	action("POWER-UPS",Rect2(24,size.y-65,212,48),"powers")
+	if breach_unlocked():
+		action("EQUIP PULSE" if save.data.get("weapon","pulse")=="breach" else "EQUIP BREACH",Rect2(size.x/2-155,size.y-65,310,48),"weapon")
+	else:
+		text("BREACH: defeat the Bronze Warden",Rect2(244,size.y-65,size.x-488,48),18,GOLD)
 	action("UPGRADE >",Rect2(size.x-236,size.y-65,212,48),"upgrades",-1,true)
 
 func draw_powers() -> void:
 	header("POWER-UPS","campaign")
 	panel(Rect2(150,78,size.x-300,37),INK,Color("547283"),8)
-	text("CHOOSE ONE FOR BATTLE",Rect2(150,79,size.x-300,35),26,GOLD,true)
+	text(enemy_lesson(),Rect2(154,79,size.x-308,35),19,GOLD)
 	var width := (size.x-84)/3
 	for i in 3:
 		var rect := Rect2(24+i*(width+18),126,width,260)
@@ -619,7 +668,7 @@ func draw_upgrades() -> void:
 	var left := size.x*0.29
 	icon(selected,Vector2(left,228),93,COLORS[selected])
 	panel(Rect2(left-145,86,290,49))
-	text(NAMES[selected],Rect2(left-145,86,290,49),32,CREAM,true)
+	text(ability_name(selected),Rect2(left-145,86,290,49),32,CREAM,true)
 	for i in 4:
 		var p := Vector2(left-117+i*78,385)
 		icon(i,p,31,COLORS[i])
@@ -633,10 +682,11 @@ func draw_upgrades() -> void:
 	panel(Rect2(x,90,width,344))
 	text(t("LEVEL %d  >  %d") % [level,mini(8,level+1)],Rect2(x+12,106,width-24,50),32,GOLD,true)
 	text(["DAMAGE","PROTECTION","DAMAGE","HEALING"][selected],Rect2(x+16,169,width-32,30),23)
-	text(str(effect(selected)) if level==8 else t("%d  >  %d") % [effect(selected),effect(selected)+[8,5,6,6][selected]],Rect2(x+16,206,width-32,48),35,COLORS[selected])
+	var shown_effect: int=effect(selected)-(6 if selected==0 and ability_name(0)=="BREACH" else 0)
+	text(str(shown_effect) if level==8 else t("%d  >  %d") % [shown_effect,shown_effect+[8,5,6,6][selected]],Rect2(x+16,206,width-32,48),35,COLORS[selected])
 	text(t("CHARGE   %d ENERGY") % COSTS[selected],Rect2(x+16,265,width-32,34),23)
 	action("MAX LEVEL" if level==8 else t("UPGRADE  ◈ %d") % price,Rect2(x+20,319,width-40,56),"upgrade",selected,true,level<8 and save.data.coins>=price)
-	text("Fully upgraded" if level==8 else "Earn coins in campaign" if save.data.coins<price else t("Balance after: %d") % (int(save.data.coins)-price),Rect2(x+12,386,width-24,29),19)
+	text("Pulse and Breach share upgrades" if selected==0 and breach_unlocked() else "Fully upgraded" if level==8 else "Earn coins in campaign" if save.data.coins<price else t("Balance after: %d") % (int(save.data.coins)-price),Rect2(x+12,386,width-24,29),19)
 
 func board_rect() -> Rect2:
 	return Rect2((size.x-454)/2,205,454,256)
@@ -681,6 +731,10 @@ func draw_battle() -> void:
 		draw_texture_rect_region(board_environment,Rect2(target_x,177,target_width,size.y-177),Rect2(source_x,0,source_width,source_size.y))
 	if shield>0 and not ended:
 		Ornaments.shield_field(self,Vector2(size.x*.20,119),clock,save.data.calm)
+	if foe_guard and not ended:
+		Ornaments.shield_field(self,Vector2(size.x*.80,119),clock,save.data.calm)
+		Ornaments.plaque(self,Rect2(size.x*.80-96,140,192,28))
+		text("ARMOR • 6 TILES",Rect2(size.x*.80-92,143,184,22),15,GOLD)
 	fx.draw(self,size.x,save.data.calm)
 	var board := board_rect()
 	for x in 6:
@@ -693,6 +747,10 @@ func draw_battle() -> void:
 	text("II",Rect2(size.x/2-20,10,40,44),29,GOLD,true)
 	buttons.append({"rect":Rect2(size.x/2-27,6,54,54),"id":"pause","value":-1,"enabled":true})
 	var intent := t("FROZEN  %.1fs") % freeze if freeze > 0 else t("INCOMING  %.1fs") % countdown if countdown<3 else t("Next attack  %ds") % int(ceil(countdown))
+	if freeze<=0 and not ended: intent=t("%s IN %ds") % [t(next_enemy_move()),int(ceil(countdown))]
+	if next_enemy_move()!="ATTACK" and not ended:
+		Ornaments.plaque(self,Rect2(size.x/2-130,70,260,29))
+		text(intent,Rect2(size.x/2-122,73,244,22),17,GOLD)
 	if ended: intent=t("VICTORY" if won else "DEFEATED")
 	Ornaments.plaque(self,Rect2(size.x/2-177,164,354,39))
 	if path.is_empty():
@@ -733,9 +791,10 @@ func draw_battle() -> void:
 		var center := ability_center(i)
 		var ready: bool = energy[i] >= COSTS[i]
 		Ornaments.medallion(self,i,center,47,COLORS[i],energy[i],COSTS[i])
+		if i==0 and ability_name(0)=="BREACH": draw_breach_icon(center,47)
 		var label := Rect2(center.x-58,center.y+29,116,43)
 		Ornaments.plaque(self,label)
-		text(NAMES[i],Rect2(label.position.x+9,label.position.y+4,98,18),17,CREAM,true)
+		text(ability_name(i),Rect2(label.position.x+9,label.position.y+4,98,18),17,CREAM,true)
 		text("READY" if ready else t("%d/%d") % [energy[i],COSTS[i]],Rect2(label.position.x+9,label.position.y+23,98,16),16,GOLD if ready else CREAM)
 		buttons.append({"rect":Rect2(center-Vector2(59,48),Vector2(118,122)),"id":"fire","value":i,"enabled":true})
 	var help_center := Vector2(size.x/2-313,446)
@@ -836,7 +895,7 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 		Ornaments.ui_icon(self,"coin",Rect2(middle-87,rect.position.y+185,35,35))
 		text("+%d" % reward,Rect2(middle-44,rect.position.y+183,130,38),28,GOLD,true)
 		text(t("%d words  •  %.0fs") % [word_count,duration],Rect2(rect.position.x+55,rect.position.y+234,rect.size.x-110,25),21)
-		text(t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+55,rect.position.y+262,rect.size.x-110,25),21,GOLD)
+		text("BREACH UNLOCKED — equip in Arsenal" if weapon_unlocked_now else t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+35,rect.position.y+262,rect.size.x-70,25),21,GOLD)
 		if mission==11: text("CAMPAIGN COMPLETE",Rect2(middle-145,rect.position.y+161,290,22),16,GOLD,true)
 	else:
 		text(ENEMIES[mission],Rect2(middle-245,rect.position.y+118,490,32),24,CREAM,true)
@@ -852,16 +911,52 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 	var y := rect.end.y-71
 	if victory:
 		action("MAP",Rect2(middle-275,y,140,51),"campaign")
-		action("UPGRADES",Rect2(middle-119,y,185,51),"upgrades")
+		action("ARSENAL" if weapon_unlocked_now else "UPGRADES",Rect2(middle-119,y,185,51),"arsenal" if weapon_unlocked_now else "upgrades")
 		action("NEXT >" if mission<11 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
 	else:
 		action("MENU",Rect2(middle-300,y,125,51),"save_home")
 		action("OPTIONS",Rect2(middle-165,y,190,51),"settings")
 		action("RESUME",Rect2(middle+45,y,255,51),"resume",-1,true)
 
+func draw_defeat_dialog() -> void:
+	var width := minf(710,size.x-48)
+	var r := Rect2((size.x-width)/2,38,width,size.y-76)
+	var x := r.position.x
+	var y := r.position.y
+	panel(r)
+	draw_texture_rect(Ornaments.FILIGREE,r,false)
+	Ornaments.glow(self,Vector2(r.get_center().x,y+45),160,Color(.28,.57,.9,.18))
+	Ornaments.plaque(self,Rect2(r.get_center().x-185,y+13,370,47))
+	text("RISE AGAIN",Rect2(x+80,y+16,width-160,42),30,GOLD,true)
+	text(t("DEFEATED BY %s") % t(ENEMIES[mission]),Rect2(x+26,y+64,width-52,28),20,CREAM)
+	var remaining := clampf(float(foe_hp)/maxi(1,foe_max),0,1)
+	var bar := Rect2(x+35,y+105,width-70,10)
+	draw_style_box(health_style(Color("203f52")),bar)
+	if remaining>0: draw_style_box(health_style(GOLD),Rect2(bar.position,Vector2(bar.size.x*remaining,10)))
+	text(t("Enemy health remaining: %d / %d") % [foe_hp,foe_max],Rect2(x+30,y+120,width-60,24),18,GOLD)
+	var values := [str(word_count),t("%.0f seconds") % duration,"+%d" % reward]
+	var labels := ["WORDS FOUND","TIME IN BATTLE","COINS KEPT"]
+	var card_width := (width-90)/3
+	for i in 3:
+		var card := Rect2(x+30+i*(card_width+15),y+154,card_width,68)
+		Ornaments.frame(self,card)
+		text(values[i],Rect2(card.position.x+5,card.position.y+5,card_width-10,30),25,GOLD,true)
+		text(labels[i],Rect2(card.position.x+5,card.position.y+38,card_width-10,22),16,CREAM)
+	text(t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(x+25,y+230,width-50,25),20,GOLD)
+	text("FOR YOUR NEXT ATTEMPT",Rect2(x+25,y+264,width-50,23),17,GOLD,true)
+	text(enemy_lesson(),Rect2(x+25,y+291,width-50,26),20,CREAM)
+	var by := r.end.y-65
+	var bw := (width-90)/3
+	action("MAP",Rect2(x+30,by,bw,49),"campaign")
+	action("ARSENAL",Rect2(x+45+bw,by,bw,49),"arsenal")
+	action("RETRY",Rect2(x+60+2*bw,by,bw,49),"next",-1,true)
+
 func draw_overlay() -> void:
 	buttons.clear()
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.02,0.06,0.10,0.86))
+	if overlay=="result" and not won:
+		draw_defeat_dialog()
+		return
 	var width := minf(670,size.x-60)
 	var rect := Rect2((size.x-width)/2,55,width,size.y-110)
 	if overlay=="pause" or (overlay=="result" and won):
@@ -1047,6 +1142,11 @@ func dispatch(id: String, value: int = -1) -> void:
 			settle_campaign(value)
 		"journal_page": journal_page=clampi(value,0,maxi(0,(save.data.dictionary.size()-1)/20))
 		"power": save.data.selected_power=value; save.save_game()
+		"weapon":
+			if breach_unlocked():
+				save.data.weapon="pulse" if save.data.get("weapon","pulse")=="breach" else "breach"
+				selected=0
+				save.save_game()
 		"upgrade": upgrade()
 		"start":
 			if not save.data.battle.is_empty(): overlay="replace"
@@ -1131,7 +1231,7 @@ func upgrade() -> void:
 	save.data.levels[selected]+=1
 	save.save_game()
 	sfx.play("upgrade")
-	message(t("%s upgraded to level %d") % [t(NAMES[selected]),save.data.levels[selected]])
+	message(t("%s upgraded to level %d") % [t(ability_name(selected)),save.data.levels[selected]])
 
 func start_battle() -> void:
 	if mission>save.data.unlocked:
@@ -1140,6 +1240,9 @@ func start_battle() -> void:
 	lex.adjacent_only = save.data.adjacent_only
 	change_screen("battle")
 	hp=100; foe_max=72+mission*13+(35 if mission%4==3 else 0); foe_hp=foe_max
+	foe_guard=enemy_style()=="armored"
+	battle_weapon=save.data.get("weapon","pulse") if breach_unlocked() else "pulse"
+	weapon_unlocked_now=false
 	energy=[0,3,0,0]; shield=0; used.clear(); word_count=0; best_word=""
 	duration=0; ended=false; won=false; reward=0; stars=0; freeze=0; surge=false
 	boost_used=false; enemy_attacks=0; countdown=interval()+4; shuffled=0
@@ -1180,7 +1283,7 @@ func submit_word() -> void:
 		if previous_energy<COSTS[i] and energy[i]>=COSTS[i]: ready_flash[i]=1.15
 	surge=false
 	var damage := path.size()+maxi(0,path.size()-4)*2
-	launch_attack(true,"word",GOLD,damage)
+	launch_attack(true,"long_word" if path.size()>=6 else "word",GOLD,damage)
 	sfx.play("word")
 	var refreshed: bool = lex.refill(path,used)
 	path.clear()
@@ -1190,7 +1293,7 @@ func submit_word() -> void:
 func fire(i: int) -> void:
 	if i not in [0,1,2,3] or fx.shots.size() >= fx.MAX_SHOTS: return
 	if ended or energy[i]<COSTS[i]:
-		message(t("%s needs %d matching energy") % [t(NAMES[i]),COSTS[i]]); return
+		message(t("%s needs %d matching energy") % [t(ability_name(i)),COSTS[i]]); return
 	if i==1 and shield>0: message("Your shield is already active"); return
 	if i==3 and hp>=100: message("Health is already full"); return
 	energy[i]=0
@@ -1198,18 +1301,29 @@ func fire(i: int) -> void:
 	match i:
 		1: shield=effect(i)
 		3: hp=mini(100,hp+effect(i)); hero_flash=0
-	if i in [0,2]: launch_attack(true,"arc" if i == 2 else "pulse",COLORS[i],effect(i))
+	if i in [0,2]:
+		var kind := "arc" if i==2 else battle_weapon
+		launch_attack(true,kind,COLORS[i],maxi(1,effect(i)-6) if kind=="breach" else effect(i))
 	else:
 		fx.burst("shield" if i == 1 else "heal",Vector2(.20,115),COLORS[i],.8)
 		sfx.play("shield" if i == 1 else "heal")
 		haptic(30,.4)
-	message(["Pulse fired!","Shield ready","Arc fired!","Health restored"][i])
+	message("Breach fired!" if i==0 and battle_weapon=="breach" else ["Pulse fired!","Shield ready","Arc fired!","Health restored"][i])
 	persist_battle()
 
 func enemy_attack() -> void:
 	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
 	enemy_attacks+=1
+	if enemy_style()=="healer" and enemy_attacks%2==0:
+		foe_hp=mini(foe_max,foe_hp+16+mission)
+		countdown=interval()
+		fx.burst("heal",Vector2(.80,115),COLORS[3],.8)
+		sfx.play("heal")
+		message("Enemy healed. Use Arc before the next heal.")
+		persist_battle()
+		return
 	var amount := 12+mission
+	if enemy_style()=="heavy" and enemy_attacks%2==0: amount+=12
 	if mission%4==3 and enemy_attacks%3==0: amount+=8
 	countdown=interval()
 	launch_attack(false,"enemy",COLORS[2],amount)
@@ -1254,6 +1368,7 @@ func finish(victory: bool) -> void:
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)
 	save.data.coins+=reward
 	if won:
+		weapon_unlocked_now=mission==3 and not breach_unlocked()
 		save.data.wins[str(mission)]=maxi(stars,int(save.data.wins.get(str(mission),0)))
 		save.data.unlocked=maxi(save.data.unlocked,mini(11,mission+1))
 	save.data.total_words+=word_count
@@ -1268,6 +1383,8 @@ func persist_battle() -> void:
 	if screen=="battle" and not ended and lex.letters.size()==28:
 		save.data.battle={"adjacent_only":lex.adjacent_only,"dictionary_code":lex.language,"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
 		save.data.battle.projectiles=fx.snapshot()
+		save.data.battle.foe_guard=foe_guard
+		save.data.battle.weapon=battle_weapon
 	if not save.save_game(): message("Could not save progress on this device")
 
 func restore_battle() -> void:
@@ -1279,6 +1396,9 @@ func restore_battle() -> void:
 	lex.adjacent_only = b.get("adjacent_only",true)
 	change_screen("battle")
 	mission=int(b.mission); hp=int(b.hp); foe_hp=int(b.foe); foe_max=int(b.max)
+	foe_guard=b.get("foe_guard",false)
+	battle_weapon=b.get("weapon","pulse") if breach_unlocked() else "pulse"
+	weapon_unlocked_now=false
 	energy.assign(b.energy); shield=int(b.shield); countdown=float(b.countdown)
 	ready_flash.assign([0.0,0.0,0.0,0.0])
 	freeze=float(b.freeze); surge=bool(b.surge); boost_used=bool(b.boost_used)
@@ -1302,6 +1422,7 @@ func valid_snapshot(b: Dictionary) -> bool:
 	if b.get("dictionary_code","en") not in ["en","sr"]: return false
 	if not b.get("adjacent_only",true) is bool: return false
 	if not fx.valid_saved(b.get("projectiles",[])): return false
+	if not b.get("foe_guard",false) is bool or b.get("weapon","pulse") not in ["pulse","breach"]: return false
 	var tile_lex = Lexicon.new(false,b.get("dictionary_code","en"))
 	for letter in b.letters:
 		if not letter is String or not tile_lex.valid_tile(letter): return false

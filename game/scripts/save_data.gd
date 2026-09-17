@@ -8,6 +8,7 @@ func defaults() -> Dictionary:
 
 func load_game() -> void:
 	data = defaults()
+	data.weapon = "pulse"
 	for file_path in [path,path+".bak"]:
 		if not FileAccess.file_exists(file_path):
 			continue
@@ -23,6 +24,7 @@ func load_game() -> void:
 			data.coins = clampi(number(parsed.get("coins"),180),0,999999)
 			data.unlocked = clampi(number(parsed.get("unlocked"),0),0,11)
 			data.selected_power = clampi(number(parsed.get("selected_power"),0),0,2)
+			data.weapon = "breach" if parsed.get("weapon") == "breach" and data.wins.has("3") else "pulse"
 			data.total_words = maxi(0,number(parsed.get("total_words"),0))
 			if not data.levels is Array or data.levels.size() != 4:
 				data.levels = [1,1,1,1]
