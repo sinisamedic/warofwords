@@ -6,7 +6,9 @@ Radna grana: `codex/daily-global-leaderboard`. Ovo je novi režim; objavljeni AP
 
 Servis je objavljen na korisnikovom potvrđenom projektu `phfbohgbeqjvtfsgcjwi`, Free / Frankfurt. Stvarni test preko Node HTTPS klijenta završen je u 17:32:35 UTC: EN 70 i SR 30 bodova na odvojenim listama, potvrđeni idempotentni Start/Submit, odbijen zahtev bez sesije i direktno čitanje tabela. Gateway JWT kontrola ostala je uključena. Testni profil „QA provera” je jasno označen; rezultati su stvarno izračunati na serveru.
 
-Godot UI i offline pravila prolaze 1106 provera uz svih 306 postojećih regresija. Direktan Godot mrežni test nije prošao na ovom računaru: Avast HTTPS scanning izdaje lokalni sertifikat koji Windows/Node prihvataju, a Godot/mbedTLS odbija. Proba sa postojećim pouzdanim CA sertifikatima nije rešila parsiranje; nije uveden TLS bypass niti promenjen antivirus. Potrebna je zasebna provera na Androidu. Android SDK/JDK/templates i stari potpisni ključ nisu pronađeni na standardnim putanjama; novi APK nije napravljen.
+Godot UI i offline pravila prolaze 1106 provera uz svih 306 postojećih regresija. Korisnik je dodao Avast izuzetak za tačan host projekta; direktna Godot HTTPS prijava i API pozivi sada rade uz normalnu TLS validaciju. Prvi vidljivi test uključivao je dodatne poteze u prozoru: server je sačuvao 12 reči / 545 poena i vratio sopstveni plasman, ali automatizovane tvrdnje vezane za početne tri reči nisu prošle. Takve testove pokretati bez prozora (`--headless`), u izolovanom APPDATA folderu.
+
+Android SDK/JDK/templates su instalirani i nepotpisani probni APK je uspešno izvezen; detalji su u [android.md](android.md). Stari potpisni ključ još treba preneti. Zasebna mrežna provera na Androidu ostaje otvorena.
 
 ## Pravila prve implementacije
 
@@ -62,3 +64,5 @@ PGlite koristi novu memorijsku bazu i minimalne zamene za Supabase `auth`/`stora
 Stvarni udaljeni test, koji kreira anonimni QA profil i rezultat (ne pokretati kao običan unit test): `node --use-system-ca tools/test-daily-live.mjs --live-daily`. Dodatak `--fresh-profile` koristi zaseban novi testni profil kada je prethodni pokušaj istekao tokom prekida procesa. `tools/capture-daily-leaderboard.mjs` čita stvarnu listu za naknadni vizuelni render; taj snimak ne predstavlja direktnu Godot mrežnu sesiju. Godot varijanta je `game/tests/test_daily_live.gd -- --live-daily` i zahteva kompatibilnu HTTPS vezu.
 
 Zvanična dokumentacija: [anonimna prijava](https://supabase.com/docs/guides/auth/auth-anonymous), [ključevi](https://supabase.com/docs/guides/api/api-keys), [Edge autentikacija](https://supabase.com/docs/guides/functions/auth), [serverske promenljive](https://supabase.com/docs/guides/functions/secrets).
+
+Naknadna izolovana Godot provera posle Avast izuzetka: svih 8 provera prolazi, uključujući punih 120 s, serversku potvrdu, idempotentno slanje, sopstveni plasman i srpsku kategoriju. Merodavan log: .local/daily-godot-headless-live.log; LIVE DAILY RESULT: 0 failures. Ovo potvrđuje desktop Godot tok, ne Android uređaj.

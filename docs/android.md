@@ -35,7 +35,7 @@ Bez ključa, `./tools/build-android.ps1 -UnsignedCheck` proverava import/testove
 
 Na drugom Windows računaru 2026-09-17 instalirani su Microsoft OpenJDK 21.0.12.1, Android command-line tools 15859902, platform-tools 37.0.1, platform 35/rev 2 i build-tools 36.0.0. Zvanični Godot 4.7.2 Android šabloni su u `.local/templates/`, alati u `.local/toolchains/`; putanje su upisane u lokalni machine.json i Godot Editor Settings. Arhive su proverene prema objavljenim SHA256 vrednostima. NDK/CMake/Android Studio nisu potrebni za ovaj izvoz gotovog APK šablona bez Gradle-a.
 
-Na ovom računaru SDK preuzimanja traže Windows CA skladište zbog Avast HTTPS inspekcije: za proces SDK menadžera korišćen je `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE`. TLS validacija ostaje uključena. Ovo nije rešilo zasebni Godot/mbedTLS problem; za njega je korisniku dat Avast izuzetak ograničen na host projekta.
+Na ovom računaru SDK preuzimanja traže Windows CA skladište zbog Avast HTTPS inspekcije: za proces SDK menadžera korišćen je `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE`. TLS validacija ostaje uključena. Zasebni Godot/mbedTLS problem rešen je korisnikovim Avast izuzetkom ograničenim na host projekta; stvarni Godot mrežni test potom je prošao svih 8 provera.
 
 Paket sadrži ARM64 za Samsung S23 Ultra i druge moderne telefone, kao i x86_64 za emulator. Minimum Android 7 (API 24), cilj API 36 — provereno iz finalnog Android manifesta. Compatibility renderer, landscape, immersive. Jedina tražena funkcionalna dozvola je vibracija; nema mrežnih poziva, analitike, reklama ili kupovina.
 
