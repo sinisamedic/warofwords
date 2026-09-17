@@ -36,7 +36,7 @@ async function main(){
  check(s.battle.boost_used,'power-up consumed');
  const snapshot=JSON.stringify(s.battle);
  adb('shell','am','force-stop',pkg);await start();
- await tap(1730,940);await shot('resume');
+ await tap(1730,966);await shot('resume');
  s=save();check(JSON.stringify(s.battle)===snapshot,'force-stop/relaunch preserves battle');
  await sleep(1200);check(JSON.stringify(save().battle)===snapshot,'resumed duel remains paused');
  await tap(1590,855);await tap(496,781);await tap(496,1004);await shot('battle');await tap(1200,80);
@@ -47,7 +47,7 @@ async function main(){
   console.log('PLAY '+path.map(i=>s.battle.letters[i]).join(''));
   await tap(1590,855);
   for(const i of path){adb('shell','input','tap',String(Math.round(761.25+(i%7)*146.25)),String(Math.round(533.25+Math.floor(i/7)*146.25)));await sleep(110);}
-  await tap(1631,411);s=save();
+  await tap(1667,407);s=save();
   if(!s.battle.letters)break;
   if(s.battle.energy[0]>=4)await tap(496,531);
   s=save();if(!s.battle.letters)break;
@@ -63,7 +63,7 @@ async function main(){
  // Separate interface and dictionary settings, using real Android taps.
  await tap(175,90);await tap(2040,366);
  s=save();check(s.ui_language==='sr'&&s.word_language==='en','Serbian interface independent of English dictionary');
- await tap(550,300);await tap(550,465);await tap(550,626);
+ await tap(550,300);await tap(550,410);await tap(550,540);
  await tap(2040,620);await waitDictionaryLoads(2);await shot('settings-serbian');
  s=save();check(s.word_language==='sr'&&!s.sound&&!s.haptics&&s.calm,'dictionary and all three toggles persist');
  await tap(120,90);await tap(1730,615);await tap(2080,905);await tap(2110,983);await tap(1200,80);
@@ -71,13 +71,13 @@ async function main(){
  loadDictionary('sr');const srPath=bestPath(s.battle,true);const srWord=srPath.map(i=>s.battle.letters[i]).join('');check(srPath.length>=3,'Serbian board has a valid path');
  console.log('SERBIAN PLAY '+srWord);await tap(1590,855);
  for(const i of srPath){adb('shell','input','tap',String(Math.round(761.25+(i%7)*146.25)),String(Math.round(533.25+Math.floor(i/7)*146.25)));await sleep(110);}
- await shot('battle-serbian-tap');await tap(1631,411);await tap(1200,80);
+ await shot('battle-serbian-tap');await tap(1667,407);await tap(1200,80);
  s=save();check(s.battle.used[srWord]&&s.battle.words===1,'Serbian word accepted via tap and confirmation');
  const srSnapshot=JSON.stringify(s.battle);
- adb('shell','am','force-stop',pkg);await start();await tap(1730,940);s=save();
+ adb('shell','am','force-stop',pkg);await start();await tap(1730,966);s=save();
  check(JSON.stringify(s.battle)===srSnapshot&&s.ui_language==='sr'&&s.word_language==='sr','Serbian battle and settings survive restart');
  await tap(1060,855); // pause -> settings
- await tap(1491,366);await tap(1491,620);await sleep(1300);await tap(120,90);await tap(1730,940);
+ await tap(1491,366);await tap(1491,620);await sleep(1300);await tap(120,90);await tap(1730,966);
  s=save();check(s.word_language==='en'&&s.ui_language==='en'&&s.battle.dictionary_code==='sr','saved Serbian duel keeps dictionary after switching menus and new duels to English');
  await tap(1590,855);await shot('battle-serbian-english-ui');await tap(1200,80);
  const pid=adb('shell','pidof',pkg);const log=adb('logcat','-d','--pid='+pid,'-s','godot','Godot','AndroidRuntime');fs.writeFileSync('.local/android-final-logcat.txt',log);check(!/SCRIPT ERROR|E godot.*ERROR:|FATAL EXCEPTION/.test(log),'latest Android launch has no engine/script error');

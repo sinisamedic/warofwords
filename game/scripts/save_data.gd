@@ -4,7 +4,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"haptics":true,"calm":false,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()

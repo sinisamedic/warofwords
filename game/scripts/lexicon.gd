@@ -9,6 +9,9 @@ var seeds: Array[String] = ["STONE","STREAM","PLANET","BRIDGE","SILVER","GARDEN"
 var letters: Array[String] = []
 var types: Array[int] = []
 var solutions: Dictionary = {}
+var adjacent_only := true
+var search_nodes := 0
+const FREE_SEARCH_BUDGET := 18000
 
 func _init(load_now: bool = true, code: String = "en") -> void:
 	rng.randomize()
@@ -94,9 +97,40 @@ func refill(path: Array[int], used: Dictionary) -> bool:
 
 func find_words(used: Dictionary = {}) -> Dictionary:
 	solutions.clear()
+	if not adjacent_only:
+		# Seed familiar long hints first, then search unique letter combinations.
+		# Equal glyphs are interchangeable in this mode; avoiding their permutations
+		# keeps even the 1.7M-word Serbian dictionary responsive on a phone.
+		for word in seeds:
+			if used.has(word) or not contains(word): continue
+			var indices: Array[int] = []
+			for tile in tokens(word):
+				for i in letters.size():
+					if letters[i] == tile and i not in indices:
+						indices.append(i); break
+			if indices.size() == tokens(word).size(): solutions[word] = indices
+		search_nodes = 0
+		_search_free("",0,[],used)
+		return solutions
 	for i in letters.size():
 		_search(i,"",0,[],used)
 	return solutions
+
+func _search_free(prefix: String, mask: int, path: Array, used: Dictionary) -> void:
+	if solutions.size() >= 180 or path.size() >= 12 or search_nodes >= FREE_SEARCH_BUDGET: return
+	var seen: Dictionary = {}
+	for i in letters.size():
+		if mask & (1 << i) or seen.has(letters[i]): continue
+		seen[letters[i]] = true
+		search_nodes += 1
+		if search_nodes > FREE_SEARCH_BUDGET: return
+		var word := prefix+letters[i]
+		if not has_prefix(word): continue
+		var next := path.duplicate()
+		next.append(i)
+		if next.size() >= 3 and contains(word) and not used.has(word): solutions[word] = next
+		_search_free(word,mask | (1 << i),next,used)
+		if solutions.size() >= 180: return
 
 func _search(i: int, prefix: String, mask: int, path: Array, used: Dictionary) -> void:
 	if solutions.size() >= 180 or path.size() >= 12 or mask & (1 << i):
@@ -123,7 +157,7 @@ func validate_path(path: Array[int]) -> String:
 		var i := path[j]
 		if i < 0 or i >= 28 or visited.has(i):
 			return ""
-		if j > 0 and not adjacent(path[j-1],i):
+		if adjacent_only and j > 0 and not adjacent(path[j-1],i):
 			return ""
 		visited[i] = true
 		word += letters[i]

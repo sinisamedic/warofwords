@@ -1,0 +1,18 @@
+{
+  "created": "2026-09-17",
+  "tool": "built-in OpenAI ImageGen",
+  "assets": [
+    {
+      "file": "title-emblem.png",
+      "reference": "design/screens/01-main-menu.png",
+      "output": "exec-7a97b705-7a28-4ac6-a0f4-158f1640d427.png",
+      "prompt": "Use case: background-extraction. Production transparent game logo. Input image is the approved War of Words title-screen illustration, reference/edit target for logo ONLY. Isolate and recreate its beautiful exact title emblem: WAR OF on first line, WORDS large on second, brass compass rose inside O, small SUNWARD RUINS plaque beneath. Ivory engraved serif lettering with dark beveled shadows, layered polished antique gold frame, navy enamel backing, tiny sapphire top finial. Preserve this original logo style and spelling precisely. Output one tightly composed emblem centered filling the canvas, transparent background, no characters, no scenery, no buttons, no counters. Landscape 3:2 image. Actual transparent alpha outside emblem, not a checkerboard. High detail clean game asset."
+    },
+    {
+      "file": "board-environment.png",
+      "reference": "design/screens/06-battle.png",
+      "output": "exec-d7af5a96-9a35-4e40-88ed-f5295d0d538e.png",
+      "prompt": "Use case: precise-object-edit. Input image is approved War of Words battle design. Produce ONLY the lower playfield environment as a landscape 3:1 production background texture. Recreate the warm weathered limestone architectural frame, carved stone pillars, ivy leaves and tiny white flowers from the lower half of reference; dark navy inset panels with subtle diamond-pattern stone, thin antique gold edges. Empty central navy rectangle from 24% to 76% width, with stone dividers at 23% and 77%; empty navy side panels. Top is a horizontal narrow sunlit stone ledge, bottom stone plinth. Flat front elevation, rich painterly videogame detail. Remove ALL letters, tokens, icons, circles, portraits, gauges, characters, symbols, UI labels and text. This is scenery BEHIND interactive board and abilities, must leave the center and side panel interiors dark and quiet. No text whatsoever. Frame fits edge to edge. Use the full wide canvas."
+    }
+  ]
+}

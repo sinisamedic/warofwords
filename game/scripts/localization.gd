@@ -1,6 +1,12 @@
 extends RefCounted
 
 const SR := {
+"HINT: %s":"POMOĆ: %s",
+"LETTER CONNECTION":"POVEZIVANJE SLOVA", "ADJACENT":"SUSEDNA", "FREE":"SLOBODNO",
+"New duels use these rules. Saved duels keep theirs.":"Važi za nove borbe. Započete čuvaju svoja pravila.",
+"Link any letters. Each tile can be used once.":"Spajaj bilo koja slova. Svaka pločica važi jednom.",
+"Offline dictionaries  •  v0.1.2":"Rečnici bez interneta  •  v0.1.2",
+"Noto Serif / Lato: SIL Open Font License.":"Noto Serif / Lato: SIL Open Font License.",
 "Preparing your word arsenal...":"Pripremam rečnike...",
 "PLAY  >":"IGRAJ  >", "ARSENAL":"ARSENAL", "UPGRADES":"UNAPREĐENJA", "CONTINUE DUEL":"NASTAVI BORBU",
 "WORD JOURNAL":"DNEVNIK REČI", "OPTIONS":"PODEŠAVANJA", "OFFLINE  •  SOLO CAMPAIGN":"BEZ INTERNETA  •  PROTIV RAČUNARA",

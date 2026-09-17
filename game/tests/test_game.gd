@@ -183,6 +183,72 @@ func run_tests() -> void:
 	scene.save.data.battle=invalid
 	await scene.restore_battle()
 	check(scene.save.data.battle.is_empty() and scene.screen=="home","malformed dictionary code is rejected before loading")
+	# Optional free linking: input, validation, hints, persistence and legacy rules.
+	scene.save.data.word_language="en"; scene.save.data.tutorial=true
+	scene.dispatch("link_rule",1)
+	await scene.start_battle()
+	check(not scene.lex.adjacent_only,"new duel adopts free linking preference")
+	scene.lex.letters.assign(Array("XXXXXXXXXXXXXXXXXXXXXXXXXXXX".split("")))
+	var scattered: Array[int] = [0,20,7,25,3]
+	for i in 5: scene.lex.letters[scattered[i]]="STONE"[i]
+	check(scene.lex.validate_path(scattered)=="STONE","nonadjacent word accepted in free mode")
+	var repeated: Array[int]=[0,20,0]
+	check(scene.lex.validate_path(repeated).is_empty(),"free mode still forbids tile reuse")
+	scene.path.clear()
+	for index in scattered: scene.add_letter(index)
+	check(scene.path==scattered,"tap composition can jump across the board")
+	scene.add_letter(25)
+	check(scene.path==scattered.slice(0,4),"free jump supports backtracking")
+	scene.lex.adjacent_only=true
+	check(scene.lex.validate_path(scattered).is_empty(),"adjacent mode rejects the same scattered word")
+	scene.path.clear(); scene.add_letter(0); scene.add_letter(20)
+	check(scene.path==[0],"adjacent input rejects jumps")
+	scene.lex.adjacent_only=false
+	var free_started := Time.get_ticks_msec()
+	scene.lex.find_words()
+	check(scene.lex.solutions.has("STONE"),"free hint solver discovers a scattered word")
+	check(scene.lex.search_nodes<=scene.lex.FREE_SEARCH_BUDGET+1,"free search has a fixed work budget")
+	print("Free English search: %d ms" % (Time.get_ticks_msec()-free_started))
+	for word in scene.lex.solutions:
+		var valid_free: Array[int]=[]; valid_free.assign(scene.lex.solutions[word])
+		if scene.lex.validate_path(valid_free)!=word: check(false,"invalid free hint: "+word)
+	scene.path.assign(scattered); scene.submit_word(); scene.persist_battle()
+	check(scene.used.has("STONE") and not scene.save.data.battle.adjacent_only,"free word and rule are saved")
+	scene.change_screen("settings"); scene.dispatch("link_rule",0)
+	await scene.restore_battle()
+	check(not scene.lex.adjacent_only and scene.save.data.adjacent_only,"saved free duel keeps its rule after preference change")
+	scene.change_screen("home"); old_duel.erase("adjacent_only")
+	scene.save.data.battle=old_duel; await scene.restore_battle()
+	check(scene.lex.adjacent_only,"legacy duel defaults to adjacency")
+	invalid=old_duel.duplicate(true); invalid.adjacent_only="false"
+	check(not scene.valid_snapshot(invalid),"malformed link rule rejected")
+	scene.save.data.word_language="sr"; scene.save.data.adjacent_only=false
+	await scene.start_battle()
+	scene.lex.letters.assign(Array("ČČČČČČČČČČČČČČČČČČČČČČČČČČČČ".split("")))
+	scene.lex.letters[0]="Đ"; scene.lex.letters[10]="A"; scene.lex.letters[27]="K"
+	var djak: Array[int]=[0,10,27]
+	check(scene.lex.validate_path(djak)=="ĐAK","Serbian free linking preserves Đ")
+	free_started=Time.get_ticks_msec(); scene.lex.find_words()
+	check(scene.lex.solutions.has("ĐAK"),"Serbian free hint finds ĐAK across board")
+	print("Free Serbian search: %d ms" % (Time.get_ticks_msec()-free_started))
+	scene.lex.generate()
+	check(scene.lex.solutions.size()>=4,"free mode generates playable boards")
+	for glyph in "ĐđČčĆćŠšŽž":
+		check(scene.title_font.has_char(glyph.unicode_at(0)) and scene.font.has_char(glyph.unicode_at(0)),"both shipped fonts contain "+glyph)
+	var effects = load("res://scripts/combat_fx.gd").new()
+	effects.launch(true,"pulse",scene.GOLD)
+	check(effects.advance(.40).is_empty(),"impact waits for projectile arrival")
+	check(effects.advance(.03).size()==1 and effects.shots.is_empty(),"one impact emitted at arrival")
+	check(effects.advance(.5).is_empty(),"impact sound/haptic cannot repeat")
+	for i in 30: effects.launch(false,"enemy",scene.GOLD,true)
+	check(effects.shots.size()==8 and effects.bursts.size()<=16,"effects remain bounded during rapid attacks")
+	effects.clear()
+	check(effects.shots.is_empty() and effects.bursts.is_empty(),"leaving battle clears effects")
+	check(scene.sfx.streams.size()==13 and scene.sfx.streams.values().all(func(stream): return stream!=null),"all thirteen sound assets load")
+	scene.sfx.enabled=true; scene.sfx.play("flight"); scene.sfx.enabled=false
+	check(scene.sfx.voices.all(func(voice): return not voice.playing),"muting stops current sounds immediately")
+	scene.save.save_game(); persistence.load_game()
+	check(not persistence.data.adjacent_only,"connection preference survives reload")
 	print("RESULT: %d failures" % failures)
 	quit(1 if failures else 0)
 

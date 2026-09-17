@@ -1,6 +1,6 @@
 # War of Words — dizajn igre
 
-Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
+Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
 ## Usvojeno
 
@@ -9,7 +9,7 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Borba protiv **računara**, bez ljudskog protivnika u ovom smeru.
 - Kompozicija po korisnikovoj Slugterra referenci: duel i zdravlje gore, velika tabla slova dole, napunjene sposobnosti nadohvat prstiju.
 - Slova u krugovima; više mogućih reči na tabli.
-- **Povezuju se samo susedna slova, uključujući dijagonale.**
+- **Podrazumevano se povezuju susedna slova, uključujući dijagonale.** Posle testa 0.1.1 korisnik je usvojio i podesivo slobodno povezivanje udaljenih slova.
 - **Korišćena slova nestaju i dopunjavaju se novim.** Prethodna V2 hipoteza pet reči po istoj tabli je odbačena.
 - **Oružja i sposobnosti umesto sakupljivih bića.**
 - **Slova imaju tipove/boje i pune odgovarajuća oružja/sposobnosti.** Nije usvojeno punjenje unapred izabranog oružja niti zajednički energetski bazen.
@@ -19,7 +19,7 @@ Ažurirano: 2026-09-16. Radni naziv. Poslednja eksplicitna korisnička odluka im
 - Korisnik ima Samsung S23 Ultra, ali želi standardan mobilni prikaz, ne ekskluzivni raspored za taj model.
 - Korisnik je usvojio šest dizajna i dao slobodu za kompletnu igrivu Android verziju. **Godot 4.7.2**, aktivni projekat `game/`. Ranije ograničenje na statični dizajn više ne važi.
 
-## Aktivna implementacija — 0.1.1
+## Aktivna implementacija — 0.1.2
 
 Ovo su sprovedene odluke za prvi test, izabrane u okviru korisnikove dozvole da samostalno rešimo detalje. Predstavljaju početni balans, ne trajno zaključavanje ekonomije ili rečnika.
 
@@ -56,6 +56,17 @@ Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pri
 - Srpski Hunspell/LibreOffice izvor pod MPL-2.0, 1.740.276 oblika od 3–12 slova srpske abecede. Izvor, tačna revizija, filtriranje i licence: game/data/README.md. Rečnik je probni pravopisni resurs, ne konačna turnirska lista.
 - Promena rečnika važi za nove borbe. Sačuvana borba nosi svoj kod rečnika; borbe iz 0.1.0 podrazumevaju engleski. Novčići, misije i unapređenja ostaju zajednički.
 - Verzija 0.1.1 / Android versionCode 2 koristi isti paket i potpis za nadogradnju 0.1.0. Monetizacija nije uvedena.
+
+## Dorade posle fizičkog testa 0.1.1 — usvojeno 2026-09-17
+
+- Zajednički ukrašeni zlatni/navy okviri dugmadi i panela na svim ekranima, ikone Arsenala, Unapređenja, podešavanja i dnevnika. Reljefan originalni naslov i novčić sa kompasom prate master dizajn.
+- Donji borbeni deo je kameno okruženje sa bršljanom i tamnim pločama. Jedan ukrašeni panel na spoju arene i table prikazuje reč tokom sastavljanja, a inače poruku ili najavu napada. Tap potvrda ostaje uslovna.
+- Noto Serif Bold za naslove i pločice umesto prethodnog fonta; Đ/đ i ostali srpski dijakritici ostaju stvarni Unicode znakovi u rečniku, prikazu i save-u. Svetleći spoj ima zlatni sjaj, svetlo jezgro i putujuće varnice.
+- **Options → Letter connection → Adjacent / Free.** Srpski: **Podešavanja → Povezivanje slova → Susedna / Slobodno**. Slobodno dozvoljava bilo koji razmak između izabranih pločica, ali svaku samo jednom. Dodirima se može direktno preskočiti na udaljenu pločicu; prevlačenje bira pređene pločice i dopušta prelazak preko praznina. Povratak na prethodnu pločicu uklanja poslednju. Minimum, punjenje, bonus i rečnik ostaju isti.
+- Implementacioni izbor: podešavanje važi za nove borbe, a započeta zadržava svoje pravilo. Stare borbe bez polja `adjacent_only` koriste susedna slova. Nije potrebno brisati napredak. Hint pretražuje i udaljena slova u slobodnom režimu; rad pretrage je ograničen na 18.000 čvorova / 180 predloga radi odziva, pa nije iscrpan spisak svih reči.
+- Originalni slojeviti WAV efekti za ispaljivanje, let, udar, eksploziju, štit, električni napad, lečenje i Freeze. Zvuk udara i haptika okidaju se pri dolasku projektila (0,42 s), a ne ponovo u svakom frejmu. Logička šteta se i dalje obračunava odmah; završni ekran čeka 0,62 s da se vidi završni udar.
+- Bljesak cevi, rep projektila, električne grane, udarni talas, varnice, udar u štit, aura lečenja/zamrzavanja i blag trzaj likova. Broj efekata je ograničen; HUD i dodirne oblasti ne podrhtavaju. Pauza zaustavlja let i odložene efekte. Reduced Motion uklanja trzaje, varnice i pulsiranje, a zadržava mirniju povratnu informaciju. Sound OFF odmah prekida aktivne glasove; haptika ima nezavisno podešavanje.
+- Android 0.1.2 / code 3, isti identitet paketa i potpis. Balans, monetizacija i tema nisu dodatno zaključani.
 
 ## Istorija: usvojeni statični vizuelni dizajn
 

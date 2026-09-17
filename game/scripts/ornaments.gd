@@ -7,6 +7,10 @@ const TOKENS := [preload("res://assets/ui/token-gold.svg"),preload("res://assets
 const METAL := preload("res://assets/ui/metal-disc.svg")
 const GEM := preload("res://assets/ui/gold-gem.svg")
 const WEAVE := preload("res://assets/ui/board-weave.svg")
+const FRAMES := [preload("res://assets/ui/frame-navy.svg"),preload("res://assets/ui/frame-gold.svg"),preload("res://assets/ui/frame-panel.svg"),preload("res://assets/ui/status-plaque.svg")]
+const GLOW := preload("res://assets/ui/glow.svg")
+const ICONS := {"arsenal":preload("res://assets/ui/icon-arsenal.svg"),"upgrades":preload("res://assets/ui/icon-gears.svg"),"upgrade":preload("res://assets/ui/icon-gears.svg"),"settings":preload("res://assets/ui/icon-settings.svg"),"journal":preload("res://assets/ui/icon-journal.svg"),"coin":preload("res://assets/ui/icon-coin.svg"),"powers":preload("res://assets/ui/icon-power.svg"),"help":preload("res://assets/ui/icon-help.svg")}
+static var styles: Dictionary = {}
 const PALETTE := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
 
 static func gradient_disc(c: CanvasItem, p: Vector2, radius: float, _top: Color, _bottom: Color) -> void:
@@ -22,24 +26,39 @@ static func jewel(c: CanvasItem, p: Vector2, radius: float, color: Color, chosen
 static func gem(c: CanvasItem, p: Vector2, r: float = 5) -> void:
 	c.draw_texture_rect(GEM,Rect2(p-Vector2.ONE*r,Vector2.ONE*r*2),false)
 
+static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color.WHITE) -> void:
+	if kind != 2:
+		# Three horizontal slices scale the complete bevel vertically. Preserving
+		# top/bottom pixel margins makes a short mobile plaque almost solid gold.
+		var texture: Texture2D = FRAMES[kind]
+		var source_cap := 36.0 if kind == 3 else 18.0
+		var cap := minf(18,rect.size.x/3)
+		var tw := float(texture.get_width())
+		var th := float(texture.get_height())
+		c.draw_texture_rect_region(texture,Rect2(rect.position,Vector2(cap,rect.size.y)),Rect2(0,0,source_cap,th),tint)
+		c.draw_texture_rect_region(texture,Rect2(rect.position+Vector2(cap,0),Vector2(rect.size.x-2*cap,rect.size.y)),Rect2(source_cap,0,tw-2*source_cap,th),tint)
+		c.draw_texture_rect_region(texture,Rect2(rect.end.x-cap,rect.position.y,cap,rect.size.y),Rect2(tw-source_cap,0,source_cap,th),tint)
+		return
+	var key := str(kind)+tint.to_html()
+	if not styles.has(key):
+		var style := StyleBoxTexture.new()
+		style.texture = FRAMES[kind]
+		style.set_texture_margin_all(30 if kind == 2 else 18)
+		if kind != 2:
+			style.texture_margin_top=10
+			style.texture_margin_bottom=10
+		style.modulate_color = tint
+		styles[key] = style
+	c.draw_style_box(styles[key],rect)
+
 static func plaque(c: CanvasItem, rect: Rect2) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = INK
-	style.border_color = Color("9e7641")
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(15)
-	style.shadow_color = Color(0,0,0,0.5)
-	style.shadow_size = 4
-	style.shadow_offset = Vector2(0,3)
-	c.draw_style_box(style,rect)
-	style = style.duplicate()
-	style.bg_color = Color.TRANSPARENT
-	style.border_color = GOLD
-	style.set_border_width_all(1)
-	style.shadow_size = 0
-	c.draw_style_box(style,rect.grow(-2))
-	gem(c,Vector2(rect.position.x,rect.get_center().y),4)
-	gem(c,Vector2(rect.end.x,rect.get_center().y),4)
+	frame(c,rect,3)
+
+static func ui_icon(c: CanvasItem, id: String, rect: Rect2) -> void:
+	if ICONS.has(id): c.draw_texture_rect(ICONS[id],rect,false)
+
+static func glow(c: CanvasItem, p: Vector2, radius: float, color: Color) -> void:
+	c.draw_texture_rect(GLOW,Rect2(p-Vector2.ONE*radius,Vector2.ONE*radius*2),false,color)
 
 static func art(c: CanvasItem, kind: int, p: Vector2, radius: float, tint: Color = Color.WHITE) -> void:
 	# UV sampling preserves the original atlas; only the round illustration is drawn.
