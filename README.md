@@ -1,12 +1,12 @@
 # War of Words
 
-**Android 0.1.10:** prvi talas opreme — Ogledalo, Pečat, Obnova i dva pasivna artefakta, novi Arsenal i zaseban komplet za sačuvanu borbu. Dnevni izazov i globalna rang-lista ostaju dostupni. [Online režim i postavljanje](docs/daily-online.md).
+**Android 0.1.11:** nova odabrana ikonica W sa više prostora za kružni prikaz i detaljan Proboj sa projektilom preko zlatnog oboda. Prvi talas opreme, dnevni izazov i globalna rang-lista ostaju dostupni. [Online režim i postavljanje](docs/daily-online.md).
 
 **Igriva Android verzija u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Kampanja i vežba rade offline; rangirani dnevni izazov zahteva internet. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 
-- [Preuzmi APK 0.1.10](https://github.com/sinisamedic/warofwords/releases/download/v0.1.10-android-preview/WarOfWords-0.1.10-android.apk). Lokalno: `exports/WarOfWords-0.1.10-android.apk`. Koristi lokalni potpis ovog računara, različit od kućnih verzija 0.1.7–0.1.9; korisnik je odobrio deinstaliranje stare aplikacije i novu instalaciju. Deinstaliranje briše lokalni napredak. Stanje objave i link: [STATUS.md](STATUS.md).
+- [Preuzmi APK 0.1.11](https://github.com/sinisamedic/warofwords/releases/download/v0.1.11-android-preview/WarOfWords-0.1.11-android.apk). Lokalno: `exports/WarOfWords-0.1.11-android.apk`. **Instalira se preko 0.1.10 bez deinstalacije**, sa istim potpisom i očuvanim napretkom (provereno u emulatoru). Potpis se razlikuje od kućnih verzija 0.1.7–0.1.9 kao i kod prethodnog paketa; pri prelasku sa njih potrebna je deinstalacija koja briše lokalni napredak. Stanje objave: [STATUS.md](STATUS.md).
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
 - **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Any letters** dozvoljava udaljena slova. Pravilo povezivanja važi odmah i za započetu borbu. Novi rečnik važi za novu borbu.
@@ -15,7 +15,7 @@
 
 Ukrašeni meniji, reljefni naslov, kamena tabla, svetleći spojevi i slojeviti efekti borbe. Šest osnovnih ekrana, 12 misija u tri poglavlja, osam uređaja u četiri borbena mesta sa osam zajedničkih nivoa, dva pasivna artefakta, tri besplatna power-upa, novčići i otključavanje misija, odvojen izbor jezika menija i rečnika, 76.802 engleske i 1.740.276 srpskih oblika reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. 12 različitih protivnika, orkestarska muzika sa zasebnim prekidačem, šteta pri udaru projektila, prevlačenje mape/dnevnika i 20 reči po strani. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
 
-[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.10.md) · [Status i sledeći korak](STATUS.md).
+[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.11.md) · [Status i sledeći korak](STATUS.md).
 
 U 0.1.6: popravljen izbor nivoa, tri pozadine lokacija sa animiranim pretapanjem, bolja dopuna slova i artikulisani heroj u borbi. Pri porazu heroj savija kolena i pada kroz zglobove, a protivnik se raspada u energiju i fragmente. Naslovna zadržava originalnu celu ilustraciju.
 

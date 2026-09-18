@@ -8,7 +8,8 @@ Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 - Od četiri predloga izabran je **Zlatni W**, sa manjim slovom radi kružnog prikaza. Konačna ImageGen ilustracija i Android main/foreground/background resursi su u `game/assets/launcher/`; originalni predlozi ostaju u `design/icon-proposals/`.
 - APK `exports/WarOfWords-0.1.11-android.apk`, code 12, **103.173.929 bajtova**, SHA256 `8e1750b7605bb783a1f7a5641f00c36dcd58d104205164b91c50f26c2ea5c5d6`. Potpis v2/v3 i zipalign prolaze. **Isti sertifikat kao 0.1.10** (`a071affa…d276`), instalacija preko prethodne verzije čuva napredak.
 - 1.552 PASS / 0 FAIL + refill benchmark. Import/export bez grešaka/upozorenja. Pet Godot rendera na 1280×576; pregledani Arsenal i borba. Android API 36: instalacija preko 0.1.10 bez brisanja, identičan ceo progress fajl pre prvog pokretanja, uspešan start i vizuelno pregledana kružna ikonica u launcheru. Pri prvom startu emulator je obnovio stari shader keš i kasnio pri pokretanju; potom aplikacija postaje spremna, bez script greške/pada. Detalji: `docs/QA-0.1.11.md`.
-- **Sledeći korak:** proveriti novi izgled na Samsungu i nastaviti balans opreme prema povratnoj informaciji. Aktivna grana ostaje `codex/equipment-wave-one`. Objava 0.1.11 još nije potvrđena; 0.1.10 je prethodno objavljeno izdanje.
+- **Objavljeno i provereno:** [v0.1.11-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.11-android-preview), izvorni commit `1bdf7dc`. APK i SHA256 prilog su dostupni; GitHub digest i veličine odgovaraju lokalnim fajlovima. Izdanje je prerelease, nije draft. Izvor je push-ovan na `codex/equipment-wave-one` uz proveru udaljenog SHA-a.
+- **Sledeći korak:** instalirati 0.1.11 preko 0.1.10 na Samsungu i proveriti novi izgled, zatim nastaviti balans opreme prema povratnoj informaciji. Aktivna grana ostaje `codex/equipment-wave-one`.
 
 ## 0.1.10 — prvi talas opreme
 
