@@ -15,13 +15,13 @@
 
 Ukrašeni meniji, reljefni naslov, kamena tabla, svetleći spojevi i slojeviti efekti borbe. Šest osnovnih ekrana, 12 misija u tri poglavlja, osam uređaja u četiri borbena mesta sa osam zajedničkih nivoa, dva pasivna artefakta, tri besplatna power-upa, novčići i otključavanje misija, odvojen izbor jezika menija i rečnika, 76.802 engleske i 1.740.276 srpskih oblika reči, nagoveštaji, dnevnik pronađenih reči, zvuk, vibracija i automatsko čuvanje nedovršene borbe. 12 različitih protivnika, orkestarska muzika sa zasebnim prekidačem, šteta pri udaru projektila, prevlačenje mape/dnevnika i 20 reči po strani. Originalni svet i likovi; Slugterra je referenca za kompoziciju duela i table.
 
-[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.13.md) · [Status i sledeći korak](STATUS.md).
+[Pravila i balans](docs/game-design.md) · [Provere i granice verzije](docs/QA-0.1.13.md) · [Urađeno i ideje za dalje](docs/next-steps.md) · [Status i sledeći korak](STATUS.md).
 
 U 0.1.6: popravljen izbor nivoa, tri pozadine lokacija sa animiranim pretapanjem, bolja dopuna slova i artikulisani heroj u borbi. Pri porazu heroj savija kolena i pada kroz zglobove, a protivnik se raspada u energiju i fragmente. Naslovna zadržava originalnu celu ilustraciju.
 
 ## Nastavi na drugom računaru
 
-Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. Aktivna radna grana je **codex/equipment-wave-one**:
+Prvo pročitati [AGENTS.md](AGENTS.md), zaštititi postojeće izmene i proveriti remote. [Sažetak završenog rada, prioriteti i materijali za zaseban prenos](docs/next-steps.md). Aktivna radna grana je **codex/equipment-wave-one**; naredne komande važe za čistu kopiju bez razilaženja:
 
 ```powershell
 git fetch origin --prune

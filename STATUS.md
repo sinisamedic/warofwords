@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
+## Nastavak kod kuće — 2026-09-18
+
+- Poslednji gotov i objavljen paket je **0.1.13 / code 14**; izvorni commit APK-a `53230bb`. Sve tražene dorade do tog paketa su završene. Detalji i provere su ispod; ova dopuna dokumentacije ne menja igru niti pravi novi APK.
+- **Šta dalje:** [pregled urađenog i prioriteti](docs/next-steps.md). Prvo proba 0.1.13 na Samsungu i konkretne primedbe, zatim preporučena provera balansa opreme/dopune. Drugi talas opreme, proširenje kampanje, animacije i trajni profil su predlozi za sledeći dogovor.
+- Nastaviti **`codex/equipment-wave-one`**, ne staru kućnu granu. Na kućnom računaru prvo pregledati/sačuvati lokalne izmene, `git fetch origin --prune`, pa preći na ovu granu i `git pull --ff-only` ako nema razilaženja. Kod razilaženja pratiti AGENTS.md; ne resetovati tuđi rad.
+- Ključ za potpis APK-a, `game/online_config.json`, Godot/SDK i `.local/` nisu deo pull-a. Posebno proveriti potpis pre sledećeg kućnog builda — [šta preneti zasebno](docs/next-steps.md#šta-se-ne-prenosi-običnim-pull-om).
+
 ## 0.1.13 — odobren izgled i čisti rubovi medaljona
 
 - Kampanjska nagrada je velika ikonica uz „Pripremi se“; osvojena ima ukrašen zeleno-zlatni bedž. Uklonjen tekstualni red o otključavanju. Savet protivnika ostaje čitljiv u dve linije.
@@ -135,7 +142,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/equipment-wave-one`. APK 0.1.13 je objavljen i čeka korisničku probu na Samsungu. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
+Nastaviti granu `codex/equipment-wave-one`. APK 0.1.13 je objavljen i čeka korisničku probu na Samsungu. Pregled urađenog, redosled predloga i preostala kolekcija: [docs/next-steps.md](docs/next-steps.md). Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
 
 Za drugi računar: `git fetch origin --prune`, pregledati lokalno stanje, nastaviti `codex/equipment-wave-one` i povući bez destruktivnog resetovanja. Engine/SDK/template-i se ne prenose Git-om. Signing ključ i javnu online konfiguraciju preneti zasebno van Git-a; ne vraćati slučajno kućni potpis ako se nastavlja linija 0.1.10. Raniji 0.1.8 draft ostaje neobjavljen.
 

@@ -4,7 +4,7 @@ Datum: 2026-09-18. **Prvi talas je usvojen i implementiran u 0.1.10:** Ogledalo,
 
 ## 1. Šta igrač bira
 
-Predlog pune kolekcije: **16 aktivnih uređaja i šest pasivnih artefakata**, ukupno 22 predmeta. Pet aktivnih već postoji: Pulse, Breach, Aegis, Arc i Mend.
+Predlog pune kolekcije: **16 aktivnih uređaja i šest pasivnih artefakata**, ukupno 22 predmeta. Posle prvog talasa postoji osam aktivnih uređaja (Pulse, Breach, Aegis, Mirror, Arc, Seal, Mend i Bloom) i dva artefakta (Lexicon Seal i Reserve Cell). Preostaje osam uređaja i četiri artefakta kao predlog. Tabele ispod čuvaju izvorni predlog iz 0.1.9; za implementirane predmete merodavna su pravila u [game-design.md](game-design.md).
 
 Za duel se oprema po jedan uređaj svake boje i jedan artefakt:
 
@@ -124,10 +124,10 @@ Za nove ilustracije koristiti isti materijalni jezik: mesing i zlato, emajl u bo
 
 ## 11. Redosled kojim bih pravio kolekciju
 
-**Prvi talas: ukupno osam aktivnih uređaja i dva artefakta.** Zadržati postojećih pet, dodati Ogledalo, Pečat i Obnovu; uz njih Pečat leksikona i Rezervnu ćeliju. Tako svaka boja ima bar dve opcije, svaka nova sposobnost rešava vidljiv problem sadašnje kampanje, a samo dva artefakta uvode novi sloj izbora.
+**Prvi talas — završen u 0.1.10: ukupno osam aktivnih uređaja i dva artefakta.** Zadržano je pet prvobitnih uređaja, dodati Ogledalo, Pečat i Obnova, uz Pečat leksikona i Rezervnu ćeliju. Svaka boja ima dve opcije. Dorade izgleda i otključavanja objavljene su zaključno sa 0.1.13.
 
 **Drugi talas:** Žar, Rezonator, Bastion i Crpljenje, kada postojeći protivnici i težina budu isprobani na telefonu. Dodati i jasnije prikaze trajnih efekata.
 
 **Treći talas:** Kontraštit, Peščanik, Gravitacija, Životna rezerva i preostala četiri artefakta. Oni traže najviše provere međusobnih uticaja, tajmera i spašavanja od smrti.
 
-Pre odobrene implementacije potvrditi četiri mesta + jedan artefakt, deljenje unapređenja po boji i obim prvog talasa. Zatim proveriti svaku alternativu na teškom napadaču, iscelitelju i oklopljenom protivniku, na početnom i visokom nivou unapređenja; oba rečnika, susedno/slobodno povezivanje, pauzu/nastavak, režim smanjenih animacija i dodirni prostor na telefonu. Cilj je različit razlog za izbor svake varijante, uz očuvanu vrednost dobrog sastavljanja reči.
+Četiri mesta + jedan artefakt, deljenje unapređenja po boji i obim prvog talasa već su potvrđeni i implementirani. Pre proširivanja kolekcije probati postojeće alternative na teškom napadaču, iscelitelju i oklopljenom protivniku, na početnom i visokom nivou unapređenja; oba rečnika, susedno/slobodno povezivanje, pauzu/nastavak, smanjene animacije i dodirni prostor na telefonu. Drugi/treći talas i njegovo otključavanje tek dogovoriti. Cilj je različit razlog za izbor svake varijante, uz očuvanu vrednost dobrog sastavljanja reči. [Aktuelni sledeći koraci](next-steps.md).
