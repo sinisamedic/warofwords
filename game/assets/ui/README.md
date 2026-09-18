@@ -35,3 +35,5 @@ rotating the whole illustration or changing its source bitmap. Reduced Motion
 uses the actor's ordinary opacity fade instead.
 
 `icon-lock.svg` (2026-09-18): original project vector illustration, authored in SVG for this game. Navy enamel, layered brass/ivory bevels, ornamental shield body and engraved key plate match the existing frames. Replaces the primitive runtime lock drawing. No external assets or third-party license.
+
+Panel sharpness (2026-09-18): keep `frame-panel.svg.import` at `svg/scale=4.0` (1024×512 from the original 256×128 vector). `Ornaments.panel_slices` maps source pixels to separate logical destination margins, preserving ornament size in both regular panels and home cards. Do not reset the import scale when regenerating SVG sources.

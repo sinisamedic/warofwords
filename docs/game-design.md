@@ -10,6 +10,8 @@ Korekcija po korisničkom pregledu: isijavanje Arsenala mora koristiti isti anim
 
 Naslovna: po zahtevu korisnika kartice Arsenal i Unapređenja koriste devetodelni panel sa očuvanim proporcijama ugaonih ukrasa, umesto vertikalno razvučenog okvira dugmeta. Ilustracije se uklapaju proporcionalno, tekst je odmaknut od ukrasa. Prvo pregled; APK tek nakon potvrde.
 
+Oštrina panela: zajednički vektorski okvir se uvozi u četiri puta većoj rezoluciji (1024×512), uz nezavisne izvorne i prikazane margine. To važi za sve ekrane sa istim panelom; dimenzije i raspored ostaju isti. APK i dalje čeka potvrdu.
+
 ## Dorade nagrada i preglednosti — usvojeno 2026-09-18
 
 Korisnik je zatražio oznake nagrada na nivoima, klik na medaljon sa objašnjenjem namene i korišćenja, sjaj opremljene i tamniju ostalu opremu, detaljnije katance i automatsko osvežavanje dnevne rang-liste pri ulasku. Implementirano uz oba jezika i Reduced Motion; promena kategorije takođe učitava odgovarajuću listu. Prozor nagrade samo informiše, bez promene inventara. Prvo igrivi pregled, bez APK-a.

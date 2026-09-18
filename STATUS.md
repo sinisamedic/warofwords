@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## Oštrina zajedničkog panela — pregled 2026-09-18
+
+- Korisnik je primetio zamućenje ukrašenog okvira na svim ekranima. `frame-panel.svg` se ranije uvozio na 256×128; sada se rasterizuje direktno iz vektora na 1024×512 (`svg/scale=4.0`). Bez uvećavanja stare bitmap slike.
+- Zajednički crtač devet segmenata razdvaja izvorne piksele od prikazanih margina, pa viša rezolucija ne menja veličinu ukrasa. Primenjeno na sve panel-okvire i naslovne kartice. Ostale ilustracije nisu menjane.
+- Upoređeni snimci naslovne pre/posle na 1920×1080, EN/SR i sa/bez nastavka borbe; pregledani Arsenal i dijalozi na 1280×720. Uvoz/renderi i 306 testova igre prolaze bez grešaka/upozorenja.
+- Otvoren `preview_home_cards.gd`, zaseban probni save. **Novi APK nije pravljen; čeka se potvrda.** Aktivna grana `codex/campaign-wave-two`; sledeći korak je pregled oštrine.
 ## Naslovna: pozadine Arsenala i Unapređenja — pregled 2026-09-18
 
 - Po korisničkoj primedbi uklonjen je visinski razvučen okvir niskog dugmeta sa dve naslovne kartice. Koriste ukrašeni panel sa devet segmenata: kompletni uglovi ostaju istih proporcija, rastežu se ravne ivice i sredina. Ilustracije čuvaju odnos stranica; nazivi imaju razmak od ugaonih ukrasa i tanku razdelnu liniju.

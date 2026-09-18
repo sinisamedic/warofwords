@@ -49,17 +49,26 @@ static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color
 		c.draw_texture_rect_region(texture,Rect2(rect.position+Vector2(cap,0),Vector2(rect.size.x-2*cap,rect.size.y)),Rect2(source_cap,0,tw-2*source_cap,th),tint)
 		c.draw_texture_rect_region(texture,Rect2(rect.end.x-cap,rect.position.y,cap,rect.size.y),Rect2(tw-source_cap,0,source_cap,th),tint)
 		return
-	var key := str(kind)+tint.to_html()
-	if not styles.has(key):
-		var style := StyleBoxTexture.new()
-		style.texture = FRAMES[kind]
-		style.set_texture_margin_all(30 if kind == 2 else 18)
-		if kind != 2:
-			style.texture_margin_top=10
-			style.texture_margin_bottom=10
-		style.modulate_color = tint
-		styles[key] = style
-	c.draw_style_box(styles[key],rect)
+	panel_slices(c,rect,30,tint)
+
+static func panel_slices(c: CanvasItem, rect: Rect2, margin: float, tint: Color) -> void:
+	# SVG is rasterized at 4x resolution. Source margins and screen margins
+	# are independent so increasing detail never enlarges the ornaments.
+	var texture: Texture2D=FRAMES[2]
+	var source_size := Vector2(texture.get_size())
+	var source_margin := margin*source_size.x/256.0
+	var dx := minf(margin,rect.size.x/2)
+	var dy := minf(margin,rect.size.y/2)
+	var source_x := [0.0,source_margin,source_size.x-source_margin,source_size.x]
+	var source_y := [0.0,source_margin,source_size.y-source_margin,source_size.y]
+	var target_x := [rect.position.x,rect.position.x+dx,rect.end.x-dx,rect.end.x]
+	var target_y := [rect.position.y,rect.position.y+dy,rect.end.y-dy,rect.end.y]
+	for y in 3:
+		for x in 3:
+			var target := Rect2(target_x[x],target_y[y],target_x[x+1]-target_x[x],target_y[y+1]-target_y[y])
+			if target.size.x<=0 or target.size.y<=0: continue
+			var source := Rect2(source_x[x],source_y[y],source_x[x+1]-source_x[x],source_y[y+1]-source_y[y])
+			c.draw_texture_rect_region(texture,target,source,tint)
 
 static func plaque(c: CanvasItem, rect: Rect2) -> void:
 	frame(c,rect,3)
@@ -67,14 +76,7 @@ static func plaque(c: CanvasItem, rect: Rect2) -> void:
 static func home_card(c: CanvasItem, rect: Rect2, pressed: bool) -> void:
 	# Preserve entire corner ornaments on tall home tiles; only straight edges
 	# and the plain center stretch, unlike the short horizontal button frame.
-	var key := "home_card_pressed" if pressed else "home_card"
-	if not styles.has(key):
-		var style := StyleBoxTexture.new()
-		style.texture=FRAMES[2]
-		style.set_texture_margin_all(43)
-		style.modulate_color=Color(.78,.78,.78) if pressed else Color.WHITE
-		styles[key]=style
-	c.draw_style_box(styles[key],rect)
+	panel_slices(c,rect,43,Color(.78,.78,.78) if pressed else Color.WHITE)
 	var y := rect.end.y-37
 	c.draw_line(Vector2(rect.position.x+31,y),Vector2(rect.end.x-31,y),Color(GOLD,.35),1,true)
 	gem(c,Vector2(rect.get_center().x,y),2.5)
