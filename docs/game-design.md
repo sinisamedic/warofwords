@@ -4,9 +4,9 @@ Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 ## Vizuelna dorada posle 0.1.10
 
-Na zahtev korisnika Proboj dobija punu ilustraciju probijanja metalnog oklopa zlatnim energetskim projektilom, u stilu ostale opreme. Linijski privremeni simbol je uklonjen; isti izvor koriste svi ekrani i kružno dugme u borbi. Pravila, trošak i efekat oružja nisu menjani.
+Na zahtev korisnika Proboj dobija punu ilustraciju probijanja metalnog oklopa zlatnim energetskim projektilom, u stilu ostale opreme. Linijski privremeni simbol je uklonjen; isti izvor koriste svi ekrani i dugme u borbi. Posle dodatnog pregleda korisnik je izabrao **celu alfa siluetu**, bez kružnog odsecanja vrha projektila koji prelazi zlatni obod. Borba zadržava zaseban spoljašnji prsten punjenja. Pravila, trošak i efekat oružja nisu menjani.
 
-Za ikonicu aplikacije napravljena su [četiri predloga](../design/icon-proposals/index.html): Zlatni W, Slova puna energije, Heroj i Živi leksikon. Ovo je **izbor za pregled**, ne usvojena promena identiteta. Konačna ikonica čeka korisnikov izbor, pa prilagođavanje Android maskama. Postojeća ikonica aplikacije za sada ostaje aktivna.
+Od [četiri predloga](../design/icon-proposals/index.html) korisnik je izabrao **Zlatni W**, sa smanjenim slovom radi kružnog prikaza. Konačna ilustracija i posebni Android adaptive slojevi su u `game/assets/launcher/`. Verzija 0.1.11 uvodi taj izgled; ostala tri predloga ostaju arhiva izbora.
 
 ## 0.1.10 — usvojen prvi talas opreme
 

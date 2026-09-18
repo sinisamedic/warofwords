@@ -1,6 +1,6 @@
 # Android — instalacija i razvoj
 
-**Aktivno izdanje: 0.1.10 / code 11.** Korisnik je odobrio potpis lokalnim debug ključem ovog računara. Za prelazak sa kućnih 0.1.7–0.1.9 deinstalirati prethodnu aplikaciju, pa instalirati novi APK; time se briše lokalni napredak i anonimna online sesija. Kampanja i vežba rade offline, rangirani dnevni izazov zahteva internet. Ključ čuvati i preneti bezbedno van Git-a za buduća ažuriranja. [Provere](QA-0.1.10.md). Niži odeljci o ranijim paketima su istorija.
+**Aktivni paket: 0.1.11 / code 12.** Nova W ikonica i puni prikaz Proboja. Instalira se preko **0.1.10 bez deinstalacije**, sa istim lokalnim potpisom; očuvanje celog progress fajla provereno u emulatoru. Za prelazak sa kućnih 0.1.7–0.1.9 potpis se razlikuje kao u 0.1.10 i potrebna je deinstalacija, uz gubitak lokalnog napretka. Kampanja i vežba rade offline, rangirani dnevni izazov zahteva internet. Ključ čuvati i preneti bezbedno van Git-a. [Provere](QA-0.1.11.md), [stanje objave](../STATUS.md). Niži odeljci o ranijim paketima su istorija.
 
 **0.1.8 / code 9:** instalira se preko 0.1.7, bez deinstalacije i uz isti potpis. Nova dopuna u kampanji/dnevnom režimu, zvuk i vibracija pri spajanju dnevnih slova i katanac umesto teksta. Novi dnevni rezultati koriste odvojenu v2 rang-listu; v1 podaci ostaju sačuvani. SHA256 APK-a: `62d6e86ba22dceb6c786cecdcb11b210a3731716103968226fe598be8d94bf28`, veličina 94.893.374 bajta. Sledeći odeljak beleži promenu potpisa koja se desila u 0.1.7.
 
@@ -13,7 +13,7 @@ APK SHA256: 118ad610bbba0e84a687975e4f11d4e0531244412fc978ae9b0357723bbf2d36; ve
 
 ## Probaj na telefonu
 
-1. Preuzmi **WarOfWords-0.1.6-android.apk** na Android telefon (ili ga kopiraj sa računara u Downloads preko USB kabla).
+1. Preuzmi aktuelni **WarOfWords-0.1.11-android.apk** prema linku u README-u (ili ga kopiraj iz `exports/` u Downloads telefona).
 2. Otvori APK u Downloads / My Files. Ako Android zatraži, dozvoli instalaciju tom browseru ili upravljaču fajlovima, pa izaberi Install.
 3. Otvori **War of Words**. Igra se automatski postavlja vodoravno. Kampanja radi bez interneta; globalna rang-lista zahteva internet.
 4. **Play → Prepare → Battle → Got it**. Prva tabla ima STONE u prvom redu. Prevuci S–T–O–N–E i pusti. Boje pune odgovarajuće sposobnosti; kada piše READY, dodirni sposobnost.

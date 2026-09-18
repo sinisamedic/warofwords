@@ -5,12 +5,19 @@ var textures: Dictionary = {}
 
 func icon(c: CanvasItem, id: String, p: Vector2, radius: float, color: Color, amount: int = -1, capacity: int = 1) -> void:
 	var old := E.DEFAULTS.find(id)
-	Art.medallion(c,maxi(0,old),p,radius,color,amount,capacity)
+	if id!="breach" or amount>=0:
+		Art.medallion(c,maxi(0,old),p,radius,color,amount,capacity)
 	if old>=0: return
 	if not textures.has(id):
 		var path := "res://assets/art/equipment-"+id+".png"
 		if ResourceLoader.exists(path): textures[id]=load(path)
 	if not textures.has(id): return
+	if id=="breach":
+		# Preserve the original alpha silhouette, including the lance beyond its rim.
+		# Battle keeps an outer live charge ring around the complete illustration.
+		var art_radius := radius-(12 if amount>=0 else 0)
+		c.draw_texture_rect(textures[id],Rect2(p-Vector2.ONE*art_radius,Vector2.ONE*art_radius*2),false)
+		return
 	var points := PackedVector2Array()
 	var uv := PackedVector2Array()
 	var r := radius-(12 if amount>=0 else 7)

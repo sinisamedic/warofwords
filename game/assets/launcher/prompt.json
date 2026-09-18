@@ -1,0 +1,9 @@
+{
+  "date": "2026-09-18",
+  "tool": "OpenAI ImageGen (built-in)",
+  "source": "exec-fd96dd51-0a5c-4b6f-b179-d1965986b4f9.png",
+  "prompt": "Edit the provided Android launcher icon for WAR OF WORDS. Preserve this exact design, same elegant ivory-faced beveled gold W, same textured deep sapphire-blue background, cyan glow, gold circular ornament and overall premium painted material style. Make ONLY the central W letter about 15 percent smaller in both width and height, still precisely centered, giving it more surrounding blue breathing room so the entire letter fits comfortably inside a circular phone launcher mask. Keep its exact distinctive serif shape and proportions. Reconstruct the blue texture and glow naturally behind the reduced letter; no square patch or visible inset. Keep the existing decorative gold circular ornament and other background elements visually consistent. Full square opaque image extending all the way to edges, no pre-rounded corners, no transparency, no new text, no extra symbols, no new subject, no watermark.",
+  "reference": "../../../design/icon-proposals/01-golden-w.png",
+  "reference_role": "User-selected first launcher proposal; preserve design and shrink the W by approximately 15 percent.",
+  "processing": "icon-main.png is the unchanged generated master; icon-foreground.png is a platform packaging derivative (72dp artwork on a transparent 108dp adaptive canvas) made by tools/build-launcher-icons.gd."
+}

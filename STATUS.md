@@ -2,12 +2,13 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
-## Posle 0.1.10 — ilustracija Proboja i predlozi ikonice
+## 0.1.11 — odabrana ikonica i puni Proboj
 
-- Proboj sada ima detaljnu ilustraciju zlatnog projektila koji probija metalni oklop, umesto privremenog linijskog simbola. Zajednički prikaz opreme koristi je u Arsenalu, unapređenjima, pripremi i borbi; kružno punjenje ostaje dinamičko. Originalni ImageGen PNG i tačan prompt su u `game/assets/art/`.
-- Godot uvoz i stvarni renderi pet stanja na 1280×576 prolaze bez script/engine grešaka. Pregledani Arsenal i borba; interaktivni Godot pregled otvoren sa izolovanim probnim napretkom. Mehanika nije menjana. Novi APK nije pravljen: objavljeni 0.1.10 još sadrži stari simbol.
-- Četiri originalna **predloga** ikonice telefona: Zlatni W, Slova puna energije, Heroj i Živi leksikon. Galerija `design/icon-proposals/index.html` ima prikaze 48/64 px, kružnu/zaobljenu masku i svetlu/tamnu podlogu. Izvorne slike i tačni promptovi sačuvani; nijedan predlog još nije odabran niti ugrađen.
-- **Sledeći korak:** korisnik bira ikonicu; zatim pripremiti Android launcher resurse za taj izbor i sledeći APK sa novom ilustracijom Proboja. Aktivna grana ostaje `codex/equipment-wave-one`.
+- Korisnik je izabrao detaljan Proboj sa vrhom projektila preko zlatnog oboda. Cela alfa silueta prikazuje se bez kružnog odsecanja u Arsenalu, unapređenjima, pripremi i borbi; spoljni prsten punjenja ostaje dinamički. PNG i prompt su u `game/assets/art/`.
+- Od četiri predloga izabran je **Zlatni W**, sa manjim slovom radi kružnog prikaza. Konačna ImageGen ilustracija i Android main/foreground/background resursi su u `game/assets/launcher/`; originalni predlozi ostaju u `design/icon-proposals/`.
+- APK `exports/WarOfWords-0.1.11-android.apk`, code 12, **103.173.929 bajtova**, SHA256 `8e1750b7605bb783a1f7a5641f00c36dcd58d104205164b91c50f26c2ea5c5d6`. Potpis v2/v3 i zipalign prolaze. **Isti sertifikat kao 0.1.10** (`a071affa…d276`), instalacija preko prethodne verzije čuva napredak.
+- 1.552 PASS / 0 FAIL + refill benchmark. Import/export bez grešaka/upozorenja. Pet Godot rendera na 1280×576; pregledani Arsenal i borba. Android API 36: instalacija preko 0.1.10 bez brisanja, identičan ceo progress fajl pre prvog pokretanja, uspešan start i vizuelno pregledana kružna ikonica u launcheru. Pri prvom startu emulator je obnovio stari shader keš i kasnio pri pokretanju; potom aplikacija postaje spremna, bez script greške/pada. Detalji: `docs/QA-0.1.11.md`.
+- **Sledeći korak:** proveriti novi izgled na Samsungu i nastaviti balans opreme prema povratnoj informaciji. Aktivna grana ostaje `codex/equipment-wave-one`. Objava 0.1.11 još nije potvrđena; 0.1.10 je prethodno objavljeno izdanje.
 
 ## 0.1.10 — prvi talas opreme
 
