@@ -28,13 +28,17 @@ Godot --path game --resolution 1280x576 --script res://tests/render_equipment.gd
 - `apksigner verify`: v2/v3 prolaze. Sertifikat SHA256: `a071affaa411155113450b13d9ffaa9b7bf51312cb0a23087ca685680d18d276` — lokalni potpis ovog računara iz izdanja do 0.1.6, različit od kućnih 0.1.7–0.1.9. Korisnik je odobrio ovu zamenu i novu instalaciju.
 - `zipalign -c -P 16 4` prolazi. API 24–36, ARM64 + x86_64, INTERNET/VIBRATE. Online javna konfiguracija vraćena je iz objavljenog APK-a 0.1.7, ostaje ignorisana i nije u Git-u. Nijedan privatni serverski ključ nije potreban.
 - Instalacija na namenski Android API 36 emulator uspešna. **ANDROID EQUIPMENT QA PASSED:** stvarni dodiri proveravaju zaključani predmet, izbor svih uređaja, izbor i uklanjanje oba artefakta, aktiviranje Ogledala/Pečata/Obnove, povrat rezerve, pauzu, force-stop i nastavak. Nema runtime script grešaka ni pada aplikacije. Originalni podaci emulatora vraćeni su u `finally`. Log `.local/android-equipment-qa.log`; snimci `.local/android-equipment-*.png`.
-- Javni konfiguracioni host i format ključa potvrđeni; read-only HTTPS `/auth/v1/health` vraća GoTrue. Nije slat novi rezultat na globalnu listu. Potpis i sadržaj instaliranog paketa dodatno se porede sa izvornim APK-om.
+- Javni konfiguracioni host i format ključa potvrđeni; read-only HTTPS `/auth/v1/health` vraća GoTrue. Nije slat novi rezultat na globalnu listu. SHA256 instaliranog `base.apk` identičan je izvornom APK-u.
 
 Ponovljivo, na namenskom emulatoru sa 2400 × 1080 landscape prikazom:
 
 ```powershell
 node tools/qa-android-equipment.cjs --serial emulator-5554 --temporary-fixture
 ```
+
+## GitHub objava
+
+[v0.1.10-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.10-android-preview), izvorni commit `bc9e819`, prerelease (nije draft). APK i SHA256 asset-i imaju potvrđene veličine i GitHub digest-e identične lokalnim fajlovima.
 
 ## Granice provere
 

@@ -6,7 +6,7 @@
 
 ## Probaj igru
 
-- APK 0.1.10: `exports/WarOfWords-0.1.10-android.apk`. Koristi lokalni potpis ovog računara, različit od kućnih verzija 0.1.7–0.1.9; korisnik je odobrio deinstaliranje stare aplikacije i novu instalaciju. Deinstaliranje briše lokalni napredak. Stanje objave i link: [STATUS.md](STATUS.md).
+- [Preuzmi APK 0.1.10](https://github.com/sinisamedic/warofwords/releases/download/v0.1.10-android-preview/WarOfWords-0.1.10-android.apk). Lokalno: `exports/WarOfWords-0.1.10-android.apk`. Koristi lokalni potpis ovog računara, različit od kućnih verzija 0.1.7–0.1.9; korisnik je odobrio deinstaliranje stare aplikacije i novu instalaciju. Deinstaliranje briše lokalni napredak. Stanje objave i link: [STATUS.md](STATUS.md).
 - [Instalacija na telefonu i izgradnja APK-a](docs/android.md).
 - Izvor: importuj **game/project.godot** u Godot 4.7.2 i pritisni F5.
 - **Play → Prepare → Battle**. Poveži STONE u prvom redu prve table. Srpski: **Options → Interface language / Word dictionary → Srpski**. Izbori su nezavisni. **Letter connection → Any letters** dozvoljava udaljena slova. Pravilo povezivanja važi odmah i za započetu borbu. Novi rečnik važi za novu borbu.

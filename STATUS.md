@@ -13,7 +13,7 @@ Korisnik je odobrio implementaciju prvog talasa i novi APK sa lokalnim potpisom.
 - 1.552 PASS / 0 FAIL + refill benchmark. Završni uvoz/izvoz i test opreme bez script grešaka. Test taktike sada čeka 0,5 s na gašenje audio servera i više nema upozorenje pri izlasku. Godot renderi EN/SR pregledani na 1280×720 i 1280×576.
 - **ANDROID EQUIPMENT QA PASSED** na API 36 / 2400×1080: izbor i uklanjanje opreme dodirima, aktiviranje novih moći, rezerva, pauza, force-stop i nastavak. Originalni podaci emulatora vraćeni. Fizički Samsung i balans još nisu testirani. Detalji i ponovljivi testovi: `docs/QA-0.1.10.md`.
 - Javni `game/online_config.json` obnovljen iz objavljenog APK-a 0.1.7, ignorisan kao ranije; HTTPS health provera prolazi. Dnevna pravila/server nisu menjani. Nisu slati novi QA rezultati na rang-listu.
-- GitHub objava još nije potvrđena; slede commit/push i upload APK-a uz proveru digest-a.
+- **Objavljeno i provereno:** [v0.1.10-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.10-android-preview), izvorni commit `bc9e819`. APK i SHA256 prilog su dostupni; GitHub digest i veličine odgovaraju lokalnim fajlovima. Izdanje je prerelease, nije draft. Izvor je push-ovan na `codex/equipment-wave-one`; lokalni i udaljeni SHA provereni.
 
 ## 0.1.9 — taktika kampanje i poraz
 
