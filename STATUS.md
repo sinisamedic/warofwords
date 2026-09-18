@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## Ponovna dorada Arsenala — 2026-09-18
+
+- Korisnik je odbio prethodno isijavanje i katanac. Arsenal sada koristi **istu funkciju `selection_aura` kao odabrano pojačanje**: rotirajuće lepezaste zrake, kružeće zlatne detalje i pulsiranje. Skaliranje prati veličinu medaljona. Reduced Motion ostaje statičan.
+- Jednostavan nacrtani katanac zamenjen originalnim `game/assets/ui/icon-lock.svg`: tamnoplavi emajl, reljefno zlato, ukrašeno telo u obliku štita i ključanica. Isti simbol koristi se na mapi, u Arsenalu i dijalogu nagrade.
+- Godot import, testovi opreme i UI dorada prolaze bez grešaka. EN/SR renderi 1280×720 i 1280×576 pregledani. Dve faze animacije imaju različite snimke; Reduced Motion daje identične snimke u obe faze.
+- Pregled `game/tests/preview_ui_polish.gd` sada počinje direktno u Arsenalu, sa opremljenim Žarom i zaključanim Rezonatorom. Zaseban probni napredak. Novi APK nije pravljen. Aktivna grana `codex/campaign-wave-two`; sledeći korak je korisnički pregled.
 ## Nagrade, Arsenal i automatska rang-lista — pregled 2026-09-18
 
 - Nivoi sa opremom imaju mali bedž poklona na mapi, sa kvačicom za osvojenu nagradu. Veliki medaljon nagrade ima oznaku „i“ i otvara ukrašen informativni prozor: čemu služi, kako se oprema, koja boja ga puni i koliko energije traži; artefakti imaju uputstvo za pasivno korišćenje. EN/SR, zatvaranje dugmetom ili Back bez dodele/opremanja predmeta.

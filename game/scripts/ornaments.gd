@@ -34,24 +34,7 @@ static func gem(c: CanvasItem, p: Vector2, r: float = 5) -> void:
 	c.draw_texture_rect(GEM,Rect2(p-Vector2.ONE*r,Vector2.ONE*r*2),false)
 
 static func padlock(c: CanvasItem, p: Vector2) -> void:
-	c.draw_arc(p+Vector2(0,-6),9,PI,TAU,24,GOLD,4,true)
-	c.draw_line(p+Vector2(-9,-6),p+Vector2(-9,2),GOLD,4,true)
-	c.draw_line(p+Vector2(9,-6),p+Vector2(9,2),GOLD,4,true)
-	var body := StyleBoxFlat.new()
-	body.bg_color=GOLD; body.set_corner_radius_all(4)
-	c.draw_style_box(body,Rect2(p+Vector2(-14,-1),Vector2(28,22)))
-	c.draw_circle(p+Vector2(0,7),3,INK)
-	c.draw_line(p+Vector2(0,8),p+Vector2(0,14),INK,3,true)
-	# Brass bevels, steel shackle highlight, engraved inset and corner rivets.
-	c.draw_arc(p+Vector2(0,-6),9,PI+.15,TAU-.15,24,Color("fff1bd"),1.2,true)
-	var inset := StyleBoxFlat.new()
-	inset.bg_color=Color("ab7633"); inset.border_color=Color("ffe3a0")
-	inset.set_border_width_all(1); inset.set_corner_radius_all(3)
-	c.draw_style_box(inset,Rect2(p+Vector2(-11,2),Vector2(22,16)))
-	c.draw_circle(p+Vector2(0,7),3.2,INK)
-	c.draw_line(p+Vector2(0,8),p+Vector2(0,14),INK,3,true)
-	for dx in [-8,8]:
-		for dy in [5,15]: c.draw_circle(p+Vector2(dx,dy),1,Color("fff1bd"))
+	c.draw_texture_rect(preload("res://assets/ui/icon-lock.svg"),Rect2(p+Vector2(-17,-19),Vector2(34,40)),false)
 
 static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color.WHITE) -> void:
 	if kind != 2:

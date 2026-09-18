@@ -129,12 +129,10 @@ func draw(c: Control) -> void:
 		var center := Vector2(rect.get_center().x,rect.position.y+36 if compact else 226)
 		var radius := 32.0 if compact else minf(65,card_width*.39)
 		if equipped==id:
-			var pulse: float=0 if c.save.data.calm else sin(c.clock*2.2)*.06
-			Art.glow(c,center,radius+22,Color(c.GOLD,.36+pulse))
-			c.draw_arc(center,radius+3,0,TAU,64,c.GOLD,2,true)
-			for ray in 12:
-				var v := Vector2.from_angle(ray*TAU/12)
-				c.draw_line(center+v*(radius+6),center+v*(radius+12),Color(c.GOLD,.55),1.5,true)
+			# Reuse the exact animated halo from the selected pre-battle power-up.
+			c.draw_set_transform(center,0,Vector2.ONE*(radius/43.0))
+			Art.selection_aura(c,Vector2.ZERO,c.clock,c.save.data.calm)
+			c.draw_set_transform(Vector2.ZERO)
 		icon(c,id,Vector2(rect.get_center().x,rect.position.y+36 if compact else 226),32 if compact else minf(65,card_width*.39),color)
 		if equipped!=id: c.draw_rect(rect.grow(-7),Color(.01,.035,.07,.30 if E.unlocked(id,c.save.data) else .48))
 		else: Art.earned_badge(c,center+Vector2(radius*.78,radius*.65),11 if compact else 18)

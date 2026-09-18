@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="112" viewBox="0 0 96 112">
+ <defs>
+  <linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff4c0"/><stop offset=".22" stop-color="#f4d481"/><stop offset=".46" stop-color="#98632b"/><stop offset=".65" stop-color="#ffe6a0"/><stop offset="1" stop-color="#a96d2b"/></linearGradient>
+  <linearGradient id="edge" x2="0" y2="1"><stop stop-color="#ffecb3"/><stop offset=".45" stop-color="#ca9749"/><stop offset="1" stop-color="#654220"/></linearGradient>
+  <linearGradient id="enamel" x2=".5" y2="1"><stop stop-color="#31566c"/><stop offset=".5" stop-color="#132e43"/><stop offset="1" stop-color="#081b2c"/></linearGradient>
+ </defs>
+ <!-- Original vector: same ivory/brass bevels and navy enamel as the UI frames. -->
+ <path d="M23 49V32C23 0 73 0 73 32V49" fill="none" stroke="#30251b" stroke-width="16"/>
+ <path d="M23 49V32C23 0 73 0 73 32V49" fill="none" stroke="url(#gold)" stroke-width="12"/>
+ <path d="M20 42V31C20 3 73 2 76 30" fill="none" stroke="#fff0b7" stroke-width="2"/>
+ <path d="M29 42V32C29 8 67 8 67 32V43" fill="none" stroke="#75502a" stroke-width="2"/>
+ <path d="M9 44L25 39H71L87 44V83Q83 101 48 110Q13 101 9 83Z" fill="#0a1824" stroke="#684521" stroke-width="3"/>
+ <path d="M12 45L26 41H70L84 45V81Q81 97 48 106Q15 97 12 81Z" fill="url(#gold)" stroke="#ffdf97" stroke-width="1.5"/>
+ <path d="M19 50L29 47H67L77 50V80Q74 91 48 99Q22 91 19 80Z" fill="url(#enamel)" stroke="url(#edge)" stroke-width="3"/>
+ <path d="M23 54L32 51H64L73 54M24 83Q30 90 43 94" fill="none" stroke="#78919b" stroke-opacity=".5" stroke-width="1.3"/>
+ <path d="M48 52L63 70L48 93L33 70Z" fill="url(#gold)" stroke="#fff0bc" stroke-width="1"/>
+ <path d="M48 57L58 70L48 86L38 70Z" fill="#bb853b"/>
+ <circle cx="48" cy="68" r="6" fill="#081b2c" stroke="#fce0a0" stroke-width="1"/>
+ <path d="M46 70H50L52 81H44Z" fill="#081b2c"/>
+ <g fill="none" stroke="url(#gold)" stroke-width="2" stroke-linecap="round">
+  <path d="M30 58Q18 59 25 69Q31 74 27 81M66 58Q78 59 71 69Q65 74 69 81"/>
+  <path d="M26 63Q32 61 31 66M70 63Q64 61 65 66M32 86L37 89M64 86L59 89"/>
+ </g>
+ <g fill="#fff0b5"><path d="M14 47L17 51L14 55L11 51ZM82 47L85 51L82 55L79 51ZM48 100L51 103L48 106L45 103Z"/></g>
+</svg>

@@ -23,4 +23,9 @@ func run() -> void:
 			g.dispatch("reward_info"); await shot("reward-%d-" % mission+lang); g.overlay=""
 		for slot in [0,1,4]:
 			g.change_screen("arsenal"); g.arsenal_slot=slot; g.arsenal_choice=0; await shot("arsenal-%d-" % slot+lang)
+	g.change_screen("arsenal"); g.arsenal_slot=0; g.arsenal_choice=2
+	for calm in [false,true]:
+		g.save.data.calm=calm
+		for phase in [0.0,2.0]:
+			g.clock=phase; await shot("aura-%s-%s" % [str(calm),str(phase)])
 	g.queue_free(); await process_frame; await create_timer(.5).timeout; quit()

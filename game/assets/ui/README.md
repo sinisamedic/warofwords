@@ -33,3 +33,5 @@ or third-party icon library was used for this set.
 an enemy's existing atlas region through a glowing fragmented edge, without
 rotating the whole illustration or changing its source bitmap. Reduced Motion
 uses the actor's ordinary opacity fade instead.
+
+`icon-lock.svg` (2026-09-18): original project vector illustration, authored in SVG for this game. Navy enamel, layered brass/ivory bevels, ornamental shield body and engraved key plate match the existing frames. Replaces the primitive runtime lock drawing. No external assets or third-party license.

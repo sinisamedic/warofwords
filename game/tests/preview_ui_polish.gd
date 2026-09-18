@@ -13,5 +13,5 @@ func run() -> void:
 	for i in 13: g.save.data.wins[str(i)]=3
 	g.save.data.loadout=["ember","mirror","seal","bloom"]
 	g.save.data.artifact="reserve"; g.save.save_game()
-	g.mission=12; g.change_screen("campaign")
+	g.mission=12; g.change_screen("arsenal"); g.arsenal_slot=0; g.arsenal_choice=2
 	root.title="War of Words — PREGLED: nagrade, Arsenal i dnevna rang-lista"
