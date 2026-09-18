@@ -12,6 +12,8 @@ Naslovna: po zahtevu korisnika kartice Arsenal i Unapređenja koriste devetodeln
 
 Oštrina panela: zajednički vektorski okvir se uvozi u četiri puta većoj rezoluciji (1024×512), uz nezavisne izvorne i prikazane margine. To važi za sve ekrane sa istim panelom; dimenzije i raspored ostaju isti. APK i dalje čeka potvrdu.
 
+Ista korekcija oštrine primenjena je i na zlatne/tamnoplave okvire dugmadi i statusne pločice. Krajnji ukrasi čuvaju odnos stranica; obična i dnevna dugmad dele geometriju iscrtavanja. I dalje prvo pregled bez APK-a.
+
 ## Dorade nagrada i preglednosti — usvojeno 2026-09-18
 
 Korisnik je zatražio oznake nagrada na nivoima, klik na medaljon sa objašnjenjem namene i korišćenja, sjaj opremljene i tamniju ostalu opremu, detaljnije katance i automatsko osvežavanje dnevne rang-liste pri ulasku. Implementirano uz oba jezika i Reduced Motion; promena kategorije takođe učitava odgovarajuću listu. Prozor nagrade samo informiše, bez promene inventara. Prvo igrivi pregled, bez APK-a.

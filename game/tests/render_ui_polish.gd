@@ -28,4 +28,8 @@ func run() -> void:
 		g.save.data.calm=calm
 		for phase in [0.0,2.0]:
 			g.clock=phase; await shot("aura-%s-%s" % [str(calm),str(phase)])
+	for lang in ["sr","en"]:
+		g.save.data.ui_language=lang; g.change_screen("powers"); await shot("powers-"+lang)
+		g.daily_screen.service.config={}; g.dispatch("daily"); await shot("daily-buttons-"+lang)
+		g.daily_screen.close_screen()
 	g.queue_free(); await process_frame; await create_timer(.5).timeout; quit()

@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## Oštrina preostalih dugmadi — pregled 2026-09-18
+
+- Po korisničkoj primedbi isti postupak primenjen je na `frame-navy`, `frame-gold` i `status-plaque`: SVG uvoz 4×, oštri detalji umesto uvećavanja male teksture. Bočni ukrasi se sada skaliraju ravnomerno prema visini; samo sredina prati širinu dugmeta. Obuhvata „Igraj“, „Dnevni izazov“, navigaciju i druga mesta sa istim okvirima.
+- Standardni Button elementi dnevnog izazova koriste `button_frame_style.gd` i istu geometriju kao ručno crtana dugmad, uključujući disabled/hover/pressed/focus boje.
+- Uvoz i renderi bez grešaka. Testovi igre i dnevnog izazova prolaze (uključujući stvarni touch pipeline). Pregled EN/SR naslovne na 1920×1080 i Arsenala/dijaloga/pojačanja/dnevnih dugmadi na 1280×576.
+- Ponovo otvoren `preview_home_cards.gd`; **bez APK-a do korisničke potvrde**. Aktivna grana `codex/campaign-wave-two`; sledeći korak je pregled ukupne oštrine dugmadi.
 ## Oštrina zajedničkog panela — pregled 2026-09-18
 
 - Korisnik je primetio zamućenje ukrašenog okvira na svim ekranima. `frame-panel.svg` se ranije uvozio na 256×128; sada se rasterizuje direktno iz vektora na 1024×512 (`svg/scale=4.0`). Bez uvećavanja stare bitmap slike.

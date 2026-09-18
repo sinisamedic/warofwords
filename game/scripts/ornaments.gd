@@ -38,19 +38,24 @@ static func padlock(c: CanvasItem, p: Vector2) -> void:
 
 static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color.WHITE) -> void:
 	if kind != 2:
-		# Three horizontal slices scale the complete bevel vertically. Preserving
-		# top/bottom pixel margins makes a short mobile plaque almost solid gold.
-		var texture: Texture2D = FRAMES[kind]
-		var source_cap := 36.0 if kind == 3 else 18.0
-		var cap := minf(18,rect.size.x/3)
-		var tw := float(texture.get_width())
-		var th := float(texture.get_height())
-		c.draw_texture_rect_region(texture,Rect2(rect.position,Vector2(cap,rect.size.y)),Rect2(0,0,source_cap,th),tint)
-		c.draw_texture_rect_region(texture,Rect2(rect.position+Vector2(cap,0),Vector2(rect.size.x-2*cap,rect.size.y)),Rect2(source_cap,0,tw-2*source_cap,th),tint)
-		c.draw_texture_rect_region(texture,Rect2(rect.end.x-cap,rect.position.y,cap,rect.size.y),Rect2(tw-source_cap,0,source_cap,th),tint)
+		for patch in button_patches(rect,kind):
+			c.draw_texture_rect_region(FRAMES[kind],patch[0],patch[1],tint)
 		return
 	panel_slices(c,rect,30,tint)
 
+static func button_patches(rect: Rect2, kind: int) -> Array:
+	var texture: Texture2D=FRAMES[kind]
+	var tw := float(texture.get_width())
+	var th := float(texture.get_height())
+	# End ornaments scale uniformly with height, never independently in X/Y.
+	# Only the undecorated middle expands to accommodate the button label.
+	var source_cap := tw*18.0/128.0
+	var cap := minf(rect.size.y*source_cap/th,rect.size.x/2)
+	return [
+		[Rect2(rect.position,Vector2(cap,rect.size.y)),Rect2(0,0,source_cap,th)],
+		[Rect2(rect.position+Vector2(cap,0),Vector2(rect.size.x-2*cap,rect.size.y)),Rect2(source_cap,0,tw-2*source_cap,th)],
+		[Rect2(rect.end.x-cap,rect.position.y,cap,rect.size.y),Rect2(tw-source_cap,0,source_cap,th)]
+	]
 static func panel_slices(c: CanvasItem, rect: Rect2, margin: float, tint: Color) -> void:
 	# SVG is rasterized at 4x resolution. Source margins and screen margins
 	# are independent so increasing detail never enlarges the ornaments.

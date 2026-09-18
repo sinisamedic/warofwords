@@ -76,10 +76,10 @@ func button(label: String, rect: Rect2, callback: Callable, enabled := true) -> 
 		item.add_theme_color_override(color_name,INK if primary else CREAM)
 	item.add_theme_color_override("font_disabled_color",Color("85939c"))
 	for style_name in ["normal","hover","pressed","disabled","focus"]:
-		var style := StyleBoxTexture.new()
-		style.texture=Ornaments.FRAMES[1 if primary else 0]
-		style.texture_margin_left=18; style.texture_margin_right=18
-		style.modulate_color=Color(.55,.55,.55) if style_name=="disabled" else Color(.8,.8,.8) if style_name=="pressed" else Color(1.12,1.12,1.12) if style_name in ["hover","focus"] else Color.WHITE
+		var style = preload("res://scripts/button_frame_style.gd").new()
+		style.kind=1 if primary else 0
+		style.content_margin_left=18; style.content_margin_right=18
+		style.tint=Color(.55,.55,.55) if style_name=="disabled" else Color(.8,.8,.8) if style_name=="pressed" else Color(1.12,1.12,1.12) if style_name in ["hover","focus"] else Color.WHITE
 		item.add_theme_stylebox_override(style_name,style)
 	item.pressed.connect(callback); ui.add_child(item)
 
