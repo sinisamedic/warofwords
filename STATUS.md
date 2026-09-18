@@ -1,10 +1,19 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-tactics.**
+Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
-## Predlog kolekcije — bez izmene igre
+## 0.1.10 — prvi talas opreme
 
-Korisnik je tražio da osmislimo veću kolekciju opreme/oružja. `docs/equipment-collection.md` sadrži predlog 16 aktivnih uređaja i šest pasivnih artefakata: po jedno od četiri obojena mesta i jedan artefakt u duelu, zajednička unapređenja po boji, jasna otključavanja i tri talasa. Prvi predloženi talas dodaje Ogledalo, Pečat, Obnovu, Pečat leksikona i Rezervnu ćeliju. To nije odobrenje implementacije; igra, balans, server i APK nisu menjani. Pre implementacije dobiti korisnikov izbor obima i osnovnih pravila predloga.
+Korisnik je odobrio implementaciju prvog talasa i novi APK sa lokalnim potpisom. Urađeni su Ogledalo, Pečat, Obnova, Pečat leksikona i Rezervna ćelija: ukupno osam aktivnih uređaja i dva artefakta. Ostatak kolekcije je budući predlog.
+
+- Novi Arsenal ima pet kategorija, velike detaljne ilustracije, opis, brojke, uslove otključavanja i izbor. Četiri borbena mesta, jedan pasivni artefakt, zajednička unapređenja po boji. EN/SR prikaz. Priprema pokazuje komplet.
+- Ogledalo vraća deo stvarno upijene štete tek pri udaru povratnog projektila. Pečat sprečava sledeće lečenje unutar 20 s. Obnova leči u pet delova tokom 8 s. Artefakti pojačavaju dugu reč ili čuvaju višak energije. Oprema, rezerva, aktivni efekti i projektili ostaju vezani za sačuvan duel.
+- Otključavanja: Obnova susret 3, Pečat 6, Ogledalo 8, Rezervna ćelija 10; Pečat leksikona pobedom uz reč od 7+ pločica. Proboj ostaje susret 4. Ranije pobede važe. Detaljan balans: `docs/game-design.md`.
+- APK `exports/WarOfWords-0.1.10-android.apk`, code 11, 97.487.635 bajtova, SHA256 `aaa6461663627902708b867034a0669726d3b170b883af7f8b195c7e28a3f584`. Potpis v2/v3 i zipalign prolaze. Koristi lokalni sertifikat `a071affa…d276` (isti kao do 0.1.6), **različit od kućnih 0.1.7–0.1.9**. Korisnik je izričito odobrio deinstalaciju i gubitak napretka. Ključ ostaje van Git-a.
+- 1.552 PASS / 0 FAIL + refill benchmark. Završni uvoz/izvoz i test opreme bez script grešaka. Test taktike sada čeka 0,5 s na gašenje audio servera i više nema upozorenje pri izlasku. Godot renderi EN/SR pregledani na 1280×720 i 1280×576.
+- **ANDROID EQUIPMENT QA PASSED** na API 36 / 2400×1080: izbor i uklanjanje opreme dodirima, aktiviranje novih moći, rezerva, pauza, force-stop i nastavak. Originalni podaci emulatora vraćeni. Fizički Samsung i balans još nisu testirani. Detalji i ponovljivi testovi: `docs/QA-0.1.10.md`.
+- Javni `game/online_config.json` obnovljen iz objavljenog APK-a 0.1.7, ignorisan kao ranije; HTTPS health provera prolazi. Dnevna pravila/server nisu menjani. Nisu slati novi QA rezultati na rang-listu.
+- GitHub objava još nije potvrđena; slede commit/push i upload APK-a uz proveru digest-a.
 
 ## 0.1.9 — taktika kampanje i poraz
 
@@ -93,9 +102,9 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/campaign-tactics`. Razmotriti sa korisnikom predlog `docs/equipment-collection.md`; ne implementirati celu kolekciju samo na osnovu zahteva da je osmislimo. Probati 0.1.9 na telefonu: drugi susret snažan udar, treći lečenje i prekid Lukom, četvrti oklop i nagrada Proboj; zatim Proboj na sedmom susretu. Pregledati poraz, pripremu i nastavak borbe, pa podesiti balans. 0.1.9 APK je ostao na kućnom računaru, nije prenet Git-om; stari GitHub draft 0.1.8 ostaje neobjavljen. Na ovom računaru nedostaju `.local/signing/` i `game/online_config.json`; za sledeći online potpisani build preneti ih odgovarajućim bezbednim putem van Git-a.
+Nastaviti granu `codex/equipment-wave-one`. Posle objave 0.1.10 korisnik proba novi Arsenal, otključavanja i kombinacije na telefonu; naročito Pečat protiv iscelitelja, Ogledalo protiv snažnog udarca i Obnovu u dužoj borbi. Tek posle povratnih informacija menjati balans ili birati drugi talas. Ostali uređaji iz kolekcije i trajni profil još nisu implementirani.
 
-Radni kod: game/project.godot. Grana za nastavak: codex/campaign-tactics. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
+Za drugi računar: `git fetch origin --prune`, pregledati lokalno stanje, nastaviti `codex/equipment-wave-one` i povući bez destruktivnog resetovanja. Engine/SDK/template-i se ne prenose Git-om. Signing ključ i javnu online konfiguraciju preneti zasebno van Git-a; ne vraćati slučajno kućni potpis ako se nastavlja linija 0.1.10. Raniji 0.1.8 draft ostaje neobjavljen.
 
 ## Istorija
 

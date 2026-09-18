@@ -1,6 +1,6 @@
 # Predlog kolekcije opreme — War of Words
 
-Datum: 2026-09-18. **Predlog za razgovor; nije usvojena specifikacija niti implementirana nadogradnja.** Korisnik je tražio da osmislimo veću kolekciju. Imena, brojke, otključavanja i obim talasa ispod su predlozi. Osnova je postojeća verzija 0.1.9.
+Datum: 2026-09-18. **Prvi talas je usvojen i implementiran u 0.1.10:** Ogledalo, Pečat, Obnova, Pečat leksikona i Rezervna ćelija. Tačna aktivna pravila i skaliranje: [dizajn igre](game-design.md). Ostatak pune kolekcije ispod je budući predlog. Osnova predloga je bila verzija 0.1.9.
 
 ## 1. Šta igrač bira
 

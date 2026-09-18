@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Aktivno izdanje: 0.1.10 / code 11.** Korisnik je odobrio potpis lokalnim debug ključem ovog računara. Za prelazak sa kućnih 0.1.7–0.1.9 deinstalirati prethodnu aplikaciju, pa instalirati novi APK; time se briše lokalni napredak i anonimna online sesija. Kampanja i vežba rade offline, rangirani dnevni izazov zahteva internet. Ključ čuvati i preneti bezbedno van Git-a za buduća ažuriranja. [Provere](QA-0.1.10.md). Niži odeljci o ranijim paketima su istorija.
+
 **0.1.8 / code 9:** instalira se preko 0.1.7, bez deinstalacije i uz isti potpis. Nova dopuna u kampanji/dnevnom režimu, zvuk i vibracija pri spajanju dnevnih slova i katanac umesto teksta. Novi dnevni rezultati koriste odvojenu v2 rang-listu; v1 podaci ostaju sačuvani. SHA256 APK-a: `62d6e86ba22dceb6c786cecdcb11b210a3731716103968226fe598be8d94bf28`, veličina 94.893.374 bajta. Sledeći odeljak beleži promenu potpisa koja se desila u 0.1.7.
 
 **Istorija: testni paket 0.1.7 / code 8**, sa dnevnim izazovom, globalnom listom i novim izgledom. Koristi novi potpis koji je korisnik izričito odobrio: **deinstalirati 0.1.6 ili stariju verziju jednom, zatim instalirati 0.1.7; lokalni napredak se briše.** Naredni paketi treba da koriste isti novi ključ. Ranija uputstva ispod za 0.1.6 ostaju istorijska.
@@ -13,7 +15,7 @@ APK SHA256: 118ad610bbba0e84a687975e4f11d4e0531244412fc978ae9b0357723bbf2d36; ve
 
 1. Preuzmi **WarOfWords-0.1.6-android.apk** na Android telefon (ili ga kopiraj sa računara u Downloads preko USB kabla).
 2. Otvori APK u Downloads / My Files. Ako Android zatraži, dozvoli instalaciju tom browseru ili upravljaču fajlovima, pa izaberi Install.
-3. Otvori **War of Words**. Igra se automatski postavlja vodoravno. Internet i nalog nisu potrebni.
+3. Otvori **War of Words**. Igra se automatski postavlja vodoravno. Kampanja radi bez interneta; globalna rang-lista zahteva internet.
 4. **Play → Prepare → Battle → Got it**. Prva tabla ima STONE u prvom redu. Prevuci S–T–O–N–E i pusti. Boje pune odgovarajuće sposobnosti; kada piše READY, dodirni sposobnost.
 5. **Options** je na glavnom ekranu i u pauzi. Podesi Sound Effects, Music, Haptics, Reduced Motion, Interface Language i Word Dictionary. **Letter Connection → Any letters** (srpski: **Povezivanje slova → Bilo koja**) omogućava udaljena slova. Pravilo važi odmah i za sačuvanu borbu, uz očuvanje njenog napretka. Srpski je latinica; novi rečnik važi za nove borbe, sačuvane zadržavaju svoj. Probaj sijalicu (Hint), štit Aegis i pahuljicu (Freeze). Posle pobede otvori Upgrades. Zatvori aplikaciju i proveri Continue Duel za nedovršenu borbu.
 
@@ -36,7 +38,7 @@ Godot **4.7.2 standard**, bez .NET. Importuj `game/project.godot` i F6/F5 (glavn
 
 Može i `GODOT_EXECUTABLE`, ili `godotExecutable` u ignorisanom `.local/machine.json`. Rezultat i SHA256 idu u `exports/`. Skripta prvo uvozi resurse i pokreće testove. Samo provere: dodati `-TestOnly`.
 
-Za potpisani build postaviti `GODOT_ANDROID_KEYSTORE_DEBUG_PATH` na postojeći ključ; po potrebi i `GODOT_ANDROID_KEYSTORE_DEBUG_USER` i `GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD`. Ključ/lozinke ostaju van Git-a. Skripta odbija potpisivanje bez eksplicitne putanje, da novi računar ne bi slučajno koristio drugi potpis. Na prethodnom računaru proveriti Godot Editor Settings → Export → Android → Debug Keystore; tipične lokacije su `%APPDATA%/Godot/keystores/debug.keystore` i `%APPDATA%/Godot/android/debug.keystore`. APK kontrolna suma sa GitHub Releases nije potpisni ključ i ne može ga zameniti.
+Za potpisani build postaviti `GODOT_ANDROID_KEYSTORE_DEBUG_PATH` na postojeći ključ; obavezno i `GODOT_ANDROID_KEYSTORE_DEBUG_USER` i `GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD`. Ključ/lozinke ostaju van Git-a. Skripta odbija potpisivanje bez eksplicitne putanje, da novi računar ne bi slučajno koristio drugi potpis. Na prethodnom računaru proveriti Godot Editor Settings → Export → Android → Debug Keystore; tipične lokacije su `%APPDATA%/Godot/keystores/debug.keystore` i `%APPDATA%/Godot/android/debug.keystore`. APK kontrolna suma sa GitHub Releases nije potpisni ključ i ne može ga zameniti.
 
 Bez ključa, `./tools/build-android.ps1 -UnsignedCheck` proverava import/testove/izvoz u `.local/WarOfWords-0.1.8-UNSIGNED-CHECK.apk`. To nije instalaciono izdanje. Skripta privremeno isključuje potpisivanje i u `finally` vraća identičan preset; ne pokretati paralelan editor/export tokom ove provere. Posle nasilnog prekida proveriti da je `package/signed=true`.
 
@@ -44,7 +46,7 @@ Na drugom Windows računaru 2026-09-17 instalirani su Microsoft OpenJDK 21.0.12.
 
 Na ovom računaru SDK preuzimanja traže Windows CA skladište zbog Avast HTTPS inspekcije: za proces SDK menadžera korišćen je `JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE`. TLS validacija ostaje uključena. Zasebni Godot/mbedTLS problem rešen je korisnikovim Avast izuzetkom ograničenim na host projekta; stvarni Godot mrežni test potom je prošao svih 8 provera.
 
-Paket sadrži ARM64 za Samsung S23 Ultra i druge moderne telefone, kao i x86_64 za emulator. Minimum Android 7 (API 24), cilj API 36 — provereno iz finalnog Android manifesta. Compatibility renderer, landscape, immersive. Jedina tražena funkcionalna dozvola je vibracija; nema mrežnih poziva, analitike, reklama ili kupovina.
+Paket sadrži ARM64 za Samsung S23 Ultra i druge moderne telefone, kao i x86_64 za emulator. Minimum Android 7 (API 24), cilj API 36 — provereno iz finalnog Android manifesta. Compatibility renderer, landscape, immersive. Dozvole su INTERNET i VIBRATE. Online pozivi služe dnevnom izazovu; nema reklama ili kupovina.
 
 Zvanično uputstvo za alat: https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html.
 

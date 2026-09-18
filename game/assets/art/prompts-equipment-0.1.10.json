@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-18",
+  "tool": "OpenAI ImageGen",
+  "images": [
+    {
+      "id": "mirror",
+      "prompt": "Create one premium fantasy mobile game equipment icon: a magnificent faceted cyan crystal mirror shield, reflective silver center with blue light, elaborate brass mechanical rim. Square image, one centered object inside a dark navy circular medallion with a finely engraved gold metallic rim. Rich tactile 3D painted material, cinematic polished game inventory art, sharp bevels and tiny engraved details, vivid jewel colors, warm gold highlights, subtle magical particles. Bold instantly recognizable silhouette at small size. Entire medallion fits within central 85 percent, corners pure deep navy #071725. No text, no letters, no numbers, no watermark. Visually coherent with a sophisticated adult fantasy word battle game.",
+      "source": "exec-19f3906f-51a8-47bd-91ec-26df9851fa3c.png"
+    },
+    {
+      "id": "seal",
+      "prompt": "Create one premium fantasy mobile game equipment icon: a purple arcane sealing device, circular amethyst seal with interlocking brass rings, a radiant magical lock symbol. Square image, one centered object inside a dark navy circular medallion with a finely engraved gold metallic rim. Rich tactile 3D painted material, cinematic polished game inventory art, sharp bevels and tiny engraved details, vivid jewel colors, warm gold highlights, subtle magical particles. Bold instantly recognizable silhouette at small size. Entire medallion fits within central 85 percent, corners pure deep navy #071725. No text, no letters, no numbers, no watermark. Visually coherent with a sophisticated adult fantasy word battle game.",
+      "source": "exec-5bc92c41-bbfb-49ef-bc46-3c4bed4ab87f.png"
+    },
+    {
+      "id": "bloom",
+      "prompt": "Create one premium fantasy mobile game equipment icon: an emerald healing lotus device, intricate brass petals opening around a luminous green life crystal. Square image, one centered object inside a dark navy circular medallion with a finely engraved gold metallic rim. Rich tactile 3D painted material, cinematic polished game inventory art, sharp bevels and tiny engraved details, vivid jewel colors, warm gold highlights, subtle magical particles. Bold instantly recognizable silhouette at small size. Entire medallion fits within central 85 percent, corners pure deep navy #071725. No text, no letters, no numbers, no watermark. Visually coherent with a sophisticated adult fantasy word battle game.",
+      "source": "exec-b9e4be67-6c67-4f1e-9fd3-831f8f9351af.png"
+    },
+    {
+      "id": "lexicon",
+      "prompt": "Create one premium fantasy mobile game equipment icon: a small exquisite magical closed book with an embossed golden wax seal and radiant ivory rune, premium brass filigree. Square image, one centered object inside a dark navy circular medallion with a finely engraved gold metallic rim. Rich tactile 3D painted material, cinematic polished game inventory art, sharp bevels and tiny engraved details, vivid jewel colors, warm gold highlights, subtle magical particles. Bold instantly recognizable silhouette at small size. Entire medallion fits within central 85 percent, corners pure deep navy #071725. No text, no letters, no numbers, no watermark. Visually coherent with a sophisticated adult fantasy word battle game.",
+      "source": "exec-efb7431a-9941-46ae-ae0a-8be1c371d843.png"
+    },
+    {
+      "id": "reserve",
+      "prompt": "Create one premium fantasy mobile game equipment icon: an ornate brass energy capacitor with four vivid glowing crystal chambers gold cyan purple emerald, compact mechanical power cell. Square image, one centered object inside a dark navy circular medallion with a finely engraved gold metallic rim. Rich tactile 3D painted material, cinematic polished game inventory art, sharp bevels and tiny engraved details, vivid jewel colors, warm gold highlights, subtle magical particles. Bold instantly recognizable silhouette at small size. Entire medallion fits within central 85 percent, corners pure deep navy #071725. No text, no letters, no numbers, no watermark. Visually coherent with a sophisticated adult fantasy word battle game.",
+      "source": "exec-5e1ea04e-dc7f-4a6d-9fa7-aa32d8fc6e3f.png"
+    }
+  ]
+}

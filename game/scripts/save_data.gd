@@ -1,10 +1,11 @@
 extends RefCounted
+const Equipment = preload("res://scripts/equipment.gd")
 
 var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -35,6 +36,11 @@ func load_game() -> void:
 				if data[key] not in ["en","sr"]: data[key] = "en"
 			for key in data.wins.keys():
 				data.wins[key] = clampi(number(data.wins[key],1),1,3)
+			# Migrate legacy gold-only equipment without changing an unfinished duel.
+			if not parsed.has("loadout"): data.loadout=[data.weapon,"aegis","arc","mend"]
+			data.loadout=Equipment.loadout(data)
+			data.weapon=data.loadout[0]
+			if data.artifact not in ["none","lexicon","reserve"] or not Equipment.unlocked(data.artifact,data): data.artifact="none"
 			break
 
 func number(value: Variant, fallback: int) -> int:

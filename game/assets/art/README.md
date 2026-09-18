@@ -36,3 +36,9 @@ Original scalable UI frames/icons: `tools/build-ornate-ui.cjs`. Original audio s
 - `enemies.png`, 1448 × 1086, genuine alpha: 12 distinct opponents in a 4 × 3 atlas, in campaign order. Source output: `exec-8b2c7c7e-0f9c-4793-ba5a-6d35a5812a22.png`; a layout edit of `exec-01d4c693-d9e4-481d-9a1a-0a99d4cc5262.png` to separate the figures. `scripts/enemy_art.gd` selects the body and matching face crop. These sprites use native alpha, without the old magenta-key shader.
 
 Both production files were generated with the built-in ImageGen tool and copied unchanged. Exact prompts, reference role and source identifiers: `prompts-0.1.3.json`. No external franchise characters are included. Both assets are below 10 MiB. Original approved design masters remain unchanged. Licensed music has separate provenance in `../music/README.md`.
+
+## 0.1.10 equipment artwork (2026-09-18)
+
+Five original OpenAI ImageGen illustrations: `equipment-mirror.png`, `equipment-seal.png`, `equipment-bloom.png`, `equipment-lexicon.png`, `equipment-reserve.png`. Each is an unchanged 1254 × 1254 source PNG, under 2.4 MB. Exact individual prompts and original output filenames: `prompts-equipment-0.1.10.json`. No external artwork or franchise references were used. Generated assets follow applicable OpenAI terms; no third-party stock license is claimed.
+
+Godot imports icons at a 512-pixel size limit with mipmaps; the full source images remain intact. `equipment_ui.gd` samples circular UV regions and adds existing live charge rings. Original assets remain below the project's 10 MiB review threshold; no additional LFS pattern is needed.

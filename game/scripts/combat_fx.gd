@@ -34,7 +34,7 @@ static func valid_saved(saved: Variant) -> bool:
 	for shot in saved:
 		if not shot is Dictionary: return false
 		if not shot.get("player") is bool: return false
-		if shot.get("kind") not in ["word","long_word","pulse","breach","arc","enemy"]: return false
+		if shot.get("kind") not in ["word","long_word","pulse","breach","arc","seal","mirror","enemy"]: return false
 		if shot.player == (shot.kind == "enemy"): return false
 		if not shot.get("color") is String or not Color.html_is_valid(shot.color): return false
 		for key in ["time","damage"]:
@@ -73,6 +73,11 @@ func draw(c: CanvasItem, width: float, calm: bool) -> void:
 		c.draw_line(tail.lerp(p,.25),p,Color("fff7d0"),2.5,true)
 		Art.glow(c,p,24 if calm else 38,Color(shot.color,.9))
 		c.draw_circle(p,5,Color("fffdea"))
+		if shot.kind in ["seal","mirror"]:
+			var points := PackedVector2Array()
+			for n in 7: points.append(p+Vector2.from_angle(n*TAU/6+(0 if calm else u*4))*14)
+			c.draw_polyline(points,shot.color,3,true)
+			c.draw_arc(p,19,0,TAU,32,Color(shot.color,.6),1.5,true)
 		if shot.kind == "arc" and not calm:
 			var points := PackedVector2Array()
 			for n in 9: points.append(tail.lerp(p,n/8.0)+Vector2(0,sin(n*13+u*30)*7))

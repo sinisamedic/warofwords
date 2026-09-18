@@ -2,9 +2,20 @@
 
 Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
-## Predlog veće kolekcije — 2026-09-18
+## 0.1.10 — usvojen prvi talas opreme
 
-Korisnik je tražio osmišljavanje veće kolekcije opreme/oružja. [Predlog kolekcije](equipment-collection.md) opisuje 16 aktivnih uređaja (po četiri alternative za svaku postojeću boju) i šest pasivnih artefakata, uz izbor četiri uređaja i jednog artefakta za duel. Predložen prvi talas dodaje Ogledalo, Pečat, Obnovu i dva artefakta postojećoj petorci. Brojke, otključavanja, deljenje unapređenja i redosled su **predlozi, još nisu usvojeni niti implementirani**. Rangirani dnevni izazov ostaje bez bonusa kampanjske opreme. Aktivna igra ostaje 0.1.9.
+Korisnik je 2026-09-18 izričito izabrao **prvi talas: tri nova uređaja i dva artefakta**, odobrio implementaciju i APK sa lokalnim potpisom. Aktivno je osam uređaja i dva artefakta. Ostatak [kolekcije](equipment-collection.md) ostaje predlog.
+
+- Za kampanju se bira po jedan uređaj svake boje i najviše jedan pasivni artefakt. Nema petog borbenog dugmeta. Unapređenja su zajednička po boji, postojeće cene/nivoi ostaju.
+- **Ogledalo / Mirror:** 6 plave energije, zaštita `14 + 5 × (nivo − 1)` od sledećeg napada. Vraća polovinu stvarno upijene štete, zaokruženu naniže, kao novi projektil; zdravlje protivnika se smanjuje tek na njegovom udaru. Protivnički oklop deluje na povratni udar. Smrt igrača poništava projektile.
+- **Pečat / Seal:** 5 ljubičaste energije, `8 + 3 × (nivo − 1)` štete pri udaru. Tada obeležava protivnika na 20 s; sledeći potez lečenja se poništava i troši oznaku. Obični napadi ostaju. Ponovno ispaljivanje osvežava oznaku.
+- **Obnova / Bloom:** 5 zelene energije. Odmah vraća `6 + 2 × (nivo − 1)`, zatim četiri puta po `6 + (nivo − 1)` HP u razmacima od 2 s. Ukupno `30 + 6 × (nivo − 1)` tokom 8 s. Ponovno aktiviranje zamenjuje prethodne preostale tikove; nema slaganja efekata. Zdravlje ne prelazi 100. Pauza zaustavlja vreme, kraj duela zaustavlja dejstvo.
+- **Pečat leksikona:** potvrđena neponovljena reč od najmanje 7 pločica dobija +4 štete na svom projektilu. Srpski LJ/NJ/DŽ računaju se kao jedna pločica. Ne pojačava energiju ili druga oružja.
+- **Rezervna ćelija:** čuva do 2 viška energije zasebno za svaku boju. Aktiviranje troši punjenje i prenosi njenu rezervu u isto dugme. Ostatak viška se gubi.
+- Otključavanje pobedama: Obnova posle susreta **3**, Proboj **4**, Pečat **6**, Ogledalo **8**, Rezervna ćelija **10**. Pečat leksikona zahteva pobedu u duelu u kome je pronađena reč od najmanje 7 pločica. Ranije pobede automatski otključavaju odgovarajuće uređaje; raniji dnevnik reči nije dokaz pobede za artefakt.
+- Arsenal: pet kategorija, velike kartice i opis, brojke i uslov otključavanja, izričito dugme Opremi. Izbor važi za novu borbu. Priprema prikazuje komplet; borba prikazuje rezervne žetone, oznaku Pečata i preostala lečenja Obnove.
+- Započeti duel čuva svoj komplet, artefakt, rezervu, oznaku, tikove i projektile. Stari save sa Probojem migrira bez gubitka napretka. Stare borbe bez novih polja imaju podrazumevane sposobnosti i nijedan artefakt.
+- **Dnevni izazov i vežba ostaju nezavisni od opreme.** Serverski kod i pravila nisu menjani. Balans prvog talasa tek treba proceniti na telefonu.
 
 ## 0.1.9 — taktika kampanje i ekran poraza
 

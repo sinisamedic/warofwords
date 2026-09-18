@@ -84,6 +84,6 @@ func run() -> void:
 	check(game.save.data.get("weapon","pulse")=="pulse","locked weapon cannot equip")
 	game.queue_free(); await process_frame
 	# Let the audio server retire MP3 playback before the headless process exits.
-	await create_timer(.15).timeout
+	await create_timer(.5).timeout
 	print("TACTICS RESULT: %d failures" % failures)
 	quit(1 if failures else 0)

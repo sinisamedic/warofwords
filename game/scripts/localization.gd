@@ -1,6 +1,23 @@
 extends RefCounted
 
 const SR := {
+"Every second hit is heavy. Save your shield.":"Svaki drugi udar je snažan. Sačuvaj zaštitu.",
+"Healing every other turn. Use Arc or Seal.":"Leči se svaki drugi potez. Koristi Luk ili Pečat.",
+"YOUR LOADOUT":"TVOJA OPREMA",
+"MIRROR":"OGLEDALO", "SEAL":"PEČAT", "BLOOM":"OBNOVA",
+"LEXICON SEAL":"PEČAT LEKSIKONA", "RESERVE CELL":"REZERVNA ĆELIJA",
+"STRIKE":"NAPAD", "GUARD":"ZAŠTITA", "CONTROL":"KONTROLA", "RESTORE":"LEČENJE", "ARTIFACTS":"ARTEFAKTI",
+"AVAILABLE":"DOSTUPNO", "EQUIP":"OPREMI", "LOCKED":"ZAKLJUČANO",
+"REMOVE ARTIFACT":"UKLONI ARTEFAKT", "PASSIVE • NO ENERGY":"PASIVNO • BEZ ENERGIJE",
+"%d ENERGY • %s %d":"%d ENERGIJE • %s %d",
+"Win with a word of 7+ tiles":"Pobedi uz reč od 7+ pločica",
+"Win encounter %d to unlock":"Otključaj pobedom u susretu %d",
+"New selections apply to your next duel":"Novi izbor važi za sledeću borbu",
+"LEVEL %d • SHARED BY COLOR":"NIVO %d • ZAJEDNIČKI PO BOJI",
+"Variants share upgrades":"Varijante dele unapređenja",
+"Enemy sealed for 20s":"Protivnik je zapečaćen na 20 s",
+"Seal prevented healing":"Pečat je sprečio lečenje",
+"%s activated":"%s: aktivirano", "NEW EQUIPMENT: %s":"NOVA OPREMA: %s",
 "BREACH":"PROBOJ",
 "Pulse and Breach share upgrades":"Puls i Proboj dele unapređenja",
 "Every second hit is heavy. Save Aegis.":"Svaki drugi udar je snažan. Sačuvaj štit.",
