@@ -1,6 +1,8 @@
 # War of Words
 
-**Razvojni pregled:** 24 nivoa, šest lokacija, 12 uređaja i dva artefakta. Dodati Žar, Rezonator, Bastion i Crpljenje. Novi APK nije pravljen; igrivi pregled: Godot `--path game --script res://tests/preview_wave_two.gd` (zaseban probni save). Detalji u [STATUS.md](STATUS.md).
+**Novi lokalni APK 0.1.14 / code 15:** `exports/WarOfWords-0.1.14-android.apk`, 24 nivoa i četiri nova uređaja. Potpis se razlikuje od 0.1.13: za prelazak potrebna dogovorena deinstalacija (briše napredak). Paket nije objavljen na Releases. [Provere i SHA256](STATUS.md).
+
+**Prethodni razvojni pregled:** 24 nivoa, šest lokacija, 12 uređaja i dva artefakta. Dodati Žar, Rezonator, Bastion i Crpljenje. Novi APK nije pravljen; igrivi pregled: Godot `--path game --script res://tests/preview_wave_two.gd` (zaseban probni save). Detalji u [STATUS.md](STATUS.md).
 
 **Android 0.1.13:** velike kampanjske nagrade sa ukrašenom oznakom osvojenog, jasnije istaknuto izabrano pojačanje i broj završenog nivoa na pobedi. Medaljoni imaju čist zlatni rub bez crnog donjeg oboda. Prvi talas opreme, dijalozi otključavanja, dnevni izazov i globalna rang-lista ostaju dostupni. [Online režim i postavljanje](docs/daily-online.md).
 

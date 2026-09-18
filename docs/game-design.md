@@ -2,6 +2,8 @@
 
 Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+Korisnik je nakon igrivog pregleda 2026-09-18 odobrio izgled i izradu APK-a 0.1.14 sa postojećim kućnim potpisom.
+
 ## Proširenje kampanje — usvojeno 2026-09-18
 
 Korisnik je potvrdio da 0.1.13 na telefonu izgleda dobro i odobrio još 12 nivoa, 12 novih neprijatelja i Žar, Rezonator, Bastion i Crpljenje. Ukupno 24 susreta, šest poglavlja i 12 uređaja + dva artefakta. Ova odluka zamenjuje raniji neodobreni predlog proširenja. Ovaj korak završava se desktop pregledom, bez APK builda.

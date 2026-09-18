@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## 0.1.14 — APK proširene kampanje, 2026-09-18
+
+- Korisnik je odobrio izgled i zatražio build. APK: `exports/WarOfWords-0.1.14-android.apk`, versionCode 15, 119.113.745 bajtova. Sadrži 24 nivoa, šest lokacija, 12 uređaja i dva artefakta. Probna skripta i otključan testni napredak nisu deo paketa.
+- SHA256: `498512fc5d630d3c135a8b3c303efdbf54477f15e5c19910a99e0e588ed3eadc`. SHA256 prilog je uz APK. Potpis je postojeći kućni ključ `429a2d1b…0abc`, isti kao 0.1.7–0.1.9, različit od 0.1.10–0.1.13. Korisnik je unapred odobrio deinstalaciju i gubitak lokalnog napretka pri prelasku.
+- Import, testovi i export bez script/engine grešaka ili upozorenja: 1.729 PASS / 0 FAIL, refill benchmark 0 failures. Potpis v2/v3 i 16 KiB zipalign prolaze; API 24–36, ARM64/x86_64, INTERNET/VIBRATE. Nema povezanog Android uređaja, pa instalacija ovog APK-a još nije testirana. Prethodni desktop vizuelni pregled korisnik je odobrio.
+- APK je gotov lokalno; nije objavljen na GitHub Releases. Aktivna grana `codex/campaign-wave-two`. Sledeći korak: instalirati na telefon i probati proširenu kampanju i novu opremu; posebno balans kasnijih nivoa.
 ## Proširenje kampanje — igrivi pregled, 2026-09-18
 
 - Aktivna grana: **codex/campaign-wave-two**, polazi od `682eb84` sa grane `codex/equipment-wave-one`.
