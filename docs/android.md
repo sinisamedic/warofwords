@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Aktivni lokalni paket: 0.1.15 / code 16**, `exports/WarOfWords-0.1.15-android.apk`. Isti potpis kao 0.1.14, instalira se preko nje bez deinstalacije. Detalji/provere u [STATUS.md](../STATUS.md). Sledeći odeljci su prethodne verzije.
+
 **Aktivni lokalni paket: 0.1.14 / code 15.** `exports/WarOfWords-0.1.14-android.apk`, proširena kampanja i četiri nova uređaja. Postojeći kućni potpis razlikuje se od 0.1.13; pre instalacije ukloniti 0.1.13, što briše lokalni napredak (korisnik odobrio). Provere i SHA256: [STATUS.md](../STATUS.md). Nije objavljen na Releases.
 
 **Prethodni objavljeni paket: 0.1.13 / code 14.** Velike nagrade sa bedžom osvojenog, jasniji izbor pojačanja, broj završenog nivoa na pobedi i medaljoni bez crnog donjeg oboda. Instalira se preko **0.1.12, 0.1.11 ili 0.1.10 bez deinstalacije**, sa istim lokalnim potpisom; prelazak sa 0.1.12 i očuvanje celog progress fajla provereni u emulatoru. Za prelazak sa kućnih 0.1.7–0.1.9 potpis se razlikuje kao u 0.1.10 i potrebna je deinstalacija, uz gubitak lokalnog napretka. Kampanja i vežba rade offline, rangirani dnevni izazov zahteva internet. Ključ čuvati i preneti bezbedno van Git-a. [Provere](QA-0.1.13.md), [stanje objave](../STATUS.md). Niži odeljci o ranijim paketima su istorija.

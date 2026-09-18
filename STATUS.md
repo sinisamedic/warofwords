@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## 0.1.15 — odobrene dorade, APK gotov 2026-09-18
+
+- Korisnik je odobrio novi animirani oreol i katanac i zatražio APK. Paket sadrži i oznake nagrada na nivoima, prozor objašnjenja i automatsko osvežavanje dnevne rang-liste.
+- `exports/WarOfWords-0.1.15-android.apk`, code 16, 119.130.332 bajta; SHA256 `ca2c14cbf108a244f8f82168dae0914074578b057a262a96168f97a71041f9f0`. SHA256 prilog je uz APK. Postojeći kućni sertifikat `429a2d1b…0abc`, **isti kao 0.1.14**: instalirati preko 0.1.14 bez deinstalacije. Potpis je i dalje različit od 0.1.10–0.1.13.
+- 1.763 PASS / 0 FAIL i refill benchmark bez neuspeha. Godot import/export bez script/engine grešaka ili upozorenja; potpis v2/v3, 16 KiB zipalign i manifest provereni (API 24–36, ARM64/x86_64). Nema povezanog Android uređaja; instalacija ovog paketa još nije proverena. Desktop izgled je korisnik odobrio.
+- APK je lokalno gotov, nije objavljen na Releases. Aktivna grana `codex/campaign-wave-two`. Sledeći korak: instalirati preko 0.1.14 na telefonu i proveriti nagrade, animaciju opremljenog, katance i automatsku rang-listu.
 ## Ponovna dorada Arsenala — 2026-09-18
 
 - Korisnik je odbio prethodno isijavanje i katanac. Arsenal sada koristi **istu funkciju `selection_aura` kao odabrano pojačanje**: rotirajuće lepezaste zrake, kružeće zlatne detalje i pulsiranje. Skaliranje prati veličinu medaljona. Reduced Motion ostaje statičan.

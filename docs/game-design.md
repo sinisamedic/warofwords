@@ -4,6 +4,8 @@ Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 Korisnik je nakon igrivog pregleda 2026-09-18 odobrio izgled i izradu APK-a 0.1.14 sa postojećim kućnim potpisom.
 
+Korisnik je odobrio ponovnu doradu Arsenala i katanca i zatražio APK 0.1.15 (code 16), sa istim potpisom kao 0.1.14.
+
 Korekcija po korisničkom pregledu: isijavanje Arsenala mora koristiti isti animirani oreol kao odabrano pojačanje; prethodni jednostavni zraci su zamenjeni. Katanac koristi originalni ukrašeni zlatno-plavi SVG umesto geometrijskog crteža. Prvo ponovni desktop pregled, bez novog APK-a.
 
 ## Dorade nagrada i preglednosti — usvojeno 2026-09-18
