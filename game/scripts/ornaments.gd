@@ -143,7 +143,6 @@ static func art(c: CanvasItem, kind: int, p: Vector2, radius: float, tint: Color
 	c.draw_polygon(points,PackedColorArray([tint]),uv,ATLAS)
 
 static func medallion(c: CanvasItem, kind: int, p: Vector2, radius: float, color: Color, amount: int = -1, capacity: int = 1, disabled: bool = false) -> void:
-	c.draw_circle(p+Vector2(0,4),radius+2,Color("071420"))
 	gradient_disc(c,p,radius,Color("fff0b6"),Color("775029"))
 	c.draw_circle(p,radius-2,Color("081c2d"))
 	var art_radius := radius-(12 if amount>=0 else 9)

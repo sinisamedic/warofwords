@@ -2,15 +2,18 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
-## Pregled posle 0.1.12 — APK čeka potvrdu
+## 0.1.13 — odobren izgled i čisti rubovi medaljona
 
 - Kampanjska nagrada je velika ikonica uz „Pripremi se“; osvojena ima ukrašen zeleno-zlatni bedž. Uklonjen tekstualni red o otključavanju. Savet protivnika ostaje čitljiv u dve linije.
 - Izabrano pojačanje ima zlatni oreol, zrake, bedž i zlatnu oznaku „Opremljeno“. Ostala dva su tamnija; sva tri medaljona su malo manja, uz očuvane velike dodirne oblasti. Reduced Motion ima statičan sjaj.
 - Pobeda prikazuje broj upravo završenog nivoa na srpskom/engleskom. Završni nivo dodatno ima naslov za završenu kampanju.
 - Godot import i 306 postojećih provera prolaze bez grešaka/upozorenja. Render pregled EN/SR, 1280×720 i 1280×576: svih pet kampanjskih nagrada pre/posle osvajanja, sva tri izbora pojačanja, Reduced Motion i pobede na nivoima 1/4/12. Ponovljiv prikaz: `game/tests/render_campaign_polish.gd`.
-- **Nema novog APK-a i nema promene verzije. Korisnik je izričito tražio pregled pre builda.** Poslednji objavljeni APK ostaje 0.1.12.
+- Korisnik je odobrio izgled i novi APK, uz uklanjanje crnog oboda. Uklonjen je neprozirni pomereni krug iz zajedničkog crtača medaljona. Izvorne ilustracije i Proboj ostaju isti; prstenovi punjenja ostaju funkcionalni.
+- Lokalni APK `exports/WarOfWords-0.1.13-android.apk`, code 14, 103.116.885 bajtova, SHA256 `38a7ce34b42db540e733338a3f748deccd0262bc192271ed2589e5a697e48b5c`. Potpis `a071affa…d276`, isti kao 0.1.10–0.1.12; v2/v3 i zipalign prolaze.
+- 1.570 PASS / 0 FAIL i refill benchmark sa 0 neuspeha. Prvi izvoz zaustavljen jer nije bio prosleđen alias postojećeg ključa. Završni izvoz koristi alias pročitan iz istog ključa i postojeću lozinku; prolazi bez script/engine grešaka/upozorenja.
+- Android API 36: nadogradnja sa 0.1.12 čuva ceo progress, dodiri otvaraju kampanju/pripremu i menjaju sva tri pojačanja uz čuvanje izbora. Pregledani pravi Android snimci; originalni podaci emulatora vraćeni. Prvi UI pokušaj imao je crn ekran; posle buđenja/otključavanja i čekanja iscrtanog kadra ponovljena provera prolazi. Detalji: `docs/QA-0.1.13.md`. GitHub objava još nije potvrđena u ovom zapisu.
 - Lokalni interaktivni pregled: `.local/preview-campaign-polish.gd`, zaseban probni save; F1 nagrada, F2 osvojena nagrada, F3 pojačanja, F4 pobeda. Lokalni pregled nije Android emulator.
-- **Tačan sledeći korak:** korisnik potvrđuje ili koriguje izgled; tek nakon potvrde pripremiti sledeći APK na grani `codex/equipment-wave-one`.
+- **Tačan sledeći korak:** objaviti i proveriti APK 0.1.13, zatim korisnička proba na Samsungu. Aktivna grana: `codex/equipment-wave-one`.
 
 ## 0.1.12 — nagrade na mapi i dijalog otključavanja
 
@@ -131,7 +134,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/equipment-wave-one`. Sačekati korisnikov pregled novih nagrada, pojačanja i rezultata u Godotu. **APK tek posle njegove potvrde.** Poslednji objavljeni paket ostaje 0.1.12. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
+Nastaviti granu `codex/equipment-wave-one`. Korisnik je odobrio izgled i APK 0.1.13; dovršiti proveru i objavu prema najnovijem odeljku na vrhu. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
 
 Za drugi računar: `git fetch origin --prune`, pregledati lokalno stanje, nastaviti `codex/equipment-wave-one` i povući bez destruktivnog resetovanja. Engine/SDK/template-i se ne prenose Git-om. Signing ključ i javnu online konfiguraciju preneti zasebno van Git-a; ne vraćati slučajno kućni potpis ako se nastavlja linija 0.1.10. Raniji 0.1.8 draft ostaje neobjavljen.
 
