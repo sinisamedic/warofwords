@@ -250,6 +250,7 @@ func finish_loading() -> void:
 		daily_screen.closed.connect(func(): change_screen("home"))
 	if OS.is_debug_build():
 		print("WarOfWords: ready")
+	if screen=="home": show_pending_unlock()
 	queue_redraw()
 
 func select_dictionary(code: String) -> void:
@@ -331,8 +332,9 @@ func _process(delta: float) -> void:
 		if ended and result_delay > 0:
 			result_delay=maxf(0,result_delay-delta)
 			if result_delay == 0:
-				overlay="result"
-				sfx.play("win" if won else "lose")
+				if not won or not show_pending_unlock():
+					overlay="result"
+					sfx.play("win" if won else "lose")
 	for p in sparks:
 		p.time += delta
 	sparks = sparks.filter(func(p): return p.time < 0.7)
@@ -660,7 +662,11 @@ func draw_campaign() -> void:
 	EnemyArt.draw_preview(self,mission,feet,238)
 	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
 	text(enemy_lesson(),Rect2(44,y+49,size.x-320,24),18,CREAM,false,HORIZONTAL_ALIGNMENT_LEFT)
-	text("Win here to unlock BREACH" if mission==3 and not breach_unlocked() else t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+77,size.x-320,24),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
+	var prize := Equipment.mission_reward(mission)
+	if not prize.is_empty():
+		equipment_ui.campaign_reward(self,prize,Rect2(42,y+72,size.x-320,34))
+	else:
+		text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+77,size.x-320,24),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
 	if chapter<2: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
@@ -923,7 +929,7 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 		Ornaments.ui_icon(self,"coin",Rect2(middle-87,rect.position.y+185,35,35))
 		text("+%d" % reward,Rect2(middle-44,rect.position.y+183,130,38),28,GOLD,true)
 		text(t("%d words  •  %.0fs") % [word_count,duration],Rect2(rect.position.x+55,rect.position.y+234,rect.size.x-110,25),21)
-		text(t("NEW EQUIPMENT: %s") % ", ".join(new_equipment.map(func(id): return t(Equipment.DATA[id].name))) if not new_equipment.is_empty() else t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+35,rect.position.y+262,rect.size.x-70,25),21,GOLD)
+		text(t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+35,rect.position.y+262,rect.size.x-70,25),21,GOLD)
 		if mission==11: text("CAMPAIGN COMPLETE",Rect2(middle-145,rect.position.y+161,290,22),16,GOLD,true)
 	else:
 		text(ENEMIES[mission],Rect2(middle-245,rect.position.y+118,490,32),24,CREAM,true)
@@ -982,6 +988,9 @@ func draw_defeat_dialog() -> void:
 func draw_overlay() -> void:
 	buttons.clear()
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.02,0.06,0.10,0.86))
+	if overlay=="unlock":
+		equipment_ui.draw_unlock(self)
+		return
 	if overlay=="result" and not won:
 		draw_defeat_dialog()
 		return
@@ -1162,6 +1171,7 @@ func launch_attack(player: bool, kind: String, color: Color, damage: int) -> voi
 func dispatch(id: String, value: int = -1) -> void:
 	if OS.is_debug_build(): print("WarOfWords: action=%s screen=%s overlay=%s" % [id,screen,overlay])
 	match id:
+		"unlock_continue": acknowledge_unlock()
 		"daily": change_screen("daily"); daily_screen.open()
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
@@ -1253,6 +1263,7 @@ func change_screen(target: String) -> void:
 func back() -> void:
 	if screen=="daily": daily_screen.leave(); return
 	if ended and screen == "battle" and result_delay>0: return
+	if overlay=="unlock": acknowledge_unlock(); return
 	if not overlay.is_empty():
 		if overlay=="result": change_screen("campaign")
 		else: overlay=""
@@ -1413,6 +1424,26 @@ func show_hint() -> void:
 	hint_time=4
 	message(t("HINT: %s") % solution)
 
+func show_pending_unlock() -> bool:
+	if save.data.get("pending_unlocks",[]).is_empty(): return false
+	overlay="unlock"
+	sfx.play("upgrade")
+	haptic(35,.4)
+	queue_redraw()
+	return true
+
+func acknowledge_unlock() -> void:
+	if overlay!="unlock" or save.data.pending_unlocks.is_empty(): return
+	var id: String=save.data.pending_unlocks.pop_front()
+	if not save.save_game():
+		save.data.pending_unlocks.push_front(id)
+		message("Could not save progress on this device")
+		return
+	if not show_pending_unlock():
+		overlay="result" if screen=="battle" and ended and won else ""
+		if overlay=="result": sfx.play("win")
+	queue_redraw()
+
 func finish(victory: bool) -> void:
 	if ended: return
 	ended=true; won=victory; result_delay=DEFEAT_DURATION; overlay=""; path.clear(); notice_time=0
@@ -1433,6 +1464,8 @@ func finish(victory: bool) -> void:
 		save.data.wins[str(mission)]=maxi(stars,int(save.data.wins.get(str(mission),0)))
 		save.data.unlocked=maxi(save.data.unlocked,mini(11,mission+1))
 	new_equipment.assign(Equipment.DATA.keys().filter(func(id): return id not in owned and Equipment.unlocked(id,save.data)))
+	for id in new_equipment:
+		if id not in save.data.pending_unlocks: save.data.pending_unlocks.append(id)
 	save.data.total_words+=word_count
 	if best_word.length()>save.data.longest.length(): save.data.longest=best_word
 	for word in used:

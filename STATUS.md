@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
+## 0.1.12 — nagrade na mapi i dijalog otključavanja
+
+- Očišćen tamni trag oko vrha strele Proboja; cela alfa silueta ostaje. ImageGen PNG pregledan na beloj i navy podlozi; prompt i poreklo su u `game/assets/art/prompts-breach-cleanup.json`.
+- Poseban ukrašen dijalog za svaki novootključani uređaj/artefakt: ikonica, naziv, opis i potvrda. Više nagrada ide redom, zatim rezultat pobede. Nepotvrđeni red se čuva kroz restart; potvrđene/ranije osvojene nagrade se ne najavljuju ponovo. Izbor opreme ostaje ručan u Arsenalu.
+- Mapa prikazuje ikonicu i nagradu za pobedu na susretima 3, 4, 6, 8 i 10, a za već osvojene predmete „Otključano“. EN/SR. Uslovi otključavanja i balans nisu menjani.
+- Lokalni APK `exports/WarOfWords-0.1.12-android.apk`, code 13, 103.096.196 bajtova, SHA256 `c2e379fe8ed494f5e359e44605b0adf928f5b7f17c97e34505b40a7e3a23299c`. Potpis `a071affa…d276`, isti kao 0.1.10/0.1.11; v2/v3 i zipalign prolaze.
+- 1.570 PASS / 0 FAIL + refill benchmark. Import/export bez script/engine grešaka i upozorenja. EN/SR renderi 1280×576 i 1280×720, uključujući duge nazive i obe podloge ikonice. Android API 36: instalacija preko 0.1.11 čuva ceo progress; potvrda prve nagrade dodirima, force-stop sa drugom nepotvrđenom nagradom, Back potvrda i otvaranje kampanje prolaze. Stvarni prikazi dijaloga i nagrade pregledani; originalni podaci emulatora vraćeni. Detalji: `docs/QA-0.1.12.md`. Objava još nije potvrđena.
+- **Sledeći korak:** objaviti i proveriti 0.1.12, zatim korisnička proba novog otključavanja na telefonu. Aktivna grana: `codex/equipment-wave-one`.
+
 ## 0.1.11 — odabrana ikonica i puni Proboj
 
 - Korisnik je izabrao detaljan Proboj sa vrhom projektila preko zlatnog oboda. Cela alfa silueta prikazuje se bez kružnog odsecanja u Arsenalu, unapređenjima, pripremi i borbi; spoljni prsten punjenja ostaje dinamički. PNG i prompt su u `game/assets/art/`.

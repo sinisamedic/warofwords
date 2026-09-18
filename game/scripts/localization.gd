@@ -1,6 +1,9 @@
 extends RefCounted
 
 const SR := {
+"CONGRATULATIONS!":"ČESTITAMO!", "You have unlocked":"Otključali ste", "NEW EQUIPMENT":"NOVA OPREMA",
+"CONTINUE":"NASTAVI", "Choose it in the Arsenal before your next duel.":"Izaberi u Arsenalu pre sledeće borbe.",
+"%d more to reveal":"Još za otkrivanje: %d", "Victory reward: %s":"Nagrada za pobedu: %s", "Unlocked: %s":"Otključano: %s",
 "Every second hit is heavy. Save your shield.":"Svaki drugi udar je snažan. Sačuvaj zaštitu.",
 "Healing every other turn. Use Arc or Seal.":"Leči se svaki drugi potez. Koristi Luk ili Pečat.",
 "YOUR LOADOUT":"TVOJA OPREMA",

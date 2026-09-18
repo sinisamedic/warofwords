@@ -364,6 +364,8 @@ func run_tests() -> void:
 	scene.fire(0)
 	check(scene.energy[0]==0 and scene.ready_flash[0]==0,"firing ends ready pulse")
 	# Death presentation cannot interrupt the outcome, replay the reward or hide the winner.
+	# This scenario has no pending award; dedicated equipment tests cover that flow.
+	scene.save.data.pending_unlocks.clear()
 	scene.fx.clear(); scene.foe_hp=1; scene.launch_attack(true,"pulse",scene.GOLD,24)
 	scene.advance_combat(.43)
 	check(scene.ended and scene.overlay.is_empty() and scene.result_delay>1.0,"lethal hit starts defeat before showing results")

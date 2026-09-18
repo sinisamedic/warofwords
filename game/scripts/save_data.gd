@@ -5,7 +5,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -41,6 +41,11 @@ func load_game() -> void:
 			data.loadout=Equipment.loadout(data)
 			data.weapon=data.loadout[0]
 			if data.artifact not in ["none","lexicon","reserve"] or not Equipment.unlocked(data.artifact,data): data.artifact="none"
+			var pending: Array = []
+			for id in data.pending_unlocks:
+				if id is String and Equipment.DATA.has(id) and id not in Equipment.DEFAULTS and Equipment.unlocked(id,data) and id not in pending:
+					pending.append(id)
+			data.pending_unlocks=pending
 			break
 
 func number(value: Variant, fallback: int) -> int:

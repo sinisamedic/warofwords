@@ -89,8 +89,43 @@ func run() -> void:
 	g.best_tiles=6; g.save.data.lexicon_earned=false; g.best_word="LJUBLJEN"; g.finish(true)
 	check(not g.save.data.lexicon_earned,"artifact achievement counts tiles, not Serbian digraph characters")
 	# Legacy save migrates gold weapon; inventory remains independent of battle payload.
-	var legacy: Dictionary=g.save.defaults(); legacy.erase("loadout"); legacy.weapon="breach"; legacy.wins={"3":3}
+	var legacy: Dictionary=g.save.defaults(); legacy.erase("loadout"); legacy.erase("pending_unlocks"); legacy.weapon="breach"; legacy.wins={"3":3}
 	g.save.data=legacy; g.save.save_game(); g.save.load_game()
 	check(g.save.data.loadout==["breach","aegis","arc","mend"],"legacy Breach selection migrates on disk")
+	check(g.save.data.pending_unlocks.is_empty(),"legacy ownership does not replay old unlock celebrations")
+	for pair in [[2,"bloom"],[3,"breach"],[5,"seal"],[7,"mirror"],[9,"reserve"]]:
+		check(g.Equipment.mission_reward(pair[0])==pair[1],"campaign preview matches real reward for encounter %d" % (pair[0]+1))
+	check(g.Equipment.mission_reward(0).is_empty(),"ordinary encounter does not promise equipment")
+	g.save.data=g.save.defaults(); g.save.data.unlocked=11; g.save.data.tutorial=true
+	g.mission=3; await g.start_battle(); g.best_tiles=7; g.finish(true)
+	check(g.save.data.pending_unlocks==["breach","lexicon"],"one victory queues both the level reward and the word achievement")
+	var coins_after_unlock: int=g.save.data.coins
+	g.finish(true)
+	check(g.save.data.pending_unlocks==["breach","lexicon"] and g.save.data.coins==coins_after_unlock,"duplicate finish cannot queue or award twice")
+	g.result_delay=.025; g._process(.05)
+	check(g.overlay=="unlock","earned equipment gets a dedicated dialog after defeat animation")
+	g.dispatch("unlock_continue")
+	check(g.overlay=="unlock" and g.save.data.pending_unlocks==["lexicon"],"continue advances through every newly unlocked item")
+	g.save.load_game()
+	check(g.save.data.pending_unlocks==["lexicon"],"acknowledged item stays dismissed while next item survives reload")
+	# A fresh scene runs the real cold-start flow, not just the queue helper.
+	var restarted=load("res://main.tscn").instantiate()
+	restarted.save.path=g.save.path; root.add_child(restarted)
+	while restarted.loading: await process_frame
+	restarted.set_process(false); restarted.sfx.enabled=false; restarted.music.set_enabled(false)
+	check(restarted.screen=="home" and restarted.overlay=="unlock" and restarted.save.data.pending_unlocks==["lexicon"],"cold start resumes an unseen unlock dialog")
+	restarted.back(); restarted.save.load_game()
+	check(restarted.overlay.is_empty() and restarted.save.data.pending_unlocks.is_empty(),"Android back acknowledges final dialog and persists it")
+	restarted.queue_free(); await process_frame
+	g.save.load_game(); g.mission=3; await g.start_battle(); g.best_tiles=7; g.finish(true)
+	g.result_delay=.025; g._process(.05)
+	check(g.overlay=="result" and g.save.data.pending_unlocks.is_empty(),"replaying an already won reward level goes straight to victory")
+	g.mission=2; await g.start_battle(); g.finish(false)
+	check(g.save.data.pending_unlocks.is_empty() and not g.Equipment.unlocked("bloom",g.save.data),"defeat never awards or celebrates the promised item")
+	g.save.data.pending_unlocks=["breach","none","breach","mirror",42,"missing","pulse"]
+	g.save.save_game(); g.save.load_game()
+	check(g.save.data.pending_unlocks==["breach"],"save loading removes duplicates, invalid IDs, defaults and unearned rewards")
+	g.overlay="unlock"; g.screen="battle"; g.ended=true; g.won=true; g.acknowledge_unlock()
+	check(g.overlay=="result" and g.save.data.pending_unlocks.is_empty(),"final acknowledgment returns to victory without losing the result")
 	g.queue_free(); await process_frame; await create_timer(.5).timeout
 	print("EQUIPMENT RESULT: %d failures" % failures); quit(1 if failures else 0)

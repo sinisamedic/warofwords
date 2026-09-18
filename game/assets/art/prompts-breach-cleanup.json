@@ -1,0 +1,9 @@
+{
+  "date": "2026-09-18",
+  "tool": "OpenAI ImageGen (built-in)",
+  "source": "exec-09cf04d7-63b7-43a6-a0e3-3e918b621257.png",
+  "prompt": "Edit this exact fantasy BREACH equipment icon. This is a cleanup of transparency ONLY. Preserve the existing engraved circular gold medallion, broken steel breastplate, bright gold energy spear, metallic details, lighting, colors, and overall composition exactly. The spear must still project beyond the circular frame toward the upper right. Remove the ugly dark/black smoky rectangular patch and gray/black halo surrounding the spear OUTSIDE the medallion in the upper-right corner. Replace all that dark exterior patch with genuine fully transparent alpha, tightly following the sharp spear silhouette. Retain only the spear itself and a very subtle warm golden light bloom outside the ring, with clean antialiased transparent edges. Also remove any dirty dark fringe around the exterior of the medallion. Keep the dark navy interior INSIDE the circular frame entirely intact. Transparent RGBA canvas outside the physical medallion and protruding spear, no white matte, no black matte, no painted checkerboard. Do not crop the spear, do not change the design, do not add text, symbols, or another frame. The final icon must look equally clean on pure white and dark navy UI backgrounds.",
+  "reference": "equipment-breach.png at Git revision 1bdf7dc4d7335219d45cd580869730616f410706",
+  "reference_role": "Transparency cleanup only; preserve artwork and protruding spear.",
+  "processing": "Generated PNG copied unchanged; Godot import uses the existing 512-pixel limit and mipmaps."
+}

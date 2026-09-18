@@ -27,6 +27,53 @@ func icon(c: CanvasItem, id: String, p: Vector2, radius: float, color: Color, am
 		uv.append(Vector2(.5,.5)+v*.43)
 	c.draw_polygon(points,PackedColorArray([Color.WHITE]),uv,textures[id])
 
+func campaign_reward(c: Control, id: String, rect: Rect2) -> void:
+	var owned := E.unlocked(id,c.save.data)
+	var color: Color=c.COLORS[3] if owned else c.GOLD
+	Art.plaque(c,rect)
+	icon(c,id,rect.position+Vector2(22,rect.size.y/2),16,color)
+	var label: String=c.t("Unlocked: %s" if owned else "Victory reward: %s") % c.t(E.DATA[id].name)
+	c.text(label,Rect2(rect.position+Vector2(47,0),rect.size-Vector2(57,0)),18,color,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+
+func draw_unlock(c: Control) -> void:
+	var pending: Array=c.save.data.get("pending_unlocks",[])
+	if pending.is_empty(): return
+	var id: String=pending[0]
+	var tint: Color=c.COLORS[mini(3,maxi(0,E.slot_of(id)))] if E.slot_of(id)<4 else c.GOLD
+	var width := minf(720,c.size.x-48)
+	var r := Rect2((c.size.x-width)/2,(c.size.y-416)/2,width,416)
+	var x := r.position.x
+	var y := r.position.y
+	var middle := r.get_center().x
+	c.panel(r,c.INK,c.GOLD)
+	c.draw_texture_rect(Art.FILIGREE,r,false)
+	Art.glow(c,Vector2(middle,y+51),200,Color(c.GOLD,.14))
+	Art.gem(c,Vector2(middle,y),7)
+	c.text("CONGRATULATIONS!",Rect2(x+35,y+18,width-70,42),31,c.GOLD,true)
+	c.text("You have unlocked",Rect2(x+35,y+65,width-70,29),22,c.CREAM)
+	c.draw_line(Vector2(x+40,y+108),Vector2(r.end.x-40,y+108),Color(c.GOLD,.32),1.5,true)
+	var p := Vector2(x+145,y+216)
+	var time: float=0 if c.save.data.calm else c.clock
+	Art.glow(c,p,132,Color(tint,.31+.05*sin(time*2)))
+	for n in 12:
+		var angle: float=TAU*n/12.0+time*.08
+		var v := Vector2.from_angle(angle)
+		c.draw_line(p+v*98,p+v*(113+5*sin(n*1.7)),Color(tint,.28),2,true)
+		if n%3==0: Art.gem(c,p+v*119,2.5)
+	icon(c,id,p,88,tint)
+	Art.plaque(c,Rect2(x+58,y+322,174,29))
+	c.text("NEW EQUIPMENT",Rect2(x+65,y+322,160,27),16,tint,true)
+	var tx := x+280
+	var tw := width-310
+	c.text(E.DATA[id].name,Rect2(tx,y+142,tw,44),29,tint,true,HORIZONTAL_ALIGNMENT_LEFT)
+	var desc: Array=E.DATA[id].sr if c.save.data.ui_language=="sr" else E.DATA[id].desc
+	for n in 2:
+		c.text(desc[n],Rect2(tx,y+202+n*31,tw,29),22,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+	c.text("Choose it in the Arsenal before your next duel.",Rect2(tx,y+280,tw,28),18,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT)
+	if pending.size()>1:
+		c.text(c.t("%d more to reveal") % (pending.size()-1),Rect2(tx,y+314,tw,26),17,c.GOLD,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+	c.action("CONTINUE",Rect2(middle-116,r.end.y-62,232,47),"unlock_continue",-1,true)
+
 func draw(c: Control) -> void:
 	c.header("ARSENAL")
 	var tw: float=(c.size.x-48)/5

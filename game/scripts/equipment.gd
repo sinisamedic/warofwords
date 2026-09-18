@@ -22,6 +22,16 @@ static func unlocked(id: String, data: Dictionary) -> bool:
 	if win==-2: return data.get("lexicon_earned",false)
 	return win==-1 or data.get("wins",{}).has(str(win))
 
+static func mission_reward(mission: int) -> String:
+	for id in DATA:
+		if int(DATA[id].win)>=0 and int(DATA[id].win)==mission: return id
+	return ""
+
+static func slot_of(id: String) -> int:
+	for i in SLOTS.size():
+		if id in SLOTS[i]: return i
+	return -1
+
 static func loadout(data: Dictionary) -> Array:
 	var result: Array=DEFAULTS.duplicate()
 	var saved: Variant=data.get("loadout",[])

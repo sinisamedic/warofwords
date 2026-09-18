@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## 0.1.12 — najava i proslava otključavanja
+
+- Proboj zadržava celu strelu preko kružnog oboda, uz očišćenu providnost spolja: uklonjen je tamni trag oko vrha. Nova ImageGen korekcija ne menja značenje ikonice.
+- Posle pobede koja prvi put otključa opremu prikazuje se ukrašen dijalog „Čestitamo! Otključali ste“, velika ikonica, naziv i dve linije opisa. Jedna potvrda prikazuje sledeću nagradu, a poslednja vraća rezultat pobede. Više nagrada iz jednog duela prikazuje se redom. Potvrda ne oprema predmet automatski; izbor ostaje u Arsenalu.
+- Nepotvrđene nagrade su u lokalnom `pending_unlocks` redu. Prekid aplikacije ih ne gubi: prikazuju se pri sledećem pokretanju. Potvrđene se ne ponavljaju, ponovljena pobeda ne pravi novu najavu, a nadogradnja starog save-a ne prikazuje stare osvojene predmete kao nove. Android Back potvrđuje trenutni dijalog. Zvuk, vibracija i Reduced Motion poštuju podešavanja.
+- Mapa prikazuje malu ikonicu i „Nagrada za pobedu: …“ za Obnovu na susretu 3, Proboj 4, Pečat 6, Ogledalo 8 i Rezervnu ćeliju 10. Ako je predmet već osvojen, red prikazuje „Otključano: …“. Podaci dolaze iz istih definicija kao stvarno otključavanje, bez posebnog hardkodiranog izuzetka za Proboj.
+- Pečat leksikona ostaje posebna nagrada za pobedu uz reč od 7+ pločica, uz isti dijalog; nije obećan kao nagrada određenog nivoa. EN/SR su podržani. Uslovi, brojke opreme, dnevni režim i server nisu menjani.
+
 ## Vizuelna dorada posle 0.1.10
 
 Na zahtev korisnika Proboj dobija punu ilustraciju probijanja metalnog oklopa zlatnim energetskim projektilom, u stilu ostale opreme. Linijski privremeni simbol je uklonjen; isti izvor koriste svi ekrani i dugme u borbi. Posle dodatnog pregleda korisnik je izabrao **celu alfa siluetu**, bez kružnog odsecanja vrha projektila koji prelazi zlatni obod. Borba zadržava zaseban spoljašnji prsten punjenja. Pravila, trošak i efekat oružja nisu menjani.

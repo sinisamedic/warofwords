@@ -1,5 +1,11 @@
 # Production artwork
 
+## Breach transparency cleanup — 0.1.12, 2026-09-18
+
+The user identified a dark exterior matte around the protruding spear. Built-in OpenAI ImageGen edited the existing icon to remove that dark patch and dirty fringe while retaining the navy interior, engraved frame and projecting gold spear. `equipment-breach.png` is the unchanged new RGBA output (2,471,583 bytes). The previous original remains in Git history; the exact reference revision, output identifier and cleanup prompt are in `prompts-breach-cleanup.json`. The original creation prompt remains in `prompts-breach.json`.
+
+The revised texture was visually inspected on white and navy backgrounds in Godot. A subtle gold bloom remains around the luminous spear, without the black patch. Same applicable OpenAI terms, no third-party stock artwork. Godot's 512 px import and mipmaps are unchanged.
+
 ## Breach illustration revision — 2026-09-18
 
 `equipment-breach.png` is an original built-in OpenAI ImageGen illustration of a gold energy lance splitting steel armor. It replaces the temporary procedural arrow/shield symbol across equipment views and battle. Our `equipment-mirror.png` supplied only the rendering style and medallion presentation; the central illustration is new. The generated PNG is copied unchanged (2,862,978 bytes); Godot imports it with a 512-pixel limit and mipmaps, like the other equipment icons. Exact prompt, reference role and original source filename: `prompts-breach.json`.
