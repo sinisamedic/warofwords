@@ -1,5 +1,6 @@
 extends RefCounted
 const Equipment = preload("res://scripts/equipment.gd")
+const Campaign = preload("res://scripts/campaign.gd")
 
 var path := "user://progress.json"
 var data: Dictionary = {}
@@ -23,7 +24,9 @@ func load_game() -> void:
 					data[key] = parsed[key]
 			# JSON represents integers as floats, so validate numeric fields separately.
 			data.coins = clampi(number(parsed.get("coins"),180),0,999999)
-			data.unlocked = clampi(number(parsed.get("unlocked"),0),0,11)
+			data.unlocked = clampi(number(parsed.get("unlocked"),0),0,Campaign.COUNT-1)
+			# A completed old campaign opens chapter four immediately after upgrading.
+			if data.wins.has("11"): data.unlocked=maxi(12,data.unlocked)
 			data.selected_power = clampi(number(parsed.get("selected_power"),0),0,2)
 			data.weapon = "breach" if parsed.get("weapon") == "breach" and data.wins.has("3") else "pulse"
 			data.total_words = maxi(0,number(parsed.get("total_words"),0))

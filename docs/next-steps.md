@@ -1,5 +1,7 @@
 # Nastavak rada — War of Words
 
+> **Dopuna 2026-09-18:** korisnik je probao 0.1.13 i odobrio proširenje. Na `codex/campaign-wave-two` implementirani su 24 nivoa / šest lokacija i Žar, Rezonator, Bastion, Crpljenje: ukupno 12 uređaja + dva artefakta. Prioriteti 2 i 3 ispod sada su sprovedeni za obim od 24 nivoa. Sledeća je korisnička proba desktop pregleda i balansa; APK nije pravljen. Ostaju predlozi četiri uređaja i četiri artefakta. Korisnik prihvata deinstalaciju pri budućem APK-u sa drugim potpisom. Ostatak stranice je pregled prethodnog objavljenog izdanja 0.1.13.
+
 Ažurirano 2026-09-18. Aktivna grana: **`codex/equipment-wave-one`**. Poslednji objavljeni paket: **0.1.13 / code 14**. Izvor tog APK-a: `53230bb`; kasniji commit-i dokumentacije ne zahtevaju novi build. [Izdanje i APK](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.13-android-preview).
 
 ## Šta je završeno

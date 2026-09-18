@@ -35,6 +35,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Game tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Campaign tactics tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_equipment.gd
 if ($LASTEXITCODE -ne 0) { throw 'Equipment tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_wave_two.gd
+if ($LASTEXITCODE -ne 0) { throw 'Expanded campaign tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_daily.gd
 if ($LASTEXITCODE -ne 0) { throw 'Daily challenge tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_refill.gd

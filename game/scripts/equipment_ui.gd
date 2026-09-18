@@ -82,19 +82,20 @@ func draw(c: Control) -> void:
 	var card_width: float=(c.size.x*.48-34)/2
 	var items: Array=E.SLOTS[c.arsenal_slot]
 	var equipped: String=c.save.data.get("artifact","none") if c.arsenal_slot==4 else E.loadout(c.save.data)[c.arsenal_slot]
-	for i in 2:
+	var compact := items.size()>2
+	for i in items.size():
 		var id: String=items[i]
-		var rect := Rect2(24+i*(card_width+10),145,card_width,241)
+		var rect := Rect2(24+(i%2)*(card_width+10),145+(i/2)*124,card_width,117 if compact else 241)
 		c.panel(rect,c.INK,color if c.arsenal_choice==i else Color("648399"))
 		if c.arsenal_choice==i: Art.glow(c,rect.get_center()-Vector2(0,30),card_width*.65,Color(color,.18))
-		icon(c,id,Vector2(rect.get_center().x,226),minf(65,card_width*.39),color)
+		icon(c,id,Vector2(rect.get_center().x,rect.position.y+36 if compact else 226),32 if compact else minf(65,card_width*.39),color)
 		if c.arsenal_slot==4:
 			var title: PackedStringArray=c.t(E.DATA[id].name).split(" ",false,1)
 			for n in title.size(): c.text(title[n],Rect2(rect.position.x+10,290+n*26,card_width-20,28),21,c.CREAM,true)
-		else: c.text(E.DATA[id].name,Rect2(rect.position.x+10,302,card_width-20,32),22,c.CREAM,true)
+		else: c.text(E.DATA[id].name,Rect2(rect.position.x+10,rect.position.y+67 if compact else 302,card_width-20,24 if compact else 32),18 if compact else 22,c.CREAM,true)
 		if not E.unlocked(id,c.save.data):
-			Art.padlock(c,Vector2(rect.get_center().x,355))
-		else: c.text("EQUIPPED" if equipped==id else "AVAILABLE",Rect2(rect.position.x+10,344,card_width-20,30),18,color)
+			Art.padlock(c,Vector2(rect.position.x+19 if compact else rect.get_center().x,rect.position.y+96 if compact else 355))
+		else: c.text("EQUIPPED" if equipped==id else "AVAILABLE",Rect2(rect.position.x+10,rect.position.y+90 if compact else 344,card_width-20,22 if compact else 30),14 if compact else 18,color)
 		c.buttons.append({"rect":rect,"id":"gear_view","value":i,"enabled":true})
 	var id: String=items[c.arsenal_choice]
 	var x: float=c.size.x*.51
@@ -108,8 +109,9 @@ func draw(c: Control) -> void:
 		var stats: String=c.t("PASSIVE • NO ENERGY")
 		if c.arsenal_slot<4:
 			var value: int=E.amount(id,int(c.save.data.levels[c.arsenal_slot]))
-			var stat: String=c.t(["DAMAGE","PROTECTION","DAMAGE","HEALING"][c.arsenal_slot])
+			var stat: String=c.t("TOTAL DAMAGE" if id=="ember" else "DAMAGE" if id=="siphon" else ["DAMAGE","PROTECTION","DAMAGE","HEALING"][c.arsenal_slot])
 			stats=c.t("%d ENERGY • %s %d") % [E.DATA[id].cost,stat,value]
+			if id=="resonator": stats=c.t("%d ENERGY • DAMAGE %d–%d") % [E.DATA[id].cost,value,value+30]
 		c.text(stats,Rect2(x+16,273,width-32,30),20,color)
 		c.action("EQUIPPED" if equipped==id else "EQUIP",Rect2(x+28,323,width-56,49),"gear_equip",-1,equipped!=id,equipped!=id)
 	else:
@@ -127,6 +129,14 @@ func draw(c: Control) -> void:
 
 func battle_status(c: Control) -> void:
 	if c.ended: return
+	if c.bastion_hits>0:
+		Art.plaque(c,Rect2(c.size.x*.31-47,101,94,26))
+		c.text(c.t("SHIELD ×%d") % c.bastion_hits,Rect2(c.size.x*.31-42,102,84,23),15,c.COLORS[1])
+	if c.burn_ticks>0:
+		var p := Vector2(c.size.x*.66,107)
+		icon(c,"ember",p,21,c.COLORS[0])
+		Art.plaque(c,Rect2(p.x-40,p.y+22,80,25))
+		c.text("−%d ×%d" % [c.burn_amount,c.burn_ticks],Rect2(p.x-35,p.y+22,70,25),17,c.GOLD)
 	if c.shield>0 and c.shield_kind=="mirror":
 		var p := Vector2(c.size.x*.20,119)
 		var points := PackedVector2Array()

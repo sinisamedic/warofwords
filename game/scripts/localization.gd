@@ -1,6 +1,15 @@
 extends RefCounted
 
 const SR := {
+"EMBER":"ŽAR", "RESONATOR":"REZONATOR", "BASTION":"BASTION", "SIPHON":"CRPLJENJE",
+"TOTAL DAMAGE":"UKUPNA ŠTETA", "BASE DAMAGE":"OSNOVNA ŠTETA", "%d ENERGY • DAMAGE %d–%d":"%d ENERGIJE • ŠTETA %d–%d", "SHIELD ×%d":"ŠTIT ×%d",
+"THE ASH FORGE":"UŽARENA KOVAČNICA", "THE EMERALD GARDENS":"SMARAGDNI VRTOVI", "THE MOON CITADEL":"MESEČEVA CITADELA",
+"Cinder Musketeer":"Žarni musketar", "Furnace Alchemist":"Alhemičar peći", "Obsidian Defender":"Opsidijanski branilac", "THE FORGE TYRANT":"TIRANIN KOVAČNICE",
+"Verdant Lancer":"Zeleni kopljanik", "Orchid Keeper":"Čuvar orhideja", "Jade Stag":"Žadni jelen", "THE ANCIENT ROOT":"DREVNI KOREN",
+"Silver Duelist":"Srebrni duelista", "Lunar Seer":"Mesečev prorok", "Pearl Juggernaut":"Biserni kolos", "THE ECLIPSE MONARCH":"VLADAR POMRAČENJA",
+"Armor and heavy strikes. Break armor; keep a shield.":"Oklop i snažni udari. Razbij oklop; čuvaj štit.",
+"Armor and healing. Break armor; interrupt heals.":"Oklop i lečenje. Razbij oklop; prekini lečenje.",
+"Attack, heal, heavy strike. Read the cycle; break armor.":"Napad, lečenje, snažan udar. Prati ciklus; razbij oklop.",
 "LEVEL %d COMPLETE":"NIVO %d ZAVRŠEN",
 "CONGRATULATIONS!":"ČESTITAMO!", "You have unlocked":"Otključali ste", "NEW EQUIPMENT":"NOVA OPREMA",
 "CONTINUE":"NASTAVI", "Choose it in the Arsenal before your next duel.":"Izaberi u Arsenalu pre sledeće borbe.",

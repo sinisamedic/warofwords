@@ -1,8 +1,16 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
+Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
-## Nastavak kod kuće — 2026-09-18
+## Proširenje kampanje — igrivi pregled, 2026-09-18
+
+- Aktivna grana: **codex/campaign-wave-two**, polazi od `682eb84` sa grane `codex/equipment-wave-one`.
+- Korisnik je probao prethodni APK na telefonu i odobrio 12 novih nivoa/neprijatelja i četiri uređaja. Sada postoje 24 susreta / šest lokacija, 12 uređaja i dva artefakta. Nove ilustracije, nagrade nivoa 13/15/17/20, složeniji završni protivnici, Arsenal i nastavak sačuvane borbe su povezani. Detalji: `docs/game-design.md`.
+- **Nije pravljen novi APK**, po izričitom zahtevu. Poslednji objavljeni APK i oznaka verzije ostaju 0.1.13. Korisnik dozvoljava deinstalaciju i novi lokalni potpis pri budućem build-u; ključ nije prepreka ovom radu.
+- Provere: Godot import, igra, taktika, oprema, nova kampanja i daily: **1.729 PASS / 0 FAIL**, refill benchmark 0 failures; engine log bez grešaka/upozorenja. Renderi novih mapa/borbi, opreme EN/SR, statusa i završne pobede na 1280×720 i 1280×576. Novi ponovljivi testovi i render u `game/tests/*wave_two.gd`.
+- Igrivi desktop pregled: Godot `--path game --resolution 1280x720 --script res://tests/preview_wave_two.gd`. Počinje na nivou 13, svi nivoi i uređaji otključani, unapređenja nivoa 4, 3.000 novčića, srpski interfejs/rečnik. Koristi zaseban `.local/wave-two-preview.json`; redovan napredak ostaje netaknut. Ovo je Godot desktop pregled, ne Android emulator.
+- **Sledeći korak:** korisnička proba novih lokacija, protivnika i četiri uređaja; prema utiscima doraditi balans/prikaz. APK tek na novi zahtev. Pre prelaska računara nastaviti ovu granu; alati i lokalni save nisu u Git-u.
+## Prethodni nastavak kod kuće — 2026-09-18
 
 - Poslednji gotov i objavljen paket je **0.1.13 / code 14**; izvorni commit APK-a `53230bb`. Sve tražene dorade do tog paketa su završene. Detalji i provere su ispod; ova dopuna dokumentacije ne menja igru niti pravi novi APK.
 - **Šta dalje:** [pregled urađenog i prioriteti](docs/next-steps.md). Prvo proba 0.1.13 na Samsungu i konkretne primedbe, zatim preporučena provera balansa opreme/dopune. Drugi talas opreme, proširenje kampanje, animacije i trajni profil su predlozi za sledeći dogovor.

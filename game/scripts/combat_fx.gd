@@ -34,7 +34,7 @@ static func valid_saved(saved: Variant) -> bool:
 	for shot in saved:
 		if not shot is Dictionary: return false
 		if not shot.get("player") is bool: return false
-		if shot.get("kind") not in ["word","long_word","pulse","breach","arc","seal","mirror","enemy"]: return false
+		if shot.get("kind") not in ["word","long_word","pulse","breach","arc","seal","mirror","ember","resonator","siphon","enemy"]: return false
 		if shot.player == (shot.kind == "enemy"): return false
 		if not shot.get("color") is String or not Color.html_is_valid(shot.color): return false
 		for key in ["time","damage"]:
@@ -73,6 +73,12 @@ func draw(c: CanvasItem, width: float, calm: bool) -> void:
 		c.draw_line(tail.lerp(p,.25),p,Color("fff7d0"),2.5,true)
 		Art.glow(c,p,24 if calm else 38,Color(shot.color,.9))
 		c.draw_circle(p,5,Color("fffdea"))
+		if shot.kind=="resonator":
+			for n in 3: c.draw_arc(p-direction*n*12,8+n*3,-PI*.65,PI*.65,20,Color(shot.color,.8-n*.18),2,true)
+		elif shot.kind=="ember":
+			for n in 4: Art.glow(c,p-direction*n*7+Vector2(0,sin(u*16+n)*5),12-n*2,Color(1,.3+.12*n,.05,.7))
+		elif shot.kind=="siphon":
+			c.draw_arc(p,14,0,TAU,24,Color("a2ffc5"),2,true)
 		if shot.kind in ["seal","mirror"]:
 			var points := PackedVector2Array()
 			for n in 7: points.append(p+Vector2.from_angle(n*TAU/6+(0 if calm else u*4))*14)

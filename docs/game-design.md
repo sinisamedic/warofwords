@@ -2,6 +2,17 @@
 
 Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Proširenje kampanje — usvojeno 2026-09-18
+
+Korisnik je potvrdio da 0.1.13 na telefonu izgleda dobro i odobrio još 12 nivoa, 12 novih neprijatelja i Žar, Rezonator, Bastion i Crpljenje. Ukupno 24 susreta, šest poglavlja i 12 uređaja + dva artefakta. Ova odluka zamenjuje raniji neodobreni predlog proširenja. Ovaj korak završava se desktop pregledom, bez APK builda.
+
+- Poglavlja 4–6: Užarena kovačnica, Smaragdni vrtovi i Mesečeva citadela; po četiri nova protivnika sa zasebnim ilustracijama. Šefovi na 16/20 kombinuju oklop sa teškim napadom/lečenjem; poslednji ima oklop i ciklus napad → lečenje → teški napad. Najave i saveti postoje na oba jezika.
+- Žar: nagrada nivoa 13, cena 5. Na prvom nivou udara 12 i sagoreva 3 × 6 na svake 2 s. Sagorevanje zaobilazi oklop, novi pogodak osvežava efekat. Unapređenje: +4 udar i +2 po talasu.
+- Bastion: nagrada nivoa 15, cena 7. Zajednička zaštita 24 za najviše dva pogotka, +6 po unapređenju. Drugi udar koristi ostatak; iscrpljen štit prestaje odmah.
+- Rezonator: nagrada nivoa 17, cena 6. Osnova 18 (+6 po unapređenju), poslednja prihvaćena reč daje +5 po pločici iznad tri, najviše +30. Računaju se pločice, uključujući srpske digrafe; šteta se fiksira pri ispaljivanju.
+- Crpljenje: nagrada nivoa 20, cena 6. Šteta 20 (+5 po unapređenju), pri udaru leči pola stvarno oduzetog HP-a, zaokruženo naniže. Oklop i preostali HP protivnika smanjuju lečenje. Može se koristiti i na punom zdravlju.
+- Četiri aktivna mesta i jedan artefakt ostaju; unapređenja dele boju. Novi statusi, projektili i poslednja dužina reči čuvaju se u prekinutoj borbi. Stare pobede ostaju; završena stara kampanja automatski otvara nivo 13.
+- Početni balans je implementiran i funkcionalno testiran; duža ljudska proba težine novih nivoa tek sledi. Dnevna pravila i server nisu menjani.
 ## 0.1.13 — usvojene vizuelne dorade
 
 - Nagrada izabranog nivoa prikazuje se samo kao veliki medaljon levo od „Pripremi se“, delimično preko gornje ivice panela. Osvojena oprema dobija zeleno-zlatni bedž sa nacrtanom kvačicom, bez tekstualnog reda o otključavanju. Pravila nagrada ostaju ista. Savet protivnika raspoređen je u dve kratke linije da ostane čitljiv.

@@ -1,8 +1,10 @@
 # War of Words
 
+**Razvojni pregled:** 24 nivoa, šest lokacija, 12 uređaja i dva artefakta. Dodati Žar, Rezonator, Bastion i Crpljenje. Novi APK nije pravljen; igrivi pregled: Godot `--path game --script res://tests/preview_wave_two.gd` (zaseban probni save). Detalji u [STATUS.md](STATUS.md).
+
 **Android 0.1.13:** velike kampanjske nagrade sa ukrašenom oznakom osvojenog, jasnije istaknuto izabrano pojačanje i broj završenog nivoa na pobedi. Medaljoni imaju čist zlatni rub bez crnog donjeg oboda. Prvi talas opreme, dijalozi otključavanja, dnevni izazov i globalna rang-lista ostaju dostupni. [Online režim i postavljanje](docs/daily-online.md).
 
-**Igriva Android verzija u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 12 susreta. Kampanja i vežba rade offline; rangirani dnevni izazov zahteva internet. Radni naziv i balans mogu se menjati nakon testa na telefonu.
+**Igriva Android verzija u Godotu 4.7.2.** Landscape duel protiv računara: povezuj engleska ili srpska slova, uz izbor susednog ili slobodnog povezivanja, napuni borbene sposobnosti i savladaj 24 susreta u aktuelnom izvoru (12 u objavljenom APK-u 0.1.13). Kampanja i vežba rade offline; rangirani dnevni izazov zahteva internet. Radni naziv i balans mogu se menjati nakon testa na telefonu.
 
 ## Probaj igru
 

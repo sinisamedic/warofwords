@@ -1,6 +1,7 @@
 extends Control
 
 const Equipment = preload("res://scripts/equipment.gd")
+const Campaign = preload("res://scripts/campaign.gd")
 const EquipmentUI = preload("res://scripts/equipment_ui.gd")
 const Lexicon = preload("res://scripts/lexicon.gd")
 const SaveData = preload("res://scripts/save_data.gd")
@@ -22,8 +23,8 @@ const ROLES := ["Direct energy blast","Block the next attack","Strike and interr
 const COSTS := [4,5,7,5]
 const POWER_NAMES := ["TIME FREEZE","FRESH BOARD","OVERCHARGE"]
 const POWER_DESC := ["Stop the enemy for 8s","A new field of letters","Double your next word"]
-const REGIONS := ["SUNWARD RUINS","THE SKY BRIDGES","THE OBSERVATORY"]
-const ENEMIES := ["Training Sentinel","Copper Scout","Gatekeeper","BRONZE WARDEN","Sky Watcher","Storm Sentinel","Bridge Guardian","TEMPEST WARDEN","Astral Sentinel","Archive Keeper","Sunforged Elite","THE LAST WARDEN"]
+const REGIONS := Campaign.REGIONS
+const ENEMIES := Campaign.NAMES
 
 var font: Font = preload("res://assets/fonts/Lato-Bold.ttf")
 var title_font: Font = preload("res://assets/fonts/NotoSerif.ttf")
@@ -31,7 +32,7 @@ var title_emblem: Texture2D = preload("res://assets/art/title-emblem.png")
 var board_environment: Texture2D = preload("res://assets/art/board-environment.png")
 var arena: Texture2D = preload("res://assets/art/arena.png")
 var map_art: Texture2D = preload("res://assets/art/map.png")
-const CAMPAIGN_ART := [preload("res://assets/art/campaign-sunward.png"),preload("res://assets/art/campaign-sky.png"),preload("res://assets/art/campaign-observatory.png")]
+const CAMPAIGN_ART := [preload("res://assets/art/campaign-sunward.png"),preload("res://assets/art/campaign-sky.png"),preload("res://assets/art/campaign-observatory.png"),preload("res://assets/art/campaign-forge.png"),preload("res://assets/art/campaign-garden.png"),preload("res://assets/art/campaign-citadel.png")]
 var campaign_background_from := 0
 var campaign_background_time := .55
 var campaign_background_direction := 1.0
@@ -124,6 +125,11 @@ var bloom_time := 0.0
 var bloom_ticks := 0
 var bloom_amount := 0
 var best_tiles := 0
+var last_tiles := 0
+var burn_time := 0.0
+var burn_ticks := 0
+var burn_amount := 0
+var bastion_hits := 0
 var new_equipment: Array[String] = []
 var arsenal_slot := 0
 var arsenal_choice := 0
@@ -131,10 +137,13 @@ var equipment_ui = EquipmentUI.new()
 
 # The tutorial remains simple; later encounters teach one readable counter at a time.
 func enemy_style() -> String:
-	return ["training","heavy","healer","armored","heavy","healer","armored","heavy","healer","armored","heavy","armored"][mission]
+	return Campaign.STYLES[mission]
 
 func enemy_lesson() -> String:
 	match enemy_style():
+		"armored_heavy": return "Armor and heavy strikes. Break armor; keep a shield."
+		"armored_healer": return "Armor and healing. Break armor; interrupt heals."
+		"eclipse": return "Attack, heal, heavy strike. Read the cycle; break armor."
 		"heavy": return "Every second hit is heavy. Save your shield."
 		"healer": return "Healing every other turn. Use Arc or Seal."
 		"armored": return "Armor halves damage. Break it with a 6-tile word."
@@ -154,9 +163,20 @@ func ability_cost(i: int) -> int:
 	return Equipment.DATA[ability_id(i)].cost
 
 func ability_effect(i: int) -> int:
-	return Equipment.amount(ability_id(i),int(save.data.levels[i]))
+	var amount := Equipment.amount(ability_id(i),int(save.data.levels[i]))
+	if ability_id(i)=="resonator" and screen=="battle": amount+=5*clampi(last_tiles-3,0,6)
+	return amount
 
 func advance_equipment(delta: float) -> void:
+	if ended: return
+	if burn_ticks>0:
+		burn_time-=delta
+		while burn_time<=0.000001 and burn_ticks>0 and not ended:
+			foe_hp=maxi(0,foe_hp-burn_amount)
+			burn_ticks-=1; burn_time+=2
+			fx.burst("impact",Vector2(.80,115),Color("ff993d"),.45)
+			if foe_hp<=0: finish(true)
+		if burn_ticks==0: burn_time=0
 	if ended: return
 	seal_time=maxf(0,seal_time-delta)
 	if bloom_ticks>0:
@@ -177,9 +197,7 @@ func gain_energy(gain: Array) -> void:
 		if previous_energy<ability_cost(i) and energy[i]>=ability_cost(i): ready_flash[i]=1.15
 
 func next_enemy_move() -> String:
-	if enemy_style()=="healer" and (enemy_attacks+1)%2==0: return "HEAL"
-	if enemy_style()=="heavy" and (enemy_attacks+1)%2==0: return "HEAVY HIT"
-	return "ATTACK"
+	return Campaign.action(mission,enemy_attacks+1)
 
 func _ready() -> void:
 	Engine.max_fps = 60
@@ -357,7 +375,7 @@ func update_actors() -> void:
 			EnemyArt.apply(enemy_actor,portraits[1],mission)
 			enemy_art_mission=mission
 		hero.scale = Vector2.ONE*.84
-		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.CELL.y
+		enemy_actor.scale = Vector2.ONE*128.0/EnemyArt.cell_height(mission)
 		var idle: bool = not save.data.calm and not ended
 		var enemy_breath := 1.0+sin(clock*1.8+.8)*.032 if idle else 1.0
 		enemy_actor.scale.y*=enemy_breath
@@ -411,10 +429,18 @@ func advance_combat(delta: float) -> void:
 				message("Armor broken!")
 			elif foe_guard:
 				damage=maxi(1,damage/2)
+			var actual_damage := mini(foe_hp,damage)
 			foe_hp=maxi(0,foe_hp-damage)
+			if impact.kind=="ember":
+				burn_time=2; burn_ticks=3
+				# Derive the tick from this projectile, not a later changed upgrade.
+				burn_amount=6+maxi(0,(int(impact.damage)-12)/2)
+			if impact.kind=="siphon":
+				hp=mini(100,hp+actual_damage/2)
+				fx.burst("heal",Vector2(.20,115),COLORS[3],.65)
 			if impact.kind=="seal": seal_time=20; message("Enemy sealed for 20s")
 			if impact.kind == "arc":
-				if enemy_style()=="healer" and (enemy_attacks+1)%2==0:
+				if next_enemy_move()=="HEAL":
 					enemy_attacks+=1 # Cancel this healing turn, not merely its animation.
 				countdown=interval()+3
 				message("Enemy attack interrupted")
@@ -423,7 +449,12 @@ func advance_combat(delta: float) -> void:
 		else:
 			var absorbed := mini(shield,damage)
 			var reflect := absorbed/2 if shield_kind=="mirror" else 0
-			damage=maxi(0,damage-shield); shield=0
+			damage=maxi(0,damage-shield)
+			if shield_kind=="bastion":
+				bastion_hits=maxi(0,bastion_hits-1)
+				shield=maxi(0,shield-absorbed) if bastion_hits>0 else 0
+				if shield==0: bastion_hits=0
+			else: shield=0
 			if reflect>0 and hp>damage: launch_attack(true,"mirror",COLORS[1],reflect)
 			hp=maxi(0,hp-damage)
 			hero.react("hit",save.data.calm)
@@ -445,6 +476,7 @@ func _draw_backdrop(node: Node2D) -> void:
 		node.draw_rect(Rect2(Vector2.ZERO,size),Color(.03,.09,.14,.16))
 		return
 	var tex := map_art if screen == "campaign" else arena
+	if mission>=12 and screen=="battle": tex=CAMPAIGN_ART[mission/4]
 	var target := Rect2(Vector2.ZERO,size)
 	if screen == "battle":
 		target.size.y = 180
@@ -458,6 +490,7 @@ func _draw_backdrop(node: Node2D) -> void:
 	else:
 		region.size.y = tw/ratio
 		region.position.y = (th-region.size.y)*0.35
+		if mission>=12 and screen=="battle": region.position.y=th*.79-region.size.y
 	node.draw_texture_rect_region(tex,target,region)
 	if screen == "battle":
 		for x in [.20,.80]:
@@ -603,7 +636,7 @@ func campaign_span() -> float:
 	return size.x*.64-44
 
 func settle_campaign(target: int) -> void:
-	var next := clampi(target,0,mini(2,int(save.data.unlocked)/4))
+	var next := clampi(target,0,mini(Campaign.CHAPTERS-1,int(save.data.unlocked)/4))
 	if next!=chapter:
 		campaign_background_from=chapter
 		campaign_background_time=0
@@ -618,7 +651,7 @@ func settle_campaign(target: int) -> void:
 func draw_campaign_track(canvas: Control) -> void:
 	if screen!="campaign": return
 	var points := campaign_points()
-	for page in 3:
+	for page in Campaign.CHAPTERS:
 		var offset := campaign_offset+(page-chapter)*campaign_span()
 		if absf(offset)>canvas.size.x+45: continue
 		canvas.draw_set_transform(Vector2(offset,0))
@@ -672,7 +705,7 @@ func draw_campaign() -> void:
 	text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+80,info_width,22),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
-	if chapter<2: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
+	if chapter<Campaign.CHAPTERS-1: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
 
 func draw_arsenal() -> void:
 	equipment_ui.draw(self)
@@ -722,7 +755,7 @@ func draw_upgrades() -> void:
 	var price := upgrade_cost(selected)
 	panel(Rect2(x,90,width,344))
 	text(t("LEVEL %d  >  %d") % [level,mini(8,level+1)],Rect2(x+12,106,width-24,50),32,GOLD,true)
-	text(["DAMAGE","PROTECTION","DAMAGE","HEALING"][selected],Rect2(x+16,169,width-32,30),23)
+	text("TOTAL DAMAGE" if ability_id(selected)=="ember" else "DAMAGE" if ability_id(selected)=="siphon" else "BASE DAMAGE" if ability_id(selected)=="resonator" else ["DAMAGE","PROTECTION","DAMAGE","HEALING"][selected],Rect2(x+16,169,width-32,30),23)
 	var shown_effect: int=ability_effect(selected)
 	text(str(shown_effect) if level==8 else t("%d  >  %d") % [shown_effect,shown_effect+int(Equipment.DATA[ability_id(selected)].step)],Rect2(x+16,206,width-32,48),35,COLORS[selected])
 	text(t("CHARGE   %d ENERGY") % ability_cost(selected),Rect2(x+16,265,width-32,34),23)
@@ -838,7 +871,9 @@ func draw_battle() -> void:
 		var label := Rect2(center.x-58,center.y+29,116,43)
 		Ornaments.plaque(self,label)
 		text(ability_name(i),Rect2(label.position.x+9,label.position.y+4,98,18),17,CREAM,true)
-		text("READY" if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+9,label.position.y+23,98,16),16,GOLD if ready else CREAM)
+		var ready_label := t("READY")
+		if ability_id(i)=="resonator": ready_label+=" • %d" % ability_effect(i)
+		text(ready_label if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+9,label.position.y+23,98,16),16,GOLD if ready else CREAM)
 		buttons.append({"rect":Rect2(center-Vector2(59,48),Vector2(118,122)),"id":"fire","value":i,"enabled":true})
 	var help_center := Vector2(size.x/2-313,446)
 	var power_center := Vector2(size.x/2+294,446)
@@ -924,7 +959,7 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 	draw_texture_rect(Ornaments.CRESTS[1 if victory else 0],Rect2(middle-82,rect.position.y-39,164,106),false)
 	if victory:
 		Ornaments.plaque(self,Rect2(middle-210,rect.position.y+54,420,65))
-		text("CAMPAIGN COMPLETE" if mission==11 else "VICTORY",Rect2(middle-185,rect.position.y+56,370,33),30,GOLD,true)
+		text("CAMPAIGN COMPLETE" if mission==Campaign.COUNT-1 else "VICTORY",Rect2(middle-185,rect.position.y+56,370,33),30,GOLD,true)
 		text(t("LEVEL %d COMPLETE") % (mission+1),Rect2(middle-185,rect.position.y+85,370,25),19,CREAM,true)
 		for i in 3:
 			var p := Vector2(middle+(i-1)*75,rect.position.y+151)
@@ -957,7 +992,7 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 	if victory:
 		action("MAP",Rect2(middle-275,y,140,51),"campaign")
 		action("ARSENAL" if not new_equipment.is_empty() else "UPGRADES",Rect2(middle-119,y,185,51),"arsenal" if not new_equipment.is_empty() else "upgrades")
-		action("NEXT >" if mission<11 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
+		action("NEXT >" if mission<Campaign.COUNT-1 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
 	else:
 		action("MENU",Rect2(middle-300,y,125,51),"save_home")
 		action("OPTIONS",Rect2(middle-165,y,190,51),"settings")
@@ -1025,7 +1060,7 @@ func draw_overlay() -> void:
 		"result":
 			title="VICTORY" if won else "DEFEATED"
 			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.",t("%d words  •  Best: %s") % [word_count,best_word if not best_word.is_empty() else "—"],t("+%d coins   •   %.0f seconds") % [reward,duration]]
-			if won and mission==11:
+			if won and mission==Campaign.COUNT-1:
 				lines.append("The observatory is free. Campaign complete!")
 		"replace":
 			title="START A NEW DUEL?"
@@ -1047,7 +1082,7 @@ func draw_overlay() -> void:
 		"result":
 			action("MAP",Rect2(middle-275,y,140,51),"campaign")
 			action("UPGRADES",Rect2(middle-119,y,185,51),"upgrades")
-			action("NEXT >" if won and mission<11 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
+			action("NEXT >" if won and mission<Campaign.COUNT-1 else "RETRY",Rect2(middle+81,y,194,51),"next",-1,true)
 		"replace":
 			action("CANCEL",Rect2(middle-220,y,200,51),"dismiss")
 			action("START",Rect2(middle+20,y,200,51),"new_battle",-1,true)
@@ -1110,7 +1145,7 @@ func move(p: Vector2) -> void:
 		var travel := p-page_origin
 		if screen=="campaign" and not save.data.calm and absf(travel.x)>absf(travel.y)*1.35:
 			var direction := 1 if travel.x<0 else -1
-			var allowed := chapter+direction>=0 and chapter+direction<=mini(2,int(save.data.unlocked)/4)
+			var allowed := chapter+direction>=0 and chapter+direction<=mini(Campaign.CHAPTERS-1,int(save.data.unlocked)/4)
 			campaign_offset=clampf(travel.x,-campaign_span()*.8,campaign_span()*.8)*(1.0 if allowed else .12)
 	if not dragging:
 		return
@@ -1187,7 +1222,7 @@ func dispatch(id: String, value: int = -1) -> void:
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
 		"gear_slot": arsenal_slot=clampi(value,0,4); arsenal_choice=0
-		"gear_view": arsenal_choice=clampi(value,0,1)
+		"gear_view": arsenal_choice=clampi(value,0,Equipment.SLOTS[arsenal_slot].size()-1)
 		"gear_upgrade": selected=mini(arsenal_slot,3); change_screen("upgrades")
 		"gear_equip":
 			var item: String=Equipment.SLOTS[arsenal_slot][arsenal_choice]
@@ -1219,7 +1254,7 @@ func dispatch(id: String, value: int = -1) -> void:
 		"new_battle": start_battle()
 		"continue": restore_battle()
 		"next":
-			if won: mission=mini(11,mission+1)
+			if won: mission=mini(Campaign.COUNT-1,mission+1)
 			change_screen("powers")
 		"pause": overlay="pause"; path.clear(); persist_battle()
 		"resume","dismiss": overlay=""; save.data.tutorial=true; save.save_game()
@@ -1305,14 +1340,15 @@ func start_battle() -> void:
 	await select_dictionary(save.data.word_language)
 	lex.adjacent_only = save.data.adjacent_only
 	change_screen("battle")
-	hp=100; foe_max=72+mission*13+(35 if mission%4==3 else 0); foe_hp=foe_max
-	foe_guard=enemy_style()=="armored"
+	hp=100; foe_max=Campaign.health(mission); foe_hp=foe_max
+	foe_guard=Campaign.armored(mission)
 	battle_loadout=Equipment.loadout(save.data)
 	battle_weapon=battle_loadout[0]
 	battle_artifact=save.data.get("artifact","none")
 	if not Equipment.unlocked(battle_artifact,save.data): battle_artifact="none"
 	reserves.assign([0,0,0,0]); shield_kind="aegis"
 	seal_time=0; bloom_time=0; bloom_ticks=0; bloom_amount=0; best_tiles=0; new_equipment.clear()
+	last_tiles=0; burn_time=0; burn_ticks=0; burn_amount=0; bastion_hits=0
 	weapon_unlocked_now=false
 	energy=[0,3,0,0]; shield=0; used.clear(); word_count=0; best_word=""
 	duration=0; ended=false; won=false; reward=0; stars=0; freeze=0; surge=false
@@ -1328,7 +1364,7 @@ func start_battle() -> void:
 	persist_battle()
 
 func interval() -> float:
-	return maxf(8,14-mission*0.42)
+	return Campaign.interval(mission)
 
 func submit_word() -> void:
 	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
@@ -1343,6 +1379,7 @@ func submit_word() -> void:
 	used[word]=true; word_count+=1
 	if word.length()>best_word.length(): best_word=word
 	best_tiles=maxi(best_tiles,path.size())
+	last_tiles=path.size()
 	var multiplier := (2 if path.size()>=6 else 1)*(2 if surge else 1)
 	var gain := [0,0,0,0]
 	for i in path:
@@ -1365,21 +1402,25 @@ func fire(i: int) -> void:
 	if ended or energy[i]<ability_cost(i):
 		message(t("%s needs %d matching energy") % [t(ability_name(i)),ability_cost(i)]); return
 	if i==1 and shield>0: message("Your shield is already active"); return
-	if i==3 and hp>=100: message("Health is already full"); return
+	if i==3 and hp>=100 and ability_id(i)!="siphon": message("Health is already full"); return
 	energy[i]=reserves[i] if battle_artifact=="reserve" else 0
 	reserves[i]=0
 	ready_flash[i]=0
 	var kind := ability_id(i)
 	match i:
-		1: shield=ability_effect(i); shield_kind=kind
+		1:
+			shield=ability_effect(i); shield_kind=kind
+			bastion_hits=2 if kind=="bastion" else 0
 		3:
 			if kind=="bloom":
 				var level := int(save.data.levels[3])
 				hp=mini(100,hp+6+2*(level-1))
 				bloom_ticks=4; bloom_time=2; bloom_amount=6+level-1
-			else: hp=mini(100,hp+ability_effect(i))
+			elif kind!="siphon": hp=mini(100,hp+ability_effect(i))
 			hero_flash=0
-	if i in [0,2]: launch_attack(true,kind,COLORS[i],ability_effect(i))
+	if i in [0,2] or kind=="siphon":
+		var damage := 12+4*(int(save.data.levels[0])-1) if kind=="ember" else ability_effect(i)
+		launch_attack(true,kind,Color("ff993d") if kind=="ember" else COLORS[i],damage)
 	else:
 		fx.burst("shield" if i==1 else "heal",Vector2(.20,115),COLORS[i],.8)
 		sfx.play("shield" if i==1 else "heal")
@@ -1390,7 +1431,7 @@ func fire(i: int) -> void:
 func enemy_attack() -> void:
 	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
 	enemy_attacks+=1
-	if enemy_style()=="healer" and enemy_attacks%2==0:
+	if Campaign.action(mission,enemy_attacks)=="HEAL":
 		if seal_time>0:
 			seal_time=0; countdown=interval()
 			fx.burst("impact",Vector2(.80,115),COLORS[2],.65)
@@ -1403,8 +1444,8 @@ func enemy_attack() -> void:
 		message("Enemy healed. Use Arc before the next heal.")
 		persist_battle()
 		return
-	var amount := 12+mission
-	if enemy_style()=="heavy" and enemy_attacks%2==0: amount+=12
+	var amount := Campaign.damage(mission)
+	if Campaign.action(mission,enemy_attacks)=="HEAVY HIT": amount+=12
 	if mission%4==3 and enemy_attacks%3==0: amount+=8
 	countdown=interval()
 	launch_attack(false,"enemy",COLORS[2],amount)
@@ -1473,7 +1514,7 @@ func finish(victory: bool) -> void:
 		if best_tiles>=7: save.data.lexicon_earned=true
 		weapon_unlocked_now=mission==3 and not breach_unlocked()
 		save.data.wins[str(mission)]=maxi(stars,int(save.data.wins.get(str(mission),0)))
-		save.data.unlocked=maxi(save.data.unlocked,mini(11,mission+1))
+		save.data.unlocked=maxi(save.data.unlocked,mini(Campaign.COUNT-1,mission+1))
 	new_equipment.assign(Equipment.DATA.keys().filter(func(id): return id not in owned and Equipment.unlocked(id,save.data)))
 	for id in new_equipment:
 		if id not in save.data.pending_unlocks: save.data.pending_unlocks.append(id)
@@ -1500,6 +1541,11 @@ func persist_battle() -> void:
 		save.data.battle.bloom_ticks=bloom_ticks
 		save.data.battle.bloom_amount=bloom_amount
 		save.data.battle.best_tiles=best_tiles
+		save.data.battle.last_tiles=last_tiles
+		save.data.battle.burn_time=burn_time
+		save.data.battle.burn_ticks=burn_ticks
+		save.data.battle.burn_amount=burn_amount
+		save.data.battle.bastion_hits=bastion_hits
 	if not save.save_game(): message("Could not save progress on this device")
 
 func restore_battle() -> void:
@@ -1518,6 +1564,8 @@ func restore_battle() -> void:
 	reserves.assign(b.get("reserves",[0,0,0,0])); shield_kind=b.get("shield_kind","aegis")
 	seal_time=float(b.get("seal_time",0)); bloom_time=float(b.get("bloom_time",0))
 	bloom_ticks=int(b.get("bloom_ticks",0)); bloom_amount=int(b.get("bloom_amount",0)); best_tiles=int(b.get("best_tiles",0))
+	last_tiles=int(b.get("last_tiles",0)); burn_time=float(b.get("burn_time",0))
+	burn_ticks=int(b.get("burn_ticks",0)); burn_amount=int(b.get("burn_amount",0)); bastion_hits=int(b.get("bastion_hits",0))
 	new_equipment.clear()
 	weapon_unlocked_now=false
 	energy.assign(b.energy); shield=int(b.shield); countdown=float(b.countdown)
@@ -1545,14 +1593,14 @@ func valid_snapshot(b: Dictionary) -> bool:
 	if b.get("dictionary_code","en") not in ["en","sr"]: return false
 	if not b.get("adjacent_only",true) is bool: return false
 	if not fx.valid_saved(b.get("projectiles",[])): return false
-	if not b.get("foe_guard",false) is bool or b.get("weapon","pulse") not in ["pulse","breach"]: return false
+	if not b.get("foe_guard",false) is bool or b.get("weapon","pulse") not in Equipment.SLOTS[0]: return false
 	var tile_lex = Lexicon.new(false,b.get("dictionary_code","en"))
 	for letter in b.letters:
 		if not letter is String or not tile_lex.valid_tile(letter): return false
 	for kind in b.types:
 		if not (kind is int or kind is float): return false
 		if int(kind)<0 or int(kind)>3 or float(int(kind))!=float(kind): return false
-	return int(b.mission)>=0 and int(b.mission)<12 and int(b.hp)>0 and int(b.hp)<=100 and int(b.foe)>0 and int(b.max)>0 and int(b.power) in [0,1,2]
+	return int(b.mission)>=0 and int(b.mission)<Campaign.COUNT and int(b.hp)>0 and int(b.hp)<=100 and int(b.foe)>0 and int(b.max)>0 and int(b.power) in [0,1,2]
 
 func message(value: String) -> void:
 	notice=t(value); notice_time=2.2
@@ -1641,7 +1689,7 @@ func _run_visual_qa() -> void:
 	save.data.ui_language="sr"
 	await _qa_capture(directory+"/options-icons-sr.png")
 	save.data.ui_language="en"; save.data.unlocked=11
-	for page in 3:
+	for page in Campaign.CHAPTERS:
 		mission=page*4; change_screen("campaign")
 		await _qa_capture(directory+"/campaign-%d.png" % page)
 	mission=0; change_screen("campaign"); settle_campaign(1); campaign_offset=campaign_span()*.45
