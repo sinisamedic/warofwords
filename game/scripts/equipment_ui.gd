@@ -27,13 +27,11 @@ func icon(c: CanvasItem, id: String, p: Vector2, radius: float, color: Color, am
 		uv.append(Vector2(.5,.5)+v*.43)
 	c.draw_polygon(points,PackedColorArray([Color.WHITE]),uv,textures[id])
 
-func campaign_reward(c: Control, id: String, rect: Rect2) -> void:
+func campaign_reward(c: Control, id: String, center: Vector2) -> void:
 	var owned := E.unlocked(id,c.save.data)
-	var color: Color=c.COLORS[3] if owned else c.GOLD
-	Art.plaque(c,rect)
-	icon(c,id,rect.position+Vector2(22,rect.size.y/2),16,color)
-	var label: String=c.t("Unlocked: %s" if owned else "Victory reward: %s") % c.t(E.DATA[id].name)
-	c.text(label,Rect2(rect.position+Vector2(47,0),rect.size-Vector2(57,0)),18,color,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+	Art.glow(c,center,82,Color(c.GOLD,.24))
+	icon(c,id,center,62,c.GOLD)
+	if owned: Art.earned_badge(c,center+Vector2(39,40),24)
 
 func draw_unlock(c: Control) -> void:
 	var pending: Array=c.save.data.get("pending_unlocks",[])

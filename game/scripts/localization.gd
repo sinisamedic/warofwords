@@ -1,6 +1,7 @@
 extends RefCounted
 
 const SR := {
+"LEVEL %d COMPLETE":"NIVO %d ZAVRŠEN",
 "CONGRATULATIONS!":"ČESTITAMO!", "You have unlocked":"Otključali ste", "NEW EQUIPMENT":"NOVA OPREMA",
 "CONTINUE":"NASTAVI", "Choose it in the Arsenal before your next duel.":"Izaberi u Arsenalu pre sledeće borbe.",
 "%d more to reveal":"Još za otkrivanje: %d", "Victory reward: %s":"Nagrada za pobedu: %s", "Unlocked: %s":"Otključano: %s",

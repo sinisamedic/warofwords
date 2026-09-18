@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2=".65" y2="1">
+      <stop stop-color="#fff5c9"/><stop offset=".24" stop-color="#efc56c"/>
+      <stop offset=".51" stop-color="#8d5c23"/><stop offset=".7" stop-color="#f8db8e"/><stop offset="1" stop-color="#ad712d"/>
+    </linearGradient>
+    <linearGradient id="emerald" x2=".2" y2="1">
+      <stop stop-color="#349b79"/><stop offset=".48" stop-color="#116752"/><stop offset="1" stop-color="#07392e"/>
+    </linearGradient>
+    <linearGradient id="tick" x2="0" y2="1">
+      <stop stop-color="#fffde7"/><stop offset=".55" stop-color="#ffe9a8"/><stop offset="1" stop-color="#dca94c"/>
+    </linearGradient>
+  </defs>
+  <path d="M37 82 29 121 47 112 61 124 69 86M61 87 76 124 86 111 106 115 88 79" fill="#092a29" stroke="#c59a4e" stroke-width="3"/>
+  <circle cx="64" cy="64" r="55" fill="#061722" opacity=".7"/>
+  <circle cx="64" cy="58" r="54" fill="url(#gold)" stroke="#513d20" stroke-width="2"/>
+  <circle cx="64" cy="58" r="48" fill="#143f3d" stroke="#ffe5a0" stroke-width="1.5"/>
+  <circle cx="64" cy="58" r="43" fill="url(#emerald)" stroke="#ab853f" stroke-width="2"/>
+  <path d="M26 40A41 41 0 0 1 91 27" fill="none" stroke="#93edb6" stroke-width="2" opacity=".7"/>
+  <path d="m33 60 20 22 42-46-8-7-34 35-12-13Z" fill="#032b26" transform="translate(0 4)"/>
+  <path d="m33 58 20 22 42-46-8-7-34 35-12-13Z" fill="url(#tick)" stroke="#ffefbc" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="m37 57 16 17 36-39" fill="none" stroke="#ffffe9" stroke-width="1.5" opacity=".8"/>
+  <path d="m64 2 5 7-5 7-5-7ZM7 58l7-5 7 5-7 5Zm100 0 7-5 7 5-7 5Z" fill="#ffe9a7" stroke="#89652e" stroke-width="1.5"/>
+</svg>

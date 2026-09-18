@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Dorade posle 0.1.12 — pregled pre APK-a
+
+- Nagrada izabranog nivoa prikazuje se samo kao veliki medaljon levo od „Pripremi se“, delimično preko gornje ivice panela. Osvojena oprema dobija zeleno-zlatni bedž sa nacrtanom kvačicom, bez tekstualnog reda o otključavanju. Pravila nagrada ostaju ista. Savet protivnika raspoređen je u dve kratke linije da ostane čitljiv.
+- Na pripremi su sva tri medaljona malo manja. Odabrano pojačanje ima zlatni oreol sa zracima, bedž i zlatnu pločicu „Opremljeno“; ostale ilustracije i okviri su tamniji, uz čitljive opise. Cele kartice ostaju dodirne površine. Reduced Motion prikazuje miran oreol.
+- Rezultat pobede jasno prikazuje „Nivo N završen“ / „Level N complete“. Poslednji nivo zadržava i naslov za završenu kampanju. Broj je broj upravo završenog susreta, pre komande „Dalje“.
+- Korisnik je zatražio Godot pregled i izričito odložio APK do potvrde izgleda. Verzija i Android export podešavanja nisu menjani.
+
 ## 0.1.12 — najava i proslava otključavanja
 
 - Proboj zadržava celu strelu preko kružnog oboda, uz očišćenu providnost spolja: uklonjen je tamni trag oko vrha. Nova ImageGen korekcija ne menja značenje ikonice.

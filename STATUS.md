@@ -2,6 +2,16 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
+## Pregled posle 0.1.12 — APK čeka potvrdu
+
+- Kampanjska nagrada je velika ikonica uz „Pripremi se“; osvojena ima ukrašen zeleno-zlatni bedž. Uklonjen tekstualni red o otključavanju. Savet protivnika ostaje čitljiv u dve linije.
+- Izabrano pojačanje ima zlatni oreol, zrake, bedž i zlatnu oznaku „Opremljeno“. Ostala dva su tamnija; sva tri medaljona su malo manja, uz očuvane velike dodirne oblasti. Reduced Motion ima statičan sjaj.
+- Pobeda prikazuje broj upravo završenog nivoa na srpskom/engleskom. Završni nivo dodatno ima naslov za završenu kampanju.
+- Godot import i 306 postojećih provera prolaze bez grešaka/upozorenja. Render pregled EN/SR, 1280×720 i 1280×576: svih pet kampanjskih nagrada pre/posle osvajanja, sva tri izbora pojačanja, Reduced Motion i pobede na nivoima 1/4/12. Ponovljiv prikaz: `game/tests/render_campaign_polish.gd`.
+- **Nema novog APK-a i nema promene verzije. Korisnik je izričito tražio pregled pre builda.** Poslednji objavljeni APK ostaje 0.1.12.
+- Lokalni interaktivni pregled: `.local/preview-campaign-polish.gd`, zaseban probni save; F1 nagrada, F2 osvojena nagrada, F3 pojačanja, F4 pobeda. Lokalni pregled nije Android emulator.
+- **Tačan sledeći korak:** korisnik potvrđuje ili koriguje izgled; tek nakon potvrde pripremiti sledeći APK na grani `codex/equipment-wave-one`.
+
 ## 0.1.12 — nagrade na mapi i dijalog otključavanja
 
 - Očišćen tamni trag oko vrha strele Proboja; cela alfa silueta ostaje. ImageGen PNG pregledan na beloj i navy podlozi; prompt i poreklo su u `game/assets/art/prompts-breach-cleanup.json`.
@@ -121,7 +131,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/equipment-wave-one`. Posle objave 0.1.10 korisnik proba novi Arsenal, otključavanja i kombinacije na telefonu; naročito Pečat protiv iscelitelja, Ogledalo protiv snažnog udarca i Obnovu u dužoj borbi. Tek posle povratnih informacija menjati balans ili birati drugi talas. Ostali uređaji iz kolekcije i trajni profil još nisu implementirani.
+Nastaviti granu `codex/equipment-wave-one`. Sačekati korisnikov pregled novih nagrada, pojačanja i rezultata u Godotu. **APK tek posle njegove potvrde.** Poslednji objavljeni paket ostaje 0.1.12. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
 
 Za drugi računar: `git fetch origin --prune`, pregledati lokalno stanje, nastaviti `codex/equipment-wave-one` i povući bez destruktivnog resetovanja. Engine/SDK/template-i se ne prenose Git-om. Signing ključ i javnu online konfiguraciju preneti zasebno van Git-a; ne vraćati slučajno kućni potpis ako se nastavlja linija 0.1.10. Raniji 0.1.8 draft ostaje neobjavljen.
 

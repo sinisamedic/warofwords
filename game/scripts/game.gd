@@ -660,13 +660,16 @@ func draw_campaign() -> void:
 	Ornaments.glow(self,Vector2.ZERO,72,Color(.01,.04,.07,.55))
 	draw_set_transform(Vector2.ZERO)
 	EnemyArt.draw_preview(self,mission,feet,238)
-	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+8,size.x-320,40),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
-	text(enemy_lesson(),Rect2(44,y+49,size.x-320,24),18,CREAM,false,HORIZONTAL_ALIGNMENT_LEFT)
 	var prize := Equipment.mission_reward(mission)
+	var info_width := size.x-(438 if not prize.is_empty() else 320)
+	text(t(ENEMIES[mission]).to_upper(),Rect2(44,y+5,info_width,36),26,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT)
+	# Two short sentences leave room for the large reward without shrinking the tip.
+	var lesson := t(enemy_lesson()).split(". ",false,1)
+	for i in lesson.size():
+		text(lesson[i]+("." if i==0 and lesson.size()>1 else ""),Rect2(44,y+40+i*21,info_width,22),18,CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
 	if not prize.is_empty():
-		equipment_ui.campaign_reward(self,prize,Rect2(42,y+72,size.x-320,34))
-	else:
-		text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+77,size.x-320,24),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
+		equipment_ui.campaign_reward(self,prize,Vector2(size.x-322,y+43))
+	text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+80,info_width,22),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
 	if chapter<2: action(">",Rect2(size.x-73,86,50,46),"chapter",chapter+1,false,save.data.unlocked>=(chapter+1)*4)
@@ -681,11 +684,17 @@ func draw_powers() -> void:
 	var width := (size.x-84)/3
 	for i in 3:
 		var rect := Rect2(24+i*(width+18),126,width,260)
-		panel(rect,INK,GOLD if i==save.data.selected_power else Color("7298b2"))
-		icon(4+i,Vector2(rect.get_center().x,197),49,[COLORS[1],GOLD,COLORS[2]][i])
-		text(POWER_NAMES[i],Rect2(rect.position.x+8,252,width-16,34),25,CREAM,true)
+		var equipped: bool=i==save.data.selected_power
+		var center := Vector2(rect.get_center().x,200)
+		Ornaments.frame(self,rect,2,Color.WHITE if equipped else Color(.64,.70,.77))
+		if equipped: Ornaments.selection_aura(self,center,clock,save.data.calm)
+		Ornaments.medallion(self,4+i,center,43,[COLORS[1],GOLD,COLORS[2]][i],-1,1,not equipped)
+		if equipped: Ornaments.earned_badge(self,center+Vector2(32,30),18)
+		text(POWER_NAMES[i],Rect2(rect.position.x+8,265,width-16,34),25,CREAM if equipped else Color("afc0ca"),true)
 		text(POWER_DESC[i],Rect2(rect.position.x+9,298,width-18,30),20)
-		text("EQUIPPED" if i==save.data.selected_power else "TAP TO EQUIP",Rect2(rect.position.x+8,344,width-16,30),21,GOLD)
+		if equipped:
+			Ornaments.frame(self,Rect2(rect.position.x+20,339,width-40,36),1)
+		text("EQUIPPED" if equipped else "TAP TO EQUIP",Rect2(rect.position.x+24,341,width-48,30),20,INK if equipped else Color("afc0ca"),equipped)
 		buttons.append({"rect":rect,"id":"power","value":i,"enabled":true})
 	action("ARSENAL",Rect2(24,size.y-68,200,50),"arsenal")
 	var kit: Array=Equipment.loadout(save.data)
@@ -913,12 +922,13 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 	draw_texture_rect(Ornaments.FILIGREE,rect,false)
 	Ornaments.glow(self,Vector2(middle,rect.position.y+64),145,Color(1,.71,.24,.17) if victory else Color(.25,.65,1,.17))
 	draw_texture_rect(Ornaments.CRESTS[1 if victory else 0],Rect2(middle-82,rect.position.y-39,164,106),false)
-	Ornaments.plaque(self,Rect2(middle-177,rect.position.y+58,354,51))
-	text("VICTORY" if victory else "PAUSED",Rect2(middle-155,rect.position.y+62,310,40),32,GOLD,true)
 	if victory:
+		Ornaments.plaque(self,Rect2(middle-210,rect.position.y+54,420,65))
+		text("CAMPAIGN COMPLETE" if mission==11 else "VICTORY",Rect2(middle-185,rect.position.y+56,370,33),30,GOLD,true)
+		text(t("LEVEL %d COMPLETE") % (mission+1),Rect2(middle-185,rect.position.y+85,370,25),19,CREAM,true)
 		for i in 3:
-			var p := Vector2(middle+(i-1)*75,rect.position.y+141)
-			var radius := 29.0 if i==1 else 23.0
+			var p := Vector2(middle+(i-1)*75,rect.position.y+151)
+			var radius := 26.0 if i==1 else 21.0
 			if i<stars:
 				Ornaments.glow(self,p,47,Color(1,.72,.25,.35))
 			Ornaments.star(self,p,radius,i<stars)
@@ -930,8 +940,9 @@ func draw_battle_dialog(rect: Rect2, victory: bool) -> void:
 		text("+%d" % reward,Rect2(middle-44,rect.position.y+183,130,38),28,GOLD,true)
 		text(t("%d words  •  %.0fs") % [word_count,duration],Rect2(rect.position.x+55,rect.position.y+234,rect.size.x-110,25),21)
 		text(t("Best word: %s") % (best_word if not best_word.is_empty() else "—"),Rect2(rect.position.x+35,rect.position.y+262,rect.size.x-70,25),21,GOLD)
-		if mission==11: text("CAMPAIGN COMPLETE",Rect2(middle-145,rect.position.y+161,290,22),16,GOLD,true)
 	else:
+		Ornaments.plaque(self,Rect2(middle-177,rect.position.y+58,354,51))
+		text("PAUSED",Rect2(middle-155,rect.position.y+62,310,40),32,GOLD,true)
 		text(ENEMIES[mission],Rect2(middle-245,rect.position.y+118,490,32),24,CREAM,true)
 		var values := [str(word_count),str(hp)+" / 100",str(int(duration))+"s"]
 		for i in 3:

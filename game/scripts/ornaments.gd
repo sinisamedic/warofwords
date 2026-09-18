@@ -15,6 +15,7 @@ const CRESTS := [preload("res://assets/ui/crest-pause.svg"),preload("res://asset
 const FILIGREE := preload("res://assets/ui/dialog-filigree.svg")
 const HEALTH := preload("res://assets/ui/icon-health.svg")
 const HOURGLASS := preload("res://assets/ui/icon-hourglass.svg")
+const EARNED := preload("res://assets/ui/badge-earned.svg")
 const ICONS := {"arsenal":preload("res://assets/ui/icon-arsenal.svg"),"upgrades":preload("res://assets/ui/icon-gears.svg"),"upgrade":preload("res://assets/ui/icon-gears.svg"),"settings":preload("res://assets/ui/icon-settings.svg"),"journal":preload("res://assets/ui/icon-journal.svg"),"coin":preload("res://assets/ui/icon-coin.svg"),"powers":preload("res://assets/ui/icon-power.svg"),"help":preload("res://assets/ui/icon-help.svg")}
 static var styles: Dictionary = {}
 const PALETTE := [Color("ffd053"),Color("78bfff"),Color("b896f5"),Color("62dcb5")]
@@ -75,6 +76,22 @@ static func ui_icon(c: CanvasItem, id: String, rect: Rect2) -> void:
 
 static func glow(c: CanvasItem, p: Vector2, radius: float, color: Color) -> void:
 	c.draw_texture_rect(GLOW,Rect2(p-Vector2.ONE*radius,Vector2.ONE*radius*2),false,color)
+
+static func earned_badge(c: CanvasItem, p: Vector2, radius: float) -> void:
+	c.draw_texture_rect(EARNED,Rect2(p-Vector2.ONE*radius,Vector2.ONE*radius*2),false)
+
+static func selection_aura(c: CanvasItem, p: Vector2, time: float, calm: bool) -> void:
+	var phase := 0.0 if calm else time*.13
+	var pulse := 1.0 if calm else .9+.1*sin(time*2.3)
+	glow(c,p,94,Color(1,.71,.24,.82*pulse))
+	for i in 16:
+		var angle := phase+i*TAU/16
+		var reach := 71.0 if i%2==0 else 62.0
+		var ray := PackedVector2Array([p+Vector2.from_angle(angle-.045)*43,p+Vector2.from_angle(angle)*reach,p+Vector2.from_angle(angle+.045)*43])
+		c.draw_colored_polygon(ray,Color(1,.82,.39,.29*pulse))
+	c.draw_arc(p,49,0,TAU,64,Color("ffe6a1"),1.5,true)
+	for i in 4:
+		gem(c,p+Vector2.from_angle(-phase*2+i*TAU/4)*57,3)
 
 static func star(c: CanvasItem, p: Vector2, r: float, earned: bool) -> void:
 	var points := PackedVector2Array()
