@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 
+## Posle 0.1.10 — ilustracija Proboja i predlozi ikonice
+
+- Proboj sada ima detaljnu ilustraciju zlatnog projektila koji probija metalni oklop, umesto privremenog linijskog simbola. Zajednički prikaz opreme koristi je u Arsenalu, unapređenjima, pripremi i borbi; kružno punjenje ostaje dinamičko. Originalni ImageGen PNG i tačan prompt su u `game/assets/art/`.
+- Godot uvoz i stvarni renderi pet stanja na 1280×576 prolaze bez script/engine grešaka. Pregledani Arsenal i borba; interaktivni Godot pregled otvoren sa izolovanim probnim napretkom. Mehanika nije menjana. Novi APK nije pravljen: objavljeni 0.1.10 još sadrži stari simbol.
+- Četiri originalna **predloga** ikonice telefona: Zlatni W, Slova puna energije, Heroj i Živi leksikon. Galerija `design/icon-proposals/index.html` ima prikaze 48/64 px, kružnu/zaobljenu masku i svetlu/tamnu podlogu. Izvorne slike i tačni promptovi sačuvani; nijedan predlog još nije odabran niti ugrađen.
+- **Sledeći korak:** korisnik bira ikonicu; zatim pripremiti Android launcher resurse za taj izbor i sledeći APK sa novom ilustracijom Proboja. Aktivna grana ostaje `codex/equipment-wave-one`.
+
 ## 0.1.10 — prvi talas opreme
 
 Korisnik je odobrio implementaciju prvog talasa i novi APK sa lokalnim potpisom. Urađeni su Ogledalo, Pečat, Obnova, Pečat leksikona i Rezervna ćelija: ukupno osam aktivnih uređaja i dva artefakta. Ostatak kolekcije je budući predlog.

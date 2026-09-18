@@ -523,16 +523,6 @@ func icon(kind: int, center: Vector2, radius: float, color: Color = GOLD) -> voi
 	if kind<4: equipment_ui.icon(self,ability_id(kind),center,radius,color)
 	else: Ornaments.medallion(self,kind,center,radius,color)
 
-func draw_breach_icon(center: Vector2, radius: float) -> void:
-	# A split shield and piercing bolt keep the new weapon recognizable at thumb size.
-	draw_circle(center,radius*.78,INK)
-	Ornaments.glow(self,center,radius*.85,Color(1,.67,.16,.24))
-	var r := radius*.5
-	draw_polyline(PackedVector2Array([center+Vector2(-r,-r*.65),center+Vector2(-r,r*.1),center+Vector2(-r*.3,r),center+Vector2(-r*.3,-r*.8)]),GOLD,2.5,true)
-	draw_polyline(PackedVector2Array([center+Vector2(r*.3,-r*.8),center+Vector2(r*.3,r),center+Vector2(r,r*.1),center+Vector2(r,-r*.65)]),GOLD,2.5,true)
-	draw_line(center+Vector2(-r*1.25,r*.4),center+Vector2(r*1.2,-r*.4),CREAM,4,true)
-	draw_colored_polygon(PackedVector2Array([center+Vector2(r*1.35,-r*.46),center+Vector2(r*.65,-r*.72),center+Vector2(r*.85,r*.08)]),GOLD)
-
 func _draw() -> void:
 	buttons_state = screen+"|"+overlay
 	buttons.clear()

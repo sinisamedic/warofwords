@@ -1,5 +1,11 @@
 # Production artwork
 
+## Breach illustration revision — 2026-09-18
+
+`equipment-breach.png` is an original built-in OpenAI ImageGen illustration of a gold energy lance splitting steel armor. It replaces the temporary procedural arrow/shield symbol across equipment views and battle. Our `equipment-mirror.png` supplied only the rendering style and medallion presentation; the central illustration is new. The generated PNG is copied unchanged (2,862,978 bytes); Godot imports it with a 512-pixel limit and mipmaps, like the other equipment icons. Exact prompt, reference role and original source filename: `prompts-breach.json`.
+
+Generated for this project under applicable OpenAI terms; no third-party stock license is claimed. This file is below 10 MiB, so no new LFS pattern is required. Launcher icon proposals are separately documented in `../../../design/icon-proposals/README.md` and are not production assets yet.
+
 ## 0.1.6 preview artwork — 2026-09-17
 
 Four original built-in ImageGen outputs, copied unchanged with source identifiers and exact prompts in `prompts-0.1.6.json`:

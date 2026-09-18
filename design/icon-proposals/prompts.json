@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-18",
+  "tool": "OpenAI built-in ImageGen",
+  "status": "Four proposals for user review; none selected or installed.",
+  "license": "Original AI-generated outputs for this project, subject to applicable OpenAI terms; no third-party stock license claimed.",
+  "assets": [
+    {
+      "file": "01-golden-w.png",
+      "name": "Zlatni W",
+      "source_output": "exec-60cf050e-3fe9-4029-874f-582a89c7e310.png",
+      "prompt": "Use case: stylized-concept. Create ONE polished Android launcher icon for the original fantasy word-combat game WAR OF WORDS, appealing to adults. Square opaque full-bleed composition, no phone mockup, no external labels, no transparent corners, no watermark. High-end painted 3D game art, carefully sculpted materials, bold silhouette and strong contrast that remain legible at 48 pixels. Keep the main identifying subject inside the central 68 percent, leave only background near corners so both round and rounded-square Android masks work. Detailed but not cluttered. A single enormous elegant capital serif W sculpted from warm beveled gold and ivory metal, like the emblem of an ancient fantasy order. Monumental and clean, a small sharp ivory highlight along its bevels. Deep sapphire-blue enamel backdrop with a faint radiant cyan halo and restrained gold sparks. The W fills the visual center and is the unmistakable hero. One subtle circular golden arc behind it adds energy; minimal border details. Rich premium identity, powerful rather than cute. Only text: W.",
+      "reference": null,
+      "reference_role": null
+    },
+    {
+      "file": "02-letter-energy.png",
+      "name": "Slova puna energije",
+      "source_output": "exec-2f193e99-c7b5-4ae4-b61d-e2bfa46757fd.png",
+      "prompt": "Use case: stylized-concept. Create ONE polished Android launcher icon for the original fantasy word-combat game WAR OF WORDS, appealing to adults. Square opaque full-bleed composition, no phone mockup, no external labels, no transparent corners, no watermark. High-end painted 3D game art, carefully sculpted materials, bold silhouette and strong contrast that remain legible at 48 pixels. Keep the main identifying subject inside the central 68 percent, leave only background near corners so both round and rounded-square Android masks work. Detailed but not cluttered. A large chunky jeweled GOLD letter tile bearing a bold dark uppercase W, tilted very slightly in dramatic three-quarter perspective. Behind it two smaller partially overlapping glowing crystal letter tiles: cyan O and amethyst W. The three tiles form a compact triangular composition, linked by a bright flowing gold energy trail that launches upward like magic. Deep teal and cobalt background, colorful cyan and amethyst accents, premium metallic bevels and inset letter carving. The large W is instantly clear, and the image communicates letters becoming battle power. Only letters: W O W. No separate frame, no objects beyond these tiles and the energy.",
+      "reference": null,
+      "reference_role": null
+    },
+    {
+      "file": "03-hero.png",
+      "name": "Heroj",
+      "source_output": "exec-61053e73-145c-4c98-9037-e2f5101fc416.png",
+      "prompt": "Use case: stylized-concept. Create ONE polished Android launcher icon for the original fantasy word-combat game WAR OF WORDS, appealing to adults. Square opaque full-bleed composition, no phone mockup, no external labels, no transparent corners, no watermark. High-end painted 3D game art, carefully sculpted materials, bold silhouette and strong contrast that remain legible at 48 pixels. Keep the main identifying subject inside the central 68 percent, leave only background near corners so both round and rounded-square Android masks work. Detailed but not cluttered. Input image is a CHARACTER IDENTITY REFERENCE ONLY: use the left-hand human protagonist, keeping the wavy dark hair, facial features, teal coat, amber scarf and brass gauntlet. Ignore the right-hand robot and remove all magenta background. Compose a dramatic close-up three-quarter head-and-shoulders portrait, confidently looking toward the viewer, with the glowing gold gauntlet at the lower edge. The expressive face is large and instantly recognizable, lit by warm golden magic against a clean deep sapphire background. Original character, sophisticated fantasy illustration matching the reference, not a child's cartoon. A small but clear sculpted golden W crest on the lower foreground helps identify the word game. No other text or letters.",
+      "reference": "../../game/assets/art/fighters.png",
+      "reference_role": "Identity reference for existing left-hand human protagonist only. No other character reused."
+    },
+    {
+      "file": "04-living-lexicon.png",
+      "name": "Živi leksikon",
+      "source_output": "exec-a551cdb3-11f4-4ef2-9c2b-dc65233f2fe6.png",
+      "prompt": "Use case: stylized-concept. Create ONE polished Android launcher icon for the original fantasy word-combat game WAR OF WORDS, appealing to adults. Square opaque full-bleed composition, no phone mockup, no external labels, no transparent corners, no watermark. High-end painted 3D game art, carefully sculpted materials, bold silhouette and strong contrast that remain legible at 48 pixels. Keep the main identifying subject inside the central 68 percent, leave only background near corners so both round and rounded-square Android masks work. Detailed but not cluttered. An exquisite open navy-and-gold magical book with thick ivory pages and sculpted brass corners. From the opening rises one large floating golden serif W made of brilliant solid magical light, surrounded by a sweeping arc of violet and amber energy. Compact iconic composition, the W and open book read as a single striking emblem. Deep indigo background, luminous amethyst aura, bright warm gold. Ancient knowledge visibly transforming into battle magic; heroic and sophisticated, no whimsical faces. Pages have only faint decorative lines, not readable writing. Only text: W.",
+      "reference": null,
+      "reference_role": null
+    }
+  ]
+}

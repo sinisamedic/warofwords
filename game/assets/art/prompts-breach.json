@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-18",
+  "tool": "OpenAI ImageGen (built-in)",
+  "source": "exec-c7171bdf-4d4c-4bda-82d1-1547433e8c18.png",
+  "prompt": "Use case: stylized-concept. Asset type: one premium fantasy mobile game ability icon for BREACH, a gold armor-piercing attack. Input image 1 is a STYLE AND MEDALLION REFERENCE ONLY: match its lavish engraved brass rim, dark navy backdrop, detailed tactile painted 3D rendering and crisp readable small-size silhouette. Create a new central scene: a powerful sculpted golden energy lance blasting diagonally from lower left to upper right THROUGH a thick dark steel breastplate/shield, splitting the armor into two visibly separated jagged pieces. A luminous spear-like bolt clearly continues through the opening with a sharp golden tip; flying metallic fragments, molten gold crack edges and concentrated sparks convey armor penetration. The split armor and piercing lance must read clearly at 70 pixels. Finely engraved steel and brass, rich warm gold, amber and ivory highlights, dramatic directional light, deep navy shadows. Match the reference's circular presentation on a square canvas, retaining an ornate circular gold rim and pure deep navy corners. Keep all meaningful action within central 74 percent of image to allow circular UI cropping. No blue shield glow: the main effect is distinctly golden. This must be fully illustrated premium game art, not line art or a flat arrow pictogram. No text, letters, numbers, watermark, UI panels, characters or extra icons.",
+  "reference": {
+    "path": "equipment-mirror.png",
+    "role": "Style and medallion presentation only"
+  }
+}

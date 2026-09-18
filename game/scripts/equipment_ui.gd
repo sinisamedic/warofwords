@@ -6,7 +6,6 @@ var textures: Dictionary = {}
 func icon(c: CanvasItem, id: String, p: Vector2, radius: float, color: Color, amount: int = -1, capacity: int = 1) -> void:
 	var old := E.DEFAULTS.find(id)
 	Art.medallion(c,maxi(0,old),p,radius,color,amount,capacity)
-	if id=="breach": c.draw_breach_icon(p,radius); return
 	if old>=0: return
 	if not textures.has(id):
 		var path := "res://assets/art/equipment-"+id+".png"
