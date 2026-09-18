@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## 0.1.16 — odobreni oštri okviri, APK gotov 2026-09-18
+
+- Korisnik je odobrio build nakon pregleda naslovnih kartica i oštrine svih zajedničkih okvira. Paket uključuje pravilne proporcije Arsenala/Unapređenja, SVG okvire u 4× rezoluciji i ravnomerno skalirane krajnje ukrase dugmadi, uključujući standardne dnevne kontrole.
+- `exports/WarOfWords-0.1.16-android.apk`, code 17, 119.212.423 bajta. SHA256 `bafb523d423a10a5123dc3cb360cf408e36f358da553dd7b590bfcf9d8e16f86`; prilog uz APK. Potpis `429a2d1b…0abc`, isti kao 0.1.14/0.1.15 — instalirati preko njih bez deinstalacije.
+- 1.763 PASS / 0 FAIL, refill benchmark bez neuspeha; Godot import/export bez grešaka/upozorenja. Potpis v2/v3 i 16 KiB zipalign prolaze. Manifest potvrđuje 0.1.16/code 17, API 24–36, ARM64/x86_64. Nema povezanog Android uređaja; instalacija ove verzije na telefonu još nije proverena.
+- APK je gotov lokalno, nije objavljen na Releases. Aktivna grana `codex/campaign-wave-two`. Sledeći korak: instalirati preko 0.1.15 i proveriti okvire i dnevna dugmad na telefonu.
 ## Oštrina preostalih dugmadi — pregled 2026-09-18
 
 - Po korisničkoj primedbi isti postupak primenjen je na `frame-navy`, `frame-gold` i `status-plaque`: SVG uvoz 4×, oštri detalji umesto uvećavanja male teksture. Bočni ukrasi se sada skaliraju ravnomerno prema visini; samo sredina prati širinu dugmeta. Obuhvata „Igraj“, „Dnevni izazov“, navigaciju i druga mesta sa istim okvirima.

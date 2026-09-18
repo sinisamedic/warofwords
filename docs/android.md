@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Aktivni lokalni APK: 0.1.16 / code 17**, `exports/WarOfWords-0.1.16-android.apk`. Oštriji okviri i pravilne proporcije dugmadi. Isti potpis kao 0.1.14/0.1.15; instalirati preko njih bez deinstalacije. [Provere](../STATUS.md). Ostatak verzionih napomena je istorija.
+
 **Aktivni lokalni paket: 0.1.15 / code 16**, `exports/WarOfWords-0.1.15-android.apk`. Isti potpis kao 0.1.14, instalira se preko nje bez deinstalacije. Detalji/provere u [STATUS.md](../STATUS.md). Sledeći odeljci su prethodne verzije.
 
 **Aktivni lokalni paket: 0.1.14 / code 15.** `exports/WarOfWords-0.1.14-android.apk`, proširena kampanja i četiri nova uređaja. Postojeći kućni potpis razlikuje se od 0.1.13; pre instalacije ukloniti 0.1.13, što briše lokalni napredak (korisnik odobrio). Provere i SHA256: [STATUS.md](../STATUS.md). Nije objavljen na Releases.

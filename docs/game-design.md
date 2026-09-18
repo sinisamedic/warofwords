@@ -14,6 +14,8 @@ Oštrina panela: zajednički vektorski okvir se uvozi u četiri puta većoj rezo
 
 Ista korekcija oštrine primenjena je i na zlatne/tamnoplave okvire dugmadi i statusne pločice. Krajnji ukrasi čuvaju odnos stranica; obična i dnevna dugmad dele geometriju iscrtavanja. I dalje prvo pregled bez APK-a.
 
+Korisnik je nakon pregleda oštrijih panela i preostalih dugmadi izričito odobrio APK 0.1.16 / code 17. Izrađen sa istim potpisom kao 0.1.15.
+
 ## Dorade nagrada i preglednosti — usvojeno 2026-09-18
 
 Korisnik je zatražio oznake nagrada na nivoima, klik na medaljon sa objašnjenjem namene i korišćenja, sjaj opremljene i tamniju ostalu opremu, detaljnije katance i automatsko osvežavanje dnevne rang-liste pri ulasku. Implementirano uz oba jezika i Reduced Motion; promena kategorije takođe učitava odgovarajuću listu. Prozor nagrade samo informiše, bez promene inventara. Prvo igrivi pregled, bez APK-a.

@@ -1,5 +1,7 @@
 # War of Words
 
+**Najnoviji lokalni APK 0.1.16 / code 17:** `exports/WarOfWords-0.1.16-android.apk` — odobrene proporcije i oštrina okvira. Instalirati preko 0.1.15 ili 0.1.14 bez deinstalacije (isti potpis). [Provere i SHA256](STATUS.md). Paket nije na Releases; niže su prethodne verzije.
+
 **Najnoviji lokalni APK 0.1.15 / code 16:** `exports/WarOfWords-0.1.15-android.apk`. Odobreni animirani Arsenal, ukrašeni katanci, informacije o nagradama i automatska dnevna rang-lista. Isti potpis kao 0.1.14; instalirati preko nje bez deinstalacije. Paket nije na Releases. [Provere i SHA256](STATUS.md).
 
 **Novi lokalni APK 0.1.14 / code 15:** `exports/WarOfWords-0.1.14-android.apk`, 24 nivoa i četiri nova uređaja. Potpis se razlikuje od 0.1.13: za prelazak potrebna dogovorena deinstalacija (briše napredak). Paket nije objavljen na Releases. [Provere i SHA256](STATUS.md).
