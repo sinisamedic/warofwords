@@ -11,9 +11,10 @@ Ažurirano: 2026-09-18. **Aktivna grana: codex/equipment-wave-one.**
 - Korisnik je odobrio izgled i novi APK, uz uklanjanje crnog oboda. Uklonjen je neprozirni pomereni krug iz zajedničkog crtača medaljona. Izvorne ilustracije i Proboj ostaju isti; prstenovi punjenja ostaju funkcionalni.
 - Lokalni APK `exports/WarOfWords-0.1.13-android.apk`, code 14, 103.116.885 bajtova, SHA256 `38a7ce34b42db540e733338a3f748deccd0262bc192271ed2589e5a697e48b5c`. Potpis `a071affa…d276`, isti kao 0.1.10–0.1.12; v2/v3 i zipalign prolaze.
 - 1.570 PASS / 0 FAIL i refill benchmark sa 0 neuspeha. Prvi izvoz zaustavljen jer nije bio prosleđen alias postojećeg ključa. Završni izvoz koristi alias pročitan iz istog ključa i postojeću lozinku; prolazi bez script/engine grešaka/upozorenja.
-- Android API 36: nadogradnja sa 0.1.12 čuva ceo progress, dodiri otvaraju kampanju/pripremu i menjaju sva tri pojačanja uz čuvanje izbora. Pregledani pravi Android snimci; originalni podaci emulatora vraćeni. Prvi UI pokušaj imao je crn ekran; posle buđenja/otključavanja i čekanja iscrtanog kadra ponovljena provera prolazi. Detalji: `docs/QA-0.1.13.md`. GitHub objava još nije potvrđena u ovom zapisu.
+- Android API 36: nadogradnja sa 0.1.12 čuva ceo progress, dodiri otvaraju kampanju/pripremu i menjaju sva tri pojačanja uz čuvanje izbora. Pregledani pravi Android snimci; originalni podaci emulatora vraćeni. Prvi UI pokušaj imao je crn ekran; posle buđenja/otključavanja i čekanja iscrtanog kadra ponovljena provera prolazi. Detalji: `docs/QA-0.1.13.md`.
+- **Objavljeno i provereno:** [v0.1.13-android-preview](https://github.com/sinisamedic/warofwords/releases/tag/v0.1.13-android-preview), izvorni commit `53230bb`. APK i SHA256 prilog su dostupni; GitHub digest i veličine odgovaraju lokalnim fajlovima. Prerelease, nije draft. Izvor je push-ovan na `codex/equipment-wave-one` uz proveru udaljenog SHA-a.
 - Lokalni interaktivni pregled: `.local/preview-campaign-polish.gd`, zaseban probni save; F1 nagrada, F2 osvojena nagrada, F3 pojačanja, F4 pobeda. Lokalni pregled nije Android emulator.
-- **Tačan sledeći korak:** objaviti i proveriti APK 0.1.13, zatim korisnička proba na Samsungu. Aktivna grana: `codex/equipment-wave-one`.
+- **Tačan sledeći korak:** instalirati 0.1.13 preko 0.1.12 na Samsungu i probati nove prikaze nagrada, pojačanja i rezultata. Aktivna grana: `codex/equipment-wave-one`.
 
 ## 0.1.12 — nagrade na mapi i dijalog otključavanja
 
@@ -134,7 +135,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/equipment-wave-one`. Korisnik je odobrio izgled i APK 0.1.13; dovršiti proveru i objavu prema najnovijem odeljku na vrhu. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
+Nastaviti granu `codex/equipment-wave-one`. APK 0.1.13 je objavljen i čeka korisničku probu na Samsungu. Balans nove opreme, drugi talas i trajni profil ostaju za naredni dogovor.
 
 Za drugi računar: `git fetch origin --prune`, pregledati lokalno stanje, nastaviti `codex/equipment-wave-one` i povući bez destruktivnog resetovanja. Engine/SDK/template-i se ne prenose Git-om. Signing ključ i javnu online konfiguraciju preneti zasebno van Git-a; ne vraćati slučajno kućni potpis ako se nastavlja linija 0.1.10. Raniji 0.1.8 draft ostaje neobjavljen.
 
