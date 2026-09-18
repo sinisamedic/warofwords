@@ -32,6 +32,44 @@ func campaign_reward(c: Control, id: String, center: Vector2) -> void:
 	Art.glow(c,center,82,Color(c.GOLD,.24))
 	icon(c,id,center,62,c.GOLD)
 	if owned: Art.earned_badge(c,center+Vector2(39,40),24)
+	Art.jewel(c,center+Vector2(-43,39),13,c.INK)
+	c.text("i",Rect2(center+Vector2(-53,26),Vector2(20,26)),18,c.GOLD,true)
+
+func reward_marker(c: CanvasItem, p: Vector2, owned: bool) -> void:
+	Art.jewel(c,p,14,Color("23574d") if owned else Color("744b21"))
+	# A small gift chest keeps the level number and its stars unobstructed.
+	c.draw_rect(Rect2(p-Vector2(7,5),Vector2(14,11)),Color("f3c569"))
+	c.draw_line(p+Vector2(-8,-6),p+Vector2(8,-6),Color("fff1ce"),3,true)
+	c.draw_line(p+Vector2(0,-7),p+Vector2(0,7),Color("875321"),3,true)
+	if owned: Art.earned_badge(c,p+Vector2(10,10),7)
+
+func draw_reward_info(c: Control, id: String) -> void:
+	if not E.DATA.has(id): return
+	var sr: bool=c.save.data.ui_language=="sr"
+	var slot := E.slot_of(id)
+	var color: Color=c.COLORS[mini(slot,3)] if slot<4 else c.GOLD
+	var width := minf(750,c.size.x-48)
+	var r := Rect2((c.size.x-width)/2,35,width,410)
+	var x := r.position.x
+	var y := r.position.y
+	c.panel(r,c.INK,c.GOLD); c.draw_texture_rect(Art.FILIGREE,r,false)
+	c.text("NAGRADA NIVOA %d" % (c.mission+1) if sr else "LEVEL %d REWARD" % (c.mission+1),Rect2(x+30,y+16,width-60,32),23,c.GOLD,true)
+	var p := Vector2(x+112,y+154)
+	Art.glow(c,p,108,Color(color,.30)); icon(c,id,p,76,color)
+	if E.unlocked(id,c.save.data): Art.earned_badge(c,p+Vector2(48,49),22)
+	else: Art.padlock(c,p+Vector2(48,49))
+	c.text(E.DATA[id].name,Rect2(x+219,y+65,width-250,38),28,color,true,HORIZONTAL_ALIGNMENT_LEFT)
+	var desc: Array=E.DATA[id].sr if sr else E.DATA[id].desc
+	for i in 2: c.text(desc[i],Rect2(x+219,y+114+i*29,width-250,28),21,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+	c.text("KAKO SE KORISTI" if sr else "HOW TO USE",Rect2(x+32,y+231,width-64,27),21,c.GOLD,true)
+	var usage: Array
+	if slot==4:
+		usage=["Izaberi artefakt u Arsenalu pre borbe.","Deluje automatski; ne troši energiju."] if sr else ["Equip the artifact in the Arsenal before battle.","Its effect is automatic; no energy is needed."]
+	else:
+		var colors := ["zlatna","plava","ljubičasta","zelena"] if sr else ["gold","blue","purple","green"]
+		usage=["Opremi u Arsenalu. Spajaj slova: %s boja puni uređaj." % colors[slot],"Kada skupiš %d energije, dodirni njegov medaljon u borbi." % E.DATA[id].cost] if sr else ["Equip in the Arsenal. Link %s letters to charge it." % colors[slot],"At %d energy, tap its medallion during battle." % E.DATA[id].cost]
+	for i in 2: c.text(usage[i],Rect2(x+32,y+265+i*28,width-64,27),19,c.CREAM)
+	c.action("ZATVORI" if sr else "CLOSE",Rect2(r.get_center().x-110,r.end.y-65,220,47),"reward_close",-1,true)
 
 func draw_unlock(c: Control) -> void:
 	var pending: Array=c.save.data.get("pending_unlocks",[])
@@ -86,16 +124,27 @@ func draw(c: Control) -> void:
 	for i in items.size():
 		var id: String=items[i]
 		var rect := Rect2(24+(i%2)*(card_width+10),145+(i/2)*124,card_width,117 if compact else 241)
-		c.panel(rect,c.INK,color if c.arsenal_choice==i else Color("648399"))
+		c.panel(rect,c.INK,c.GOLD if equipped==id else Color("9cb4c4") if c.arsenal_choice==i else Color("648399"))
 		if c.arsenal_choice==i: Art.glow(c,rect.get_center()-Vector2(0,30),card_width*.65,Color(color,.18))
+		var center := Vector2(rect.get_center().x,rect.position.y+36 if compact else 226)
+		var radius := 32.0 if compact else minf(65,card_width*.39)
+		if equipped==id:
+			var pulse: float=0 if c.save.data.calm else sin(c.clock*2.2)*.06
+			Art.glow(c,center,radius+22,Color(c.GOLD,.36+pulse))
+			c.draw_arc(center,radius+3,0,TAU,64,c.GOLD,2,true)
+			for ray in 12:
+				var v := Vector2.from_angle(ray*TAU/12)
+				c.draw_line(center+v*(radius+6),center+v*(radius+12),Color(c.GOLD,.55),1.5,true)
 		icon(c,id,Vector2(rect.get_center().x,rect.position.y+36 if compact else 226),32 if compact else minf(65,card_width*.39),color)
+		if equipped!=id: c.draw_rect(rect.grow(-7),Color(.01,.035,.07,.30 if E.unlocked(id,c.save.data) else .48))
+		else: Art.earned_badge(c,center+Vector2(radius*.78,radius*.65),11 if compact else 18)
 		if c.arsenal_slot==4:
 			var title: PackedStringArray=c.t(E.DATA[id].name).split(" ",false,1)
 			for n in title.size(): c.text(title[n],Rect2(rect.position.x+10,290+n*26,card_width-20,28),21,c.CREAM,true)
 		else: c.text(E.DATA[id].name,Rect2(rect.position.x+10,rect.position.y+67 if compact else 302,card_width-20,24 if compact else 32),18 if compact else 22,c.CREAM,true)
 		if not E.unlocked(id,c.save.data):
 			Art.padlock(c,Vector2(rect.position.x+19 if compact else rect.get_center().x,rect.position.y+96 if compact else 355))
-		else: c.text("EQUIPPED" if equipped==id else "AVAILABLE",Rect2(rect.position.x+10,rect.position.y+90 if compact else 344,card_width-20,22 if compact else 30),14 if compact else 18,color)
+		else: c.text("EQUIPPED" if equipped==id else "AVAILABLE",Rect2(rect.position.x+10,rect.position.y+90 if compact else 344,card_width-20,22 if compact else 30),14 if compact else 18,c.GOLD if equipped==id else color)
 		c.buttons.append({"rect":rect,"id":"gear_view","value":i,"enabled":true})
 	var id: String=items[c.arsenal_choice]
 	var x: float=c.size.x*.51

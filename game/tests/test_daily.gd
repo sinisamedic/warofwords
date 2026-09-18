@@ -50,6 +50,8 @@ func run_tests() -> void:
 	game.start_battle()
 	var original=game.save.data.duplicate(true)
 	var original_board: Array=game.lex.letters.duplicate()
+	# This suite tests offline practice/input; automatic online refresh has its own mocked suite.
+	game.daily_screen.service.config={}
 	game.dispatch("daily")
 	var daily=game.daily_screen
 	check(Input.emulate_mouse_from_touch,"native daily controls support Android touch")

@@ -669,6 +669,9 @@ func draw_campaign_track(canvas: Control) -> void:
 				Ornaments.padlock(canvas,p)
 			if save.data.wins.has(str(level)):
 				text("★".repeat(int(save.data.wins[str(level)])),Rect2(p.x-42,p.y+40,84,28),20,GOLD,false,HORIZONTAL_ALIGNMENT_CENTER,false,canvas)
+			var prize := Equipment.mission_reward(level)
+			if not prize.is_empty():
+				equipment_ui.reward_marker(canvas,p+Vector2(28,-29),Equipment.unlocked(prize,save.data))
 	canvas.draw_set_transform(Vector2.ZERO)
 
 func draw_campaign() -> void:
@@ -702,6 +705,7 @@ func draw_campaign() -> void:
 		text(lesson[i]+("." if i==0 and lesson.size()>1 else ""),Rect2(44,y+40+i*21,info_width,22),18,CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
 	if not prize.is_empty():
 		equipment_ui.campaign_reward(self,prize,Vector2(size.x-322,y+43))
+		buttons.append({"rect":Rect2(size.x-384,y-19,124,124),"id":"reward_info","value":mission,"enabled":true})
 	text(t("CPU  •  %s  •  +%d COINS") % [t("BOSS" if mission%4==3 else "DUEL"),40+mission*5 if save.data.wins.has(str(mission)) else 120+mission*20],Rect2(44,y+80,info_width,22),17,GOLD,false,HORIZONTAL_ALIGNMENT_LEFT)
 	action("PREPARE >",Rect2(size.x-249,y+29,205,58),"powers",-1,true)
 	if chapter>0: action("<",Rect2(23,86,50,46),"chapter",chapter-1)
@@ -1037,6 +1041,9 @@ func draw_overlay() -> void:
 	if overlay=="unlock":
 		equipment_ui.draw_unlock(self)
 		return
+	if overlay=="reward_info":
+		equipment_ui.draw_reward_info(self,Equipment.mission_reward(mission))
+		return
 	if overlay=="result" and not won:
 		draw_defeat_dialog()
 		return
@@ -1218,6 +1225,9 @@ func dispatch(id: String, value: int = -1) -> void:
 	if OS.is_debug_build(): print("WarOfWords: action=%s screen=%s overlay=%s" % [id,screen,overlay])
 	match id:
 		"unlock_continue": acknowledge_unlock()
+		"reward_info":
+			if not Equipment.mission_reward(mission).is_empty(): overlay="reward_info"
+		"reward_close": overlay=""
 		"daily": change_screen("daily"); daily_screen.open()
 		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value

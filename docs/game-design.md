@@ -4,6 +4,10 @@ Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 Korisnik je nakon igrivog pregleda 2026-09-18 odobrio izgled i izradu APK-a 0.1.14 sa postojećim kućnim potpisom.
 
+## Dorade nagrada i preglednosti — usvojeno 2026-09-18
+
+Korisnik je zatražio oznake nagrada na nivoima, klik na medaljon sa objašnjenjem namene i korišćenja, sjaj opremljene i tamniju ostalu opremu, detaljnije katance i automatsko osvežavanje dnevne rang-liste pri ulasku. Implementirano uz oba jezika i Reduced Motion; promena kategorije takođe učitava odgovarajuću listu. Prozor nagrade samo informiše, bez promene inventara. Prvo igrivi pregled, bez APK-a.
+
 ## Proširenje kampanje — usvojeno 2026-09-18
 
 Korisnik je potvrdio da 0.1.13 na telefonu izgleda dobro i odobrio još 12 nivoa, 12 novih neprijatelja i Žar, Rezonator, Bastion i Crpljenje. Ukupno 24 susreta, šest poglavlja i 12 uređaja + dva artefakta. Ova odluka zamenjuje raniji neodobreni predlog proširenja. Ovaj korak završava se desktop pregledom, bez APK builda.

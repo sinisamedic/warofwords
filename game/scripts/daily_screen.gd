@@ -63,6 +63,7 @@ func open() -> void:
 	visible=true; mode="lobby"; status=""; leaderboard={}; page=0
 	language=host.save.data.word_language; adjacent=host.save.data.adjacent_only
 	rebuild()
+	if service.configured(): await refresh_leaderboard()
 
 func button(label: String, rect: Rect2, callback: Callable, enabled := true) -> void:
 	var item := Button.new()
@@ -123,9 +124,11 @@ func rebuild() -> void:
 
 func toggle_language() -> void:
 	language="sr" if language=="en" else "en"; leaderboard={}; page=0; status=""; rebuild()
+	if service.configured(): await refresh_leaderboard()
 
 func toggle_rule() -> void:
 	adjacent=not adjacent; leaderboard={}; page=0; status=""; rebuild()
+	if service.configured(): await refresh_leaderboard()
 
 func leave() -> void:
 	if requesting: return
@@ -304,7 +307,7 @@ func _draw() -> void:
 			label(tr_daily("Online service is not connected yet.","Online servis još nije povezan."),Rect2(size.x*.52,209,size.x*.48-40,30),18)
 			label(tr_daily("Practice is available.","Vežbanje je dostupno."),Rect2(size.x*.52,242,size.x*.48-40,30),18)
 		elif leaderboard.is_empty():
-			label(tr_daily("Refresh to load real results.","Osveži za stvarne rezultate."),Rect2(size.x*.52,215,size.x*.48-40,30),18)
+			label(tr_daily("Loading results…","Učitavanje rezultata…") if requesting else tr_daily("Refresh to retry.","Osveži za novi pokušaj."),Rect2(size.x*.52,215,size.x*.48-40,30),18)
 		else:
 			var rows: Array=leaderboard.get("rows",[])
 			if rows.is_empty(): label(tr_daily("No verified results yet.","Još nema potvrđenih rezultata."),Rect2(size.x*.52,215,size.x*.48-40,30),18)

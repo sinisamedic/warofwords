@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## Nagrade, Arsenal i automatska rang-lista — pregled 2026-09-18
+
+- Nivoi sa opremom imaju mali bedž poklona na mapi, sa kvačicom za osvojenu nagradu. Veliki medaljon nagrade ima oznaku „i“ i otvara ukrašen informativni prozor: čemu služi, kako se oprema, koja boja ga puni i koliko energije traži; artefakti imaju uputstvo za pasivno korišćenje. EN/SR, zatvaranje dugmetom ili Back bez dodele/opremanja predmeta.
+- Arsenal: opremljeni imaju zlatni okvir, pulsirajući oreol, zrake i bedž; ostali su tamniji. Reduced Motion zadržava miran sjaj. Katanac ima reljefni okvir, metalni odsjaj, unutrašnju pločicu i zakovice.
+- Dnevna lista se osvežava pri svakom otvaranju i pri promeni jezika/pravila povezivanja. Ručno osvežavanje ostaje za ponovni pokušaj. Postojeći indikator učitavanja, blokada duplih zahteva i prikaz mrežne greške ostaju. Nema promena servera/bodovanja.
+- Provere igre/taktike/opreme/kampanje/daily + 34 nove provere: ukupno 1.763 PASS / 0 FAIL; refill benchmark bez neuspeha. Prvi offline daily test zatekao je novu mrežnu aktivnost i stao; izolovan je praznom konfiguracijom, ponovljeni daily i refill prolaze. Auto-refresh zasebno testiran lažnim servisom. Završni testovi/renderi bez script grešaka/upozorenja. Vizuelno pregledani EN/SR na 1280×720 i 1280×576.
+- **Nema novog APK-a.** Pregled: Godot `--path game --resolution 1280x720 --script res://tests/preview_ui_polish.gd`. Zaseban probni save, sve mape dostupne, pobede do nivoa 13 radi poređenja osvojene i zaključane opreme. Otvara nivo 13. Stvarni napredak nije menjan.
+- Aktivna grana: `codex/campaign-wave-two`. Sledeći korak: korisnički pregled izgleda i ponašanja; APK tek po odobrenju.
 ## 0.1.14 — APK proširene kampanje, 2026-09-18
 
 - Korisnik je odobrio izgled i zatražio build. APK: `exports/WarOfWords-0.1.14-android.apk`, versionCode 15, 119.113.745 bajtova. Sadrži 24 nivoa, šest lokacija, 12 uređaja i dva artefakta. Probna skripta i otključan testni napredak nisu deo paketa.
