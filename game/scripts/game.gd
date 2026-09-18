@@ -603,12 +603,13 @@ func draw_home() -> void:
 	for i in 2:
 		var rect := Rect2(x+i*(split+12),296,split,card_height)
 		var id := "arsenal" if i == 0 else "upgrades"
-		Ornaments.frame(self,rect,0,Color.WHITE.darkened(.22) if pressed_action == id else Color.WHITE)
+		Ornaments.home_card(self,rect,pressed_action==id)
 		var source := Rect2(25,125,925,650) if i == 0 else Rect2(950,130,800,650)
-		var icon_height := card_height-34
-		var icon_width := minf(split-18,icon_height*source.size.x/source.size.y)
-		draw_texture_rect_region(menu_icons,Rect2(rect.get_center().x-icon_width/2,rect.position.y+2,icon_width,icon_height),source)
-		text("ARSENAL" if i == 0 else "UPGRADES",Rect2(rect.position.x+12,rect.end.y-38,split-24,26),25,CREAM,true)
+		var icon_area := Rect2(rect.position+Vector2(24,12),Vector2(split-48,card_height-55))
+		var icon_scale := minf(icon_area.size.x/source.size.x,icon_area.size.y/source.size.y)
+		var icon_size := source.size*icon_scale
+		draw_texture_rect_region(menu_icons,Rect2(icon_area.get_center()-icon_size/2,icon_size),source)
+		text("ARSENAL" if i == 0 else "UPGRADES",Rect2(rect.position.x+38,rect.end.y-35,split-76,26),23,CREAM,true)
 		buttons.append({"rect":rect,"id":id,"value":-1,"enabled":true})
 	if not save.data.battle.is_empty():
 		action("CONTINUE DUEL",Rect2(x,418,width,44),"continue",-1,true)

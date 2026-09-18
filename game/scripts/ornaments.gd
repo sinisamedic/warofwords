@@ -64,6 +64,21 @@ static func frame(c: CanvasItem, rect: Rect2, kind: int = 0, tint: Color = Color
 static func plaque(c: CanvasItem, rect: Rect2) -> void:
 	frame(c,rect,3)
 
+static func home_card(c: CanvasItem, rect: Rect2, pressed: bool) -> void:
+	# Preserve entire corner ornaments on tall home tiles; only straight edges
+	# and the plain center stretch, unlike the short horizontal button frame.
+	var key := "home_card_pressed" if pressed else "home_card"
+	if not styles.has(key):
+		var style := StyleBoxTexture.new()
+		style.texture=FRAMES[2]
+		style.set_texture_margin_all(43)
+		style.modulate_color=Color(.78,.78,.78) if pressed else Color.WHITE
+		styles[key]=style
+	c.draw_style_box(styles[key],rect)
+	var y := rect.end.y-37
+	c.draw_line(Vector2(rect.position.x+31,y),Vector2(rect.end.x-31,y),Color(GOLD,.35),1,true)
+	gem(c,Vector2(rect.get_center().x,y),2.5)
+
 static func ui_icon(c: CanvasItem, id: String, rect: Rect2) -> void:
 	if ICONS.has(id): c.draw_texture_rect(ICONS[id],rect,false)
 

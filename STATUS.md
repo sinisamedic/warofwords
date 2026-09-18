@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
 
+## Naslovna: pozadine Arsenala i Unapređenja — pregled 2026-09-18
+
+- Po korisničkoj primedbi uklonjen je visinski razvučen okvir niskog dugmeta sa dve naslovne kartice. Koriste ukrašeni panel sa devet segmenata: kompletni uglovi ostaju istih proporcija, rastežu se ravne ivice i sredina. Ilustracije čuvaju odnos stranica; nazivi imaju razmak od ugaonih ukrasa i tanku razdelnu liniju.
+- Pregledani EN/SR na 1280×720 i 1280×576, sa i bez „Nastavi borbu“, kao i pritisnuto stanje. Godot import/render i 306 testova igre prolaze bez script grešaka/upozorenja.
+- Pregled `game/tests/preview_home_cards.gd` otvara naslovnu uz zaseban probni save. Ponovljiv render: `game/tests/render_home_cards.gd`. Aktivna grana `codex/campaign-wave-two`.
+- **APK nije pravljen; čeka se eksplicitna potvrda novog izgleda.** Poslednji APK ostaje 0.1.15. Sledeći korak: korisnički pregled naslovne.
 ## 0.1.15 — odobrene dorade, APK gotov 2026-09-18
 
 - Korisnik je odobrio novi animirani oreol i katanac i zatražio APK. Paket sadrži i oznake nagrada na nivoima, prozor objašnjenja i automatsko osvežavanje dnevne rang-liste.

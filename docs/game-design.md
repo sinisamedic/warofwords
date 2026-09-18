@@ -8,6 +8,8 @@ Korisnik je odobrio ponovnu doradu Arsenala i katanca i zatražio APK 0.1.15 (co
 
 Korekcija po korisničkom pregledu: isijavanje Arsenala mora koristiti isti animirani oreol kao odabrano pojačanje; prethodni jednostavni zraci su zamenjeni. Katanac koristi originalni ukrašeni zlatno-plavi SVG umesto geometrijskog crteža. Prvo ponovni desktop pregled, bez novog APK-a.
 
+Naslovna: po zahtevu korisnika kartice Arsenal i Unapređenja koriste devetodelni panel sa očuvanim proporcijama ugaonih ukrasa, umesto vertikalno razvučenog okvira dugmeta. Ilustracije se uklapaju proporcionalno, tekst je odmaknut od ukrasa. Prvo pregled; APK tek nakon potvrde.
+
 ## Dorade nagrada i preglednosti — usvojeno 2026-09-18
 
 Korisnik je zatražio oznake nagrada na nivoima, klik na medaljon sa objašnjenjem namene i korišćenja, sjaj opremljene i tamniju ostalu opremu, detaljnije katance i automatsko osvežavanje dnevne rang-liste pri ulasku. Implementirano uz oba jezika i Reduced Motion; promena kategorije takođe učitava odgovarajuću listu. Prozor nagrade samo informiše, bez promene inventara. Prvo igrivi pregled, bez APK-a.
