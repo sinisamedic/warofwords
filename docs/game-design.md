@@ -1,6 +1,10 @@
 # War of Words — dizajn igre
 
-Ažurirano: 2026-09-17. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
+Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
+
+## Predlog veće kolekcije — 2026-09-18
+
+Korisnik je tražio osmišljavanje veće kolekcije opreme/oružja. [Predlog kolekcije](equipment-collection.md) opisuje 16 aktivnih uređaja (po četiri alternative za svaku postojeću boju) i šest pasivnih artefakata, uz izbor četiri uređaja i jednog artefakta za duel. Predložen prvi talas dodaje Ogledalo, Pečat, Obnovu i dva artefakta postojećoj petorci. Brojke, otključavanja, deljenje unapređenja i redosled su **predlozi, još nisu usvojeni niti implementirani**. Rangirani dnevni izazov ostaje bez bonusa kampanjske opreme. Aktivna igra ostaje 0.1.9.
 
 ## 0.1.9 — taktika kampanje i ekran poraza
 

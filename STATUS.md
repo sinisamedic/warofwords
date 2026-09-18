@@ -1,6 +1,10 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-17. **Aktivna grana: codex/campaign-tactics.**
+Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-tactics.**
+
+## Predlog kolekcije — bez izmene igre
+
+Korisnik je tražio da osmislimo veću kolekciju opreme/oružja. `docs/equipment-collection.md` sadrži predlog 16 aktivnih uređaja i šest pasivnih artefakata: po jedno od četiri obojena mesta i jedan artefakt u duelu, zajednička unapređenja po boji, jasna otključavanja i tri talasa. Prvi predloženi talas dodaje Ogledalo, Pečat, Obnovu, Pečat leksikona i Rezervnu ćeliju. To nije odobrenje implementacije; igra, balans, server i APK nisu menjani. Pre implementacije dobiti korisnikov izbor obima i osnovnih pravila predloga.
 
 ## 0.1.9 — taktika kampanje i poraz
 
@@ -89,7 +93,7 @@ Najnovija korekcija: korisniku je smrt izgledala kao okretanje celog sprite-a. *
 
 ## Tačan sledeći korak
 
-Nastaviti granu `codex/campaign-tactics`. Probati lokalni 0.1.9 preko 0.1.7/0.1.8 na telefonu: drugi susret snažan udar, treći lečenje i prekid Lukom, četvrti oklop i nagrada Proboj; zatim Proboj na sedmom susretu. Pregledati poraz i povratak u pripremu, kao i nastavak sačuvane borbe. Po utisku podesiti balans pre širenja broja nivoa. 0.1.9 je lokalni paket; stari GitHub draft 0.1.8 ostaje neobjavljen. Za drugi računar preneti `.local/signing/` bezbedno van Git-a.
+Nastaviti granu `codex/campaign-tactics`. Razmotriti sa korisnikom predlog `docs/equipment-collection.md`; ne implementirati celu kolekciju samo na osnovu zahteva da je osmislimo. Probati 0.1.9 na telefonu: drugi susret snažan udar, treći lečenje i prekid Lukom, četvrti oklop i nagrada Proboj; zatim Proboj na sedmom susretu. Pregledati poraz, pripremu i nastavak borbe, pa podesiti balans. 0.1.9 APK je ostao na kućnom računaru, nije prenet Git-om; stari GitHub draft 0.1.8 ostaje neobjavljen. Na ovom računaru nedostaju `.local/signing/` i `game/online_config.json`; za sledeći online potpisani build preneti ih odgovarajućim bezbednim putem van Git-a.
 
 Radni kod: game/project.godot. Grana za nastavak: codex/campaign-tactics. Pročitati AGENTS.md, proveriti Git i sačuvati lokalni rad pre usklađivanja. Ne prebacivati automatski na main.
 
