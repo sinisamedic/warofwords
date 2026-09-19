@@ -41,6 +41,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Expanded campaign tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Endless arena tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_endless_scoring.gd
 if ($LASTEXITCODE -ne 0) { throw 'Endless scoring tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_joker.gd
+if ($LASTEXITCODE -ne 0) { throw 'Joker tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_rankings.gd
+if ($LASTEXITCODE -ne 0) { throw 'Ranking queue tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_ui_polish.gd
 if ($LASTEXITCODE -ne 0) { throw 'Reward and daily refresh tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_daily.gd

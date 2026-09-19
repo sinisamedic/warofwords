@@ -10,6 +10,8 @@ var letters: Array[String] = []
 var types: Array[int] = []
 var solutions: Dictionary = {}
 var adjacent_only := true
+var joker_enabled := false
+var alphabet: Array[String] = []
 var search_nodes := 0
 const FREE_SEARCH_BUDGET := 18000
 const REFILL_SEARCH_BUDGET := 10000
@@ -30,6 +32,9 @@ func _init(load_now: bool = true, code: String = "en") -> void:
 		seeds.assign(["KAMEN","REKA","VODA","VATRA","ŠTIT","SNAGA","ZEMLJA","NEBO","OBLAK","SVETLO","ISKRA","IGRA","REČNIK","ČOVEK","PTICA","SREĆA","LJUBAV","NJEGA","DŽEPOVI","ŠUMA","ZVEZDA","MESEC","SUNCE","MOST","GRAD","ZLATO","MISLI","VETAR"])
 	if load_now:
 		load_dictionary()
+	for tile in pool:
+		if tile not in alphabet: alphabet.append(tile)
+	alphabet.sort()
 	for i in 28:
 		var around: Array[int]=[]
 		for j in 28:
@@ -78,7 +83,15 @@ func tokens(word: String) -> Array[String]:
 	return result
 
 func valid_tile(letter: String) -> bool:
+	if joker_enabled and letter=="*": return true
 	return (letter.length()==1 and letter>="A" and letter<="Z") if language=="en" else letter in pool
+
+func tile_options(tile: String) -> Array[String]:
+	return alphabet if joker_enabled and tile=="*" else [tile]
+
+func add_joker(cells: Array[int], chance: float) -> void:
+	if joker_enabled and not cells.is_empty() and "*" not in letters and rng.randf()<chance:
+		letters[cells[rng.randi_range(0,cells.size()-1)]]="*"
 
 func adjacent(a: int, b: int) -> bool:
 	return a != b and absi(a % 7 - b % 7) <= 1 and absi(a / 7 - b / 7) <= 1
@@ -103,6 +116,8 @@ func generate(used: Dictionary = {}) -> void:
 		var offset := rng.randi_range(0,7-seed_word.size())
 		for j in seed_word.size():
 			letters[row*7+offset+j] = seed_word[j]
+	var cells: Array[int]=[]
+	cells.assign(range(28)); add_joker(cells,1.0)
 	find_words(used)
 
 func refill(path: Array[int], used: Dictionary) -> bool:
@@ -133,6 +148,7 @@ func refill(path: Array[int], used: Dictionary) -> bool:
 					letters[fit[n]]=candidate.tiles[n]; writable.erase(fit[n])
 			last_refill_words.append(candidate.word)
 			last_refill_routes.append(fit.duplicate())
+	add_joker(path,.15)
 	find_words(used)
 	if solutions.is_empty():
 		generate(used)
@@ -181,6 +197,7 @@ func fit_refill_step(tiles: Array[String], writable: Dictionary, cell: int, dept
 
 func find_words(used: Dictionary = {}) -> Dictionary:
 	solutions.clear()
+	search_nodes=0
 	if not adjacent_only:
 		# Seed familiar long hints first, then search unique letter combinations.
 		# Equal glyphs are interchangeable in this mode; avoiding their permutations
@@ -208,33 +225,29 @@ func _search_free(prefix: String, mask: int, path: Array, used: Dictionary) -> v
 		seen[letters[i]] = true
 		search_nodes += 1
 		if search_nodes > FREE_SEARCH_BUDGET: return
-		var word := prefix+letters[i]
-		if not has_prefix(word): continue
-		var next := path.duplicate()
-		next.append(i)
-		if next.size() >= 3 and contains(word) and not used.has(word): solutions[word] = next
-		_search_free(word,mask | (1 << i),next,used)
-		if solutions.size() >= 180: return
+		for tile in tile_options(letters[i]):
+			var word := prefix+tile
+			if not has_prefix(word): continue
+			var next := path.duplicate()
+			next.append(i)
+			if next.size() >= 3 and contains(word) and not used.has(word): solutions[word] = next
+			_search_free(word,mask | (1 << i),next,used)
+			if solutions.size() >= 180: return
 
 func _search(i: int, prefix: String, mask: int, path: Array, used: Dictionary) -> void:
-	if solutions.size() >= 180 or path.size() >= 12 or mask & (1 << i):
+	search_nodes+=1
+	if solutions.size() >= 180 or path.size() >= 12 or mask & (1 << i) or (joker_enabled and search_nodes>FREE_SEARCH_BUDGET):
 		return
-	var word := prefix + letters[i]
-	if not has_prefix(word):
-		return
-	var next_path := path.duplicate()
-	next_path.append(i)
-	if next_path.size() >= 3 and contains(word) and not used.has(word):
-		solutions[word] = next_path
-	var next_mask := mask | (1 << i)
-	for dy in [-1,0,1]:
-		for dx in [-1,0,1]:
-			var x: int = i % 7 + dx
-			var y: int = i / 7 + dy
-			if x >= 0 and x < 7 and y >= 0 and y < 4 and (dx != 0 or dy != 0):
-				_search(y*7+x,word,next_mask,next_path,used)
+	for tile in tile_options(letters[i]):
+		var word := prefix + tile
+		if not has_prefix(word): continue
+		var next_path := path.duplicate()
+		next_path.append(i)
+		if next_path.size() >= 3 and contains(word) and not used.has(word): solutions[word] = next_path
+		var next_mask := mask | (1 << i)
+		for neighbor in neighbors[i]: _search(neighbor,word,next_mask,next_path,used)
 
-func validate_path(path: Array[int]) -> String:
+func validate_path(path: Array[int], used: Dictionary = {}) -> String:
 	var visited: Dictionary = {}
 	var word := ""
 	for j in path.size():
@@ -245,4 +258,13 @@ func validate_path(path: Array[int]) -> String:
 			return ""
 		visited[i] = true
 		word += letters[i]
-	return word if contains(word) and path.size() >= 3 else ""
+	if path.size()<3: return ""
+	if joker_enabled and word.count("*")==1:
+		var fallback := ""
+		for tile in alphabet:
+			var candidate := word.replace("*",tile)
+			if contains(candidate):
+				if not used.has(candidate): return candidate
+				fallback=candidate
+		return fallback
+	return word if contains(word) else ""

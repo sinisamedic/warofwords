@@ -7,7 +7,7 @@ func check(ok: bool, label: String) -> void:
 func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	create_timer(60).timeout.connect(func(): quit(2))
-	g=load("res://main.tscn").instantiate(); g.save.path="res://../.local/test-endless-scoring.json"; root.add_child(g)
+	g=load("res://main.tscn").instantiate(); g.online_autosubmit=false; g.save.path="res://../.local/test-endless-scoring.json"; root.add_child(g)
 	while g.loading: await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
 	g.save.data=g.save.defaults(); g.save.data.tutorial=true

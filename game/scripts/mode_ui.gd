@@ -29,10 +29,9 @@ static func fit(c: CanvasItem, texture: Texture2D, rect: Rect2) -> void:
 static func card_rect(c, i: int) -> Rect2:
 	var gap: float=clampf(c.size.x*.035,26,42)
 	var w: float=(c.size.x-76-gap*2)/3
-	return Rect2(38+i*(w+gap),98,w,c.size.y-165)
+	return Rect2(38+i*(w+gap),119,w,c.size.y-186)
 
 static func home(c) -> void:
-	fit(c,c.title_emblem,Rect2(c.size.x/2-140,-7,280,112))
 	O.frame(c,Rect2(20,16,48,46))
 	O.ui_icon(c,"settings",Rect2(29,24,30,30))
 	c.buttons.append({"rect":Rect2(20,16,48,46),"id":"settings","value":-1,"enabled":true})
@@ -71,6 +70,7 @@ static func home(c) -> void:
 		c.action("CONTINUE DUEL" if resume and i==0 else "CONTINUE RUN" if resume else ["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],Rect2(r.position.x+10,r.end.y-52,r.size.x-20,42),"continue" if resume and i==0 else ids[i],-1,true)
 		# The artwork and label are also useful touch targets.
 		c.buttons.append({"rect":Rect2(r.position,r.size-Vector2(0,57)),"id":ids[i],"value":-1,"enabled":true})
+	fit(c,c.title_emblem,Rect2(c.size.x/2-192,0,384,146))
 	var bw: float=minf(230,(c.size.x-120)/3)
 	for i in 3:
 		var r := Rect2(c.size.x/2-1.5*bw-14+i*(bw+14),c.size.y-53,bw,42)

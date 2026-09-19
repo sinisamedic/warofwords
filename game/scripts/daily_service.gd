@@ -4,6 +4,9 @@ var config: Dictionary = {}
 var session: Dictionary = {}
 var session_path := "user://daily-session.json"
 var busy := false
+signal auth_finished
+var authenticating := false
+var auth_result: Dictionary={}
 
 func _ready() -> void:
 	if FileAccess.file_exists("res://online_config.json"):
@@ -36,6 +39,16 @@ func request_json(endpoint: String, payload: Dictionary, token := "") -> Diction
 	return body
 
 func ensure_session() -> Dictionary:
+	if authenticating:
+		await auth_finished
+		return auth_result.duplicate()
+	authenticating=true
+	auth_result=await authenticate()
+	authenticating=false
+	auth_finished.emit()
+	return auth_result.duplicate()
+
+func authenticate() -> Dictionary:
 	if not configured(): return {"error":"Online service is not connected yet"}
 	if float(session.get("expires_at",0))>Time.get_unix_time_from_system()+60: return {}
 	var response: Dictionary

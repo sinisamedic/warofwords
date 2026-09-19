@@ -2,7 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
-- Zabeležen budući predlog: joker među slovima na tabli, povezuje se u reč i zamenjuje bilo koje slovo. Detalji u `docs/game-design.md`; bez izmene igre ili APK-a.
+## Globalni Rekordi, automatsko slanje i Joker — 2026-09-19
+
+- Naslovni Rekordi sada otvaraju ukrašenu serversku listu sa tabovima Beskraj / Dnevni izazov, filterima i zatvaranjem. Poraz Beskraja prikazuje statistiku, opremu, nadimak i listu u istom prozoru. Naslovne kartice su manje, logo veći.
+- Svaka završena partija automatski se šalje pod poslednjim nadimkom; prvi put čeka unos. Promena imena se pamti. Red slanja i neuspele promene imena preživljavaju restart i ponavljaju se. Serverska migracija `202609190002_endless_runs.sql` postavljena na War of Words; partije deduplikovane po ID-u, lista zadržava najbolji rezultat. Ostaje beta bez serverske provere borbe.
+- Joker odobren za Kampanju i Beskraj, bez promene Dnevnog izazova/vežbe. Zvezdica menja slovo, uključujući srpske digrafe; prepoznata reč vidi se pre puštanja. Najviše jedan na tabli, jedan na novoj tabli, 15% pri dopuni kada ga nema. Radi pomoć i nastavak sačuvane borbe.
+- Provere: kompletan TestOnly tok prolazi (1.844 PASS, bez neuspeha), dodatne 2 provere promene imena/brzih tabova prolaze; 20 SQL provera. Obe žive liste učitane, negativan upis odbijen bez lažnih skorova. SR/EN renderi pregledani na 1280×720 i 1280×576.
+- **Bez novog APK-a.** Sledeći korak: korisnička proba naslovne, Rekorda, Jokera i poraza u desktop pregledu. `preview_endless.gd`: F6 boss, F7 jezik, F8 primer poraza; server se čita, probni skorovi se ne objavljuju. Nastaviti granu `codex/endless-arena`.
 
 ## APK 0.1.17 — 2026-09-19
 

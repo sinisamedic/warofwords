@@ -308,6 +308,16 @@ Globalna beta lista na Supabase-u: najbolji rezultat anonimnog profila po SR/EN 
 
 Korisnik predlaže dugme na ekranu poraza: odgledaj reklamu i nastavi borbu. Sada se ne implementiraju oglasi ni oživljavanje. Za kasniji dogovor ostaju broj nastavaka, vraćeno zdravlje i uticaj takvih pohoda na globalnu listu.
 
-### Predlog za buduće unapređenje: joker slovo — 2026-09-19
+### Joker — prva implementacija 2026-09-19
 
-Joker se pojavljuje među slovima na tabli i može da se uključuje u povezivanje reči kao ostala polja. Pri tome zamenjuje bilo koje slovo. Ideja je zabeležena za kasniju razradu, nije implementirana. Učestalost pojavljivanja, način izbora zamenjenog slova i bodovanje ostaju otvoreni.
+Korisnik odobrio Joker za Kampanju i Beskraj; Dnevni izazov i vežba zadržavaju postojeća pravila. Zvezdica menja jedno slovo (uključujući LJ, NJ i DŽ), povezuje se i troši kao obično polje. Pre puštanja poteza prikazuje se prepoznata reč. Ako postoji više rešenja, bira se prvo nekorišćeno rešenje po sortiranom alfabetu. Boja polja puni odgovarajući Arsenal; nema posebnog bonus multiplikatora.
+
+Početno podešavanje za probu: najviše jedan Joker na tabli, jedan na novoj tabli (osim uvodnog tutorijala), zatim 15% šanse pri dopuni potrošenih polja ako nijedan nije ostao. Učestalost se može doterati posle probe. Podržani su oba rečnika, oba pravila povezivanja, pomoć i nastavak sačuvane borbe.
+
+### Rekordi i automatska objava — usvojeno 2026-09-19
+
+Naslovni Rekordi otvaraju ukrašenu serversku listu sa kategorijama Beskraj / Dnevni izazov i zatvaranjem. Filteri rečnika i povezivanja ostaju, jer različita pravila ne treba porediti. Lokalni rekord ostaje samo informacija na kartici Beskraja.
+
+Svaka završena partija Beskraja ide u red za automatsko slanje, čak i kada nije rekord. Prvi put čeka ispravan nadimak; zatim se poslednji nadimak popunjava automatski, može se promeniti i pamti se. Ekran poraza sadrži statistiku, opremu, unos imena i globalnu listu. Server čuva pojedinačne partije, a lista prikazuje najbolji rezultat po profilu/kategoriji. Ponovno slanje iste partije ne pravi duplikat. Neuspešna slanja i promene imena ponavljaju se; nema trajnog profila niti sinhronizacije kampanje između uređaja.
+
+Naslovne kartice su malo niže/manje, logo je veći i blago prelazi preko gornje ivice srednje kartice.

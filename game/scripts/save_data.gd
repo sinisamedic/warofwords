@@ -6,7 +6,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"endless":{},"endless_pending":{},"endless_records":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"endless":{},"endless_outbox":[],"endless_name_dirty":false,"endless_pending":{},"endless_records":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -49,6 +49,14 @@ func load_game() -> void:
 				if id is String and Equipment.DATA.has(id) and id not in Equipment.DEFAULTS and Equipment.unlocked(id,data) and id not in pending:
 					pending.append(id)
 			data.pending_unlocks=pending
+			var valid_runs: Array=[]
+			for entry in data.endless_outbox:
+				if not entry is Dictionary or not entry.get("id") is String or entry.get("language") not in ["sr","en"] or not entry.get("adjacent") is bool: continue
+				var valid := true
+				for field in ["score","wave","words","seconds"]:
+					if number(entry.get(field),-1)<0: valid=false
+				if valid: valid_runs.append(entry)
+			data.endless_outbox=valid_runs
 			for key in data.endless_pending.keys():
 				var entry = data.endless_pending[key]
 				if key not in ["en_adjacent","en_any","sr_adjacent","sr_any"] or not entry is Dictionary:

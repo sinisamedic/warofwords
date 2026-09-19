@@ -115,6 +115,8 @@ var journal_page := 0
 var autosave_clock := 0.0
 var fps_label := false
 var debug_sample_at := 0
+var online_autosubmit := true
+var rankings: Node
 var endless_board_open := false
 var daily_screen: Control
 var foe_guard := false
@@ -289,6 +291,8 @@ func finish_loading() -> void:
 		add_child(daily_screen)
 		daily_screen.hide()
 		daily_screen.closed.connect(func(): change_screen("home"))
+	if rankings==null:
+		rankings=preload("res://scripts/rank_service.gd").new(); rankings.host=self; add_child(rankings)
 	if OS.is_debug_build():
 		print("WarOfWords: ready")
 	if screen=="home": show_pending_unlock()
@@ -378,7 +382,9 @@ func _process(delta: float) -> void:
 					if won and endless_wave%5!=0: advance_endless()
 					else:
 						overlay="endless_boss" if won else "endless_result"
-						if not won: sfx.play("lose")
+						if not won:
+							sfx.play("lose")
+							open_rankings(true)
 				elif not won or not show_pending_unlock():
 					overlay="result"
 					sfx.play("win" if won else "lose")
@@ -860,6 +866,9 @@ func draw_battle() -> void:
 	if not path.is_empty():
 		var word := ""
 		for i in path: word += lex.letters[i]
+		if "*" in word:
+			var resolved: String=lex.validate_path(path,used)
+			word=resolved if not resolved.is_empty() else word.replace("*","★")
 		text(word,Rect2(size.x/2-message_width/2+17,172 if endless_mode else 167,message_width-34,24 if endless_mode else 32),18 if endless_mode else 25,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
 		if tap_composition and not (dragging and drag_moved):
 			action("×",Rect2(size.x/2-232,159,49,44),"clear")
@@ -867,6 +876,9 @@ func draw_battle() -> void:
 	for i in 28:
 		var p := tile_center(i)
 		Ornaments.jewel(self,p,29.5,COLORS[lex.types[i]],i in path)
+		if lex.letters[i]=="*":
+			Ornaments.glow(self,p,32,Color(1,.77,.24,.24 if save.data.calm else .24+.09*sin(clock*3)))
+			draw_arc(p,27,0,TAU,48,GOLD,1.5,true)
 		if hint_time>0 and i in hint_path:
 			draw_arc(p,32,0,TAU,48,CREAM,2,true)
 		hitboxes.append(Rect2(p-Vector2(30,30),Vector2(60,60)))
@@ -882,7 +894,7 @@ func draw_battle() -> void:
 			Ornaments.glow(self,midpoint,14,Color(1,.78,.3,.75))
 	for i in 28:
 		var p := tile_center(i)
-		text(lex.letters[i],Rect2(p.x-26,p.y-27,52,43),32 if lex.letters[i].length()==1 else 25,Color("071723"),true)
+		text("★" if lex.letters[i]=="*" else lex.letters[i],Rect2(p.x-26,p.y-27,52,43),32 if lex.letters[i].length()==1 else 25,Color("071723"),true)
 	for i in 28:
 		var p := tile_center(i)
 		text(["ϟ","◆","≈","+"][lex.types[i]],Rect2(p.x-12,p.y+12,24,16),16,Color("193a46"))
@@ -1088,6 +1100,7 @@ func draw_overlay() -> void:
 		"help":
 			title="WORDS BECOME POWER"
 			lines=[("Link neighboring letters, including diagonals." if (lex.adjacent_only if screen=="battle" else save.data.adjacent_only) else "Link any letters. Each tile can be used once."),"Release to submit; drag back to undo a letter.","Colors charge the matching abilities. Tap READY.","Long words hit harder. Find each word once per duel.","Tap letters + ✓ also works. HINT reveals a path."]
+			lines.append("★ Joker replaces one letter. The word resolves automatically.")
 		"credits":
 			title="WAR OF WORDS"
 			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lora: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
@@ -1267,12 +1280,9 @@ func dispatch(id: String, value: int = -1) -> void:
 		"reward_info":
 			if not Equipment.mission_reward(mission).is_empty(): overlay="reward_info"
 		"reward_close": overlay=""
-		"endless_board":
-			var board=preload("res://scripts/endless_board.gd").new()
-			board.host=self
-			add_child(board)
+		"endless_board","records": open_rankings(false)
 		"daily": change_screen("daily"); daily_screen.open()
-		"home","campaign","arsenal","powers","upgrades","settings","journal","records": change_screen(id)
+		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
 		"select": selected=value
 		"gear_slot": arsenal_slot=clampi(value,0,4); arsenal_choice=0
 		"gear_view": arsenal_choice=clampi(value,0,Equipment.SLOTS[arsenal_slot].size()-1)
@@ -1396,6 +1406,7 @@ func start_battle(as_endless: bool = false, save_initial: bool = true) -> void:
 	endless_mode=as_endless
 	await select_dictionary(save.data.word_language)
 	lex.adjacent_only = save.data.adjacent_only
+	lex.joker_enabled=true
 	change_screen("battle")
 	hp=100; foe_max=Endless.health(endless_wave) if endless_mode else Campaign.health(mission); foe_hp=foe_max
 	foe_guard=Campaign.armored(mission)
@@ -1429,7 +1440,7 @@ func submit_word() -> void:
 	tap_composition=false
 	if path.size()<3:
 		message("Use at least three letters"); path.clear(); return
-	var word: String = lex.validate_path(path)
+	var word: String = lex.validate_path(path,used)
 	if word.is_empty():
 		message("Not in the selected dictionary"); path.clear(); return
 	if used.has(word):
@@ -1578,11 +1589,7 @@ func finish(victory: bool) -> void:
 		if won: persist_battle()
 		else:
 			save.data.endless={}
-			if not save.data.has("endless_pending"): save.data.endless_pending={}
-			var category := Endless.key(lex.language,lex.adjacent_only)
-			var prior: Dictionary=save.data.endless_pending.get(category,{})
-			if endless_score>int(prior.get("score",0)):
-				save.data.endless_pending[category]={"score":endless_score,"wave":endless_wave,"words":endless_words+word_count,"seconds":maxi(1,int(endless_seconds+duration)),"language":lex.language,"adjacent":lex.adjacent_only}
+			rankings.enqueue({"score":endless_score,"wave":endless_wave,"words":endless_words+word_count,"seconds":maxi(1,int(endless_seconds+duration)),"language":lex.language,"adjacent":lex.adjacent_only})
 			save.save_game()
 		return
 	var first: bool = not save.data.wins.has(str(mission))
@@ -1652,6 +1659,7 @@ func restore_battle(as_endless: bool = false) -> void:
 		endless_words=int(b.run_words); endless_seconds=float(b.run_seconds)
 	await select_dictionary(b.get("dictionary_code","en"))
 	lex.adjacent_only = b.get("adjacent_only",true)
+	lex.joker_enabled=true
 	change_screen("battle")
 	mission=int(b.mission); hp=int(b.hp); foe_hp=int(b.foe); foe_max=int(b.max)
 	foe_guard=b.get("foe_guard",false)
@@ -1750,6 +1758,8 @@ func valid_snapshot(b: Dictionary) -> bool:
 	if not fx.valid_saved(b.get("projectiles",[])): return false
 	if not b.get("foe_guard",false) is bool or b.get("weapon","pulse") not in Equipment.SLOTS[0]: return false
 	var tile_lex = Lexicon.new(false,b.get("dictionary_code","en"))
+	tile_lex.joker_enabled=true
+	if b.letters.count("*")>1: return false
 	for letter in b.letters:
 		if not letter is String or not tile_lex.valid_tile(letter): return false
 	for kind in b.types:
@@ -1872,3 +1882,9 @@ func _qa_capture(file: String) -> void:
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(file)
+
+func open_rankings(show_result: bool = false) -> void:
+	if endless_board_open: return
+	var board=preload("res://scripts/endless_board.gd").new()
+	board.host=self; board.result_mode=show_result
+	add_child(board)
