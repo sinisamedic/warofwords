@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## APK 0.1.18 — 2026-09-19
+
+- Korisnik odobrio build. Paket `exports/WarOfWords-0.1.18-android.apk`, versionCode 19, 140.336.305 bajta. Joker, novi ekrani Rekorda/poraza, dugme za slanje, automatsko slanje i zajedničke SR/EN liste.
+- SHA256: `bf54cf2a340ca28ca7d2b1ceae6cda321d4b977b5b749a327c277aed5a816ea0`; priložen `.sha256`. Potpis `429a2d1b…0abc`, isti kao 0.1.14–0.1.17, omogućava instalaciju preko njih.
+- 1.847 PASS / 0 neuspeha, refill bez neuspeha. Test rangiranja prijavljuje 4 ObjectDB instance / 1 resurs pri izlasku; funkcionalne provere prolaze. Import i export uspešni. Potpis v2/v3, 16 KiB poravnanje, manifest 0.1.18/code 19, API 24–36, ARM64/x86_64 potvrđeni.
+- Nije objavljen na Releases niti instaliran na fizičkom telefonu. Sledeće: instalirati preko 0.1.17 i probati Joker, slanje pod nadimkom i zajedničke liste. Aktivna grana `codex/endless-arena`.
+
 ## Dugme za slanje i zajednički jezici — 2026-09-19
 
 - Poraz Beskraja ima zlatno dugme POŠALJI REZULTAT uz nadimak, sa stanjima SLANJE / POSLATO. Šalje trenutno uneto ime, omogućava ponovni pokušaj; automatsko slanje sa zapamćenim imenom ostaje.
