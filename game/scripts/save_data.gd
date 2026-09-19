@@ -6,7 +6,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"endless":{},"endless_records":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -49,6 +49,11 @@ func load_game() -> void:
 				if id is String and Equipment.DATA.has(id) and id not in Equipment.DEFAULTS and Equipment.unlocked(id,data) and id not in pending:
 					pending.append(id)
 			data.pending_unlocks=pending
+			for key in data.endless_records.keys():
+				var record = data.endless_records[key]
+				if key not in ["en_adjacent","en_any","sr_adjacent","sr_any"] or not record is Dictionary:
+					data.endless_records.erase(key); continue
+				data.endless_records[key]={"score":maxi(0,number(record.get("score"),0)),"wave":maxi(0,number(record.get("wave"),0))}
 			break
 
 func number(value: Variant, fallback: int) -> int:

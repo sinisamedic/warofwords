@@ -1,6 +1,21 @@
 extends RefCounted
 
 const SR := {
+"One use until the next boss.":"Jedna upotreba do sledećeg bossa.",
+"Health and energy carry between waves.":"Zdravlje i energija prenose se između talasa.",
+"JOURNAL":"REČNIK", "ENDLESS WORDS":"BESKRAJ REČI", "OPEN MAP":"OTVORI MAPU", "ENTER ARENA":"UĐI U ARENU",
+"PLAY CHALLENGE":"IGRAJ IZAZOV", "CONTINUE RUN":"NASTAVI POHOD", "RECORDS":"REKORDI",
+"%d / 24 levels":"%d / 24 nivoa", "Best wave: %d":"Rekord: talas %d",
+"A new challenge every day":"Novi izazov svakog dana", "WAVE %d":"TALAS %d",
+"SCORE":"BODOVI", "PERSONAL BEST":"LIČNI REKORD", "WAVE %d COMPLETE":"TALAS %d ZAVRŠEN",
+"Defeat enemies. Every fifth wave is a boss.":"Pobeđuj protivnike. Svaki peti talas je boss.",
+"CHOOSE YOUR POWER-UP":"IZABERI POJAČANJE", "The same power-ups as in the campaign.":"Ista pojačanja kao u kampanji.",
+"CONTINUE — WAVE %d":"NASTAVI — TALAS %d", "RUN COMPLETE":"POHOD ZAVRŠEN",
+"Reached wave %d":"Dostignut talas %d", "Score: %d":"Bodovi: %d",
+"%d words  •  %.0f seconds":"%d reči  •  %.0f sekundi", "TRY AGAIN":"POKUŠAJ PONOVO",
+"Try another loadout and beat your record.":"Isprobaj drugu opremu i obori svoj rekord.",
+"Personal records on this device":"Lični rekordi na ovom uređaju", "%d pts · wave %d":"%d bod. · talas %d",
+"Noto Serif / Lora: SIL Open Font License.":"Noto Serif / Lora: SIL Open Font License.",
 "EMBER":"ŽAR", "RESONATOR":"REZONATOR", "BASTION":"BASTION", "SIPHON":"CRPLJENJE",
 "TOTAL DAMAGE":"UKUPNA ŠTETA", "BASE DAMAGE":"OSNOVNA ŠTETA", "%d ENERGY • DAMAGE %d–%d":"%d ENERGIJE • ŠTETA %d–%d", "SHIELD ×%d":"ŠTIT ×%d",
 "THE ASH FORGE":"UŽARENA KOVAČNICA", "THE EMERALD GARDENS":"SMARAGDNI VRTOVI", "THE MOON CITADEL":"MESEČEVA CITADELA",

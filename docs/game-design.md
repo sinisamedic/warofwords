@@ -2,6 +2,18 @@
 
 Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Implementacija više režima — odobreno 2026-09-19
+
+Korisnik je posle v2 odobrio izradu u igri, uz SR/EN sliku „Boss pobeđen“, izražajniji font, dosledna postojeća pojačanja i nove pozadine. Prvo Godot pregled, **bez APK-a**. Time je prethodno čekanje implementacije završeno.
+
+Naslovna: tri razmaknute animirane kartice, donji Arsenal/Unapređenja/Rekordi, Rečnik u Podešavanjima. Lora 600 za običan tekst, Noto Serif za naslove i pločice. Kartice koriste zasebne ilustracije uz pomeranje i čestice; Reduced Motion daje statičan prikaz. Dva originalna raster naslova bossa biraju se prema jeziku, svi promenljivi brojevi/opisi ostaju lokalizovani tekst. Pozadine/izvori/promptovi: `game/assets/art/endless/`.
+
+Beskraj koristi postojeću borbu/opremu. Redovni protivnici nastavljaju posle animacije pobede; svaki peti je boss. Posle njega bira se postojeće pojačanje i dobija jedna upotreba do sledećeg bossa. Nova tabla znači postojeći efekat potpuno nove table, ne novo mešanje; postojeći nazivi/ikone/efekti su zadržani. Žar i Rezonator ostaju alternative u zlatnom slotu, za razliku od ilustrativne makete koja je prikazala oba.
+
+Početni balans za probu: HP, energija, rezerva i preostali štit prenose se između talasa; nova tabla i evidencija reči za svakog protivnika. Nema automatskog izlečenja. Oprema se fiksira pri početku pohoda, pojačanje se menja posle bossa; vremenski efekti prethodnog protivnika prestaju. Sat prati sledeći protivnički potez. Zdravlje raste kao `85 + 15*w + floor(3*w^1.35)`, boss dodaje `65+7*w`; osnovna šteta `12+w` (+5 boss), interval `max(5.5,12-0.22*w)`. Reč donosi `10*n + 15*max(0,n-4)` bodova, pobeda `100*w` (boss ×3). Ove vrednosti nisu proglašene konačnim balansom.
+
+Save Beskraja i kampanje su odvojeni. Pobeda u Beskraju ne otključava kampanju niti dodeljuje njene novčiće; rekordi su za sada lokalni, po jeziku rečnika i pravilu povezivanja. Svaki režim ima svoj nastavak; čak i boss izbor/prelaz pre zatvaranja aplikacije može da se obnovi bez ponovne nagrade. Globalni dnevni servis nije menjan. Profil/globalni Beskraj i nagrade za trajni napredak ostaju buduće odluke.
+
 ## Razjašnjen smer Beskraja i redizajn v2 — 2026-09-19
 
 Korisnik traži dinamiku kampanje: borba sa protivnikom, neposredan nastavak nakon pobede, svaki peti protivnik boss, nakon bossa mogućnost promene pojačanja. Naslovna zadržava tri kartice uz veće razmake, bez istaknutog Rečnika. Kartice moraju biti animirane u kasnijoj implementaciji.

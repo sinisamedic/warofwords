@@ -1,6 +1,16 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-19. **Aktivna grana: codex/campaign-wave-two.**
+Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
+
+## Beskraj i nova naslovna — igrivi pregled 2026-09-19
+
+- Korisnik je odobrio implementaciju v2, zatražio SR/EN grafiku naslova posle bossa, zanimljiviji običan font, dosledna kampanjska pojačanja i nove pozadine. **Bez APK-a.** Poslednji APK ostaje 0.1.16.
+- Naslovna ima tri razmaknute kartice (Kampanja/Beskraj/Dnevni), zasebne originalne ilustracije, animirano pomeranje/čestice/portal/pesak i Reduced Motion. Arsenal, Unapređenja i Rekordi su dole; Rečnik u Podešavanjima. Nove pozadine, ukrašeni sat i dva lokalizovana boss naslova u `game/assets/art/endless/`, sa promptovima/poreklom.
+- Lora 600 je običan font u celom UI; Noto Serif ostaje za naslove/slova. Licenca i tačna revizija su sačuvane. Pojačanja koriste postojeće atlas ikone i efekte, bez novih stavki ili promene kampanjskih pravila.
+- Beskraj je igriv: automatski novi protivnik, svaki peti boss, promena/obnova jedne upotrebe pojačanja posle bossa, prenos HP/energije/štita. Početni rast težine i bodovanje za probu. Posebni save i lokalni rekordi po rečniku/pravilu povezivanja; kampanjski save, nagrade i otključavanja ostaju odvojeni. Nema serverskih promena.
+- Provere: postojeći skup 1.763 PASS / 0 FAIL i refill 0 failures; 57 novih provera Beskraja/fonta prolazi. Popravljeno deljenje referenci između sačuvanih podataka i aktivne table. Provereni prelazi, boss checkpoint posle restartovanja, poraz, postojeća kampanja, neispravan save. Godot renderi SR/EN 1280×720 i 1280×576 bez grešaka; animirane faze različite, Reduced Motion faze identične. Završni engine log bez grešaka/upozorenja.
+- Pregled: `Godot --path game --resolution 1280x720 --script res://tests/preview_endless.gd`. Poseban `.local/endless-preview.json`, otključana oprema/kampanja i unapređenja nivoa 3 radi probe. **F6** prikazuje boss izbor, **F7** menja UI jezik; normalno igranje dostupno preko srednje kartice. Ovo je desktop Godot pregled, ne Android emulator.
+- Sledeći korak: korisnička proba izgleda, fonta i tempa Beskraja; dorade po utiscima. Ne praviti APK dok korisnik ne zatraži. Nastaviti granu `codex/endless-arena`.
 
 ## Redizajn v2 — čeka pregled 2026-09-19
 

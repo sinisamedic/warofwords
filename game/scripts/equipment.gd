@@ -15,7 +15,7 @@ const DATA := {
 	"seal":{"name":"SEAL","cost":5,"base":8,"step":3,"win":5,"desc":["Marks the enemy for 20s.","Cancels their next healing turn."],"sr":["Obeležava protivnika na 20 s.","Poništava sledeće lečenje."]},
 	"mend":{"name":"MEND","cost":5,"base":24,"step":6,"win":-1,"desc":["Restores health immediately.","Best when danger is close."],"sr":["Odmah vraća zdravlje.","Za trenutke velike opasnosti."]},
 	"bloom":{"name":"BLOOM","cost":5,"base":30,"step":6,"win":2,"desc":["Heals now and every 2s for 8s.","Recasting refreshes the effect."],"sr":["Leči odmah, pa na 2 s tokom 8 s.","Ponavljanje obnavlja efekat."]},
-	"lexicon":{"name":"LEXICON SEAL","cost":0,"win":-2,"desc":["Words of 7+ tiles deal +4 damage.","Passive. Campaign duels only."],"sr":["Reč od 7+ pločica: +4 štete.","Pasivno. Samo u kampanji."]},
+	"lexicon":{"name":"LEXICON SEAL","cost":0,"win":-2,"desc":["Words of 7+ tiles deal +4 damage.","Passive. Campaign and Endless."],"sr":["Reč od 7+ pločica: +4 štete.","Pasivno. Kampanja i Beskraj."]},
 	"reserve":{"name":"RESERVE CELL","cost":0,"win":9,"desc":["Stores 2 excess energy per color.","Returns it after firing that ability."],"sr":["Čuva 2 viška energije po boji.","Vraća ih po aktiviranju te moći."]}
 }
 

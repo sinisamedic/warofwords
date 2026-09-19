@@ -1,0 +1,37 @@
+[
+  {
+    "file": "sky-court.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/01-home-v2.png",
+    "prompt": "Create a clean background game asset derived from reference. Remove ALL UI cards, titles, buttons, coins, logo, characters. Only beautiful floating ivory sky city, blue sky, golden architectural accents, flowering ivy and broad empty marble terrace. Match reference precisely in art direction. Landscape 16:9. Central space calm and usable behind menus, terrace floor bottom third. No text or frames. High detail crisp painterly game art."
+  },
+  {
+    "file": "mode-campaign.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/01-home-v2.png",
+    "prompt": "Extract/recreate just campaign card illustration as standalone art filling square canvas, NO UI frame or text: teal coat orange scarf young adult hero with golden gauntlet facing bronze armored giant with blue eyes in ivory sky city. Match reference campaign illustration. No title, label, border, logo. Crisp painted game art."
+  },
+  {
+    "file": "mode-endless.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/01-home-v2.png",
+    "prompt": "Extract/recreate just endless card illustration as standalone square art NO text/frame: teal coat orange scarf hero confronting successive armored enemies through brilliant circular blue-gold portal, imposing boss beyond. Match reference middle card. No title, label, border, logo. Crisp painted game art."
+  },
+  {
+    "file": "mode-daily.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/01-home-v2.png",
+    "prompt": "Extract/recreate daily card illustration as standalone square art NO text/frame: magnificent ornate golden hourglass with flowing luminous golden sand next to small decorative calendar in floating ivory city, dark blue banners. Match reference right card. No title label border logo. Crisp painted game art."
+  },
+  {
+    "file": "boss-sr.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/03-after-boss-v2.png",
+    "prompt": "Create a standalone game UI victory HEADER asset based on top header reference only. Wide 3:1 canvas. Beautiful navy enamel plaque outlined by gold ornate trim, small five turquoise jewels crown above, laurel at sides. Exact only text 'BOSS POBEĐEN' in huge raised golden serif lettering, Serbian capital Đ with crossbar. NO other words, no numbers, no stats, no background scene, no characters. Genuinely transparent background outside the plaque, ample transparent padding, crisp edges. Header fills canvas."
+  },
+  {
+    "file": "boss-en.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/03-after-boss-v2.png",
+    "prompt": "Create a standalone game UI victory HEADER asset based on top header reference only. Wide 3:1 canvas. Beautiful navy enamel plaque outlined by gold ornate trim, small five turquoise jewels crown above, laurel at sides. Exact only text 'BOSS DEFEATED' in huge raised golden serif lettering. NO other words, no numbers, no stats, no background scene, no characters. Genuinely transparent background outside plaque, ample transparent padding, crisp edges. Header fills canvas."
+  },
+  {
+    "file": "hourglass.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/02-endless-battle-v2.png",
+    "prompt": "Create single transparent-background fantasy game icon, an ornate golden hourglass with turquoise luminous sand, elegant curved gold pillars, navy sapphire base and crown, style of our attached War of Words mockup. Reference is style only: isolate just hourglass, no plaque, no UI, no text, no number, no other objects. Tall icon centered on square canvas occupying 85% height, generous transparent padding, sharp silhouette and detailed beveled metal. Clear dark glass chambers so flowing turquoise sand reads at small size. Genuinely transparent alpha outside icon."
+  }
+]

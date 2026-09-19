@@ -1,6 +1,8 @@
 extends Control
 
 const Equipment = preload("res://scripts/equipment.gd")
+const Endless = preload("res://scripts/endless.gd")
+const ModeUI = preload("res://scripts/mode_ui.gd")
 const Campaign = preload("res://scripts/campaign.gd")
 const EquipmentUI = preload("res://scripts/equipment_ui.gd")
 const Lexicon = preload("res://scripts/lexicon.gd")
@@ -26,7 +28,7 @@ const POWER_DESC := ["Stop the enemy for 8s","A new field of letters","Double yo
 const REGIONS := Campaign.REGIONS
 const ENEMIES := Campaign.NAMES
 
-var font: Font = preload("res://assets/fonts/Lato-Bold.ttf")
+var font: Font = preload("res://assets/fonts/Lora.ttf")
 var title_font: Font = preload("res://assets/fonts/NotoSerif.ttf")
 var title_emblem: Texture2D = preload("res://assets/art/title-emblem.png")
 var board_environment: Texture2D = preload("res://assets/art/board-environment.png")
@@ -134,6 +136,13 @@ var new_equipment: Array[String] = []
 var arsenal_slot := 0
 var arsenal_choice := 0
 var equipment_ui = EquipmentUI.new()
+var endless_mode := false
+var endless_wave := 1
+var endless_score := 0
+var endless_words := 0
+var endless_seconds := 0.0
+var endless_checkpoint := false
+var preparing_battle := false
 
 # The tutorial remains simple; later encounters teach one readable counter at a time.
 func enemy_style() -> String:
@@ -206,6 +215,10 @@ func _ready() -> void:
 	heading.base_font = title_font
 	heading.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"):800}
 	title_font = heading
+	var body := FontVariation.new()
+	body.base_font=font
+	body.variation_opentype={TextServerManager.get_primary_interface().name_to_tag("wght"):600}
+	font=body
 	save.load_game()
 	lex = Lexicon.new(false, save.data.word_language)
 	lexicons[lex.language] = lex
@@ -350,7 +363,12 @@ func _process(delta: float) -> void:
 		if ended and result_delay > 0:
 			result_delay=maxf(0,result_delay-delta)
 			if result_delay == 0:
-				if not won or not show_pending_unlock():
+				if endless_mode:
+					if won and endless_wave%5!=0: advance_endless()
+					else:
+						overlay="endless_boss" if won else "endless_result"
+						sfx.play("win" if won else "lose")
+				elif not won or not show_pending_unlock():
 					overlay="result"
 					sfx.play("win" if won else "lose")
 	for p in sparks:
@@ -364,7 +382,7 @@ func update_actors() -> void:
 	if hero == null:
 		return
 	hero.visible = screen == "battle"
-	home_hero.visible = screen == "home"
+	home_hero.visible = false
 	enemy_actor.visible = screen == "battle"
 	for i in portraits.size():
 		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
@@ -469,6 +487,14 @@ func advance_combat(delta: float) -> void:
 	if not impacts.is_empty() and not ended: persist_battle()
 
 func _draw_backdrop(node: Node2D) -> void:
+	if screen=="home" or screen=="endless_prepare" or screen=="records":
+		ModeUI.cover(node,ModeUI.SKY,Rect2(Vector2.ZERO,size))
+		return
+	if screen=="battle" and endless_mode:
+		# Crop the new terrace to the arena strip; actor feet remain on its floor.
+		var s := Vector2(ModeUI.SKY.get_size())
+		node.draw_texture_rect_region(ModeUI.SKY,Rect2(0,0,size.x,180),Rect2(0,s.y*.25,s.x,s.y*.59))
+		return
 	if screen=="campaign":
 		var u := smoothstep(0,.55,campaign_background_time)
 		draw_campaign_background(node,CAMPAIGN_ART[campaign_background_from],1.0,-18*u*campaign_background_direction)
@@ -577,6 +603,8 @@ func _draw() -> void:
 		"battle": draw_battle()
 		"settings": draw_settings()
 		"journal": draw_journal()
+		"endless_prepare": ModeUI.choices(self,false)
+		"records": ModeUI.records(self)
 	if not overlay.is_empty():
 		draw_overlay()
 	if notice_time > 0 and screen not in ["battle","settings"]:
@@ -588,44 +616,7 @@ func _draw() -> void:
 		text(str(Engine.get_frames_per_second()),Rect2(0,0,60,24),16)
 
 func draw_home() -> void:
-	var x := size.x*0.48
-	var width := size.x-x-42
-	var emblem_width := minf(width+14,375)
-	draw_texture_rect(title_emblem,Rect2(x+(width-emblem_width)/2,16,emblem_width,220),false)
-	var play := home_play_rect()
-	Ornaments.frame(self,play,1,Color.WHITE.darkened(.22) if pressed_action == "campaign" else Color.WHITE)
-	text("PLAY",Rect2(play.position.x+25,play.position.y,play.size.x-83,play.size.y),38,INK,true)
-	var arrow := Vector2(play.end.x-46,play.get_center().y)
-	draw_colored_polygon(PackedVector2Array([arrow+Vector2(-7,-12),arrow+Vector2(9,0),arrow+Vector2(-7,12)]),INK)
-	buttons.append({"rect":play,"id":"campaign","value":-1,"enabled":true})
-	var split := (width-12)/2
-	var card_height := 114.0 if not save.data.battle.is_empty() else 151.0
-	for i in 2:
-		var rect := Rect2(x+i*(split+12),296,split,card_height)
-		var id := "arsenal" if i == 0 else "upgrades"
-		Ornaments.home_card(self,rect,pressed_action==id)
-		var source := Rect2(25,125,925,650) if i == 0 else Rect2(950,130,800,650)
-		var icon_area := Rect2(rect.position+Vector2(24,12),Vector2(split-48,card_height-55))
-		var icon_scale := minf(icon_area.size.x/source.size.x,icon_area.size.y/source.size.y)
-		var icon_size := source.size*icon_scale
-		draw_texture_rect_region(menu_icons,Rect2(icon_area.get_center()-icon_size/2,icon_size),source)
-		text("ARSENAL" if i == 0 else "UPGRADES",Rect2(rect.position.x+38,rect.end.y-35,split-76,26),23,CREAM,true)
-		buttons.append({"rect":rect,"id":id,"value":-1,"enabled":true})
-	if not save.data.battle.is_empty():
-		action("CONTINUE DUEL",Rect2(x,418,width,44),"continue",-1,true)
-	action("OPTIONS",Rect2(22,18,205,46),"settings")
-	action("DAILY CHALLENGE",Rect2(24,size.y-96,290,48),"daily")
-	Ornaments.frame(self,Rect2(237,18,50,46))
-	Ornaments.ui_icon(self,"journal",Rect2(246,25,32,32))
-	buttons.append({"rect":Rect2(237,18,50,46),"id":"journal","value":-1,"enabled":true})
-	coin_counter(Rect2(size.x-177,18,155,46))
-	text("CAMPAIGN  •  DAILY CHALLENGE",Rect2(24,size.y-36,size.x*.4,28),17,CREAM)
-
-func home_play_rect() -> Rect2:
-	var x := size.x*.48
-	var width := size.x-x-42
-	var play_width := minf(340,width*.78)
-	return Rect2(x+(width-play_width)/2,214,play_width,74)
+	ModeUI.home(self)
 
 func campaign_points() -> Array[Vector2]:
 	var points: Array[Vector2]=[]
@@ -816,6 +807,7 @@ func draw_battle() -> void:
 		text("ARMOR • 6 TILES",Rect2(size.x*.80-92,143,184,22),15,GOLD)
 	equipment_ui.battle_status(self)
 	fx.draw(self,size.x,save.data.calm)
+	if endless_mode: ModeUI.hud(self)
 	var board := board_rect()
 	for x in 6:
 		for y in 3:
@@ -828,7 +820,7 @@ func draw_battle() -> void:
 	buttons.append({"rect":Rect2(size.x/2-27,6,54,54),"id":"pause","value":-1,"enabled":true})
 	var intent := t("FROZEN  %.1fs") % freeze if freeze > 0 else t("INCOMING  %.1fs") % countdown if countdown<3 else t("Next attack  %ds") % int(ceil(countdown))
 	if freeze<=0 and not ended: intent=t("%s IN %ds") % [t(next_enemy_move()),int(ceil(countdown))]
-	if next_enemy_move()!="ATTACK" and not ended:
+	if next_enemy_move()!="ATTACK" and not ended and not endless_mode:
 		Ornaments.plaque(self,Rect2(size.x/2-130,70,260,29))
 		text(intent,Rect2(size.x/2-122,73,244,22),17,GOLD)
 	if ended: intent=t("VICTORY" if won else "DEFEATED")
@@ -935,7 +927,8 @@ func draw_settings() -> void:
 	panel(Rect2(28,394,size.x-56,29),INK)
 	text(notice if notice_time>0 else "Any letters: link across the board. Applies to your current duel too.",Rect2(43,394,size.x-86,29),18,CREAM)
 	action("HOW TO PLAY",Rect2(36,427,width,46),"help")
-	action("CREDITS",Rect2(right,427,width,46),"credits")
+	action("JOURNAL",Rect2(right,427,half,46),"journal")
+	action("CREDITS",Rect2(right+half+10,427,half,46),"credits")
 
 func draw_journal() -> void:
 	header("WORD JOURNAL")
@@ -1039,6 +1032,8 @@ func draw_defeat_dialog() -> void:
 func draw_overlay() -> void:
 	buttons.clear()
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.02,0.06,0.10,0.86))
+	if overlay=="endless_boss": ModeUI.choices(self,true); return
+	if overlay=="endless_result": ModeUI.result(self); return
 	if overlay=="unlock":
 		equipment_ui.draw_unlock(self)
 		return
@@ -1064,7 +1059,7 @@ func draw_overlay() -> void:
 			lines=[("Link neighboring letters, including diagonals." if (lex.adjacent_only if screen=="battle" else save.data.adjacent_only) else "Link any letters. Each tile can be used once."),"Release to submit; drag back to undo a letter.","Colors charge the matching abilities. Tap READY.","Long words hit harder. Find each word once per duel.","Tap letters + ✓ also works. HINT reveals a path."]
 		"credits":
 			title="WAR OF WORDS"
-			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lato: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
+			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lora: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
 		"result":
 			title="VICTORY" if won else "DEFEATED"
 			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.",t("%d words  •  Best: %s") % [word_count,best_word if not best_word.is_empty() else "—"],t("+%d coins   •   %.0f seconds") % [reward,duration]]
@@ -1225,12 +1220,23 @@ func launch_attack(player: bool, kind: String, color: Color, damage: int) -> voi
 func dispatch(id: String, value: int = -1) -> void:
 	if OS.is_debug_build(): print("WarOfWords: action=%s screen=%s overlay=%s" % [id,screen,overlay])
 	match id:
+		"endless_entry":
+			if not save.data.endless.is_empty(): restore_battle(true)
+			else: change_screen("endless_prepare")
+		"endless_retry": change_screen("endless_prepare")
+		"endless_start": start_endless()
+		"endless_next":
+			if endless_mode and endless_checkpoint: advance_endless()
+		"endless_power":
+			save.data.selected_power=clampi(value,0,2)
+			if endless_mode and endless_checkpoint: persist_battle()
+			else: save.save_game()
 		"unlock_continue": acknowledge_unlock()
 		"reward_info":
 			if not Equipment.mission_reward(mission).is_empty(): overlay="reward_info"
 		"reward_close": overlay=""
 		"daily": change_screen("daily"); daily_screen.open()
-		"home","campaign","arsenal","powers","upgrades","settings","journal": change_screen(id)
+		"home","campaign","arsenal","powers","upgrades","settings","journal","records": change_screen(id)
 		"select": selected=value
 		"gear_slot": arsenal_slot=clampi(value,0,4); arsenal_choice=0
 		"gear_view": arsenal_choice=clampi(value,0,Equipment.SLOTS[arsenal_slot].size()-1)
@@ -1318,6 +1324,8 @@ func change_screen(target: String) -> void:
 	queue_redraw()
 
 func back() -> void:
+	if overlay=="endless_boss": persist_battle(); change_screen("home"); return
+	if overlay=="endless_result": change_screen("home"); return
 	if screen=="daily": daily_screen.leave(); return
 	if ended and screen == "battle" and result_delay>0: return
 	if overlay=="unlock": acknowledge_unlock(); return
@@ -1345,13 +1353,15 @@ func upgrade() -> void:
 	sfx.play("upgrade")
 	message(t("%s upgraded to level %d") % [t(ability_name(selected)),save.data.levels[selected]])
 
-func start_battle() -> void:
-	if mission>save.data.unlocked:
+func start_battle(as_endless: bool = false, save_initial: bool = true) -> void:
+	if mission>save.data.unlocked and not as_endless:
 		return
+	preparing_battle=true
+	endless_mode=as_endless
 	await select_dictionary(save.data.word_language)
 	lex.adjacent_only = save.data.adjacent_only
 	change_screen("battle")
-	hp=100; foe_max=Campaign.health(mission); foe_hp=foe_max
+	hp=100; foe_max=Endless.health(endless_wave) if endless_mode else Campaign.health(mission); foe_hp=foe_max
 	foe_guard=Campaign.armored(mission)
 	battle_loadout=Equipment.loadout(save.data)
 	battle_weapon=battle_loadout[0]
@@ -1372,10 +1382,11 @@ func start_battle() -> void:
 		lex.letters.assign(Array(("KAMENVAREKASUNŠTITIGRVODAMOS" if lex.language=="sr" else "STONESTREAMLINEPLANETCARDSEN").split("")))
 		lex.find_words()
 		overlay="help"
-	persist_battle()
+	preparing_battle=false
+	if save_initial: persist_battle()
 
 func interval() -> float:
-	return Campaign.interval(mission)
+	return Endless.interval(endless_wave) if endless_mode else Campaign.interval(mission)
 
 func submit_word() -> void:
 	if ended or fx.shots.size() >= fx.MAX_SHOTS: return
@@ -1388,6 +1399,7 @@ func submit_word() -> void:
 	if used.has(word):
 		message("Already found — try a different word"); path.clear(); return
 	used[word]=true; word_count+=1
+	if endless_mode: endless_score+=Endless.word_score(path.size())
 	if word.length()>best_word.length(): best_word=word
 	best_tiles=maxi(best_tiles,path.size())
 	last_tiles=path.size()
@@ -1455,7 +1467,7 @@ func enemy_attack() -> void:
 		message("Enemy healed. Use Arc before the next heal.")
 		persist_battle()
 		return
-	var amount := Campaign.damage(mission)
+	var amount := Endless.damage(endless_wave) if endless_mode else Campaign.damage(mission)
 	if Campaign.action(mission,enemy_attacks)=="HEAVY HIT": amount+=12
 	if mission%4==3 and enemy_attacks%3==0: amount+=8
 	countdown=interval()
@@ -1517,6 +1529,14 @@ func finish(victory: bool) -> void:
 	fx.burst("defeat" if won else "fall_dust",Vector2(.80 if won else .20,128),GOLD if won else COLORS[1],DEFEAT_DURATION)
 	sfx.play("explosion",.78)
 	stars=(3 if hp>=70 else 2 if hp>=35 else 1) if won else 0
+	if endless_mode:
+		reward=0
+		if won: endless_score+=100*endless_wave*(3 if endless_wave%5==0 else 1)
+		endless_checkpoint=won
+		update_endless_record()
+		if won: persist_battle()
+		else: save.data.endless={}; save.save_game()
+		return
 	var first: bool = not save.data.wins.has(str(mission))
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)
 	save.data.coins+=reward
@@ -1538,7 +1558,9 @@ func finish(victory: bool) -> void:
 	save.save_game()
 
 func persist_battle() -> void:
-	if screen=="battle" and not ended and lex.letters.size()==28:
+	if preparing_battle: return
+	var campaign_snapshot: Dictionary=save.data.battle
+	if screen=="battle" and (not ended or (endless_mode and endless_checkpoint)) and lex.letters.size()==28:
 		save.data.battle={"adjacent_only":lex.adjacent_only,"dictionary_code":lex.language,"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
 		save.data.battle.projectiles=fx.snapshot()
 		save.data.battle.foe_guard=foe_guard
@@ -1557,13 +1579,29 @@ func persist_battle() -> void:
 		save.data.battle.burn_ticks=burn_ticks
 		save.data.battle.burn_amount=burn_amount
 		save.data.battle.bastion_hits=bastion_hits
+		# The saved campaign must not alias the next mode's live word/board arrays.
+		save.data.battle=save.data.battle.duplicate(true)
+		if endless_mode:
+			save.data.battle.merge({"mode":"endless","wave":endless_wave,"score":endless_score,"run_words":endless_words,"run_seconds":endless_seconds,"checkpoint":endless_checkpoint})
+			# A completed wave is restored into the intermission, never as a live dead foe.
+			save.data.battle.foe=maxi(1,foe_hp)
+			save.data.endless=save.data.battle
+			save.data.battle=campaign_snapshot
 	if not save.save_game(): message("Could not save progress on this device")
 
-func restore_battle() -> void:
-	var b: Dictionary = save.data.battle
+func restore_battle(as_endless: bool = false) -> void:
+	var b: Dictionary = save.data.endless if as_endless else save.data.battle
 	if b.is_empty(): return
-	if not valid_snapshot(b):
-		save.data.battle={}; save.save_game(); message("Old duel could not be restored. Start a new one."); return
+	if not valid_snapshot(b) or (as_endless and not Endless.valid_meta(b)):
+		if as_endless: save.data.endless={}
+		else: save.data.battle={}
+		save.save_game(); message("Old duel could not be restored. Start a new one."); return
+	preparing_battle=true
+	endless_mode=as_endless
+	endless_checkpoint=as_endless and b.get("checkpoint",false)
+	if as_endless:
+		endless_wave=int(b.wave); endless_score=int(b.score)
+		endless_words=int(b.run_words); endless_seconds=float(b.run_seconds)
 	await select_dictionary(b.get("dictionary_code","en"))
 	lex.adjacent_only = b.get("adjacent_only",true)
 	change_screen("battle")
@@ -1586,6 +1624,56 @@ func restore_battle() -> void:
 	lex.letters.assign(b.letters); lex.types.assign(b.types); lex.find_words(used)
 	enemy_attacks=int(b.attacks); save.data.selected_power=int(b.power)
 	ended=false; won=false; overlay="pause"; fx.restore(b.get("projectiles",[])); sparks.clear()
+	if endless_checkpoint:
+		ended=true; won=true; foe_hp=0
+		if endless_wave%5==0: overlay="endless_boss"
+		else: overlay=""; result_delay=.1
+	preparing_battle=false
+
+func start_endless() -> void:
+	endless_wave=1; endless_score=0; endless_words=0; endless_seconds=0
+	endless_checkpoint=false
+	mission=Endless.opponent(1)
+	await start_battle(true)
+
+func advance_endless() -> void:
+	if not endless_mode or not won or not endless_checkpoint or preparing_battle: return
+	var carry_hp := hp
+	var carry_energy := energy.duplicate()
+	var carry_reserves := reserves.duplicate()
+	var carry_loadout := battle_loadout.duplicate()
+	var carry_artifact := battle_artifact
+	var carry_used := boost_used
+	var carry_shield := shield
+	var carry_kind := shield_kind
+	var carry_hits := bastion_hits
+	var rule: bool=lex.adjacent_only
+	var language: String=lex.language
+	var restore_language: String=save.data.word_language
+	var restore_rule: bool=save.data.adjacent_only
+	var after_boss := endless_wave%5==0
+	endless_words+=word_count; endless_seconds+=duration
+	endless_wave+=1; endless_checkpoint=false
+	mission=Endless.opponent(endless_wave)
+	# Keep the run's dictionary and connection category fixed.
+	save.data.word_language=language; save.data.adjacent_only=rule
+	await start_battle(true,false)
+	hp=carry_hp; energy.assign(carry_energy); reserves.assign(carry_reserves)
+	battle_loadout=carry_loadout; battle_weapon=battle_loadout[0]; battle_artifact=carry_artifact
+	shield=carry_shield; shield_kind=carry_kind; bastion_hits=carry_hits
+	boost_used=false if after_boss else carry_used
+	save.data.word_language=restore_language; save.data.adjacent_only=restore_rule
+	persist_battle()
+
+func endless_record() -> Dictionary:
+	var language: String=lex.language if endless_mode and screen=="battle" else save.data.word_language
+	var adjacent: bool=lex.adjacent_only if endless_mode and screen=="battle" else save.data.adjacent_only
+	return save.data.endless_records.get(Endless.key(language,adjacent),{})
+
+func update_endless_record() -> void:
+	var key := Endless.key(lex.language,lex.adjacent_only)
+	var old: Dictionary=save.data.endless_records.get(key,{})
+	save.data.endless_records[key]={"score":maxi(endless_score,int(old.get("score",0))),"wave":maxi(endless_wave,int(old.get("wave",0)))}
 
 func valid_snapshot(b: Dictionary) -> bool:
 	if not Equipment.valid_state(b): return false

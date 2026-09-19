@@ -1,5 +1,7 @@
 # Fonts
 
+2026-09-19: body/UI text now uses **Lora at weight 600**, unchanged variable font `ofl/lora/Lora[wght].ttf` from Google Fonts commit `186331d77cc99caaa9c3b52391fd2b519c9e1ee8`. SHA256 `822a6621ccbe8d97d20ac88c1c41f5615c9c2c202eaa75f272cd452aac6475a7`. SIL OFL notice: `../../licenses/Lora-OFL.txt`. Source: https://github.com/google/fonts/tree/186331d77cc99caaa9c3b52391fd2b519c9e1ee8/ofl/lora. Serbian glyphs ČĆŠŽĐčćšžđ checked in engine. Noto Serif headings/tiles remain; Lato is retained as earlier material.
+
 Original font files from Google Fonts, distributed under the SIL Open Font License. Full notices: `../../licenses/`.
 
 | File | Pinned upstream revision | SHA256 |

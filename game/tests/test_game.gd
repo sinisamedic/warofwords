@@ -459,7 +459,7 @@ func run_tests() -> void:
 		check(tile.size.y>=90 and tile.size.x>=150,"settings icon has large touch target %d" % i)
 		for j in range(i+1,4): check(not tile.intersects(scene.settings_toggle_rect(j)),"settings touch targets do not overlap %d/%d" % [i,j])
 	scene.change_screen("home")
-	check(scene.home_hero.visible and not scene.hero.visible,"home keeps the original uncut hero illustration")
+	check(not scene.home_hero.visible and not scene.hero.visible,"home uses three separate mode illustrations")
 	scene.change_screen("battle")
 	check(scene.hero.visible and not scene.home_hero.visible,"articulated hero is used only in battle")
 	print("RESULT: %d failures" % failures)
