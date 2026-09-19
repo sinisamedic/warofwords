@@ -35,6 +35,8 @@ static func home(c) -> void:
 	O.frame(c,Rect2(20,16,48,46))
 	O.ui_icon(c,"settings",Rect2(29,24,30,30))
 	c.buttons.append({"rect":Rect2(20,16,48,46),"id":"settings","value":-1,"enabled":true})
+	c.draw_texture_rect(preload("res://assets/ui/settings/question.svg"),Rect2(78,15,48,48),false)
+	c.buttons.append({"rect":Rect2(78,15,48,48),"id":"credits","value":-1,"enabled":true})
 	c.coin_counter(Rect2(c.size.x-179,16,159,46))
 	var names := ["CAMPAIGN","ENDLESS WORDS","DAILY CHALLENGE"]
 	var ids := ["campaign","endless_entry","daily"]

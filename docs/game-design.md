@@ -339,3 +339,9 @@ Za Beskraj se čuva i rangira svaka poslata partija iste osobe. Prikaz: top 10, 
 Korisnik odobrio novi ekran sa igračem/zvukom levo, jezicima desno i dugmetom Sačuvaj. Dodaju se nemački, francuski, španski i italijanski; srpski mora biti poslednji: EN, DE, FR, ES, IT, SR. Jezik interfejsa i jezik rečnika biraju se nezavisno kroz mrežu 2×3. Poslednje ime za liste može da se unese ovde i kasnije izmeni pre slanja partije. Podešavanja imena ne objavljuju rezultat niti preimenuju istoriju.
 
 Izbor rečnika i povezivanja važi za nove borbe; sačuvani duel ostaje obnovljiv sa svojim pravilima. Novi jezici podržani su u sva tri režima, a globalne liste ostaju objedinjene. Joker ostaje samo za Kampanju/Beskraj. Akcenti se čuvaju na pločicama; nemačko ß se piše SS, francuske ligature OE/AE. Ove konvencije su implementacione odluke prve verzije za probu, podesive posle korisničke povratne informacije.
+
+### Vizuelna korekcija podešavanja — usvojeno 2026-09-19
+
+Dijalog zauzima približno 76% širine uz vidljivu pozadinu. Sekcije imaju ornament, uvučen sadržaj i zlatnu liniju koja se nastavlja desno od naslova i bledi na krajevima. Prekidači imaju tirkiznu osvetljenu stazu i animirano zlatno dugme; izabrano povezivanje/jezik koristi tamnu tirkiznu podlogu. Sačuvaj je centrirano. Pomoć, Rečnik i Autori/licence uklonjeni su iz podešavanja; Autori/licence dostupni su preko posebnog vektorskog medaljona sa upitnikom na naslovnoj. Srpski ostaje poslednji u izboru jezika.
+
+Novi originalni SVG elementi u `game/assets/ui/settings/` generišu se skriptom `tools/draw-settings-assets.py`; nacrtani su kodom za ovaj projekat prema korisnikovom usvojenom vizuelnom smeru. Nema novih preuzetih materijala.

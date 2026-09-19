@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Podešavanja usklađena sa vizuelnom referencom — 2026-09-19
+
+- Uži ukrašen panel, uvučena polja, ornamenti i linije sa prelazom providnosti uz naslove; zlatno/tirkizni animirani prekidači, tamne selekcije i centrirano Sačuvaj. Autori/licence premešteni na novu dizajniranu ikonicu upitnika na naslovnoj; pomoć/rečnik uklonjeni iz podešavanja.
+- Originalni SVG elementi i generator verzionisani. Provereni renderi svih šest jezika; test jezika/pamćenja i odustajanja prolazi (poznato ObjectDB upozorenje pri izlasku). Dodatno potvrđeni ScreenTouch na prekidaču, završetak animacije i otvaranje autora sa naslovne.
+- Simulator `game/tests/preview_settings.gd` otvara SR podešavanja sa izolovanim lokalnim podacima i isključenim upisom rezultata. Pokrenut za korisnički pregled. **Nov APK nije napravljen.**
+- Sledeće: korisnička proba izgleda i interakcije; eventualne korekcije pre narednog APK-a. Aktivna grana `codex/endless-arena`.
+
 ## Šest jezika, nova podešavanja i APK 0.1.19 — 2026-09-19
 
 - Implementiran usvojeni navy/gold ekran: ime igrača, zvuk/vibracija/animacije, povezivanje slova, zaseban jezik menija i reči. Izbor u mreži 2×3: English, Deutsch, Français, Español, Italiano, Srpski (poslednji). Sačuvaj potvrđuje; Nazad odbacuje izmene. Ime je zajedničko dnevnom izazovu i Beskraju, bez menjanja starih rezultata. Sačuvane borbe zadržavaju svoj rečnik i pravilo povezivanja.
