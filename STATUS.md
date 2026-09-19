@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Dugme za slanje i zajednički jezici — 2026-09-19
+
+- Poraz Beskraja ima zlatno dugme POŠALJI REZULTAT uz nadimak, sa stanjima SLANJE / POSLATO. Šalje trenutno uneto ime, omogućava ponovni pokušaj; automatsko slanje sa zapamćenim imenom ostaje.
+- Uklonjen jezički filter rang-liste. Beskraj i Dnevni izazov prikazuju najbolje rezultate svakog profila preko oba jezika, sa zajedničkim plasmanom i bez duplih redova. Pravilo povezivanja ostaje zasebno; jezik partije i dnevna validacija ne menjaju se.
+- Migracija `202609190003_shared_language_rankings.sql` postavljena na War of Words. 15 SQL provera i Godot test dugmeta prolaze; živim čitanjem potvrđen isti odgovor za SR/EN u oba režima. SR/EN render 1280×720 bez engine grešaka; test rangiranja povremeno prijavljuje postojeće ObjectDB curenje pri izlasku.
+- Sledeće: korisnička proba u simulatoru, F8 za poraz; probni rezultati se ne objavljuju. Bez APK-a. Aktivna grana `codex/endless-arena`.
+
 ## Globalni Rekordi, automatsko slanje i Joker — 2026-09-19
 
 - Naslovni Rekordi sada otvaraju ukrašenu serversku listu sa tabovima Beskraj / Dnevni izazov, filterima i zatvaranjem. Poraz Beskraja prikazuje statistiku, opremu, nadimak i listu u istom prozoru. Naslovne kartice su manje, logo veći.

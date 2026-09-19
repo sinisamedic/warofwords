@@ -31,6 +31,16 @@ func run() -> void:
 	var board=g.get_children().back(); assert(board.result_mode); assert(board.nickname.text=="Novo ime")
 	while service.busy or board.busy: await process_frame
 	assert(g.save.data.endless_outbox.is_empty()); assert(board.rows_view.rows.size()==22)
+	assert(board.send_button.text=="SENT ✓" or board.send_button.text=="POSLATO ✓")
+	service.offline=true; service.enqueue({"score":900,"wave":2,"words":9,"seconds":50,"language":"sr","adjacent":true})
+	await process_frame
+	while service.busy: await process_frame
+	board.nickname.text="Klik posalji"; board.nickname.text_changed.emit(board.nickname.text)
+	service.offline=false; board.send_button.pressed.emit()
+	while service.busy: await process_frame
+	assert(g.save.data.endless_outbox.is_empty()); assert(service.calls.back().payload.p_nickname=="Klik posalji")
+	assert(board.send_button.disabled)
+	print("PASS: explicit send button uploads edited nickname and shows sent state")
 	board.leave(); await process_frame; assert(not g.endless_board_open)
 	g.dispatch("records"); await process_frame; board=g.get_children().back()
 	while board.busy: await process_frame

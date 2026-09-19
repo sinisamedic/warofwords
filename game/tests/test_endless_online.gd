@@ -13,6 +13,11 @@ func run() -> void:
 	assert(not board.empty.text.contains("Nema veze"))
 	assert(board.status.text=="NAJBOLJI REZULTATI")
 	print("PASS: live authenticated leaderboard loaded")
+	for category in ["endless","daily"]:
+		var sr: Dictionary=await g.rankings.leaderboard(category,"sr",true)
+		var en: Dictionary=await g.rankings.leaderboard(category,"en",true)
+		assert(not sr.has("error") and not en.has("error") and sr==en)
+		print("PASS: live ",category," ranking combines both languages")
 	var response: Dictionary=await g.rankings.call_rank_api("endless_finish",{"p_run":"10000000-0000-0000-0000-000000000099","p_language":"sr","p_adjacent":true,"p_nickname":"QA provera","p_score":-1,"p_wave":1,"p_words":1,"p_seconds":1})
 	assert(response.has("error")); print("PASS: live invalid score rejected")
 	board.mode="daily"; board.rebuild(); await board.refresh(); assert(not board.empty.text.contains("Nema veze")); print("PASS: live daily leaderboard loaded")

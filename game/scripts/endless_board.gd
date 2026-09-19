@@ -7,6 +7,7 @@ var mode := "endless"
 var language := "sr"
 var adjacent := true
 var nickname: LineEdit
+var send_button: Button
 var status: Label
 var empty: Label
 var rows_view: Control
@@ -37,7 +38,7 @@ func label(value: String, rect: Rect2, pixels: int=17) -> Label:
 	var item := Label.new(); item.text=value; item.position=rect.position; item.size=rect.size
 	item.add_theme_font_override("font",host.font); item.add_theme_font_size_override("font_size",pixels); item.add_theme_color_override("font_color",Color("fff1ce")); item.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	form.add_child(item); return item
-func button(value: String, rect: Rect2, callback: Callable, gold := false) -> void:
+func button(value: String, rect: Rect2, callback: Callable, gold := false) -> Button:
 	var b := Button.new(); b.text=value; b.position=rect.position; b.size=rect.size
 	b.add_theme_font_override("font",host.font); b.add_theme_font_size_override("font_size",17)
 	for state in ["normal","hover","pressed","disabled","focus"]:
@@ -45,6 +46,7 @@ func button(value: String, rect: Rect2, callback: Callable, gold := false) -> vo
 		b.add_theme_stylebox_override(state,style)
 	for state in ["font_color","font_hover_color","font_pressed_color"]: b.add_theme_color_override(state,Color("10283d") if gold else Color("fff1ce"))
 	b.pressed.connect(callback); form.add_child(b)
+	return b
 func rebuild() -> void:
 	if not is_instance_valid(form): return
 	var typed: String=nickname.text if is_instance_valid(nickname) else host.rankings.nickname()
@@ -56,13 +58,16 @@ func rebuild() -> void:
 	if result_mode:
 		list_rect=Rect2(x+310,186,w-335,size.y-279)
 		label(local_text("YOUR NAME","TVOJ NADIMAK"),Rect2(x+310,71,230,21),14)
-		nickname=LineEdit.new(); nickname.position=Vector2(x+310,96); nickname.size=Vector2(w-335,35); nickname.text=typed; nickname.max_length=20; nickname.placeholder_text=local_text("Enter a nickname to publish","Unesi nadimak za objavu")
+		nickname=LineEdit.new(); nickname.position=Vector2(x+310,96); nickname.size=Vector2(w-557,35); nickname.text=typed; nickname.max_length=20; nickname.placeholder_text=local_text("Your nickname","Tvoj nadimak")
 		nickname.add_theme_font_override("font",host.font); nickname.add_theme_font_size_override("font_size",19)
 		var style := StyleBoxFlat.new(); style.bg_color=Color("0a2131"); style.border_color=Color("c6a25d"); style.set_border_width_all(1); style.set_corner_radius_all(6); style.content_margin_left=12
 		nickname.add_theme_stylebox_override("normal",style); nickname.add_theme_stylebox_override("focus",style)
-		nickname.text_changed.connect(func(_value): name_dirty=true; name_timer.start())
-		nickname.text_submitted.connect(func(_value): name_timer.stop(); save_name())
+		nickname.text_changed.connect(func(_value): name_dirty=true; name_timer.start(); update_send_button())
+		nickname.text_submitted.connect(func(_value): send_result())
 		form.add_child(nickname)
+		send_button=button(local_text("SEND RESULT","POŠALJI REZULTAT"),Rect2(right-235,96,210,35),send_result,true)
+		send_button.add_theme_font_size_override("font_size",15)
+		update_send_button()
 		status=label(host.t(host.rankings.message),Rect2(x+310,135,w-335,23),14)
 		if not host.online_autosubmit: status.text=local_text("PREVIEW · test scores are not published","PREGLED · probni rezultat se ne objavljuje")
 		button(local_text("MENU","MENI"),Rect2(x+24,size.y-66,155,40),func(): leave(); host.change_screen("home"))
@@ -70,7 +75,6 @@ func rebuild() -> void:
 	else:
 		button(local_text("ENDLESS WORDS","BESKRAJ REČI"),Rect2(x+w/2-239,77,230,40),func(): mode="endless"; rebuild(); refresh(),mode=="endless")
 		button(local_text("DAILY CHALLENGE","DNEVNI IZAZOV"),Rect2(x+w/2+9,77,230,40),func(): mode="daily"; rebuild(); refresh(),mode=="daily")
-		button("SR" if language=="sr" else "EN",Rect2(right-272,127,66,30),func(): language="en" if language=="sr" else "sr"; rebuild(); refresh())
 		button(host.t("ADJACENT" if adjacent else "ANY LETTERS"),Rect2(right-197,127,173,30),func(): adjacent=not adjacent; rebuild(); refresh())
 		status=label("",Rect2(x+24,130,w-325,27),15)
 		list_rect=Rect2(x+24,182,w-48,size.y-275)
@@ -81,7 +85,7 @@ func rebuild() -> void:
 	label(local_text("WORDS","REČI") if mode=="daily" else local_text("WAVE","TALAS"),Rect2(list_rect.end.x-48,header_y,48,18),11)
 	scroll=ScrollContainer.new(); scroll.position=list_rect.position; scroll.size=list_rect.size; scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED; form.add_child(scroll)
 	rows_view=preload("res://scripts/rank_rows.gd").new(); rows_view.host=host; rows_view.daily=mode=="daily"; rows_view.size_flags_horizontal=Control.SIZE_EXPAND_FILL; scroll.add_child(rows_view)
-	if cached_category==mode+language+str(adjacent):
+	if cached_category==mode+str(adjacent):
 		rows_view.rows=cached_rows; rows_view.custom_minimum_size.y=cached_rows.size()*40
 	empty=label("",Rect2(list_rect.position+Vector2(12,24),Vector2(list_rect.size.x-24,80)),17); empty.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	empty.gui_input.connect(retry_input)
@@ -126,7 +130,7 @@ func refresh() -> void:
 	empty.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	empty.text=local_text("No results yet. Be the first!","Još nema rezultata. Budi prvi!") if response.get("rows",[]).is_empty() else ""
 	rows_view.rows=response.get("rows",[]); rows_view.custom_minimum_size.y=rows_view.rows.size()*40; rows_view.queue_redraw()
-	cached_rows=rows_view.rows; cached_category=mode+language+str(adjacent)
+	cached_rows=rows_view.rows; cached_category=mode+str(adjacent)
 	if not result_mode: status.text=(local_text("TODAY · ","DANAS · ")+str(response.get("day","")) if mode=="daily" else local_text("ALL-TIME BEST","NAJBOLJI REZULTATI"))
 func save_name() -> void:
 	if not result_mode or not name_dirty: return
@@ -135,8 +139,22 @@ func save_name() -> void:
 	if host.rankings.busy: name_dirty=true; return
 	if host.save.data.endless_outbox.is_empty(): host.rankings.rename_player()
 	else: host.rankings.flush()
+func send_result() -> void:
+	name_timer.stop()
+	if not host.rankings.valid_name(nickname.text):
+		status.text=local_text("Use 3–20 letters or numbers.","Unesi 3–20 slova ili brojeva."); nickname.grab_focus(); return
+	if not host.online_autosubmit:
+		status.text=local_text("PREVIEW · test scores are not published","PREGLED · probni rezultat se ne objavljuje"); return
+	name_dirty=true; save_name(); update_send_button()
+func update_send_button() -> void:
+	if not is_instance_valid(send_button): return
+	var sending: bool=host.rankings.busy
+	var sent: bool=host.online_autosubmit and not name_dirty and not host.save.data.endless_name_dirty and host.save.data.endless_outbox.is_empty()
+	send_button.disabled=sending or sent
+	send_button.text=local_text("SENDING…","SLANJE…") if sending else local_text("SENT ✓","POSLATO ✓") if sent else local_text("SEND RESULT","POŠALJI REZULTAT")
 func service_changed() -> void:
 	if result_mode: status.text=host.t(host.rankings.message)
+	update_send_button()
 	if not host.rankings.busy:
 		if name_dirty: name_timer.start()
 		refresh()

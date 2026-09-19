@@ -321,3 +321,9 @@ Naslovni Rekordi otvaraju ukrašenu serversku listu sa kategorijama Beskraj / Dn
 Svaka završena partija Beskraja ide u red za automatsko slanje, čak i kada nije rekord. Prvi put čeka ispravan nadimak; zatim se poslednji nadimak popunjava automatski, može se promeniti i pamti se. Ekran poraza sadrži statistiku, opremu, unos imena i globalnu listu. Server čuva pojedinačne partije, a lista prikazuje najbolji rezultat po profilu/kategoriji. Ponovno slanje iste partije ne pravi duplikat. Neuspešna slanja i promene imena ponavljaju se; nema trajnog profila niti sinhronizacije kampanje između uređaja.
 
 Naslovne kartice su malo niže/manje, logo je veći i blago prelazi preko gornje ivice srednje kartice.
+
+### Dopuna: zajednička lista jezika i dugme za slanje — 2026-09-19
+
+Korisnik traži zajedničke rezultate svih jezika. SR/EN filter je uklonjen; oba režima rangiraju najbolji rezultat profila preko oba jezika, bez duplog pojavljivanja. Za Dnevni izazov važi današnji dan i verzija pravila. Pravilo susedno/slobodno povezivanje ostaje zasebno. Ovo zamenjuje raniju odluku o odvojenom jezičkom rangiranju.
+
+Na porazu Beskraja je jasno dugme POŠALJI REZULTAT uz ime. Šalje trenutno uneti nadimak i sačuvani rezultat, odnosno ažurira ime već poslatog rezultata. Tokom zahteva pokazuje SLANJE, posle potvrde POSLATO; nema dupliranja partije. Ranije odobreno automatsko slanje ostaje.

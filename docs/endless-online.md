@@ -1,5 +1,11 @@
 # Globalne liste i slanje Beskraja
 
+## Dopuna 2026-09-19: svi jezici zajedno
+
+Migracija `202609190003_shared_language_rankings.sql` postavljena je na War of Words. I Beskraj i Dnevni izazov sada biraju najbolji rezultat po profilu preko svih jezika pre računanja plasmana. Nema duplih redova; argument jezika ostaje zbog kompatibilnosti starih poziva, ali ne filtrira listu. Podaci o jeziku u partijama ostaju za pravila/replay. Pravilo povezivanja i dnevna verzija/datum ostaju filteri. Ova dopuna zamenjuje ranije jezičko razdvajanje opisano ispod.
+
+Poraz ima eksplicitno dugme POŠALJI REZULTAT uz ime, sa stanjem SLANJE / POSLATO i ponovnim pokušajem. Automatsko slanje ostaje; pritisak ne stvara novu partiju. `tools/test-shared-rankings.mjs` proverava objedinjavanje i prava (15 provera). Mrežni test potvrđuje identične žive SR/EN odgovore u oba režima.
+
 Migracije `202609190001_endless.sql` i `202609190002_endless_runs.sql` postavljene su na potvrđeni Supabase projekat War of Words (`phfbohgbeqjvtfsgcjwi`) 2026-09-19. Druga dodaje privatne pojedinačne partije i RPC-e `endless_finish` / `endless_name`; postojeći dnevni rezultati i Edge funkcija ostaju isti.
 
 Klijent koristi postojeću anonimnu sesiju Dnevnog izazova. Autentikacija je serijalizovana da istovremeno učitavanje liste i slanje ne otvore dva identiteta. Privatne tabele `endless_scores` i `endless_runs` imaju RLS i nemaju direktan anon/authenticated pristup. Upisi se vezuju za `auth.uid()`. Lista vraća prvih 20 i sopstveni red, bez UUID-a; jednaki bodovi dele rang. Kategorije: SR/EN i susedno/slobodno povezivanje.
