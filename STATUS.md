@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Preciziranje vizuelnog pregleda — 2026-09-19
+
+- Portal ima tri sloja: neprijatelji, rotirajući prsten, transparentni igrač ispred. Vraćene velike ilustracije Arsenala/Unapređenja; dnevni pesak pomeren prema osi sata.
+- Boss izbor ima pozadinu dvorišta, filigran i teksturu. Brojači energije skriveni u Beskraju; bodovi su samo broj preko donjeg dela portreta; lični rekord samo na početnoj kartici kao bodovi.
+- Health barovi uvučeni, tanak obod sa zaobljenim uglovima. Talasi imaju izdvojeno zaglavlje, donji ukrašeni okvir, jarke zelene kvačice, zlatni svetlosni prsten i rogatu lobanju.
+- Provere: 57 provera Beskraja i 15 bodovanja; SR/EN renderi 1280×576 i 1280×720. Bez APK-a. Sledeći korak: korisnički pregled u `preview_endless.gd` (F6 boss, F7 SR/EN), nastaviti `codex/endless-arena`.
+
 ## Dorade posle probe Beskraja — 2026-09-19
 
 - Kampanjska kartica ima dva nezavisno pokretna postojeća lika u isečenom prozoru; portal je zaseban rotirajući alfa sloj preko očišćene ilustracije. Dnevni pesak/sjaj su pojačani. Reduced Motion ostaje statičan.

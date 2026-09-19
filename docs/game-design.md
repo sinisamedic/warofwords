@@ -287,3 +287,9 @@ Ponovo se koristi prethodno generisana originalna arena Sunward Ruins. Nema novi
 ## Istorija
 
 V2 atlas od 86 ekrana ostaje u [mockups/](../mockups/README.md). Njegovo slobodno povezivanje, zajednička energija i pet reči po tabli više nisu aktuelna pravila. V1 portrait/srpski/sedam slova nalazi se u istoriji (40c1588). Stariji PLAN.md i GODOT-SETUP.md su istorija istraživanja, ne aktivne odluke.
+
+## Usvojene dorade vizuelnog pregleda — 2026-09-19
+
+Portal naslovne: neprijatelji iza prstena, prsten animiran, igrač kao zaseban transparentni sloj ispred. Velike postojeće ilustracije Arsenala i Unapređenja smeju da izlaze iz okvira. Pesak Dnevnog izazova poravnat sa satom.
+
+Beskraj: bez brojčanog odnosa energije na sposobnostima; bodovi bez naslova preko donjeg dela portreta, rekord samo na naslovnoj kartici u bodovima. Health barovi unutar ukrašenog okvira, sa tankim zaobljenim zlatnim obodom. Talas sa zasebnim zaglavljem, podlogom za medaljone, zelenim kvačicama, svetlim zlatnim oreolom i rogatom lobanjom. Boss izbor dobija dvorište u pozadini i filigran.

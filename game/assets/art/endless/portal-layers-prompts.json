@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-19",
+  "tool": "OpenAI built-in ImageGen",
+  "assets": [
+    {
+      "asset": "portal-enemies.png",
+      "reference": "portal-scene.png",
+      "prompt": "Edit reference: remove ONLY entire foreground human hero including sword, orange scarf, all body. Fill naturally with blue mist and more distant skeletal enemies. Keep original enemy composition centered in upper middle, castle, palette. No portal ring, no human hero. Square clean background layer for game."
+    },
+    {
+      "asset": "portal-hero.png",
+      "reference": "portal-scene.png",
+      "prompt": "Extract ONLY the foreground human hero from reference as a transparent alpha PNG. Preserve exact back-facing pose, blue coat gold trim orange scarf sword, entire visible body. Remove every enemy, castle, mist, background. True transparent alpha around isolated hero. Square canvas same composition as reference with hero on left bottom and sword extending right. No additional objects."
+    }
+  ]
+}

@@ -5,7 +5,7 @@ const SR := {
 "Health and energy carry between waves.":"Zdravlje i energija prenose se između talasa.",
 "JOURNAL":"REČNIK", "ENDLESS WORDS":"BESKRAJ REČI", "OPEN MAP":"OTVORI MAPU", "ENTER ARENA":"UĐI U ARENU",
 "PLAY CHALLENGE":"IGRAJ IZAZOV", "CONTINUE RUN":"NASTAVI POHOD", "RECORDS":"REKORDI",
-"%d / 24 levels":"%d / 24 nivoa", "Best wave: %d":"Rekord: talas %d",
+"%d / 24 levels":"%d / 24 nivoa", "Best wave: %d":"Rekord: talas %d", "Best score: %d":"Rekord: %d bodova", "NEXT: BOSS":"SLEDEĆI: BOSS", "BOSS AT WAVE %d":"BOSS NA TALASU %d",
 "A new challenge every day":"Novi izazov svakog dana", "WAVE %d":"TALAS %d",
 "SCORE":"BODOVI", "PERSONAL BEST":"LIČNI REKORD", "WAVE %d COMPLETE":"TALAS %d ZAVRŠEN",
 "Defeat enemies. Every fifth wave is a boss.":"Pobeđuj protivnike. Svaki peti talas je boss.",

@@ -14,3 +14,7 @@ Original assets generated with built-in OpenAI ImageGen, based on the project's 
 Original generated filenames, in the same order: `exec-db5a5d2c-cc85-41ae-bdfb-8c48028d5a93.png`, `exec-199aee35-aa7f-4f92-94d5-9f535507cff7.png`, `exec-42065f56-d155-41ef-a035-cd592a22bfda.png`, `exec-df17cf04-8744-4ddf-961f-c379961294ec.png`, `exec-6985ba91-4d06-4e4d-9a64-78bdf67a4919.png`, `exec-29b4f0da-9b25-4a84-a9c3-c24c0252a2b3.png`, `exec-b44dec58-1f91-4fac-9163-dead9d01a147.png`.
 
 Mockup power-up illustrations were not introduced. Runtime reuses the campaign's exact ability atlas indices 4/5/6 and existing effects/names. Resonator and Ember remain alternative gold-slot weapons; the mockup showing both equipped simultaneously was illustrative and is corrected in the playable preview.
+
+## Portal — tri sloja, 2026-09-19
+
+`portal-enemies.png` i providni `portal-hero.png` su originalne ImageGen izvedenice prethodne projektne ilustracije `portal-scene.png`. Između njih igra crta postojeći rotirajući `portal-ring.png`. Tačni promptovi su u `portal-layers-prompts.json`; bez novih materijala trećih strana.

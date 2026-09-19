@@ -250,6 +250,11 @@ func _ready() -> void:
 		portrait.setup(fighters,opponent)
 		add_child(portrait)
 		portraits.append(portrait)
+	var score_overlay := Node2D.new()
+	score_overlay.name="ScoreOverlay"
+	score_overlay.z_index=2
+	score_overlay.draw.connect(func(): ModeUI.score_badge(self,score_overlay))
+	add_child(score_overlay)
 	# Background is drawn by a sibling behind both actors; HUD is drawn by this Control.
 	var backdrop := Node2D.new()
 	backdrop.name = "Backdrop"
@@ -384,6 +389,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func update_actors() -> void:
+	if has_node("ScoreOverlay"): get_node("ScoreOverlay").queue_redraw()
 	if hero == null:
 		return
 	hero.visible = screen == "battle"
@@ -786,13 +792,20 @@ func health_bar(rect: Rect2, current: int, maximum: int, opponent: bool) -> void
 		label=label.left(label.length()-2)+"…"
 	text(label,Rect2(start,rect.position.y+1,width-96,20),17,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT,false)
 	text("%d/%d" % [current,maximum],Rect2(start+width-82,rect.position.y+1,82,20),18,CREAM)
-	var bar := Rect2(start,rect.position.y+25,width,8)
-	draw_style_box(health_style(Color("060f20")),bar.grow(1))
-	var colors := [Color("ffa26e"),Color("ff6046"),Color("ba2e24")] if opponent else [Color("d1ff78"),Color("88e344"),Color("439d25")]
-	var fill := Rect2(bar.position,Vector2(bar.size.x*clampf(float(current)/maxi(1,maximum),0,1),8))
-	draw_polygon(PackedVector2Array([fill.position,Vector2(fill.end.x,fill.position.y),fill.end,Vector2(fill.position.x,fill.end.y)]),PackedColorArray([colors[0],colors[0],colors[2],colors[2]]))
-	draw_line(fill.position+Vector2(0,1),Vector2(fill.end.x,fill.position.y+1),colors[0],1)
-	draw_rect(bar.grow(1),GOLD,false,1.2)
+	var bar := Rect2(start,rect.position.y+22,width,9)
+	var border := health_style(Color("060f20"))
+	border.set_corner_radius_all(2)
+	border.set_border_width_all(1)
+	border.border_color=Color("be9a50")
+	draw_style_box(border,bar)
+	var fraction := clampf(float(current)/maxi(1,maximum),0,1)
+	if fraction>0:
+		var fill := Rect2(bar.position+Vector2(1,1),Vector2((bar.size.x-2)*fraction,bar.size.y-2))
+		var color := Color("e45b3c") if opponent else Color("8add43")
+		var fill_style := health_style(color)
+		fill_style.set_corner_radius_all(1)
+		draw_style_box(fill_style,fill)
+		draw_line(fill.position+Vector2(1,1),Vector2(maxf(fill.position.x+1,fill.end.x-1),fill.position.y+1),color.lightened(.35),1,true)
 	var portrait_center := Vector2(size.x-44 if opponent else 44,33)
 	Ornaments.gradient_disc(self,portrait_center,28,Color("fff0b6"),Color("97703b"))
 	draw_circle(portrait_center,25,INK)
@@ -880,12 +893,12 @@ func draw_battle() -> void:
 		equipment_ui.icon(self,ability_id(i),center,47,COLORS[i],energy[i],ability_cost(i))
 		if battle_artifact=="reserve":
 			for n in 2: Ornaments.gem(self,center+Vector2(-9+n*18,-53),4 if n<reserves[i] else 2)
-		var label := Rect2(center.x-58,center.y+29,116,43)
+		var label := Rect2(center.x-58,center.y+29,116,28 if endless_mode else 43)
 		Ornaments.plaque(self,label)
 		text(ability_name(i),Rect2(label.position.x+16,label.position.y+5,84,18),14,CREAM,true)
 		var ready_label := t("READY")
 		if ability_id(i)=="resonator": ready_label+=" • %d" % ability_effect(i)
-		text(ready_label if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+16,label.position.y+23,84,14),12,GOLD if ready else CREAM)
+		if not endless_mode: text(ready_label if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+16,label.position.y+23,84,14),12,GOLD if ready else CREAM)
 		buttons.append({"rect":Rect2(center-Vector2(59,48),Vector2(118,122)),"id":"fire","value":i,"enabled":true})
 	var help_center := Vector2(size.x/2-313,446)
 	var power_center := Vector2(size.x/2+294,446)

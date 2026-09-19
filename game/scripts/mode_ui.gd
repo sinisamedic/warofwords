@@ -1,7 +1,8 @@
 extends RefCounted
 const O = preload("res://scripts/ornaments.gd")
 const SKY = preload("res://assets/art/endless/sky-court.png")
-const CARDS = [preload("res://assets/art/endless/mode-campaign.png"),preload("res://assets/art/endless/portal-scene.png"),preload("res://assets/art/endless/mode-daily.png")]
+const CARDS = [preload("res://assets/art/endless/mode-campaign.png"),preload("res://assets/art/endless/portal-enemies.png"),preload("res://assets/art/endless/mode-daily.png")]
+const PORTAL_HERO = preload("res://assets/art/endless/portal-hero.png")
 const PORTAL = preload("res://assets/art/endless/portal-ring.png")
 const SKULL = preload("res://assets/ui/boss-skull.svg")
 const WAVE_PANEL = preload("res://assets/ui/wave-panel.svg")
@@ -49,20 +50,21 @@ static func home(c) -> void:
 			c.draw_set_transform(center,0.0 if c.save.data.calm else c.clock*.42)
 			c.draw_texture_rect(PORTAL,Rect2(-Vector2.ONE*diameter/2,Vector2.ONE*diameter),false)
 			c.draw_set_transform(Vector2.ZERO)
+			fit(c,PORTAL_HERO,Rect2(art.position+Vector2(-8,art.size.y*.16),Vector2(art.size.y*.84,art.size.y*.84)))
 		if not c.save.data.calm:
 			for j in 8:
 				var u: float=fposmod(c.clock*.10+j*.137,1.0)
 				var p := Vector2(art.position.x+art.size.x*(.14+fposmod(j*.273, .73)),art.end.y-u*art.size.y)
 				c.draw_circle(p,1.1+sin(j+c.clock)*.4,Color(1,.83,.4,sin(u*PI)*.65))
 			if i==2:
-				var p := art.position+art.size*Vector2(.45,.42)
+				var p := art.position+art.size*Vector2(.39,.42)
 				O.glow(c,p,25,Color(1,.74,.2,.22+.1*sin(c.clock*2)))
 				for j in 13:
 					var at := p+Vector2(sin(j*2.7)*2,fposmod(c.clock*28+j*4,46))
 					c.draw_circle(at,1.8,Color("fff0a0"))
 		c.draw_line(Vector2(r.position.x+10,art.end.y),Vector2(r.end.x-10,art.end.y),GOLD,1)
 		c.text(names[i],Rect2(r.position.x+12,art.end.y+3,r.size.x-24,34),24,CREAM,true)
-		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best wave: %d") % c.endless_record().get("wave",0) if i==1 else c.t("A new challenge every day")
+		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best score: %d") % c.endless_record().get("score",0) if i==1 else c.t("A new challenge every day")
 		c.text(status,Rect2(r.position.x+12,art.end.y+37,r.size.x-24,24),17)
 		var resume: bool=not c.save.data.battle.is_empty() if i==0 else not c.save.data.endless.is_empty() if i==1 else false
 		c.action("CONTINUE DUEL" if resume and i==0 else "CONTINUE RUN" if resume else ["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],Rect2(r.position.x+10,r.end.y-52,r.size.x-20,42),"continue" if resume and i==0 else ids[i],-1,true)
@@ -70,7 +72,15 @@ static func home(c) -> void:
 		c.buttons.append({"rect":Rect2(r.position,r.size-Vector2(0,57)),"id":ids[i],"value":-1,"enabled":true})
 	var bw: float=minf(230,(c.size.x-120)/3)
 	for i in 3:
-		c.action(["ARSENAL","UPGRADES","RECORDS"][i],Rect2(c.size.x/2-1.5*bw-14+i*(bw+14),c.size.y-53,bw,42),["arsenal","upgrades","records"][i])
+		var r := Rect2(c.size.x/2-1.5*bw-14+i*(bw+14),c.size.y-53,bw,42)
+		var id: String=["arsenal","upgrades","records"][i]
+		O.frame(c,r)
+		if i<2:
+			var source := Rect2(25,125,925,650) if i==0 else Rect2(950,130,800,650)
+			var sz := source.size*(61/source.size.y)
+			c.draw_texture_rect_region(c.menu_icons,Rect2(r.position+Vector2(-11,-16),sz),source)
+		c.text(["ARSENAL","UPGRADES","RECORDS"][i],Rect2(r.position+Vector2(67 if i<2 else 12,3),Vector2(bw-(79 if i<2 else 24),36)),20,CREAM,true)
+		c.buttons.append({"rect":r,"id":id,"value":-1,"enabled":true})
 
 static func hourglass(c, p: Vector2, fraction: float) -> void:
 	fit(c,HOURGLASS,Rect2(p-Vector2(34,31),Vector2(68,62)))
@@ -82,29 +92,34 @@ static func hourglass(c, p: Vector2, fraction: float) -> void:
 
 static func hud(c) -> void:
 	var mid: float=c.size.x/2
-	c.draw_texture_rect(WAVE_PANEL,Rect2(mid-112,54,224,66),false)
+	c.draw_texture_rect(WAVE_PANEL,Rect2(mid-112,53,224,79),false)
 	var base: int=((c.endless_wave-1)/5)*5
-	var title: String=c.t("WAVE %d") % c.endless_wave+"  ·  "+("BOSS" if c.endless_wave%5==0 else "BOSS %d" % (base+5))
-	c.text(title,Rect2(mid-94,58,188,20),14,GOLD,true)
+	c.text(c.t("WAVE %d") % c.endless_wave,Rect2(mid-70,55,140,21),17,CREAM,true)
 	for i in 5:
-		var p := Vector2(mid+(i-2)*35,95)
+		var p := Vector2(mid+(i-2)*39,96)
 		var current: bool=base+i+1==c.endless_wave
+		if current: O.glow(c,p,30,Color(1,.59,.02,.8))
+		O.jewel(c,p,13,Color("245573"),false)
+		if current: c.draw_circle(p,12,Color("0c202b"))
 		if current:
-			O.glow(c,p,23,Color(1,.70,.13,.6 if c.save.data.calm else .5+.2*sin(c.clock*3)))
-		O.jewel(c,p,12,Color("245573"),current)
-		if current:
-			c.draw_arc(p,14,0,TAU,40,Color("ffe29c"),2.2,true)
-			if not c.save.data.calm: O.gem(c,p+Vector2.from_angle(c.clock*1.5)*16,2)
-		if i==4: fit(c,SKULL,Rect2(p-Vector2(10,10),Vector2(20,20)))
-		else: c.text(str(base+i+1),Rect2(p-Vector2(10,11),Vector2(20,22)),12,CREAM,true)
+			var alpha := 1.0 if c.save.data.calm else .88+.12*sin(c.clock*3)
+			for j in range(9,0,-1):
+				c.draw_arc(p,16+j*.6,0,TAU,64,Color(1,.55,.02,.12*alpha),2,true)
+			c.draw_arc(p,16.8,0,TAU,64,Color(1,.81,.24,alpha),2.1,true)
+			c.draw_arc(p,16.4,0,TAU,64,Color(1,.98,.77,alpha),.9,true)
+		if i==4: fit(c,SKULL,Rect2(p-Vector2(11,11),Vector2(22,22)))
+		else: c.text(str(base+i+1),Rect2(p-Vector2(10,12),Vector2(20,23)),16,CREAM,true)
 		if base+i+1<c.endless_wave:
-			c.draw_polyline(PackedVector2Array([p+Vector2(-5,10),p+Vector2(-1,14),p+Vector2(7,5)]),Color("80efae"),2.4,true)
-	hourglass(c,Vector2(mid,143),c.countdown/c.interval())
-	for i in 2:
-		var x: float=82 if i==0 else c.size.x-272
-		O.frame(c,Rect2(x,49,190,22))
-		var label: String=c.t("SCORE")+": "+str(c.endless_score) if i==0 else c.t("PERSONAL BEST")+": "+str(c.endless_record().get("score",0))
-		c.text(label,Rect2(x+14,51,162,18),12,CREAM)
+			c.draw_polyline(PackedVector2Array([p+Vector2(-6,9),p+Vector2(-1,14),p+Vector2(8,3)]),Color("37d949"),3.2,true)
+	var next_label: String=c.t("NEXT: BOSS") if c.endless_wave%5==4 else c.t("BOSS") if c.endless_wave%5==0 else c.t("BOSS AT WAVE %d") % (base+5)
+	c.text(next_label,Rect2(mid-92,114,184,16),13,CREAM,true)
+	hourglass(c,Vector2(mid,154),c.countdown/c.interval())
+
+static func score_badge(c, canvas: CanvasItem) -> void:
+	if c.screen!="battle" or not c.endless_mode or not c.overlay.is_empty() or c.loading: return
+	var rect := Rect2(14,50,60,20)
+	O.frame(canvas,rect)
+	c.text(str(c.endless_score),Rect2(21,51,46,17),13,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false,canvas)
 
 static func choices(c, boss: bool) -> void:
 	if not boss:
@@ -113,6 +128,18 @@ static func choices(c, boss: bool) -> void:
 	var w: float=minf(780,c.size.x-40)
 	var r := Rect2((c.size.x-w)/2,12,w,c.size.y-24)
 	c.panel(r)
+	c.draw_texture_rect(SKY,r.grow(-12),false,Color(.55,.65,.74,.24))
+	c.draw_rect(Rect2(r.position+Vector2(110,8),Vector2(w-220,174)),Color(.035,.10,.15,.64))
+	c.draw_texture_rect(O.WEAVE,r.grow(-12),true,Color(1,.88,.57,.16))
+	c.draw_texture_rect(O.FILIGREE,Rect2(r.position.x+24,r.position.y+14,82,82),false,Color(1,.86,.52,.6))
+	c.draw_set_transform(Vector2(r.end.x-24,r.position.y+14),0,Vector2(-1,1))
+	c.draw_texture_rect(O.FILIGREE,Rect2(0,0,82,82),false,Color(1,.86,.52,.6))
+	c.draw_set_transform(Vector2.ZERO)
+	for side in [-1,1]:
+		var x: float=r.get_center().x+side*(w/2-17)
+		for j in 7:
+			O.gem(c,Vector2(x,104+j*39),2.2)
+	O.glow(c,Vector2(r.get_center().x,90),120,Color(1,.7,.18,.13))
 	if boss:
 		fit(c,BOSS_SR if c.save.data.ui_language=="sr" else BOSS_EN,Rect2(r.position.x+90,r.position.y-4,w-180,102))
 		c.text(c.t("WAVE %d COMPLETE") % c.endless_wave,Rect2(r.position.x+20,99,w-40,26),20,GOLD,true)
