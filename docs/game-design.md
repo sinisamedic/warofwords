@@ -1,6 +1,14 @@
 # War of Words — dizajn igre
 
-Ažurirano: 2026-09-18. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
+Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
+
+## Predlog više režima — čeka pregled 2026-09-19
+
+Korisnik traži dizajn pre implementacije, nakon što je brzo završio kampanju uz različitu opremu, unapređenja i susedno povezivanje. Beskonačan niz borbi ocenjuje kao previše sličan kampanji. [Dve makete i obrazloženje](../design/concepts/multi-mode-2026-09-19/README.md) predlažu novu naslovnu sa Kampanjom, Beskrajem reči i Dnevnim izazovom, uz kampanjske prečice za Arsenal i Unapređenja.
+
+Beskraj reči je predlog zasebne igre sa tablom, bodovima i rekordom. Vreme koje se dopunjava rečima, nizovi, pomoć i nova navigacija nisu usvojeni. Brojevi su ilustrativni; plus uz novčiće nije odobrenje monetizacije. Kod igre i APK ostaju nepromenjeni do pregleda i dogovora.
+
+## Prethodne usvojene dorade
 
 Korisnik je nakon igrivog pregleda 2026-09-18 odobrio izgled i izradu APK-a 0.1.14 sa postojećim kućnim potpisom.
 

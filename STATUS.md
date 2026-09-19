@@ -1,6 +1,13 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-18. **Aktivna grana: codex/campaign-wave-two.**
+Ažurirano: 2026-09-19. **Aktivna grana: codex/campaign-wave-two.**
+
+## Predlog naslovne i Beskraja reči — 2026-09-19
+
+- Korisnik je završio kampanju brzo i lako uz različitu opremu, unapređenja i susedna slova. Traži vizuelni predlog pre implementacije; beskonačna borba mu je previše slična kampanji.
+- Dve originalne ImageGen makete i tačni promptovi: `design/concepts/multi-mode-2026-09-19/`. Naslovna prikazuje tri ravnopravna režima; Beskraj reči prikazuje tablu, bodove i rekord. Vremenska rezerva koja se dopunjava rečima je samo predlog, kao i nova navigacija i bodovanje.
+- Makete su vizuelno pregledane; kod igre, servis i APK nisu menjani. Nisu pokretani testovi igre za ovu promenu slika/dokumentacije. Poslednji APK ostaje 0.1.16.
+- Sledeći korak: korisnički pregled dve makete i dogovor o izgledu naslovne i pravilima novog režima. **Ne implementirati na osnovu maketa bez dogovora.**
 
 ## 0.1.16 — odobreni oštri okviri, APK gotov 2026-09-18
 
