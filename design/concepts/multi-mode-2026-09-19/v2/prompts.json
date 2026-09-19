@@ -1,0 +1,25 @@
+[
+  {
+    "file": "01-home-v2.png",
+    "refs": [
+      "design/concepts/multi-mode-2026-09-19/01-home.png"
+    ],
+    "prompt": "Use case: ui-mockup. Redesign the attached War of Words landscape mobile game home screen. Preserve gorgeous sharp painterly floating ivory sky-city, navy enamel, ornate gold frames, exact logo and polished fantasy art direction. Single full-screen 16:9 landscape screen, no device mockup. Three equal cards KAMPANJA, BESKRAJ REČI, DNEVNI IZAZOV but make them narrower with generous clear background gutters between them (~5% screen width each) so they are visually independent. Compact logo above, gear top left, coin balance 3 240 top right WITHOUT plus or shop. Cards contain distinct illustrations, concise title, one status, gold CTA. Campaign hero facing bronze guardian; text '24 / 24 nivoa', CTA 'OTVORI MAPU'. Endless is combat survival, NOT letters/book puzzle: hero facing successive ominous adversaries through glowing infinite portal, a boss silhouette beyond, small infinity crest; text 'Rekord: talas 18', CTA 'UĐI U ARENU'. Daily beautiful golden hourglass and calendar, text 'Novi izazov svakog dana', CTA 'IGRAJ IZAZOV'. Remove dictionary entirely from main screen. Bottom only three compact centered elegant utility buttons ARSENAL, UNAPREĐENJA, REKORDI, with plenty of breathing space. No 'za kampanju' since equipment also used in endless. Hint animation-ready layers visually through sparse floating embers/portal glow/sand, but image remains a sharp still frame. Typography highly legible Serbian Latin. Avoid blur, stretched ornament, extra panels, coins plus, book navigation."
+  },
+  {
+    "file": "02-endless-battle-v2.png",
+    "refs": [
+      ".local/wave-two-qa-wide/battle-22.png",
+      "design/concepts/multi-mode-2026-09-19/02-endless.png"
+    ],
+    "prompt": "Use case: ui-mockup. Create a polished landscape 16:9 War of Words ENDLESS COMBAT game screen. Image 1 is the primary layout/character/combat equipment reference, image 2 only ornate hourglass and polished gold/navy style reference. It MUST show live hero versus enemy as in campaign, not solitaire score puzzle. Full screen no device. Upper 40% a broad beautiful floating stone arena with hero teal coat orange scarf left aiming golden gauntlet at substantial armored monster right. Health bars TI 76/100 left, ČUVAR KAPIJE 180/260 right. Compact center top title BESKRAJ REČI, pause at far right. Small central wave tracker 'TALAS 4' with five medallions 1 check,2 check,3 check,4 lit,5 boss skull; text 'SLEDEĆI: BOSS'. Score BODOVI 2 840 and REKORD 12 480 as compact secondary labels, not dominant. Beautiful small gold turquoise sand hourglass between fighters near bottom of arena, label 'NAPAD ZA 6 s' explicitly enemy attack timer, NO global survival countdown. Lower 55% large centered sharp 7 columns x4 rows circular letter board with ivory/yellow, blue, violet, mint letters and tiny energy symbols. Selected adjacent first four tiles M O S T glow connected. Four equipped round ornate ability medallions flank board exactly like primary reference: left ŽAR 4/5 and BASTION 3/7; right REZONATOR 6/6 glowing ready and CRPLJENJE 2/6. One small existing power-up slot bottom edge with icon x1. Keep board practical and readable with large targets. Bottom fine footer 'Svaki peti talas donosi bossa'. Beautiful crisp original painterly art, gold filigree restrained, readable navy labels. No hint/dictionary buttons, no +seconds word reward, no giant title wasting space, no weaponless puzzle."
+  },
+  {
+    "file": "03-after-boss-v2.png",
+    "refs": [
+      ".local/wave-two-qa-wide/battle-22.png",
+      "design/concepts/multi-mode-2026-09-19/01-home.png"
+    ],
+    "prompt": "Use case: ui-mockup. Design single polished full-screen landscape 16:9 War of Words fantasy mobile game post-boss intermission overlay. Match references navy enamel, elaborate crisp gold trim, ivory fantasy sky-city arena. Dimmed atmospheric battle arena behind, victorious teal/orange hero left and dissolving defeated boss silhouette right, faint board below. Center elegant wide dialog occupying ~75% width and ~80% height. Crown with five small wave gems top. Exact title 'BOSS POBEĐEN', subtitle 'Talas 5 završen'. Small stat strip 'BODOVI 3 680' and 'SLEDEĆI TALAS 6'. Main section 'IZABERI POJAČANJE' and small explanatory text 'Zadrži postojeće ili izaberi drugo za nastavak.' Three clearly separated visually rich selectable navy cards each large circular magical icon, name, short explanation: hourglass with icy turquoise sand 'ZAMRZAVANJE' / 'Odloži napad protivnika'; gold blue crossing arrows 'MEŠANJE' / 'Promeni raspored slova'; golden lightning burst 'DUPLA ENERGIJA' / 'Pojačaj sledeću reč'. First card currently selected with soft magical gold halo and small check badge 'TRENUTNO'. Gold main CTA centered bottom 'NASTAVI — TALAS 6'. This is a between-boss checkpoint power-up choice, NOT permanent equipment shop. No prices, currencies, buy buttons, healing reward claims or upgrade menu. Sharp readable Serbian Latin, generously spaced controls, beautiful balanced luxury fantasy game interface, no device mockup."
+  }
+]

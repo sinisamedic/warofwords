@@ -2,7 +2,14 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/campaign-wave-two.**
 
-## Predlog naslovne i Beskraja reči — 2026-09-19
+## Redizajn v2 — čeka pregled 2026-09-19
+
+- Korisnik je razjasnio: Beskraj koristi dinamiku kampanjske borbe, protivnici dolaze redom, svaki peti je boss i nakon bossa može da se promeni pojačanje. Prethodni predlog bez protivnika nije usvojen.
+- Tri nove makete: `design/concepts/multi-mode-2026-09-19/v2/` — naslovna sa razmaknutim karticama bez Rečnika, borba sa talasima i peščanim satom, izbor pojačanja posle bossa. Animirane naslovne kartice su zahtev za kasniju implementaciju; PNG su statični.
+- Slike vizuelno pregledane; dokumentacija i promptovi sačuvani. Bez promena koda/servisa/APK-a, bez potrebe za testovima igre. Poslednji APK 0.1.16. Aktivna grana `codex/campaign-wave-two`.
+- Sledeći korak: korisnički pregled v2; tek posle dogovora implementacija. Uloga sata i detalji balansa još su predlozi.
+
+## Prethodni predlog naslovne i Beskraja reči — 2026-09-19
 
 - Korisnik je završio kampanju brzo i lako uz različitu opremu, unapređenja i susedna slova. Traži vizuelni predlog pre implementacije; beskonačna borba mu je previše slična kampanji.
 - Dve originalne ImageGen makete i tačni promptovi: `design/concepts/multi-mode-2026-09-19/`. Naslovna prikazuje tri ravnopravna režima; Beskraj reči prikazuje tablu, bodove i rekord. Vremenska rezerva koja se dopunjava rečima je samo predlog, kao i nova navigacija i bodovanje.

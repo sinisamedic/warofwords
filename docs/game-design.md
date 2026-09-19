@@ -2,7 +2,13 @@
 
 Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
-## Predlog više režima — čeka pregled 2026-09-19
+## Razjašnjen smer Beskraja i redizajn v2 — 2026-09-19
+
+Korisnik traži dinamiku kampanje: borba sa protivnikom, neposredan nastavak nakon pobede, svaki peti protivnik boss, nakon bossa mogućnost promene pojačanja. Naslovna zadržava tri kartice uz veće razmake, bez istaknutog Rečnika. Kartice moraju biti animirane u kasnijoj implementaciji.
+
+[Tri nove statične makete](../design/concepts/multi-mode-2026-09-19/v2/README.md) prikazuju naslovnu, borbu i izbor pojačanja posle bossa. Peščani sat za vreme do napada je predlog; balans, prenos zdravlja/energije, obnova pojačanja i bodovanje ostaju otvoreni. Korisnik trenutno odobrava samo izradu redizajna, ne implementaciju.
+
+## Prethodni predlog više režima — zamenjen razjašnjenjem iznad
 
 Korisnik traži dizajn pre implementacije, nakon što je brzo završio kampanju uz različitu opremu, unapređenja i susedno povezivanje. Beskonačan niz borbi ocenjuje kao previše sličan kampanji. [Dve makete i obrazloženje](../design/concepts/multi-mode-2026-09-19/README.md) predlažu novu naslovnu sa Kampanjom, Beskrajem reči i Dnevnim izazovom, uz kampanjske prečice za Arsenal i Unapređenja.
 
