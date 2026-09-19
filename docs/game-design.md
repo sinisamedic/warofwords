@@ -307,3 +307,7 @@ Globalna beta lista na Supabase-u: najbolji rezultat anonimnog profila po SR/EN 
 ### Predlog za kasniju monetizaciju — zapamtiti
 
 Korisnik predlaže dugme na ekranu poraza: odgledaj reklamu i nastavi borbu. Sada se ne implementiraju oglasi ni oživljavanje. Za kasniji dogovor ostaju broj nastavaka, vraćeno zdravlje i uticaj takvih pohoda na globalnu listu.
+
+### Predlog za buduće unapređenje: joker slovo — 2026-09-19
+
+Joker se pojavljuje među slovima na tabli i može da se uključuje u povezivanje reči kao ostala polja. Pri tome zamenjuje bilo koje slovo. Ideja je zabeležena za kasniju razradu, nije implementirana. Učestalost pojavljivanja, način izbora zamenjenog slova i bodovanje ostaju otvoreni.

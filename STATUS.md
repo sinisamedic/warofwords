@@ -2,6 +2,8 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+- Zabeležen budući predlog: joker među slovima na tabli, povezuje se u reč i zamenjuje bilo koje slovo. Detalji u `docs/game-design.md`; bez izmene igre ili APK-a.
+
 ## APK 0.1.17 — 2026-09-19
 
 - Korisnik odobrio build. `exports/WarOfWords-0.1.17-android.apk`, version code 18, 140.323.705 bajta. Beskraj, nova naslovna, vizuelne dorade, detaljan poraz i globalna beta lista.
