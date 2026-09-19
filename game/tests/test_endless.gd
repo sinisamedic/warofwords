@@ -7,7 +7,7 @@ func check(ok: bool, label: String) -> void:
 	else: print("PASS: "+label)
 func run() -> void:
 	create_timer(80).timeout.connect(func(): push_error("Endless test timeout"); quit(2))
-	g=load("res://main.tscn").instantiate(); g.online_autosubmit=false; g.save.path="res://../.local/test-endless.json"; root.add_child(g)
+	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/test-endless.json"; root.add_child(g)
 	while g.loading: await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
 	g.save.data=g.save.defaults(); g.save.data.tutorial=true

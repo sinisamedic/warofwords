@@ -1,26 +1,26 @@
-# Globalne liste i slanje Beskraja
+# Beskraj: ručno slanje i lista svih partija
 
-## Dopuna 2026-09-19: svi jezici zajedno
+Aktuelna pravila (2026-09-19) zamenjuju prethodni automatski tok. Poraz čuva partiju kao lokalni nacrt u `endless_outbox` sa jedinstvenim ID-em. Ni otvaranje ekrana, kucanje, čekanje, potvrda tastature, zatvaranje prozora ni otvaranje Rekorda ne šalju rezultat. Nema tajmera za pozadinsko slanje ili promenu imena. Stara zastavica `endless_name_dirty` više nema dejstvo.
 
-Migracija `202609190003_shared_language_rankings.sql` postavljena je na War of Words. I Beskraj i Dnevni izazov sada biraju najbolji rezultat po profilu preko svih jezika pre računanja plasmana. Nema duplih redova; argument jezika ostaje zbog kompatibilnosti starih poziva, ali ne filtrira listu. Podaci o jeziku u partijama ostaju za pravila/replay. Pravilo povezivanja i dnevna verzija/datum ostaju filteri. Ova dopuna zamenjuje ranije jezičko razdvajanje opisano ispod.
+Ime je unapred popunjeno poslednjim zapamćenim nadimkom i može da se izmeni. Dugme POŠALJI jedino poziva `send_run` za upravo tu partiju i trenutno uneto ime. Tokom slanja prikazuje SLANJE, tek potvrda servera postavlja POSLATO i zaključava dugme. Greška vraća mogućnost izmene i ručnog ponovnog slanja istog ID-a. Slabiji rezultat se šalje normalno; nove partije uvek počinju kao neposlate. Ostali raniji nacrti ne šalju se zajedno sa novim rezultatom. Posle napuštanja prozora ostaju na disku; još nema posebnog pregleda/slanja starih nacrta.
 
-Poraz ima eksplicitno dugme POŠALJI REZULTAT uz ime, sa stanjem SLANJE / POSLATO i ponovnim pokušajem. Automatsko slanje ostaje; pritisak ne stvara novu partiju. `tools/test-shared-rankings.mjs` proverava objedinjavanje i prava (15 provera). Mrežni test potvrđuje identične žive SR/EN odgovore u oba režima.
+Prozor privremeno uključuje `Input.emulate_mouse_from_touch` za standardno polje za ime, dugmad i skrol, kao Dnevni izazov. Pri zatvaranju vraća prethodno podešavanje. Promena veličine čuva tekst i fokus unosa. Test koristi stvarni Godot ulazni tok sa ScreenTouch događajima i unosom tastera, ne samo emitovanje signala dugmeta.
 
-Migracije `202609190001_endless.sql` i `202609190002_endless_runs.sql` postavljene su na potvrđeni Supabase projekat War of Words (`phfbohgbeqjvtfsgcjwi`) 2026-09-19. Druga dodaje privatne pojedinačne partije i RPC-e `endless_finish` / `endless_name`; postojeći dnevni rezultati i Edge funkcija ostaju isti.
+## Server i rangiranje
 
-Klijent koristi postojeću anonimnu sesiju Dnevnog izazova. Autentikacija je serijalizovana da istovremeno učitavanje liste i slanje ne otvore dva identiteta. Privatne tabele `endless_scores` i `endless_runs` imaju RLS i nemaju direktan anon/authenticated pristup. Upisi se vezuju za `auth.uid()`. Lista vraća prvih 20 i sopstveni red, bez UUID-a; jednaki bodovi dele rang. Kategorije: SR/EN i susedno/slobodno povezivanje.
+Migracije 202609190001–0004 postavljene su na projekat War of Words (`phfbohgbeqjvtfsgcjwi`). `endless_runs` čuva svaku poslatu partiju pojedinačno, uključujući slabije i nulte skorove, sa imenom iz tog slanja. Isto ime/profil može da ima više redova. `endless_finish` deduplikuje `(user_id, run_id)`; ponovljeni zahtev može ispraviti ime ali ne menja bodove postojeće partije.
 
-Svaki poraz u Beskraju upisuje kompletnu statistiku u `endless_outbox` u lokalnom progress.json, sa stabilnim nasumičnim UUID-om. Slanje počinje automatski ako postoji nadimak; potvrđeni zapis uklanja se iz reda. Bez veze ostaje sačuvan; pokušaj se ponavlja pri otvaranju liste i na 45 sekundi dok igra radi. Server deduplikuje `(user_id, run_id)`. Svaki pohod čuva zasebno, a najbolji pozitivan rezultat sa najmanje jednom reči ulazi na listu. Slabija partija ne briše bolji rezultat.
+`endless_attempt_leaderboard(p_adjacent, p_run)` rangira sve partije preko oba jezika. Vraća top 10 i, ako je trenutna partija niže, dva reda neposredno ispred nje i njen red; preklop sa top 10 se ne duplira. Trenutni red je istaknut i prozor se pomera do njega. Svi rezultati ostaju sačuvani iako lista prikazuje samo ovaj izbor. Jednaki skorovi dele numerički rang, redosled između njih je stabilan po vremenu/identitetu partije. Zahtev za okolinu proverava da je tražena partija vlasništvo prijavljenog profila.
 
-Nadimak od 3–20 slova/brojeva, razmaka, crtice ili donje crte deli isti daily-profile.json sa Dnevnim izazovom. Prvi rezultat čeka unos. Izmena se pamti posle kratke pauze u kucanju ili potvrde; server ažurira ime na najboljim rezultatima tog profila. Neuspešna promena označena je sa `endless_name_dirty` i ponavlja se i nakon ponovnog pokretanja. Stari `endless_pending` ostaje radi kompatibilnosti, ali se raniji rekordi ne objavljuju retroaktivno.
+Poznati najbolji skorovi iz starijih klijenata bez zapisa pojedinačnih partija preneti su u novu tabelu bez ponavljanja istih poznatih rezultata. Ranije nezabeležene slabije partije nije moguće retroaktivno obnoviti. Stari `endless_leaderboard` ostaje zbog kompatibilnosti APK-a 0.1.18 i ranijih.
 
-Rekordi na naslovnoj imaju serverske tabove Beskraj / Dnevni izazov (današnji UTC izazov). Ekran poraza sadrži listu Beskraja, nadimak, statistiku i opremu. Sopstveni red je istaknut. Greška veze ne prikazuje lokalnu listu kao globalnu.
+Dnevni izazov zadržava zajedničku listu oba jezika i svoj postojeći način verifikacije/rangiranja. Pravilo povezivanja je i dalje odvojeno. Anonimna sesija je zajednička; tabele imaju RLS bez direktnog pristupa klijenta. RPC upis vezuje za `auth.uid()`, lista ne izlaže UUID.
 
-Ovo je i dalje klijentski prijavljena beta statistika Beskraja, bez serverskog replay-a ili dokaza kampanjskih unapređenja. Ograničenja polja nisu zaštita od modifikovanog klijenta. Nema nagrada ni novca. Reinstalacija bez povezivanja naloga pravi novi identitet. Pre javnog takmičenja potrebni su provera borbe, ograničenja učestalosti i moderacija.
+Beskraj ostaje beta sa klijentskim bodovima, bez serverskog replay-a. Reinstalacija bez povezivanja naloga stvara novi identitet. Pre javnog takmičenja potrebni su provera borbe, moderacija i ograničenje učestalosti.
 
-Provere:
+## Provere
 
-- `tools/test-endless-database.mjs`: 20 lokalnih PGlite provera prava, autentikacije, rangiranja, privatnosti, deduplikacije i promene imena.
-- `game/tests/test_rankings.gd`: bez stvarnih upisa proverava red, prekid veze, pamćenje/promenu imena tokom slanja, brzu promenu kategorije i UI.
-- `game/tests/test_endless_online.gd`: izolovani anonimni identitet, čitanje obe žive liste i odbijanje negativnog rezultata. Ne objavljuje lažne bodove.
-- `game/tests/preview_endless.gd`: izolovana probna igra; F8 prikazuje primer poraza, a probni rezultati imaju isključenu automatsku objavu. Liste se čitaju sa servera.
+- `tools/test-attempt-rankings.mjs`: 17 provera svih partija jednog profila, oba jezika, top 10, dva susedna bolja, granica 10/11, deduplikacije, ispravke imena i prava.
+- `game/tests/test_rankings.gd`: dodir/unos, zabrana svih automatskih slanja, eksplicitni klik, neuspeh/ručni retry, nove slabije partije, odvojeni nacrti, stanje dugmeta, skrol i povratak input podešavanja.
+- `game/tests/test_endless_online.gd`: čita živu listu i odbija negativni testni upis, bez lažnih javnih skorova.
+- `preview_endless.gd`: izolovan vizuelni pregled, bez dozvoljenih upisa; F8 je primer poraza. Pravi rezultati se čitaju sa servera.

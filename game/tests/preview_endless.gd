@@ -6,7 +6,7 @@ var busy := true
 func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	g=load("res://main.tscn").instantiate()
-	g.online_autosubmit=false; g.save.path="res://../.local/endless-preview.json"
+	g.online_writes_enabled=false; g.save.path="res://../.local/endless-preview.json"
 	root.add_child(g)
 	while g.loading: await process_frame
 	g.save.data=g.save.defaults(); g.save.data.tutorial=true
@@ -45,5 +45,6 @@ func show_defeat() -> void:
 	g.endless_score=9958; g.endless_words=59; g.endless_seconds=427
 	g.word_count=0; g.duration=0; g.hp=0; g.ended=true; g.won=false; g.result_delay=0; g.overlay="endless_result"
 	# Preview fixture is deliberately never submitted or put into the pending queue.
+	g.rankings.current_run_id=""
 	g.open_rankings(true)
 	busy=false

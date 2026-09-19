@@ -327,3 +327,9 @@ Naslovne kartice su malo niže/manje, logo je veći i blago prelazi preko gornje
 Korisnik traži zajedničke rezultate svih jezika. SR/EN filter je uklonjen; oba režima rangiraju najbolji rezultat profila preko oba jezika, bez duplog pojavljivanja. Za Dnevni izazov važi današnji dan i verzija pravila. Pravilo susedno/slobodno povezivanje ostaje zasebno. Ovo zamenjuje raniju odluku o odvojenom jezičkom rangiranju.
 
 Na porazu Beskraja je jasno dugme POŠALJI REZULTAT uz ime. Šalje trenutno uneti nadimak i sačuvani rezultat, odnosno ažurira ime već poslatog rezultata. Tokom zahteva pokazuje SLANJE, posle potvrde POSLATO; nema dupliranja partije. Ranije odobreno automatsko slanje ostaje.
+
+### Ispravka usvojenog toka i svih partija — 2026-09-19
+
+Poslednja korisnička odluka zamenjuje prethodni automatski tok: posle poraza može da promeni zapamćeno ime, a samo dugme POŠALJI šalje rezultat. Kucanje, čekanje, tastaturna potvrda i izlazak ne šalju ništa. Dugme postaje POSLATO i disabled tek nakon potvrde servera; neuspeh ostavlja ručni retry. Svaka partija ima svoje stanje slanja, uključujući slabije rezultate.
+
+Za Beskraj se čuva i rangira svaka poslata partija iste osobe. Prikaz: top 10, a ako trenutni rezultat nije među njima, još dva rezultata neposredno iznad i sam trenutni rezultat sa plasmanom. Preklapanje sa prvih deset se ne duplira; trenutni je istaknut. Oba jezika su zajedno. Dnevno rangiranje ostaje kao pre ove dopune. To zamenjuje pravilo jednog najboljeg rezultata po osobi u Beskraju.

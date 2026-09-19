@@ -115,7 +115,7 @@ var journal_page := 0
 var autosave_clock := 0.0
 var fps_label := false
 var debug_sample_at := 0
-var online_autosubmit := true
+var online_writes_enabled := true
 var rankings: Node
 var endless_board_open := false
 var daily_screen: Control

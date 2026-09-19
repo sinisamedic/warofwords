@@ -10,9 +10,10 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--out="): directory=arg.trim_prefix("--out=")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
-	g=load("res://main.tscn").instantiate(); g.online_autosubmit=false; g.save.path="res://../.local/endless-render.json"; root.add_child(g)
+	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/endless-render.json"; root.add_child(g)
 	while g.loading: await process_frame
 	g.rankings.queue_free(); var mock=load("res://tests/mock_rank_service.gd").new(); mock.host=g; g.add_child(mock); g.rankings=mock
+	mock.current_run_id="preview-run"
 	g.daily_screen.local_nickname="Sinisa"; g.daily_screen.profile_path="res://../.local/render-profile.json"
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
 	g.save.data=g.save.defaults(); g.save.data.tutorial=true; g.save.data.unlocked=23
@@ -33,7 +34,7 @@ func run() -> void:
 		g.result_delay=0; g.overlay="endless_boss"
 		await shot("boss-"+lang)
 		g.endless_wave=8; g.endless_score=9958; g.endless_words=59; g.word_count=0; g.endless_seconds=427; g.duration=0
-		g.overlay="endless_result"; g.open_rankings(true); await process_frame; await process_frame; await shot("defeat-"+lang)
+		g.overlay="endless_result"; g.open_rankings(true); await process_frame; await process_frame; await process_frame; await process_frame; await shot("defeat-"+lang)
 		g.get_children().back().leave(); await process_frame
 		g.change_screen("home"); g.open_rankings(); await process_frame; await process_frame; await shot("records-"+lang)
 		var board=g.get_children().back(); board.mode="daily"; board.rebuild(); await board.refresh(); await shot("records-daily-"+lang)

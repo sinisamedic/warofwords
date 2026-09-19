@@ -2,7 +2,7 @@ extends SceneTree
 var g
 func _initialize() -> void: call_deferred("run")
 func run() -> void:
-	g=load("res://main.tscn").instantiate(); g.online_autosubmit=false; g.save.path="res://../.local/endless-online-test.json"; root.add_child(g)
+	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/endless-online-test.json"; root.add_child(g)
 	while g.loading: await process_frame
 	g.save.data=g.save.defaults(); g.save.data.tutorial=true; g.save.data.ui_language="sr"
 	g.daily_screen.service.session_path="res://../.local/endless-online-session.json"
@@ -11,7 +11,7 @@ func run() -> void:
 	var board=load("res://scripts/endless_board.gd").new(); board.host=g; g.add_child(board)
 	while board.busy: await process_frame
 	assert(not board.empty.text.contains("Nema veze"))
-	assert(board.status.text=="NAJBOLJI REZULTATI")
+	assert(board.status.text=="TOP 10 · SVE PARTIJE")
 	print("PASS: live authenticated leaderboard loaded")
 	for category in ["endless","daily"]:
 		var sr: Dictionary=await g.rankings.leaderboard(category,"sr",true)

@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Ručno slanje, dodir za ime i sve partije — 2026-09-19
+
+- Ispravljena greška iz APK-a 0.1.18: potpuno uklonjeno automatsko slanje/tajmer/promena imena na serveru. Samo POŠALJI šalje trenutno prikazanu partiju pod unetim imenom; POSLATO se prikazuje tek nakon serverske potvrde. Greška omogućava ručni retry. Svaka nova/slabija partija počinje neposlata. Raniji nacrti se ne šalju zajedno.
+- Polje imena/dugmad koriste touch emulaciju kao Dnevni izazov; vraćanje input podešavanja pri izlasku. Fokus i tekst preživljavaju promenu dimenzija. Provereno stvarnim ScreenTouch i tastaturnim događajima u Godot prozoru.
+- Server sada rangira svaku poslatu partiju, ne samo najbolje po profilu: isto ime može više puta. Top 10 + dva neposredno bolja i trenutni rezultat kada je ispod top 10, bez dupliranja preklopa. Trenutni red istaknut i automatski vidljiv. Oba jezika zajedno. Dnevni izazov nije menjan ovom dopunom.
+- Migracija `202609190004_endless_attempt_ranking.sql` postavljena. 17 SQL provera; kompletan TestOnly 1.845 PASS / bez neuspeha, poznato ObjectDB upozorenje pri izlasku jednog testa. Živa lista potvrđena bez objave testnih bodova, SR/EN renderi pregledani.
+- **Novi APK nije napravljen; 0.1.18 još ima stari tok.** Sledeće: korisnički pregled, pa na zahtev build naredne verzije za telefon. Nastaviti `codex/endless-arena`.
+
 ## APK 0.1.18 — 2026-09-19
 
 - Korisnik odobrio build. Paket `exports/WarOfWords-0.1.18-android.apk`, versionCode 19, 140.336.305 bajta. Joker, novi ekrani Rekorda/poraza, dugme za slanje, automatsko slanje i zajedničke SR/EN liste.

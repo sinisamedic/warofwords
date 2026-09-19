@@ -8,6 +8,8 @@ func _draw() -> void:
 		var row: Dictionary=rows[i]
 		var r := Rect2(0,i*40,size.x,36)
 		var own: bool=row.get("own",false)
+		if row.get("current",false):
+			draw_rect(r.grow(1),Color("f3c569"))
 		var bg := StyleBoxFlat.new(); bg.bg_color=Color("24475c") if own else Color("102c3d") if i%2==0 else Color("0c2232"); bg.set_corner_radius_all(5)
 		bg.set_border_width_all(1); bg.border_color=Color("cba85c") if own else Color("34505b"); draw_style_box(bg,r)
 		var rank_value := int(row.get("position",i+1))
