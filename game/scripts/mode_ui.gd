@@ -93,7 +93,7 @@ static func hourglass(c, p: Vector2, fraction: float) -> void:
 
 static func hud(c) -> void:
 	var mid: float=c.size.x/2
-	c.draw_texture_rect(WAVE_PANEL,Rect2(mid-112,53,224,79),false)
+	c.draw_texture_rect(WAVE_PANEL,Rect2(mid-112,53,224,66),false)
 	var base: int=((c.endless_wave-1)/5)*5
 	c.text(c.t("WAVE %d") % c.endless_wave,Rect2(mid-70,55,140,21),17,CREAM,true)
 	for i in 5:
@@ -165,17 +165,40 @@ static func choices(c, boss: bool) -> void:
 	c.action("MENU",Rect2(r.position.x+22,r.end.y-60,140,43),"save_home")
 	c.action(c.t("CONTINUE — WAVE %d") % (c.endless_wave+1) if boss else c.t("ENTER ARENA"),Rect2(r.end.x-345,r.end.y-60,323,43),"endless_next" if boss else "endless_start",-1,true)
 
+static func arsenal_button(c, r: Rect2) -> void:
+	O.frame(c,r)
+	var source := Rect2(25,125,925,650)
+	var sz := source.size*(61/source.size.y)
+	c.draw_texture_rect_region(c.menu_icons,Rect2(r.position+Vector2(-11,-16),sz),source)
+	c.text("ARSENAL",Rect2(r.position+Vector2(67,3),Vector2(r.size.x-79,r.size.y-6)),20,CREAM,true)
+	c.buttons.append({"rect":r,"id":"arsenal","value":-1,"enabled":true})
+
 static func result(c) -> void:
-	var w: float=minf(680,c.size.x-50)
-	var r := Rect2((c.size.x-w)/2,40,w,c.size.y-80)
+	var w: float=minf(740,c.size.x-50)
+	var r := Rect2((c.size.x-w)/2,22,w,c.size.y-44)
 	c.panel(r)
-	c.text("RUN COMPLETE",Rect2(r.position.x+24,61,w-48,45),32,GOLD,true)
-	c.text(c.t("Reached wave %d") % c.endless_wave,Rect2(r.position.x+24,116,w-48,32),25,CREAM,true)
-	c.text(c.t("Score: %d") % c.endless_score,Rect2(r.position.x+24,156,w-48,48),36,GOLD,true)
-	c.text(c.t("%d words  •  %.0f seconds") % [c.endless_words+c.word_count,c.endless_seconds+c.duration],Rect2(r.position.x+24,218,w-48,30),21)
-	c.text("Try another loadout and beat your record.",Rect2(r.position.x+24,268,w-48,30),20)
-	c.action("MENU",Rect2(r.position.x+25,r.end.y-70,180,48),"home")
-	c.action("TRY AGAIN",Rect2(r.end.x-285,r.end.y-70,260,48),"endless_retry",-1,true)
+	c.draw_texture_rect(SKY,r.grow(-12),false,Color(.45,.58,.7,.26))
+	c.draw_rect(Rect2(r.position+Vector2(14,14),Vector2(w-28,107)),Color(.025,.07,.12,.65))
+	c.draw_texture_rect(O.FILIGREE,Rect2(r.position+Vector2(18,16),Vector2(80,80)),false)
+	c.text("RUN COMPLETE",Rect2(r.position.x+70,37,w-140,36),29,GOLD,true)
+	c.text(c.t("Reached wave %d") % c.endless_wave,Rect2(r.position.x+70,77,w-140,26),20,CREAM)
+	O.glow(c,Vector2(r.get_center().x,151),95,Color(1,.68,.14,.24))
+	O.frame(c,Rect2(r.get_center().x-125,117,250,67))
+	c.text(str(c.endless_score),Rect2(r.get_center().x-105,124,210,38),34,GOLD,true)
+	c.text("SCORE",Rect2(r.get_center().x-100,162,200,17),13,CREAM)
+	var stats := [str(maxi(0,c.endless_wave-1)),str(c.endless_words+c.word_count),"%d:%02d" % [int(c.endless_seconds+c.duration)/60,int(c.endless_seconds+c.duration)%60]]
+	var labels := ["ENEMIES DEFEATED","WORDS","TIME"]
+	for i in 3:
+		var card := Rect2(r.position.x+24+i*(w-48)/3,199,(w-66)/3,68)
+		O.frame(c,card)
+		c.text(stats[i],Rect2(card.position+Vector2(10,4),Vector2(card.size.x-20,32)),25,GOLD,true)
+		c.text(labels[i],Rect2(card.position+Vector2(10,39),Vector2(card.size.x-20,19)),13,CREAM)
+	c.text("YOUR LOADOUT",Rect2(r.position.x+24,275,w-48,20),15,GOLD)
+	for i in 4: c.equipment_ui.icon(c,c.battle_loadout[i],Vector2(r.get_center().x+(i-1.5)*56,324),23,c.COLORS[i])
+	c.text("Try another loadout and beat your record.",Rect2(r.position.x+24,351,w-48,23),17)
+	c.action("MENU",Rect2(r.position.x+22,r.end.y-57,135,40),"home")
+	c.action("GLOBAL TOP",Rect2(r.get_center().x-103,r.end.y-57,206,40),"endless_board")
+	c.action("TRY AGAIN",Rect2(r.end.x-211,r.end.y-57,189,40),"endless_retry",-1,true)
 
 static func victory(c) -> void:
 	var progress: float=1-c.result_delay/c.DEFEAT_DURATION
@@ -203,4 +226,4 @@ static func records(c) -> void:
 			c.text(label,Rect2(c.size.x/2-272,190+n*42,310,32),19)
 			c.text(c.t("%d pts · wave %d") % [record.get("score",0),record.get("wave",0)],Rect2(c.size.x/2+43,190+n*42,232,32),20,GOLD)
 			n+=1
-	c.action("DAILY CHALLENGE",Rect2(c.size.x/2-170,c.size.y-70,340,47),"daily",-1,true)
+	c.action("GLOBAL TOP",Rect2(c.size.x/2-170,c.size.y-70,340,47),"endless_board",-1,true)

@@ -115,6 +115,7 @@ var journal_page := 0
 var autosave_clock := 0.0
 var fps_label := false
 var debug_sample_at := 0
+var endless_board_open := false
 var daily_screen: Control
 var foe_guard := false
 var battle_weapon := "pulse"
@@ -744,7 +745,8 @@ func draw_powers(endless_prepare: bool = false) -> void:
 			Ornaments.frame(self,Rect2(rect.position.x+20,339,width-40,36),1)
 		text("EQUIPPED" if equipped else "TAP TO EQUIP",Rect2(rect.position.x+24,341,width-48,30),20,INK if equipped else Color("afc0ca"),equipped)
 		buttons.append({"rect":rect,"id":"power","value":i,"enabled":true})
-	action("ARSENAL",Rect2(24,size.y-68,200,50),"arsenal")
+	if endless_prepare: ModeUI.arsenal_button(self,Rect2(24,size.y-68,220,50))
+	else: action("ARSENAL",Rect2(24,size.y-68,200,50),"arsenal")
 	var kit: Array=Equipment.loadout(save.data)
 	if save.data.get("artifact","none")!="none": kit.append(save.data.artifact)
 	for i in kit.size():
@@ -1125,6 +1127,7 @@ func draw_overlay() -> void:
 			action("GOT IT",Rect2(middle-120,y,240,51),"resume",-1,true)
 
 func _input(event: InputEvent) -> void:
+	if endless_board_open: return
 	if screen=="daily":
 		if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE: daily_screen.leave()
 		return
@@ -1264,6 +1267,10 @@ func dispatch(id: String, value: int = -1) -> void:
 		"reward_info":
 			if not Equipment.mission_reward(mission).is_empty(): overlay="reward_info"
 		"reward_close": overlay=""
+		"endless_board":
+			var board=preload("res://scripts/endless_board.gd").new()
+			board.host=self
+			add_child(board)
 		"daily": change_screen("daily"); daily_screen.open()
 		"home","campaign","arsenal","powers","upgrades","settings","journal","records": change_screen(id)
 		"select": selected=value
@@ -1569,7 +1576,14 @@ func finish(victory: bool) -> void:
 		endless_checkpoint=won
 		update_endless_record()
 		if won: persist_battle()
-		else: save.data.endless={}; save.save_game()
+		else:
+			save.data.endless={}
+			if not save.data.has("endless_pending"): save.data.endless_pending={}
+			var category := Endless.key(lex.language,lex.adjacent_only)
+			var prior: Dictionary=save.data.endless_pending.get(category,{})
+			if endless_score>int(prior.get("score",0)):
+				save.data.endless_pending[category]={"score":endless_score,"wave":endless_wave,"words":endless_words+word_count,"seconds":maxi(1,int(endless_seconds+duration)),"language":lex.language,"adjacent":lex.adjacent_only}
+			save.save_game()
 		return
 	var first: bool = not save.data.wins.has(str(mission))
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)

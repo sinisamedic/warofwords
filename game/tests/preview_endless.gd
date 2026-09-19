@@ -15,14 +15,15 @@ func run() -> void:
 	for i in 24: g.save.data.wins[str(i)]=3
 	g.save.data.loadout=["ember","bastion","seal","siphon"]
 	g.save.save_game(); g.change_screen("home")
-	root.title="War of Words — pregled • F6: posle bossa • F7: SR/EN"
+	root.title="War of Words — pregled • F6: posle bossa • F7: SR/EN • F8: poraz"
 	busy=false
 func _process(_delta: float) -> bool:
-	if busy or g==null: return false
-	var down := Input.is_physical_key_pressed(KEY_F6) or Input.is_physical_key_pressed(KEY_F7)
+	if busy or g==null or g.endless_board_open: return false
+	var down := Input.is_physical_key_pressed(KEY_F6) or Input.is_physical_key_pressed(KEY_F7) or Input.is_physical_key_pressed(KEY_F8)
 	if down and not held:
 		if Input.is_physical_key_pressed(KEY_F7):
 			g.save.data.ui_language="en" if g.save.data.ui_language=="sr" else "sr"
+		elif Input.is_physical_key_pressed(KEY_F8): show_defeat()
 		else: show_boss()
 	held=down
 	return false
@@ -33,4 +34,15 @@ func show_boss() -> void:
 	g.endless_checkpoint=false; g.mission=g.Endless.opponent(5)
 	await g.start_battle(true)
 	g.hp=76; g.finish(true); g.result_delay=0; g.overlay="endless_boss"
+	busy=false
+
+func show_defeat() -> void:
+	if g.endless_board_open: return
+	busy=true
+	g.change_screen("home")
+	g.endless_wave=8; g.endless_checkpoint=false; g.mission=g.Endless.opponent(8)
+	await g.start_battle(true)
+	g.endless_score=9958; g.endless_words=59; g.endless_seconds=427
+	g.word_count=0; g.duration=0; g.hp=0; g.ended=true; g.won=false; g.result_delay=0; g.overlay="endless_result"
+	# Preview fixture is deliberately never submitted or put into the pending queue.
 	busy=false

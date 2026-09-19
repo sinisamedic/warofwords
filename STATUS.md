@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Poraz i globalna beta lista Beskraja — 2026-09-19
+
+- Novi detaljan ekran poraza: rezultat, talas, pobede, reči, vreme i oprema; Arsenal dugme kao na naslovnoj, niži panel talasa.
+- Globalna lista postavljena u Supabase projektu War of Words preko nove odvojene SQL migracije; zajednička anonimna sesija, privatna tabela, RPC vezan za auth.uid(), kategorije SR/EN i pravilo povezivanja. Najbolji rezultat po profilu; nadimak i eksplicitna objava; osvežavanje pri otvaranju. Pending se čuva za ponovljeno slanje.
+- Beta prima rezultat iz klijenta, bez serverskog replay-a. Dokumentovano u `docs/endless-online.md`. Za objavu starih nepotpunih rekorda potrebna nova partija. Dnevni servis ostaje isti.
+- Živa lista uspešno učitana iz Godota; neispravan upis odbijen, bez testnih rezultata na listi. 10 lokalnih SQL provera i provera pending reload-a prolaze. SR/EN renderi pregledani.
+- Ideja nagradne reklame za nastavak posle poraza sačuvana kao budući predlog u game-design.md, bez implementacije oglasa.
+- Pregled: F6 boss, F7 jezik, F8 poraz (samo vizuelni primer, ne objavljuje rezultat). Bez APK-a. Sledeći korak: korisnička proba poraza i slanja pravog novog rezultata; nastaviti `codex/endless-arena`.
+
 ## Fino podešavanje kartica i talasa — 2026-09-19
 
 - Pesak pomeren malo desno, portal heroj unutar ilustracije kartice; kampanjska pozadina spuštena uz mali overscan bez praznih ivica.

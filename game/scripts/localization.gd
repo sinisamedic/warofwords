@@ -7,7 +7,7 @@ const SR := {
 "PLAY CHALLENGE":"IGRAJ IZAZOV", "CONTINUE RUN":"NASTAVI POHOD", "RECORDS":"REKORDI",
 "%d / 24 levels":"%d / 24 nivoa", "Best wave: %d":"Rekord: talas %d", "Best score: %d":"Rekord: %d bodova", "NEXT: BOSS":"SLEDEĆI: BOSS", "BOSS AT WAVE %d":"BOSS NA TALASU %d",
 "A new challenge every day":"Novi izazov svakog dana", "WAVE %d":"TALAS %d",
-"SCORE":"BODOVI", "PERSONAL BEST":"LIČNI REKORD", "WAVE %d COMPLETE":"TALAS %d ZAVRŠEN",
+"SCORE":"BODOVI", "GLOBAL TOP":"GLOBALNA LISTA", "ENEMIES DEFEATED":"POBEĐENI", "WORDS":"REČI", "TIME":"VREME", "PERSONAL BEST":"LIČNI REKORD", "WAVE %d COMPLETE":"TALAS %d ZAVRŠEN",
 "Defeat enemies. Every fifth wave is a boss.":"Pobeđuj protivnike. Svaki peti talas je boss.",
 "CHOOSE YOUR POWER-UP":"IZABERI POJAČANJE", "The same power-ups as in the campaign.":"Ista pojačanja kao u kampanji.",
 "CONTINUE — WAVE %d":"NASTAVI — TALAS %d", "RUN COMPLETE":"POHOD ZAVRŠEN",

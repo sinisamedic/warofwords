@@ -297,3 +297,13 @@ Beskraj: bez brojčanog odnosa energije na sposobnostima; bodovi bez naslova pre
 ### Fino podešavanje 2026-09-19
 
 Uklonjen pomoćni tekst ispod talasa. Aktivni talas koristi mek zlatni svetlosni prsten sa svetlim jezgrom; boss koristi baš originalni medaljon sa usvojene makete. Heroj portala ostaje unutar kartice, pesak malo desnije, kampanjska pozadina spuštena. Beskraj koristi zajednički Arsenal i kampanjska unapređenja, što je potvrđeno pregledom koda.
+
+## Beskraj: globalna lista i poraz — 2026-09-19
+
+Usvojeno: Arsenal dugme na pripremi koristi istu veliku ilustraciju kao naslovna. Panel talasa je niži. Ekran poraza prikazuje rezultat, broj pobeđenih protivnika, reči, trajanje i korišćenu opremu, sa ulazom na globalnu listu.
+
+Globalna beta lista na Supabase-u: najbolji rezultat anonimnog profila po SR/EN i susedno/slobodno povezivanje. Slanje je eksplicitno, pod nadimkom; novi završeni rezultati ostaju lokalno za ponovljen pokušaj. Lista se osvežava pri otvaranju. Prva beta prima klijentski rezultat uz validaciju identiteta, tipova i granica, bez serverskog replay-a borbe. To nije potvrđen rezultat poput Dnevnog izazova. Pre javnog takmičenja dodati proveru borbe, ograničenja učestalosti i moderaciju. Stari lokalni rekordi bez potpune statistike se ne objavljuju retroaktivno.
+
+### Predlog za kasniju monetizaciju — zapamtiti
+
+Korisnik predlaže dugme na ekranu poraza: odgledaj reklamu i nastavi borbu. Sada se ne implementiraju oglasi ni oživljavanje. Za kasniji dogovor ostaju broj nastavaka, vraćeno zdravlje i uticaj takvih pohoda na globalnu listu.

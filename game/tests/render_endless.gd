@@ -30,6 +30,7 @@ func run() -> void:
 		await shot("victory-"+lang)
 		g.result_delay=0; g.overlay="endless_boss"
 		await shot("boss-"+lang)
+		g.overlay="endless_result"; await shot("defeat-"+lang)
 		g.change_screen("records"); await shot("records-"+lang)
 		g.change_screen("settings"); await shot("settings-"+lang)
 	g.queue_free(); await process_frame; await create_timer(.3).timeout; quit()
