@@ -18,3 +18,5 @@ Mockup power-up illustrations were not introduced. Runtime reuses the campaign's
 ## Portal — tri sloja, 2026-09-19
 
 `portal-enemies.png` i providni `portal-hero.png` su originalne ImageGen izvedenice prethodne projektne ilustracije `portal-scene.png`. Između njih igra crta postojeći rotirajući `portal-ring.png`. Tačni promptovi su u `portal-layers-prompts.json`; bez novih materijala trećih strana.
+
+`wave-design-reference.png`: korisnički priložen isečak usvojene originalne ImageGen makete `design/concepts/multi-mode-2026-09-19/v2/02-endless-battle-v2.png`, sačuvan bez izmene. Godot koristi kružni UV region originalnog boss medaljona (centar 379,86; poluprečnik 27), bez nove interpretacije ikonice.

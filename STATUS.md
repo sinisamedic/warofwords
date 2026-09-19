@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Fino podešavanje kartica i talasa — 2026-09-19
+
+- Pesak pomeren malo desno, portal heroj unutar ilustracije kartice; kampanjska pozadina spuštena uz mali overscan bez praznih ivica.
+- Uklonjen donji tekst talasa. Svetli prsten sada ima radijalno meko zlatno svetlo i svetlo jezgro; boss medaljon koristi originalni kružni region korisničkog isečka usvojene makete, bez precrtavanja.
+- Potvrđeno: Beskraj uzima zajednički Arsenal i `save.data.levels`; kampanjska otključavanja i unapređenja važe i u Beskraju.
+- Provera: stvarni SR/EN renderi 1280×720 i 1280×576 bez engine grešaka. Samo vizuelne izmene; bez APK-a. Sledeći korak: korisnički pregled, aktivna grana `codex/endless-arena`.
+
 ## Preciziranje vizuelnog pregleda — 2026-09-19
 
 - Portal ima tri sloja: neprijatelji, rotirajući prsten, transparentni igrač ispred. Vraćene velike ilustracije Arsenala/Unapređenja; dnevni pesak pomeren prema osi sata.

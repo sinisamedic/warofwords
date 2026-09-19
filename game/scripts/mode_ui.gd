@@ -4,7 +4,8 @@ const SKY = preload("res://assets/art/endless/sky-court.png")
 const CARDS = [preload("res://assets/art/endless/mode-campaign.png"),preload("res://assets/art/endless/portal-enemies.png"),preload("res://assets/art/endless/mode-daily.png")]
 const PORTAL_HERO = preload("res://assets/art/endless/portal-hero.png")
 const PORTAL = preload("res://assets/art/endless/portal-ring.png")
-const SKULL = preload("res://assets/ui/boss-skull.svg")
+const WAVE_REFERENCE = preload("res://assets/art/endless/wave-design-reference.png")
+const WAVE_GLOW = preload("res://assets/ui/wave-glow.svg")
 const WAVE_PANEL = preload("res://assets/ui/wave-panel.svg")
 const BOSS_SR = preload("res://assets/art/endless/boss-sr.png")
 const BOSS_EN = preload("res://assets/art/endless/boss-en.png")
@@ -50,14 +51,14 @@ static func home(c) -> void:
 			c.draw_set_transform(center,0.0 if c.save.data.calm else c.clock*.42)
 			c.draw_texture_rect(PORTAL,Rect2(-Vector2.ONE*diameter/2,Vector2.ONE*diameter),false)
 			c.draw_set_transform(Vector2.ZERO)
-			fit(c,PORTAL_HERO,Rect2(art.position+Vector2(-8,art.size.y*.16),Vector2(art.size.y*.84,art.size.y*.84)))
+			fit(c,PORTAL_HERO,Rect2(art.position+Vector2(2,art.size.y*.16),Vector2(art.size.y*.84,art.size.y*.84)))
 		if not c.save.data.calm:
 			for j in 8:
 				var u: float=fposmod(c.clock*.10+j*.137,1.0)
 				var p := Vector2(art.position.x+art.size.x*(.14+fposmod(j*.273, .73)),art.end.y-u*art.size.y)
 				c.draw_circle(p,1.1+sin(j+c.clock)*.4,Color(1,.83,.4,sin(u*PI)*.65))
 			if i==2:
-				var p := art.position+art.size*Vector2(.39,.42)
+				var p := art.position+art.size*Vector2(.415,.42)
 				O.glow(c,p,25,Color(1,.74,.2,.22+.1*sin(c.clock*2)))
 				for j in 13:
 					var at := p+Vector2(sin(j*2.7)*2,fposmod(c.clock*28+j*4,46))
@@ -98,21 +99,22 @@ static func hud(c) -> void:
 	for i in 5:
 		var p := Vector2(mid+(i-2)*39,96)
 		var current: bool=base+i+1==c.endless_wave
-		if current: O.glow(c,p,30,Color(1,.59,.02,.8))
-		O.jewel(c,p,13,Color("245573"),false)
-		if current: c.draw_circle(p,12,Color("0c202b"))
 		if current:
-			var alpha := 1.0 if c.save.data.calm else .88+.12*sin(c.clock*3)
-			for j in range(9,0,-1):
-				c.draw_arc(p,16+j*.6,0,TAU,64,Color(1,.55,.02,.12*alpha),2,true)
-			c.draw_arc(p,16.8,0,TAU,64,Color(1,.81,.24,alpha),2.1,true)
-			c.draw_arc(p,16.4,0,TAU,64,Color(1,.98,.77,alpha),.9,true)
-		if i==4: fit(c,SKULL,Rect2(p-Vector2(11,11),Vector2(22,22)))
+			c.draw_circle(p,15,Color("0c202b"))
+			var pulse: float=1.0 if c.save.data.calm else .95+.05*sin(c.clock*3)
+			c.draw_texture_rect(WAVE_GLOW,Rect2(p-Vector2(23,23),Vector2(46,46)),false,Color(1,1,1,pulse))
+		else: O.jewel(c,p,13,Color("245573"),false)
+		if i==4:
+			var points := PackedVector2Array()
+			var uv := PackedVector2Array()
+			for k in 64:
+				var direction := Vector2.from_angle(k*TAU/64)
+				points.append(p+direction*14)
+				uv.append((Vector2(379,86)+direction*27)/Vector2(WAVE_REFERENCE.get_size()))
+			c.draw_polygon(points,PackedColorArray([Color.WHITE]),uv,WAVE_REFERENCE)
 		else: c.text(str(base+i+1),Rect2(p-Vector2(10,12),Vector2(20,23)),16,CREAM,true)
 		if base+i+1<c.endless_wave:
 			c.draw_polyline(PackedVector2Array([p+Vector2(-6,9),p+Vector2(-1,14),p+Vector2(8,3)]),Color("37d949"),3.2,true)
-	var next_label: String=c.t("NEXT: BOSS") if c.endless_wave%5==4 else c.t("BOSS") if c.endless_wave%5==0 else c.t("BOSS AT WAVE %d") % (base+5)
-	c.text(next_label,Rect2(mid-92,114,184,16),13,CREAM,true)
 	hourglass(c,Vector2(mid,154),c.countdown/c.interval())
 
 static func score_badge(c, canvas: CanvasItem) -> void:

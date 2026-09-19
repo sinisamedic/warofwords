@@ -293,3 +293,7 @@ V2 atlas od 86 ekrana ostaje u [mockups/](../mockups/README.md). Njegovo slobodn
 Portal naslovne: neprijatelji iza prstena, prsten animiran, igrač kao zaseban transparentni sloj ispred. Velike postojeće ilustracije Arsenala i Unapređenja smeju da izlaze iz okvira. Pesak Dnevnog izazova poravnat sa satom.
 
 Beskraj: bez brojčanog odnosa energije na sposobnostima; bodovi bez naslova preko donjeg dela portreta, rekord samo na naslovnoj kartici u bodovima. Health barovi unutar ukrašenog okvira, sa tankim zaobljenim zlatnim obodom. Talas sa zasebnim zaglavljem, podlogom za medaljone, zelenim kvačicama, svetlim zlatnim oreolom i rogatom lobanjom. Boss izbor dobija dvorište u pozadini i filigran.
+
+### Fino podešavanje 2026-09-19
+
+Uklonjen pomoćni tekst ispod talasa. Aktivni talas koristi mek zlatni svetlosni prsten sa svetlim jezgrom; boss koristi baš originalni medaljon sa usvojene makete. Heroj portala ostaje unutar kartice, pesak malo desnije, kampanjska pozadina spuštena. Beskraj koristi zajednički Arsenal i kampanjska unapređenja, što je potvrđeno pregledom koda.

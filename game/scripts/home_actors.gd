@@ -24,6 +24,6 @@ func pose(time: float, reduced: bool) -> void:
 	queue_redraw()
 func _draw() -> void:
 	var source := Vector2(SKY.get_size())
-	var factor := maxf(size.x/source.x,size.y/source.y)
+	var factor := maxf(size.x/source.x,size.y/source.y)*1.12
 	var crop := size/factor
-	draw_texture_rect_region(SKY,Rect2(Vector2.ZERO,size),Rect2((source-crop)/2,crop))
+	draw_texture_rect_region(SKY,Rect2(Vector2.ZERO,size),Rect2(Vector2((source.x-crop.x)/2,maxf(0,(source.y-crop.y)/2-12/factor)),crop))
