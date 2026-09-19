@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Najnoviji lokalni APK: 0.1.17 / code 18**, `exports/WarOfWords-0.1.17-android.apk` — Beskraj reči, nova naslovna, detaljan poraz i globalna beta lista. Isti potpis kao 0.1.14–0.1.16; instalirati preko njih bez deinstalacije. Globalna lista je beta sa klijentski prijavljenim rezultatima. Provere i SHA256 u STATUS.md. Paket nije objavljen na Releases; niže su istorijske verzije.
+
 **Aktivni lokalni APK: 0.1.16 / code 17**, `exports/WarOfWords-0.1.16-android.apk`. Oštriji okviri i pravilne proporcije dugmadi. Isti potpis kao 0.1.14/0.1.15; instalirati preko njih bez deinstalacije. [Provere](../STATUS.md). Ostatak verzionih napomena je istorija.
 
 **Aktivni lokalni paket: 0.1.15 / code 16**, `exports/WarOfWords-0.1.15-android.apk`. Isti potpis kao 0.1.14, instalira se preko nje bez deinstalacije. Detalji/provere u [STATUS.md](../STATUS.md). Sledeći odeljci su prethodne verzije.

@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## APK 0.1.17 — 2026-09-19
+
+- Korisnik odobrio build. `exports/WarOfWords-0.1.17-android.apk`, version code 18, 140.323.705 bajta. Beskraj, nova naslovna, vizuelne dorade, detaljan poraz i globalna beta lista.
+- SHA256: `9aa1a5683995d7a18d61f265decb458ab76d61db66d83d7be3285560d587d0bf`; priložen `.sha256` fajl. Potpis isti kao 0.1.14–0.1.16 (`429a2d1b…0abc`), instalirati preko njih.
+- 1.835 PASS / 0 FAIL i refill bez neuspeha; dodatnih 10 SQL provera prolazi. Import/export bez grešaka. `test_game.gd` prijavio 4 ObjectDB instance pri izlasku; funkcionalne provere prolaze. Potpis v2/v3, 16 KiB zipalign, manifest 0.1.17/code 18, API 24–36 i ARM64/x86_64 potvrđeni. Instalacija novog APK-a na fizičkom telefonu nije proverena.
+- Paket je lokalno spreman, nije objavljen na Releases. Sledeći korak: korisnička proba APK-a i objava novog stvarnog rezultata Beskraja. Aktivna grana `codex/endless-arena`.
+
 ## Poraz i globalna beta lista Beskraja — 2026-09-19
 
 - Novi detaljan ekran poraza: rezultat, talas, pobede, reči, vreme i oprema; Arsenal dugme kao na naslovnoj, niži panel talasa.
