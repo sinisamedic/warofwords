@@ -1,5 +1,9 @@
 # Multi-mode artwork — 2026-09-19
 
+## Playtest polish
+
+`portal-scene.png` removes the baked ring from our earlier illustration; `portal-ring.png` is a separate transparent rotating sprite. `hourglass-v2.png` follows the slender hourglass of the approved battle mockup. Built-in ImageGen, copied unchanged with alpha, original prompts in `polish-prompts.json`. Original outputs: `exec-d8086f22-d854-4e49-b790-7b35883b41e2.png`, `exec-fbd211cd-472e-4e1b-bfab-b563469e26c3.png`, `exec-8c240965-db11-404b-927e-f41ddaa2497c.png`. Each below 10 MiB. Campaign card uses existing licensed/original `fighters.png` cutouts, independently posed over the terrace. The original card files are retained as design history. New boss skull and compact wave frame are original code-authored SVGs in `assets/ui/`.
+
 Original assets generated with built-in OpenAI ImageGen, based on the project's own approved v2 mockups. Applicable OpenAI terms; no stock or external franchise assets. Exact prompts and reference paths: `prompts.json`. Output PNGs copied unchanged, including alpha for both bilingual boss headers and hourglass. Each file is below 10 MiB; ordinary Git matches existing art policy, no LFS history migration.
 
 - `sky-court.png`: shared menu/endless terrace background.

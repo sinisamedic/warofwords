@@ -63,6 +63,7 @@ var campaign_slide_from := 0.0
 var campaign_slide_time := .32
 var hero: Node2D
 var home_hero: Sprite2D
+var home_actors: Control
 var enemy_actor: Sprite2D
 var screen := "home"
 var previous := "home"
@@ -181,6 +182,7 @@ func advance_equipment(delta: float) -> void:
 	if burn_ticks>0:
 		burn_time-=delta
 		while burn_time<=0.000001 and burn_ticks>0 and not ended:
+			add_endless_score(mini(foe_hp,burn_amount)*2)
 			foe_hp=maxi(0,foe_hp-burn_amount)
 			burn_ticks-=1; burn_time+=2
 			fx.burst("impact",Vector2(.80,115),Color("ff993d"),.45)
@@ -191,7 +193,7 @@ func advance_equipment(delta: float) -> void:
 	if bloom_ticks>0:
 		bloom_time-=delta
 		while bloom_time<=0.000001 and bloom_ticks>0:
-			hp=mini(100,hp+bloom_amount)
+			heal_player(bloom_amount)
 			bloom_ticks-=1
 			bloom_time=minf(2,bloom_time+2)
 			fx.burst("heal",Vector2(.20,115),COLORS[3],.5)
@@ -238,6 +240,8 @@ func _ready() -> void:
 	add_child(hero)
 	add_child(home_hero)
 	add_child(enemy_actor)
+	home_actors=preload("res://scripts/home_actors.gd").new()
+	add_child(home_actors)
 	hero.z_index = -1
 	home_hero.z_index = -1
 	enemy_actor.z_index = -1
@@ -341,6 +345,7 @@ func _process(delta: float) -> void:
 	hero_flash = maxf(0,hero_flash-delta)
 	music.battle = screen == "battle"
 	music.ducked = not overlay.is_empty()
+	if endless_mode and ended and won: music.ducked=true
 	var active := screen == "battle" and overlay.is_empty() and not ended and not loading
 	if active:
 		duration += delta
@@ -367,7 +372,7 @@ func _process(delta: float) -> void:
 					if won and endless_wave%5!=0: advance_endless()
 					else:
 						overlay="endless_boss" if won else "endless_result"
-						sfx.play("win" if won else "lose")
+						if not won: sfx.play("lose")
 				elif not won or not show_pending_unlock():
 					overlay="result"
 					sfx.play("win" if won else "lose")
@@ -383,6 +388,12 @@ func update_actors() -> void:
 		return
 	hero.visible = screen == "battle"
 	home_hero.visible = false
+	home_actors.visible=screen=="home" and not loading and overlay.is_empty()
+	if home_actors.visible:
+		var r: Rect2=ModeUI.card_rect(self,0)
+		home_actors.position=r.position+Vector2(8,9)
+		home_actors.size=Vector2(r.size.x-16,r.size.y-122)
+		home_actors.pose(clock,save.data.calm)
 	enemy_actor.visible = screen == "battle"
 	for i in portraits.size():
 		portraits[i].visible = screen == "battle" and overlay.is_empty() and not loading
@@ -448,13 +459,14 @@ func advance_combat(delta: float) -> void:
 			elif foe_guard:
 				damage=maxi(1,damage/2)
 			var actual_damage := mini(foe_hp,damage)
+			add_endless_score(actual_damage*2)
 			foe_hp=maxi(0,foe_hp-damage)
 			if impact.kind=="ember":
 				burn_time=2; burn_ticks=3
 				# Derive the tick from this projectile, not a later changed upgrade.
 				burn_amount=6+maxi(0,(int(impact.damage)-12)/2)
 			if impact.kind=="siphon":
-				hp=mini(100,hp+actual_damage/2)
+				heal_player(actual_damage/2)
 				fx.burst("heal",Vector2(.20,115),COLORS[3],.65)
 			if impact.kind=="seal": seal_time=20; message("Enemy sealed for 20s")
 			if impact.kind == "arc":
@@ -466,6 +478,7 @@ func advance_combat(delta: float) -> void:
 			enemy_hit_strength=11.0 if impact.kind in ["word","long_word"] else 25.0
 		else:
 			var absorbed := mini(shield,damage)
+			add_endless_score(absorbed)
 			var reflect := absorbed/2 if shield_kind=="mirror" else 0
 			damage=maxi(0,damage-shield)
 			if shield_kind=="bastion":
@@ -706,10 +719,10 @@ func draw_campaign() -> void:
 func draw_arsenal() -> void:
 	equipment_ui.draw(self)
 
-func draw_powers() -> void:
-	header("POWER-UPS","campaign")
+func draw_powers(endless_prepare: bool = false) -> void:
+	header("ENDLESS WORDS" if endless_prepare else "POWER-UPS","home" if endless_prepare else "campaign")
 	panel(Rect2(150,78,size.x-300,37),INK,Color("547283"),8)
-	text(enemy_lesson(),Rect2(154,79,size.x-308,35),19,GOLD)
+	text("Defeat enemies. Every fifth wave is a boss." if endless_prepare else enemy_lesson(),Rect2(154,79,size.x-308,35),19,GOLD)
 	var width := (size.x-84)/3
 	for i in 3:
 		var rect := Rect2(24+i*(width+18),126,width,260)
@@ -731,7 +744,7 @@ func draw_powers() -> void:
 	for i in kit.size():
 		equipment_ui.icon(self,kit[i],Vector2(size.x/2+(i-(kit.size()-1)*.5)*45,size.y-48),18,GOLD)
 	text("YOUR LOADOUT",Rect2(235,size.y-27,size.x-470,19),16,CREAM)
-	action("BATTLE >",Rect2(size.x-224,size.y-68,200,50),"start",-1,true)
+	action("ENTER ARENA" if endless_prepare else "BATTLE >",Rect2(size.x-224,size.y-68,200,50),"endless_start" if endless_prepare else "start",-1,true)
 
 func draw_upgrades() -> void:
 	header("UPGRADES",previous if previous in ["home","arsenal"] else "home")
@@ -766,19 +779,20 @@ func tile_center(i: int) -> Vector2:
 
 func health_bar(rect: Rect2, current: int, maximum: int, opponent: bool) -> void:
 	Ornaments.frame(self,rect)
-	var start := rect.position.x+17 if opponent else rect.position.x+38
-	var width := rect.size.x-55
+	var start := rect.position.x+24 if opponent else rect.position.x+38
+	var width := rect.size.x-(62 if opponent else 64)
 	var label := t(ENEMIES[mission]).capitalize() if opponent else t("YOU")
 	while title_font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,16).x > width-96:
 		label=label.left(label.length()-2)+"…"
 	text(label,Rect2(start,rect.position.y+1,width-96,20),17,CREAM,true,HORIZONTAL_ALIGNMENT_LEFT,false)
 	text("%d/%d" % [current,maximum],Rect2(start+width-82,rect.position.y+1,82,20),18,CREAM)
-	var bar := Rect2(start,rect.position.y+23,width,11)
+	var bar := Rect2(start,rect.position.y+25,width,8)
 	draw_style_box(health_style(Color("060f20")),bar.grow(1))
 	var colors := [Color("ffa26e"),Color("ff6046"),Color("ba2e24")] if opponent else [Color("d1ff78"),Color("88e344"),Color("439d25")]
-	var fill := Rect2(bar.position,Vector2(bar.size.x*float(current)/maximum,11))
+	var fill := Rect2(bar.position,Vector2(bar.size.x*clampf(float(current)/maxi(1,maximum),0,1),8))
 	draw_polygon(PackedVector2Array([fill.position,Vector2(fill.end.x,fill.position.y),fill.end,Vector2(fill.position.x,fill.end.y)]),PackedColorArray([colors[0],colors[0],colors[2],colors[2]]))
 	draw_line(fill.position+Vector2(0,1),Vector2(fill.end.x,fill.position.y+1),colors[0],1)
+	draw_rect(bar.grow(1),GOLD,false,1.2)
 	var portrait_center := Vector2(size.x-44 if opponent else 44,33)
 	Ornaments.gradient_disc(self,portrait_center,28,Color("fff0b6"),Color("97703b"))
 	draw_circle(portrait_center,25,INK)
@@ -824,13 +838,14 @@ func draw_battle() -> void:
 		Ornaments.plaque(self,Rect2(size.x/2-130,70,260,29))
 		text(intent,Rect2(size.x/2-122,73,244,22),17,GOLD)
 	if ended: intent=t("VICTORY" if won else "DEFEATED")
-	Ornaments.plaque(self,Rect2(size.x/2-177,164,354,39))
+	var message_width := 256.0 if endless_mode else 354.0
+	Ornaments.plaque(self,Rect2(size.x/2-message_width/2,170 if endless_mode else 164,message_width,29 if endless_mode else 39))
 	if path.is_empty():
-		text(notice if notice_time > 0 else intent,Rect2(size.x/2-155,167,310,32),20,GOLD if notice_time > 0 else CREAM)
+		text(notice if notice_time > 0 else intent,Rect2(size.x/2-message_width/2+17,172 if endless_mode else 167,message_width-34,24 if endless_mode else 32),15 if endless_mode else 20,GOLD if notice_time > 0 else CREAM)
 	if not path.is_empty():
 		var word := ""
 		for i in path: word += lex.letters[i]
-		text(word,Rect2(size.x/2-152,167,304,32),25,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
+		text(word,Rect2(size.x/2-message_width/2+17,172 if endless_mode else 167,message_width-34,24 if endless_mode else 32),18 if endless_mode else 25,CREAM,true,HORIZONTAL_ALIGNMENT_CENTER,false)
 		if tap_composition and not (dragging and drag_moved):
 			action("×",Rect2(size.x/2-232,159,49,44),"clear")
 			action("✓",Rect2(size.x/2+183,159,49,44),"submit")
@@ -867,10 +882,10 @@ func draw_battle() -> void:
 			for n in 2: Ornaments.gem(self,center+Vector2(-9+n*18,-53),4 if n<reserves[i] else 2)
 		var label := Rect2(center.x-58,center.y+29,116,43)
 		Ornaments.plaque(self,label)
-		text(ability_name(i),Rect2(label.position.x+9,label.position.y+4,98,18),17,CREAM,true)
+		text(ability_name(i),Rect2(label.position.x+16,label.position.y+5,84,18),14,CREAM,true)
 		var ready_label := t("READY")
 		if ability_id(i)=="resonator": ready_label+=" • %d" % ability_effect(i)
-		text(ready_label if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+9,label.position.y+23,98,16),16,GOLD if ready else CREAM)
+		text(ready_label if ready else t("%d/%d") % [energy[i],ability_cost(i)],Rect2(label.position.x+16,label.position.y+23,84,14),12,GOLD if ready else CREAM)
 		buttons.append({"rect":Rect2(center-Vector2(59,48),Vector2(118,122)),"id":"fire","value":i,"enabled":true})
 	var help_center := Vector2(size.x/2-313,446)
 	var power_center := Vector2(size.x/2+294,446)
@@ -884,6 +899,7 @@ func draw_battle() -> void:
 		var time: float = particle.time
 		var location: Vector2 = particle.pos+particle.vel*time+Vector2(0,80)*time*time
 		draw_circle(location,4*(1-time/0.7),Color(particle.color,1-time/0.7))
+	if endless_mode and ended and won and result_delay>0: ModeUI.victory(self)
 
 func ability_center(i: int) -> Vector2:
 	return Vector2(size.x/2+(-313 if i<2 else 313),236+(i%2)*111)
@@ -1430,6 +1446,7 @@ func fire(i: int) -> void:
 	reserves[i]=0
 	ready_flash[i]=0
 	var kind := ability_id(i)
+	add_endless_score(10)
 	match i:
 		1:
 			shield=ability_effect(i); shield_kind=kind
@@ -1437,9 +1454,9 @@ func fire(i: int) -> void:
 		3:
 			if kind=="bloom":
 				var level := int(save.data.levels[3])
-				hp=mini(100,hp+6+2*(level-1))
+				heal_player(6+2*(level-1))
 				bloom_ticks=4; bloom_time=2; bloom_amount=6+level-1
-			elif kind!="siphon": hp=mini(100,hp+ability_effect(i))
+			elif kind!="siphon": heal_player(ability_effect(i))
 			hero_flash=0
 	if i in [0,2] or kind=="siphon":
 		var damage := 12+4*(int(save.data.levels[0])-1) if kind=="ember" else ability_effect(i)
@@ -1456,6 +1473,7 @@ func enemy_attack() -> void:
 	enemy_attacks+=1
 	if Campaign.action(mission,enemy_attacks)=="HEAL":
 		if seal_time>0:
+			add_endless_score(20)
 			seal_time=0; countdown=interval()
 			fx.burst("impact",Vector2(.80,115),COLORS[2],.65)
 			sfx.play("shield"); message("Seal prevented healing")
@@ -1477,6 +1495,7 @@ func enemy_attack() -> void:
 func power_up() -> void:
 	if boost_used or ended: return
 	boost_used=true
+	add_endless_score(10)
 	match save.data.selected_power:
 		0: freeze=8; message("Time frozen — keep finding words")
 		1: path.clear(); lex.generate(used); message("Fresh board — new possibilities")
@@ -1531,7 +1550,9 @@ func finish(victory: bool) -> void:
 	stars=(3 if hp>=70 else 2 if hp>=35 else 1) if won else 0
 	if endless_mode:
 		reward=0
-		if won: endless_score+=100*endless_wave*(3 if endless_wave%5==0 else 1)
+		if won:
+			endless_score+=100*endless_wave*(3 if endless_wave%5==0 else 1)
+			music.victory()
 		endless_checkpoint=won
 		update_endless_record()
 		if won: persist_battle()
@@ -1629,6 +1650,14 @@ func restore_battle(as_endless: bool = false) -> void:
 		if endless_wave%5==0: overlay="endless_boss"
 		else: overlay=""; result_delay=.1
 	preparing_battle=false
+
+func add_endless_score(amount: int) -> void:
+	if endless_mode and not ended and amount>0: endless_score+=amount
+
+func heal_player(amount: int) -> void:
+	var actual := mini(maxi(0,100-hp),maxi(0,amount))
+	hp+=actual
+	add_endless_score(actual)
 
 func start_endless() -> void:
 	endless_wave=1; endless_score=0; endless_words=0; endless_seconds=0

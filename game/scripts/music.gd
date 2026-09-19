@@ -8,8 +8,13 @@ var enabled := true
 var backgrounded := false
 var battle := false
 var ducked := false
+var fanfare: AudioStreamPlayer
 
 func _ready() -> void:
+	fanfare=AudioStreamPlayer.new()
+	fanfare.stream=preload("res://assets/audio/win.wav")
+	fanfare.volume_db=-7
+	add_child(fanfare)
 	for track in TRACKS:
 		var player := AudioStreamPlayer.new()
 		player.stream = track.duplicate()
@@ -36,11 +41,17 @@ func _process(delta: float) -> void:
 func set_enabled(value: bool) -> void:
 	enabled = value
 	if not enabled:
+		if fanfare!=null: fanfare.stop()
 		for player in players: player.stream_paused = true
+
+func victory() -> void:
+	if enabled and not backgrounded: fanfare.play()
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT]:
 		backgrounded=true
+		if fanfare!=null: fanfare.stream_paused=true
 		for player in players: player.stream_paused=true
 	elif what in [NOTIFICATION_APPLICATION_RESUMED,NOTIFICATION_APPLICATION_FOCUS_IN]:
 		backgrounded=false
+		if fanfare!=null: fanfare.stream_paused=false

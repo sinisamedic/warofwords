@@ -1,0 +1,17 @@
+[
+  {
+    "file": "portal-ring.png",
+    "reference": "game/assets/art/endless/mode-endless.png",
+    "prompt": "Extract the blue-gold magical portal RING as a separate game sprite. Perfect circular front facing luminous ring centered in square canvas, asymmetric blue and gold spiraling energy streaks around circumference. Only the ring, transparent empty central hole and transparent exterior; no heroes, monsters, landscape, text or objects. Preserve reference's painterly rich energy. Ring fits within 90% canvas so can rotate freely. True alpha."
+  },
+  {
+    "file": "hourglass-v2.png",
+    "reference": "design/concepts/multi-mode-2026-09-19/v2/02-endless-battle-v2.png",
+    "prompt": "Extract and faithfully recreate the small hourglass between the two fighters from this approved game design as an isolated transparent game sprite. MATCH its slender classic hourglass shape, simple round gold cap and base, two curved gold supports, turquoise glowing sand, pointed glass bulbs, little gold feet. Do not invent bulky blue jewels, crown spikes or huge plinth. Front facing, full hourglass only, centered in square transparent canvas, no text, no scenery, no panel. Genuine alpha outside silhouette, sharp readable details."
+  },
+  {
+    "file": "portal-scene.png",
+    "reference": "game/assets/art/endless/mode-endless.png",
+    "prompt": "Edit this square game illustration: remove ONLY the bright circular blue and golden energy ring and its sparks. Keep the hero, monsters, large distant boss, scenery and exact composition. Fill former energy area with atmospheric blue ruins and mist, leaving a quiet dark blue perimeter for a separately animated portal overlay. No ring, no frame, no text. Preserve character identity and painterly detail."
+  }
+]

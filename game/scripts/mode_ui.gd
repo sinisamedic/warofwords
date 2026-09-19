@@ -1,10 +1,13 @@
 extends RefCounted
 const O = preload("res://scripts/ornaments.gd")
 const SKY = preload("res://assets/art/endless/sky-court.png")
-const CARDS = [preload("res://assets/art/endless/mode-campaign.png"),preload("res://assets/art/endless/mode-endless.png"),preload("res://assets/art/endless/mode-daily.png")]
+const CARDS = [preload("res://assets/art/endless/mode-campaign.png"),preload("res://assets/art/endless/portal-scene.png"),preload("res://assets/art/endless/mode-daily.png")]
+const PORTAL = preload("res://assets/art/endless/portal-ring.png")
+const SKULL = preload("res://assets/ui/boss-skull.svg")
+const WAVE_PANEL = preload("res://assets/ui/wave-panel.svg")
 const BOSS_SR = preload("res://assets/art/endless/boss-sr.png")
 const BOSS_EN = preload("res://assets/art/endless/boss-en.png")
-const HOURGLASS = preload("res://assets/art/endless/hourglass.png")
+const HOURGLASS = preload("res://assets/art/endless/hourglass-v2.png")
 const GOLD := Color("f3c569")
 const CREAM := Color("fff1ce")
 const INK := Color("10283d")
@@ -40,17 +43,23 @@ static func home(c) -> void:
 		var art := Rect2(r.position+Vector2(8,9),Vector2(r.size.x-16,r.size.y-122))
 		var phase: float=0.0 if c.save.data.calm else c.clock*.35+i
 		cover(c,CARDS[i],art,phase)
+		if i==1:
+			var center := art.get_center()
+			var diameter := minf(art.size.x,art.size.y)*.98
+			c.draw_set_transform(center,0.0 if c.save.data.calm else c.clock*.42)
+			c.draw_texture_rect(PORTAL,Rect2(-Vector2.ONE*diameter/2,Vector2.ONE*diameter),false)
+			c.draw_set_transform(Vector2.ZERO)
 		if not c.save.data.calm:
 			for j in 8:
 				var u: float=fposmod(c.clock*.10+j*.137,1.0)
 				var p := Vector2(art.position.x+art.size.x*(.14+fposmod(j*.273, .73)),art.end.y-u*art.size.y)
 				c.draw_circle(p,1.1+sin(j+c.clock)*.4,Color(1,.83,.4,sin(u*PI)*.65))
-			if i==1:
-				var center := art.position+art.size*Vector2(.55,.44)
-				c.draw_arc(center,minf(art.size.x,art.size.y)*.35,c.clock*.6,c.clock*.6+1.2,24,Color(.4,.9,1,.65),2,true)
 			if i==2:
 				var p := art.position+art.size*Vector2(.45,.42)
-				for j in 5: c.draw_circle(p+Vector2(0,fposmod(c.clock*17+j*7,35)),1.1,GOLD)
+				O.glow(c,p,25,Color(1,.74,.2,.22+.1*sin(c.clock*2)))
+				for j in 13:
+					var at := p+Vector2(sin(j*2.7)*2,fposmod(c.clock*28+j*4,46))
+					c.draw_circle(at,1.8,Color("fff0a0"))
 		c.draw_line(Vector2(r.position.x+10,art.end.y),Vector2(r.end.x-10,art.end.y),GOLD,1)
 		c.text(names[i],Rect2(r.position.x+12,art.end.y+3,r.size.x-24,34),24,CREAM,true)
 		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best wave: %d") % c.endless_record().get("wave",0) if i==1 else c.t("A new challenge every day")
@@ -67,29 +76,40 @@ static func hourglass(c, p: Vector2, fraction: float) -> void:
 	fit(c,HOURGLASS,Rect2(p-Vector2(34,31),Vector2(68,62)))
 	var f := clampf(fraction,0,1)
 	var col := Color("7aeee0") if c.countdown>=3 else Color("ffba65")
-	if f>0: c.draw_arc(p,30,-PI/2,-PI/2+TAU*f,48,Color(col,.55),1.2,true)
+	if f>0: O.glow(c,p,26,Color(col,.13))
 	if not c.save.data.calm and not c.ended:
 		for i in 3: c.draw_circle(p+Vector2(0,fposmod(c.clock*22+i*6,16)),.7,CREAM)
 
 static func hud(c) -> void:
 	var mid: float=c.size.x/2
-	O.plaque(c,Rect2(mid-113,54,226,32))
+	c.draw_texture_rect(WAVE_PANEL,Rect2(mid-112,54,224,66),false)
 	var base: int=((c.endless_wave-1)/5)*5
 	var title: String=c.t("WAVE %d") % c.endless_wave+"  ·  "+("BOSS" if c.endless_wave%5==0 else "BOSS %d" % (base+5))
-	c.text(title,Rect2(mid-100,56,200,27),17,GOLD,true)
+	c.text(title,Rect2(mid-94,58,188,20),14,GOLD,true)
 	for i in 5:
-		var p := Vector2(mid+(i-2)*33,103)
-		O.jewel(c,p,13,Color("245573"),base+i+1==c.endless_wave)
-		c.text(str(base+i+1) if i<4 else "B",Rect2(p-Vector2(12,13),Vector2(24,26)),14,GOLD,true)
-	hourglass(c,Vector2(mid,140),c.countdown/c.interval())
-	O.plaque(c,Rect2(20,62,148,49))
-	c.text("SCORE",Rect2(29,65,130,18),13,GOLD)
-	c.text(str(c.endless_score),Rect2(29,82,130,24),20,CREAM,true)
-	O.plaque(c,Rect2(c.size.x-168,62,148,49))
-	c.text("PERSONAL BEST",Rect2(c.size.x-159,65,130,18),13,GOLD)
-	c.text(str(c.endless_record().get("score",0)),Rect2(c.size.x-159,82,130,24),20,CREAM,true)
+		var p := Vector2(mid+(i-2)*35,95)
+		var current: bool=base+i+1==c.endless_wave
+		if current:
+			O.glow(c,p,23,Color(1,.70,.13,.6 if c.save.data.calm else .5+.2*sin(c.clock*3)))
+		O.jewel(c,p,12,Color("245573"),current)
+		if current:
+			c.draw_arc(p,14,0,TAU,40,Color("ffe29c"),2.2,true)
+			if not c.save.data.calm: O.gem(c,p+Vector2.from_angle(c.clock*1.5)*16,2)
+		if i==4: fit(c,SKULL,Rect2(p-Vector2(10,10),Vector2(20,20)))
+		else: c.text(str(base+i+1),Rect2(p-Vector2(10,11),Vector2(20,22)),12,CREAM,true)
+		if base+i+1<c.endless_wave:
+			c.draw_polyline(PackedVector2Array([p+Vector2(-5,10),p+Vector2(-1,14),p+Vector2(7,5)]),Color("80efae"),2.4,true)
+	hourglass(c,Vector2(mid,143),c.countdown/c.interval())
+	for i in 2:
+		var x: float=82 if i==0 else c.size.x-272
+		O.frame(c,Rect2(x,49,190,22))
+		var label: String=c.t("SCORE")+": "+str(c.endless_score) if i==0 else c.t("PERSONAL BEST")+": "+str(c.endless_record().get("score",0))
+		c.text(label,Rect2(x+14,51,162,18),12,CREAM)
 
 static func choices(c, boss: bool) -> void:
+	if not boss:
+		c.draw_powers(true)
+		return
 	var w: float=minf(780,c.size.x-40)
 	var r := Rect2((c.size.x-w)/2,12,w,c.size.y-24)
 	c.panel(r)
@@ -127,6 +147,19 @@ static func result(c) -> void:
 	c.text("Try another loadout and beat your record.",Rect2(r.position.x+24,268,w-48,30),20)
 	c.action("MENU",Rect2(r.position.x+25,r.end.y-70,180,48),"home")
 	c.action("TRY AGAIN",Rect2(r.end.x-285,r.end.y-70,260,48),"endless_retry",-1,true)
+
+static func victory(c) -> void:
+	var progress: float=1-c.result_delay/c.DEFEAT_DURATION
+	var dy: float=0 if c.save.data.calm else -5*sin(progress*PI)
+	var r := Rect2(c.size.x/2-126,123+dy,252,48)
+	O.glow(c,r.get_center(),110,Color(1,.75,.2,.3))
+	O.frame(c,r,1)
+	c.text("VICTORY",Rect2(r.position+Vector2(22,3),Vector2(208,24)),21,INK,true)
+	c.text(c.t("WAVE %d COMPLETE") % c.endless_wave,Rect2(r.position+Vector2(22,26),Vector2(208,17)),12,INK)
+	if not c.save.data.calm:
+		for i in 10:
+			var p := r.get_center()+Vector2.from_angle(i*TAU/10+progress)*Vector2(100,34)*(1+progress*.3)
+			O.gem(c,p,2.5)
 
 static func records(c) -> void:
 	c.header("RECORDS")

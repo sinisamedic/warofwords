@@ -26,7 +26,9 @@ func run() -> void:
 		await g.start_endless()
 		g.endless_wave=4; g.mission=g.Endless.opponent(4); g.hp=76; g.endless_score=2840
 		await shot("battle-"+lang)
-		g.endless_wave=5; g.finish(true); g.result_delay=0; g.overlay="endless_boss"
+		g.endless_wave=5; g.finish(true); g.result_delay=.8
+		await shot("victory-"+lang)
+		g.result_delay=0; g.overlay="endless_boss"
 		await shot("boss-"+lang)
 		g.change_screen("records"); await shot("records-"+lang)
 		g.change_screen("settings"); await shot("settings-"+lang)

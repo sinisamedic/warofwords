@@ -39,6 +39,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Equipment tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Expanded campaign tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_endless.gd
 if ($LASTEXITCODE -ne 0) { throw 'Endless arena tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_endless_scoring.gd
+if ($LASTEXITCODE -ne 0) { throw 'Endless scoring tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_ui_polish.gd
 if ($LASTEXITCODE -ne 0) { throw 'Reward and daily refresh tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_daily.gd

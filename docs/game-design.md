@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Dorade prema probi Beskraja — usvojeno 2026-09-19
+
+Korisnik traži vidljivije pokretne likove/portal/pesak na naslovnoj, kampanjski izgled izbora pojačanja, kratku proslavu uz muziku, rasterećen pogled na borce, talase prema maketi, manju poruku/opremu i uvučene zdravstvene trake. Implementirano: zasebni pokretni likovi Kampanje, rotirajuća alfa slika portala, pojačani dnevni efekti, kompaktne gornje score trake, grupisani talasi sa kvačicama/sjajem/ikonom bossa, sat prema maketi, zlatan obod health barova. Početna priprema koristi isti crtač kao kampanja. Victory muzička fraza koristi postojeći `win.wav`, pod podešavanjem muzike; kratka zlatna najava prati animaciju poraza protivnika. Reduced Motion umiruje kretanje.
+
+Bodovanje Beskraja sada uz reči i pobede obuhvata **stvarne učinke**: 2 boda po oduzetom HP-u protivnika, 1 po blokiranom HP-u i 1 po stvarno vraćenom zdravlju. Sagorevanje i reflektovani projektili ulaze kroz isti obračun. Uspešno aktivirana sposobnost/pojačanje donosi 10, Pečatom sprečeno lečenje 20. Ne boduju se promašeni/prazni pokušaji, višak štete preko preostalog zdravlja, lečenje na punom HP-u ili ponovljena obrada istog projektila. Primljena šteta sama po sebi nije nagrada. Postojeći lokalni rezultati nisu obrisani; brojke treba dalje probati i balansirati. Bez promene dnevnog servera i bez APK-a do zahteva.
+
 ## Implementacija više režima — odobreno 2026-09-19
 
 Korisnik je posle v2 odobrio izradu u igri, uz SR/EN sliku „Boss pobeđen“, izražajniji font, dosledna postojeća pojačanja i nove pozadine. Prvo Godot pregled, **bez APK-a**. Time je prethodno čekanje implementacije završeno.

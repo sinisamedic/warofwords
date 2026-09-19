@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Dorade posle probe Beskraja — 2026-09-19
+
+- Kampanjska kartica ima dva nezavisno pokretna postojeća lika u isečenom prozoru; portal je zaseban rotirajući alfa sloj preko očišćene ilustracije. Dnevni pesak/sjaj su pojačani. Reduced Motion ostaje statičan.
+- Početna priprema Beskraja koristi kampanjski ekran izbora pojačanja. Bodovi i rekord su male gornje trake, bez prekrivanja boraca. Novi kompaktni panel talasa, zelene kvačice, zlatni sjaj trenutnog talasa i SVG ikona bossa. Vitkiji peščanik prema usvojenoj maketi; uža poruka, manji tekst opreme, uvučeni health barovi sa zlatnim obodom.
+- Svaka pobeda u Beskraju pušta postojeću pobedničku muzičku frazu uz kratku zlatnu animaciju. Poštuje podešavanje muzike i Reduced Motion.
+- Bodovanje prošireno: 2 boda po stvarno nanetom HP-u (uključujući reč, sagorevanje i odbijanje), 1 po apsorbovanom ili vraćenom HP-u, 10 za uspešnu sposobnost/pojačanje, 20 za Pečatom sprečeno lečenje. Bodovi reči i talasa ostaju. Višak štete/lečenja, prazna aktivacija i već obrađen projektil se ne boduju. Kampanja nema ovu promenu bodovanja.
+- Provere: **1.835 PASS / 0 FAIL**, refill bez neuspeha; stvarni renderi SR/EN 1280×720 i 1280×576 bez engine grešaka/upozorenja. Dve animirane faze različite, Reduced Motion identičan. Novi regresioni test `test_endless_scoring.gd` je u TestOnly toku.
+- Ponovo otvoriti `preview_endless.gd` (izolovani probni save; F6 boss, F7 jezik). Nema APK-a. Sledeći korak: korisnički pregled animacija, HUD-a i bodovanja; nastaviti ovu granu.
+
 ## Beskraj i nova naslovna — igrivi pregled 2026-09-19
 
 - Korisnik je odobrio implementaciju v2, zatražio SR/EN grafiku naslova posle bossa, zanimljiviji običan font, dosledna kampanjska pojačanja i nove pozadine. **Bez APK-a.** Poslednji APK ostaje 0.1.16.
