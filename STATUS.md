@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## APK 0.1.20 — 2026-09-19
+
+- Korisnik odobrio izgled i build. `exports/WarOfWords-0.1.20-android.apk`, code 21, 147.946.223 bajta. Uključuje sužen i ukrašen ekran podešavanja, animirane prekidače, centrirano Sačuvaj i novu ikonicu autora/licenci na naslovnoj.
+- Kompletan build/test tok i import/export završeni uspešno; poznata ObjectDB upozorenja testova pri izlasku. Potpis v2/v3 (`429a2d1b…0abc`) isti kao 0.1.19, provereni 16 KiB poravnanje, manifest 0.1.20/code 21, API 24–36 i ARM64/x86_64.
+- SHA256 `030e0e31e5afe024449049de7b26a5d1051e8b4975e3c1560461bfd893327b4d`. Nije objavljen na Releases niti instaliran na fizički telefon.
+- Sledeće: instalirati preko 0.1.19 i proveriti nova podešavanja na telefonu. Aktivna grana `codex/endless-arena`.
+
 ## Podešavanja usklađena sa vizuelnom referencom — 2026-09-19
 
 - Uži ukrašen panel, uvučena polja, ornamenti i linije sa prelazom providnosti uz naslove; zlatno/tirkizni animirani prekidači, tamne selekcije i centrirano Sačuvaj. Autori/licence premešteni na novu dizajniranu ikonicu upitnika na naslovnoj; pomoć/rečnik uklonjeni iz podešavanja.
