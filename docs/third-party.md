@@ -15,3 +15,9 @@
 Kopije su obični verzionisani fajlovi, ne submodule niti ugnježden repo. Preuzeti ostali upstream fajlovi ostaju lokalni i ignorisani. Izvorni Git metapodaci sačuvani su samo lokalno u .local/.
 
 Ne proširivati MIT licencu dodatka na našu igru: licenca celog projekta još nije izabrana. Za buduće slike, zvukove, fontove i rečnike dodati izvore, tačne verzije i licence pre uključivanja.
+
+## Dodatni rečnici — 0.1.19
+
+DE/FR/ES/IT: LibreOffice/dictionaries, revizija `5fe575dbcfeb789e2ab2d9731b88ac0dacc4f453`. DE i IT: GPL-3.0; FR: MPL-2.0; ES: iz ponuđene MPL-1.1-or-later izabrana MPL-2.0. Izvorne datoteke i licence sačuvane u `tools/dictionaries/`, a odgovarajući izvori i postupak obrade isporučeni u APK-u kao `game/licenses/dictionary-sources.zip`. Detalji konverzije i brojevi oblika: `docs/languages.md`.
+
+Build alat spylls 0.1.7 (Python, MIT) instalira se isključivo lokalno, ne ulazi u aplikaciju. Novi pojedinačni gzip/zip materijali su ispod 3 MiB; nema novih datoteka preko 10 MiB i nisu uvedeni LFS obrasci. Upstream tekstualni izvori čuvaju originalne bajtove/enkoding.

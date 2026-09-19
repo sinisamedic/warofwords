@@ -22,7 +22,7 @@ var name_dirty := false
 var busy := false
 var cached_rows: Array=[]
 var cached_category := ""
-func local_text(en: String,sr: String) -> String: return sr if host.save.data.ui_language=="sr" else en
+func local_text(en: String,sr: String) -> String: return sr if host.save.data.ui_language=="sr" else host.t(en)
 func _ready() -> void:
 	previous_touch_emulation=Input.emulate_mouse_from_touch
 	Input.emulate_mouse_from_touch=true

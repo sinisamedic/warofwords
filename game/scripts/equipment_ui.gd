@@ -53,21 +53,21 @@ func draw_reward_info(c: Control, id: String) -> void:
 	var x := r.position.x
 	var y := r.position.y
 	c.panel(r,c.INK,c.GOLD); c.draw_texture_rect(Art.FILIGREE,r,false)
-	c.text("NAGRADA NIVOA %d" % (c.mission+1) if sr else "LEVEL %d REWARD" % (c.mission+1),Rect2(x+30,y+16,width-60,32),23,c.GOLD,true)
+	c.text("NAGRADA NIVOA %d" % (c.mission+1) if sr else c.t("LEVEL %d REWARD") % (c.mission+1),Rect2(x+30,y+16,width-60,32),23,c.GOLD,true)
 	var p := Vector2(x+112,y+154)
 	Art.glow(c,p,108,Color(color,.30)); icon(c,id,p,76,color)
 	if E.unlocked(id,c.save.data): Art.earned_badge(c,p+Vector2(48,49),22)
 	else: Art.padlock(c,p+Vector2(48,49))
 	c.text(E.DATA[id].name,Rect2(x+219,y+65,width-250,38),28,color,true,HORIZONTAL_ALIGNMENT_LEFT)
 	var desc: Array=E.DATA[id].sr if sr else E.DATA[id].desc
-	for i in 2: c.text(desc[i],Rect2(x+219,y+114+i*29,width-250,28),21,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+	for i in 2: c.text(c.t(desc[i]),Rect2(x+219,y+114+i*29,width-250,28),21,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
 	c.text("KAKO SE KORISTI" if sr else "HOW TO USE",Rect2(x+32,y+231,width-64,27),21,c.GOLD,true)
 	var usage: Array
 	if slot==4:
 		usage=["Izaberi artefakt u Arsenalu pre borbe.","Deluje automatski; ne troši energiju."] if sr else ["Equip the artifact in the Arsenal before battle.","Its effect is automatic; no energy is needed."]
 	else:
 		var colors := ["zlatna","plava","ljubičasta","zelena"] if sr else ["gold","blue","purple","green"]
-		usage=["Opremi u Arsenalu. Spajaj slova: %s boja puni uređaj." % colors[slot],"Kada skupiš %d energije, dodirni njegov medaljon u borbi." % E.DATA[id].cost] if sr else ["Equip in the Arsenal. Link %s letters to charge it." % colors[slot],"At %d energy, tap its medallion during battle." % E.DATA[id].cost]
+		usage=["Opremi u Arsenalu. Spajaj slova: %s boja puni uređaj." % colors[slot],"Kada skupiš %d energije, dodirni njegov medaljon u borbi." % E.DATA[id].cost] if sr else [c.t("Equip in the Arsenal. Link %s letters to charge it.") % c.t(colors[slot]),c.t("At %d energy, tap its medallion during battle.") % E.DATA[id].cost]
 	for i in 2: c.text(usage[i],Rect2(x+32,y+265+i*28,width-64,27),19,c.CREAM)
 	c.action("ZATVORI" if sr else "CLOSE",Rect2(r.get_center().x-110,r.end.y-65,220,47),"reward_close",-1,true)
 
@@ -104,7 +104,7 @@ func draw_unlock(c: Control) -> void:
 	c.text(E.DATA[id].name,Rect2(tx,y+142,tw,44),29,tint,true,HORIZONTAL_ALIGNMENT_LEFT)
 	var desc: Array=E.DATA[id].sr if c.save.data.ui_language=="sr" else E.DATA[id].desc
 	for n in 2:
-		c.text(desc[n],Rect2(tx,y+202+n*31,tw,29),22,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
+		c.text(c.t(desc[n]),Rect2(tx,y+202+n*31,tw,29),22,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT,false)
 	c.text("Choose it in the Arsenal before your next duel.",Rect2(tx,y+280,tw,28),18,c.CREAM,false,HORIZONTAL_ALIGNMENT_LEFT)
 	if pending.size()>1:
 		c.text(c.t("%d more to reveal") % (pending.size()-1),Rect2(tx,y+314,tw,26),17,c.GOLD,false,HORIZONTAL_ALIGNMENT_LEFT,false)
@@ -150,7 +150,7 @@ func draw(c: Control) -> void:
 	c.panel(Rect2(x,145,width,241))
 	c.text(E.DATA[id].name,Rect2(x+14,155,width-28,36),27,color,true)
 	var desc: Array=E.DATA[id].sr if c.save.data.ui_language=="sr" else E.DATA[id].desc
-	for n in 2: c.text(desc[n],Rect2(x+16,203+n*29,width-32,27),20,c.CREAM,false,HORIZONTAL_ALIGNMENT_CENTER,false)
+	for n in 2: c.text(c.t(desc[n]),Rect2(x+16,203+n*29,width-32,27),20,c.CREAM,false,HORIZONTAL_ALIGNMENT_CENTER,false)
 	var ready: bool=E.unlocked(id,c.save.data)
 	if ready:
 		var stats: String=c.t("PASSIVE • NO ENERGY")

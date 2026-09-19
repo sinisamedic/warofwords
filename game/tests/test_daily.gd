@@ -9,7 +9,7 @@ func _initialize() -> void:
 	call_deferred("run_tests")
 func run_tests() -> void:
 	var fixtures: Array=[]
-	for language in ["en","sr"]:
+	for language in preload("res://scripts/languages.gd").CODES:
 		var lex=Lexicon.new(true,language)
 		for adjacent in [true,false]:
 			var a=Rules.new(); var b=Rules.new()
@@ -64,7 +64,7 @@ func run_tests() -> void:
 	Input.parse_input_event(gui_touch); await process_frame
 	gui_touch=gui_touch.duplicate(); gui_touch.pressed=false
 	Input.parse_input_event(gui_touch); await process_frame
-	check(daily.language=="sr","native language button responds to actual touch pipeline")
+	check(daily.language=="de","native language button follows six-language order through actual touch pipeline")
 	daily.profile_path="res://../.local/daily-test-profile.json"
 	daily.pending_path="res://../.local/daily-test-pending.json"
 	daily.language="sr"

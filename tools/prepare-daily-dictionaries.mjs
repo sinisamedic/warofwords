@@ -6,9 +6,9 @@ const root=new URL('../',import.meta.url);
 const out=new URL('.local/daily-dictionaries/',root);
 mkdirSync(out,{recursive:true});
 const manifest={version:'daily-v1',files:{}};
-for(const language of ['en','sr']) {
-  const source=readFileSync(new URL(`game/data/${language==='en'?'english.txt':'serbian.txt.gz'}`,root));
-  const text=(language==='sr'?gunzipSync(source):source).toString('utf8');
+for(const language of ['en','de','fr','es','it','sr']) {
+  const source=readFileSync(new URL(`game/data/${language==='en'?'english.txt':language==='sr'?'serbian.txt.gz':language+'.txt.gz'}`,root));
+  const text=(language!=='en'?gunzipSync(source):source).toString('utf8');
   const words=[...new Set(text.replaceAll('\r','').toUpperCase().split('\n').filter(Boolean))].sort();
   const packed=gzipSync(words.join('\n')+'\n',{level:9});
   const name=`${language}-daily-v1.txt.gz`;

@@ -118,6 +118,7 @@ var debug_sample_at := 0
 var online_writes_enabled := true
 var rankings: Node
 var endless_board_open := false
+var settings_screen: Control
 var daily_screen: Control
 var foe_guard := false
 var battle_weapon := "pulse"
@@ -936,6 +937,7 @@ func settings_toggle_rect(i: int) -> Rect2:
 	return Rect2(38+(i%2)*(half+8),94+(i/2)*103,half-2,98)
 
 func draw_settings() -> void:
+	if is_instance_valid(settings_screen): return
 	header("OPTIONS")
 	var width := (size.x-92)/2
 	var right := 56+width
@@ -1103,7 +1105,7 @@ func draw_overlay() -> void:
 			lines.append("★ Joker replaces one letter. The word resolves automatically.")
 		"credits":
 			title="WAR OF WORDS"
-			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "English: SCOWL · Serbian: LibreOffice (MPL-2.0).","Noto Serif / Lora: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
+			lines=["An original offline word-combat adventure.","Built with Godot 4.7.2 (MIT).", "Dictionaries: SCOWL / LibreOffice. See included licenses.","Noto Serif / Lora: SIL Open Font License.","Original AI-assisted art and synthesized sound.","Music: Joth / TAD · CC0 recordings.","Full notices included in the project and app package."]
 		"result":
 			title="VICTORY" if won else "DEFEATED"
 			lines=["★".repeat(stars) if won else "A new word. A better moment. Try again.",t("%d words  •  Best: %s") % [word_count,best_word if not best_word.is_empty() else "—"],t("+%d coins   •   %.0f seconds") % [reward,duration]]
@@ -1140,6 +1142,9 @@ func draw_overlay() -> void:
 			action("GOT IT",Rect2(middle-120,y,240,51),"resume",-1,true)
 
 func _input(event: InputEvent) -> void:
+	if is_instance_valid(settings_screen):
+		if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE: settings_screen.leave()
+		return
 	if endless_board_open: return
 	if screen=="daily":
 		if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE: daily_screen.leave()
@@ -1352,6 +1357,8 @@ func dispatch(id: String, value: int = -1) -> void:
 	queue_redraw()
 
 func change_screen(target: String) -> void:
+	if target!="settings" and is_instance_valid(settings_screen):
+		settings_screen.queue_free(); settings_screen=null
 	if screen=="battle" and not ended:
 		persist_battle()
 	previous=screen
@@ -1363,6 +1370,8 @@ func change_screen(target: String) -> void:
 	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
 	if target=="campaign": chapter=mission/4
+	if target=="settings" and not is_instance_valid(settings_screen):
+		settings_screen=preload("res://scripts/settings_screen.gd").new(); settings_screen.host=self; add_child(settings_screen)
 	if target=="battle" and not ended: hero.reset_pose()
 	campaign_background_from=chapter; campaign_background_time=.55
 	get_node("Backdrop").queue_redraw()
@@ -1425,9 +1434,11 @@ func start_battle(as_endless: bool = false, save_initial: bool = true) -> void:
 	ready_flash.assign([0.0,0.0,0.0,0.0])
 	attack_flash=0; hero_flash=0
 	lex.generate()
-	if not save.data.tutorial:
+	if not save.data.tutorial and lex.language in ["en","sr"]:
 		lex.letters.assign(Array(("KAMENVAREKASUNŠTITIGRVODAMOS" if lex.language=="sr" else "STONESTREAMLINEPLANETCARDSEN").split("")))
 		lex.find_words()
+		overlay="help"
+	elif not save.data.tutorial:
 		overlay="help"
 	preparing_battle=false
 	if save_initial: persist_battle()
@@ -1753,7 +1764,7 @@ func valid_snapshot(b: Dictionary) -> bool:
 		if not (b.energy[i] is int or b.energy[i] is float) or b.energy[i]<0 or not is_finite(float(b.energy[i])) or b.energy[i]>Equipment.DATA[saved_loadout[i]].cost: return false
 	for word in b.used:
 		if not word is String: return false
-	if b.get("dictionary_code","en") not in ["en","sr"]: return false
+	if b.get("dictionary_code","en") not in preload("res://scripts/languages.gd").CODES: return false
 	if not b.get("adjacent_only",true) is bool: return false
 	if not fx.valid_saved(b.get("projectiles",[])): return false
 	if not b.get("foe_guard",false) is bool or b.get("weapon","pulse") not in Equipment.SLOTS[0]: return false

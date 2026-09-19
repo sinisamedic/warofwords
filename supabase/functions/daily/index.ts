@@ -4,6 +4,13 @@ const url=Deno.env.get('SUPABASE_URL')!;
 const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const serverHeaders={apikey:serviceKey,Authorization:`Bearer ${serviceKey}`,'Content-Type':'application/json'};
 const dictionaries=new Map<string,string>();
+// Immutable public checksums, not credentials. Original EN/SR pins stay in project secrets.
+const extraDictionaryHashes:Record<string,string>={
+  de:'7159511149cdc3aff1e4f21ccb3d38f67c0f14e51a0e430b3b5ff667b8e62fad',
+  fr:'4e19e28746b452e5cabd343a8f77b9a1f3adf5e1d6933fa9cb4e4d6a61514533',
+  es:'12011da50ec8bcc0f4d96f5d47cfd02ec08cd2eee3f9c454e365236acd5a96bc',
+  it:'2d6df96a9c93d9dfb1168120e2fbc6ec6a0dc45635fa701b050d9c325fdfa314'
+};
 const respond=(value:unknown,status=200)=>Response.json(value,{status});
 async function database(path:string,body?:unknown,method='POST') {
   const response=await fetch(`${url}/rest/v1/${path}`,{method,headers:{...serverHeaders,Prefer:'return=representation'},body:body===undefined?undefined:JSON.stringify(body)});
@@ -12,7 +19,7 @@ async function database(path:string,body?:unknown,method='POST') {
 }
 async function dictionary(language:string) {
   if(dictionaries.has(language)) return dictionaries.get(language)!;
-  const expected=Deno.env.get(`DAILY_DICTIONARY_${language.toUpperCase()}_SHA256`);
+  const expected=extraDictionaryHashes[language]||Deno.env.get(`DAILY_DICTIONARY_${language.toUpperCase()}_SHA256`);
   if(!expected) throw Error('Dictionary not configured');
   const response=await fetch(`${url}/storage/v1/object/authenticated/daily-dictionaries/${language}-daily-v1.txt.gz`,{headers:serverHeaders});
   if(!response.ok) throw Error('Dictionary unavailable');
@@ -47,7 +54,7 @@ Deno.serve(async(request:Request)=>{
     raw+=decoder.decode();
     let input; try { input=JSON.parse(raw); } catch { return respond({error:'Invalid request'},400); }
     if(!input||typeof input!=='object') return respond({error:'Invalid request'},400);
-    if(!['en','sr'].includes(input.language)||typeof input.adjacent!=='boolean'||!['daily-v1',VERSION].includes(input.version)) return respond({error:'Unsupported rules'},400);
+    if(!['en','de','fr','es','it','sr'].includes(input.language)||typeof input.adjacent!=='boolean'||!['daily-v1',VERSION].includes(input.version)) return respond({error:'Unsupported rules'},400);
     const versioned=input.version===VERSION;
     const versionArgs=versioned?{p_version:input.version}:{};
     if(input.action==='leaderboard') return respond(await database(versioned?'rpc/daily_leaderboard_versioned':'rpc/daily_leaderboard',{p_user:user.id,p_language:input.language,p_adjacent:input.adjacent,...versionArgs}));

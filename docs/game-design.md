@@ -333,3 +333,9 @@ Na porazu Beskraja je jasno dugme POŠALJI REZULTAT uz ime. Šalje trenutno unet
 Poslednja korisnička odluka zamenjuje prethodni automatski tok: posle poraza može da promeni zapamćeno ime, a samo dugme POŠALJI šalje rezultat. Kucanje, čekanje, tastaturna potvrda i izlazak ne šalju ništa. Dugme postaje POSLATO i disabled tek nakon potvrde servera; neuspeh ostavlja ručni retry. Svaka partija ima svoje stanje slanja, uključujući slabije rezultate.
 
 Za Beskraj se čuva i rangira svaka poslata partija iste osobe. Prikaz: top 10, a ako trenutni rezultat nije među njima, još dva rezultata neposredno iznad i sam trenutni rezultat sa plasmanom. Preklapanje sa prvih deset se ne duplira; trenutni je istaknut. Oba jezika su zajedno. Dnevno rangiranje ostaje kao pre ove dopune. To zamenjuje pravilo jednog najboljeg rezultata po osobi u Beskraju.
+
+### Šest jezika i podešavanja — usvojeno 2026-09-19
+
+Korisnik odobrio novi ekran sa igračem/zvukom levo, jezicima desno i dugmetom Sačuvaj. Dodaju se nemački, francuski, španski i italijanski; srpski mora biti poslednji: EN, DE, FR, ES, IT, SR. Jezik interfejsa i jezik rečnika biraju se nezavisno kroz mrežu 2×3. Poslednje ime za liste može da se unese ovde i kasnije izmeni pre slanja partije. Podešavanja imena ne objavljuju rezultat niti preimenuju istoriju.
+
+Izbor rečnika i povezivanja važi za nove borbe; sačuvani duel ostaje obnovljiv sa svojim pravilima. Novi jezici podržani su u sva tri režima, a globalne liste ostaju objedinjene. Joker ostaje samo za Kampanju/Beskraj. Akcenti se čuvaju na pločicama; nemačko ß se piše SS, francuske ligature OE/AE. Ove konvencije su implementacione odluke prve verzije za probu, podesive posle korisničke povratne informacije.

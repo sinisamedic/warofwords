@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
 
+## Šest jezika, nova podešavanja i APK 0.1.19 — 2026-09-19
+
+- Implementiran usvojeni navy/gold ekran: ime igrača, zvuk/vibracija/animacije, povezivanje slova, zaseban jezik menija i reči. Izbor u mreži 2×3: English, Deutsch, Français, Español, Italiano, Srpski (poslednji). Sačuvaj potvrđuje; Nazad odbacuje izmene. Ime je zajedničko dnevnom izazovu i Beskraju, bez menjanja starih rezultata. Sačuvane borbe zadržavaju svoj rečnik i pravilo povezivanja.
+- Dodati prevodi interfejsa i rečnici DE/FR/ES/IT za Kampanju, Beskraj i Dnevni izazov/vežbu. Joker radi u Kampanji/Beskraju novih jezika. Novi rečnici: 343.335 / 341.043 / 578.122 / 1.164.157 oblika. Poreklo, licence i izvorni materijali u repo-u i `game/licenses/dictionary-sources.zip` u APK-u. Detalji: `docs/languages.md`.
+- Supabase `202609190005_six_languages.sql` primenjena; četiri privatna rečnika poslata i proširena funkcija `daily` objavljena. EN/SR pravila i svi raniji rezultati sačuvani, globalne liste ostaju zajedničke. Živim pozivima potvrđeni početak dnevne partije/provera checksum-a i liste za sva četiri jezika; bez objave QA bodova.
+- Provere: kompletan build tok 2.086 PASS, bez funkcionalnih neuspeha; dodatno proširen dnevni test i Godot/JS replay identični za svih 12 kombinacija jezika/povezivanja; 139 SQL provera. Završne provere podešavanja prolaze. Poznata ObjectDB/resurs upozorenja pri izlasku testova ostaju. Pregledani stvarni renderi podešavanja na šest jezika.
+- **APK:** `exports/WarOfWords-0.1.19-android.apk`, code 20, 147.726.896 bajta. SHA256 `0319e886eb8f99059ade66e973ccabc5292553213b747ab121acb802962b7796`. Potpis isti kao 0.1.18 (`429a2d1b…0abc`). Uključuje prethodnu ispravku ručnog slanja svih partija Beskraja. Nije postavljen na GitHub Releases niti instaliran na fizički telefon.
+- Sledeće: korisnička proba na telefonu, posebno tastatura za ime, novi rečnici i ručno slanje rezultata. Nastaviti `codex/endless-arena`; ne menjati jezičke liste/dnevne rečnike bez sinhronizacije servera i klijenta.
+
 ## Ručno slanje, dodir za ime i sve partije — 2026-09-19
 
 - Ispravljena greška iz APK-a 0.1.18: potpuno uklonjeno automatsko slanje/tajmer/promena imena na serveru. Samo POŠALJI šalje trenutno prikazanu partiju pod unetim imenom; POSLATO se prikazuje tek nakon serverske potvrde. Greška omogućava ručni retry. Svaka nova/slabija partija počinje neposlata. Raniji nacrti se ne šalju zajedno.

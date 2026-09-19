@@ -143,7 +143,11 @@ static func choices(c, boss: bool) -> void:
 			O.gem(c,Vector2(x,104+j*39),2.2)
 	O.glow(c,Vector2(r.get_center().x,90),120,Color(1,.7,.18,.13))
 	if boss:
-		fit(c,BOSS_SR if c.save.data.ui_language=="sr" else BOSS_EN,Rect2(r.position.x+90,r.position.y-4,w-180,102))
+		if c.save.data.ui_language in ["en","sr"]:
+			fit(c,BOSS_SR if c.save.data.ui_language=="sr" else BOSS_EN,Rect2(r.position.x+90,r.position.y-4,w-180,102))
+		else:
+			O.frame(c,Rect2(r.position.x+90,r.position.y+10,w-180,69),1)
+			c.text("BOSS DEFEATED",Rect2(r.position.x+108,r.position.y+20,w-216,47),29,c.INK,true)
 		c.text(c.t("WAVE %d COMPLETE") % c.endless_wave,Rect2(r.position.x+20,99,w-40,26),20,GOLD,true)
 	else:
 		c.text("ENDLESS WORDS",Rect2(r.position.x+20,25,w-40,45),31,GOLD,true)
@@ -219,7 +223,7 @@ static func records(c) -> void:
 	c.text("ENDLESS WORDS",Rect2(c.size.x/2-260,113,520,35),28,GOLD,true)
 	c.text("Personal records on this device",Rect2(c.size.x/2-260,151,520,28),19)
 	var n := 0
-	for lang in ["en","sr"]:
+	for lang in preload("res://scripts/languages.gd").CODES:
 		for adjacent in [true,false]:
 			var record: Dictionary=c.save.data.endless_records.get(c.Endless.key(lang,adjacent),{})
 			var label: String=("English" if lang=="en" else "Srpski")+" · "+c.t("ADJACENT" if adjacent else "ANY LETTERS")

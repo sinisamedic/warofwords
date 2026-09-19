@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {DailyRules,dictionaryContains} from '../supabase/functions/daily/rules.mjs';
 const root=new URL('../',import.meta.url);
 const fixtures=JSON.parse(readFileSync(new URL('.local/daily-fixtures.json',root),'utf8'));
-for(const language of ['en','sr']) {
+for(const language of ['en','de','fr','es','it','sr']) {
   const text=gunzipSync(readFileSync(new URL(`.local/daily-dictionaries/${language}-daily-v1.txt.gz`,root))).toString();
   const sample=text.split('\n');
   for(const index of [0,1,Math.floor(sample.length/2),sample.length-2]) assert(dictionaryContains(text,sample[index]));

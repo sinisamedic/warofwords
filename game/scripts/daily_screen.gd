@@ -41,7 +41,7 @@ const BACKDROP = preload("res://assets/art/campaign-observatory.png")
 var previous_touch_emulation := false
 
 func tr_daily(en: String, sr: String) -> String:
-	return sr if host.save.data.ui_language=="sr" else en
+	return sr if host.save.data.ui_language=="sr" else host.t(en)
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -104,7 +104,7 @@ func rebuild() -> void:
 		nickname.add_theme_stylebox_override("normal",entry)
 		nickname.add_theme_stylebox_override("focus",entry)
 		nickname.editable=not requesting; ui.add_child(nickname)
-		button("EN" if language=="en" else "SR",Rect2(38,174,90,42),toggle_language)
+		button(language.to_upper(),Rect2(38,174,90,42),toggle_language)
 		button(tr_daily("Adjacent","Susedna") if adjacent else tr_daily("Any letters","Bilo koja"),Rect2(140,174,w-102,42),toggle_rule)
 		button(tr_daily("PLAY RANKED","RANGIRANI POKUŠAJ"),Rect2(38,276,w,48),start_ranked,service.configured())
 		button(tr_daily("PRACTICE","VEŽBAJ"),Rect2(38,337,w,48),start_practice)
@@ -123,7 +123,7 @@ func rebuild() -> void:
 	queue_redraw()
 
 func toggle_language() -> void:
-	language="sr" if language=="en" else "en"; leaderboard={}; page=0; status=""; rebuild()
+	language=preload("res://scripts/languages.gd").CODES[(preload("res://scripts/languages.gd").CODES.find(language)+1)%6]; leaderboard={}; page=0; status=""; rebuild()
 	if service.configured(): await refresh_leaderboard()
 
 func toggle_rule() -> void:

@@ -1,4 +1,5 @@
 extends RefCounted
+const Languages = preload("res://scripts/languages.gd")
 
 var words := PackedStringArray()
 var prefixes: Dictionary = {}
@@ -30,6 +31,9 @@ func _init(load_now: bool = true, code: String = "en") -> void:
 		pool = "AAAAAAAEEEEEEEIIIIIIIOOOOOOOUUUNNNNRRRRSSSTTTTVVVLLLDDMMKKPPBGZJČĆŠĐŽFHC".split("")
 		pool.append_array(["LJ","NJ","DŽ"])
 		seeds.assign(["KAMEN","REKA","VODA","VATRA","ŠTIT","SNAGA","ZEMLJA","NEBO","OBLAK","SVETLO","ISKRA","IGRA","REČNIK","ČOVEK","PTICA","SREĆA","LJUBAV","NJEGA","DŽEPOVI","ŠUMA","ZVEZDA","MESEC","SUNCE","MOST","GRAD","ZLATO","MISLI","VETAR"])
+	if Languages.POOLS.has(language):
+		pool=Languages.POOLS[language].split("")
+		seeds.assign(Languages.STARTERS[language])
 	if load_now:
 		load_dictionary()
 	for tile in pool:
@@ -43,8 +47,8 @@ func _init(load_now: bool = true, code: String = "en") -> void:
 
 func load_dictionary() -> void:
 	var content: String
-	if language == "sr":
-		var packed := FileAccess.get_file_as_bytes("res://data/serbian.txt.gz")
+	if language != "en":
+		var packed := FileAccess.get_file_as_bytes("res://data/"+("serbian" if language=="sr" else language)+".txt.gz")
 		content = packed.decompress_dynamic(32*1024*1024,FileAccess.COMPRESSION_GZIP).get_string_from_utf8()
 	else:
 		content = FileAccess.get_file_as_string("res://data/english.txt")

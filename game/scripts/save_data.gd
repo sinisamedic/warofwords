@@ -36,7 +36,7 @@ func load_game() -> void:
 				data.levels[i] = clampi(number(data.levels[i],1),1,8)
 			data.dictionary = data.dictionary.filter(func(word): return word is String)
 			for key in ["ui_language","word_language"]:
-				if data[key] not in ["en","sr"]: data[key] = "en"
+				if data[key] not in preload("res://scripts/languages.gd").CODES: data[key] = "en"
 			for key in data.wins.keys():
 				data.wins[key] = clampi(number(data.wins[key],1),1,3)
 			# Migrate legacy gold-only equipment without changing an unfinished duel.
@@ -51,7 +51,7 @@ func load_game() -> void:
 			data.pending_unlocks=pending
 			var valid_runs: Array=[]
 			for entry in data.endless_outbox:
-				if not entry is Dictionary or not entry.get("id") is String or entry.get("language") not in ["sr","en"] or not entry.get("adjacent") is bool: continue
+				if not entry is Dictionary or not entry.get("id") is String or entry.get("language") not in preload("res://scripts/languages.gd").CODES or not entry.get("adjacent") is bool: continue
 				var valid := true
 				for field in ["score","wave","words","seconds"]:
 					if number(entry.get(field),-1)<0: valid=false
@@ -59,7 +59,7 @@ func load_game() -> void:
 			data.endless_outbox=valid_runs
 			for key in data.endless_pending.keys():
 				var entry = data.endless_pending[key]
-				if key not in ["en_adjacent","en_any","sr_adjacent","sr_any"] or not entry is Dictionary:
+				if not preload("res://scripts/languages.gd").record_key(key) or not entry is Dictionary:
 					data.endless_pending.erase(key); continue
 				var valid := true
 				for field in ["score","wave","words","seconds"]:
@@ -67,7 +67,7 @@ func load_game() -> void:
 				if not valid: data.endless_pending.erase(key)
 			for key in data.endless_records.keys():
 				var record = data.endless_records[key]
-				if key not in ["en_adjacent","en_any","sr_adjacent","sr_any"] or not record is Dictionary:
+				if not preload("res://scripts/languages.gd").record_key(key) or not record is Dictionary:
 					data.endless_records.erase(key); continue
 				data.endless_records[key]={"score":maxi(0,number(record.get("score"),0)),"wave":maxi(0,number(record.get("wave"),0))}
 			break

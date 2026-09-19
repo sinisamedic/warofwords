@@ -27,5 +27,12 @@ game/data/english.txt text eol=lf
 # Preserve upstream notices verbatim, including their original trailing spaces.
 game/licenses/*.txt -whitespace
 tools/dictionaries/sr/* -text -whitespace
+tools/dictionaries/de/* -text -whitespace
+tools/dictionaries/fr/* -text -whitespace
+tools/dictionaries/es/* -text -whitespace
+tools/dictionaries/it/* -text -whitespace
+*.zip binary
+# Localized label prefixes intentionally retain a final separator space.
+tools/translations.tsv -whitespace
 
 # Add agreed LFS patterns before the first commit of large binary assets.

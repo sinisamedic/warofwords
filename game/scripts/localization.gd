@@ -119,6 +119,6 @@ const SR := {
 "Could not save progress on this device":"Napredak nije sačuvan na ovom uređaju", "Old duel could not be restored. Start a new one.":"Stara borba ne može da se nastavi. Započni novu."
 }
 
+static var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/translations.json"))
 static func translate(value: String, language: String) -> String:
-	if language=="sr" and value=="★ Joker replaces one letter. The word resolves automatically.": return "★ Joker menja slovo. Reč se prepoznaje automatski."
-	return SR.get(value,value) if language == "sr" else value
+	return catalog.get(language,{}).get(value,SR.get(value,value) if language=="sr" else value)
