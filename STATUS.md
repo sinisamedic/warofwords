@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/wow-landing-page.**
 
+## Dorade sajta po komentarima — 2026-09-20
+
+- Uklonjeno vidljivo Pause motion dugme; ostaje sistemski reduced-motion. Oba glavna CTA koriste originalni game frame-gold.svg sa očuvanim ornamentima. Dodata korisnička najava budućih jezika.
+- Korisnikov GottaPlay logo je dodat uz izdavača u uvodu i podnožju, uključujući pravne/pomoćne stranice. Originalni PNG ostaje neizmenjen, zlatna boja je CSS prikaz. Poreklo dokumentovano u website/README.md.
+- Provere: 5 stranica / 101 lokalna referenca, CSS i JS prolaze; novi prikaz pregledan u browseru. Ažuriran lokalni ZIP. Sledeće: korisnički pregled na istoj lokalnoj adresi; otvorene objavne stavke ostaju iz prethodne sekcije.
+
 ## WoW statički sajt — 2026-09-20
 
 - Napravljen engleski `website/wow/` za budući `gottaplay.net/wow/`: navy/gold dizajn, postojeće ilustracije i Godot renderi, animirani uvod/čestice sa Pause motion i reduced-motion podrškom, galerija sa uvećanjem, tri režima, oprema, šest jezika i FAQ. Instagram/TikTok/YouTube su vidljivo „Coming soon“ dok se ne unesu stvarni URL-ovi.

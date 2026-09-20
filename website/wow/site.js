@@ -13,11 +13,9 @@
     document.querySelectorAll('.release-status').forEach(el => el.textContent = 'Available on Android');
   }
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  let paused = motion.matches;
-  function applyMotion() { document.documentElement.classList.toggle('motion-paused', paused); const b = document.querySelector('.motion-toggle'); if (b) { b.textContent = paused ? 'Enable motion' : 'Pause motion'; b.setAttribute('aria-pressed', String(paused)); } }
+  function applyMotion() { document.documentElement.classList.toggle('motion-paused', motion.matches); }
   applyMotion();
-  motion.addEventListener('change', e => { paused = e.matches; applyMotion(); });
-  document.querySelector('.motion-toggle')?.addEventListener('click', () => { paused = !paused; applyMotion(); });
+  motion.addEventListener('change', applyMotion);
   const embers = document.querySelector('.embers');
   if (embers) for (let i = 0; i < 18; i++) { const s = document.createElement('span'); s.style.cssText = `--x:${(i * 37) % 100}%;--delay:${-i * .8}s;--duration:${9 + (i % 5)}s`; embers.append(s); }
   const box = document.querySelector('.lightbox');

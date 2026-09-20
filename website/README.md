@@ -35,7 +35,7 @@ Pri objavi Google Play linka ažurirati i pre-release tekst, FAQ, meta descripti
 
 Iz korena repozitorijuma: `python -m http.server 8765 --bind 127.0.0.1 --directory website`, zatim `http://127.0.0.1:8765/wow/`. Relativne putanje rade pri prenosu u `/wow/`. Sve javne stranice su stvarni HTML, dostupne bez prijave, čak i bez JavaScripta.
 
-Stranica poštuje `prefers-reduced-motion`; dugme Pause motion isključuje animacije. Slike se otvaraju u tastaturom dostupnom dijalogu (Escape zatvara), a FAQ koristi native details. Nema automatskog audio/video sadržaja ni eksternih iframe-ova. U ovom izdanju su korišćene animacije i stvarni Godot screenshotovi, bez izmišljenog gameplay videa.
+Stranica poštuje `prefers-reduced-motion`; vidljivo dugme Pause motion uklonjeno je na zahtev korisnika; sistemska postavka reduced motion i dalje isključuje animacije. Slike se otvaraju u tastaturom dostupnom dijalogu (Escape zatvara), a FAQ koristi native details. Nema automatskog audio/video sadržaja ni eksternih iframe-ova. U ovom izdanju su korišćene animacije i stvarni Godot screenshotovi, bez izmišljenog gameplay videa.
 
 ## Izvori i licence
 
@@ -54,3 +54,7 @@ Cinzel i Lora su lokalne kopije postojećih projektnih fontova; obe SIL OFL lice
 - UMP: https://support.google.com/admob/answer/10113209?hl=en
 
 Ovo su implementirane web stranice i priprema za objavu, ne pravna potvrda niti potvrda usklađenosti buduće aplikacije. Otvorene tačke proizlaze iz stvarno nepotvrđenih naloga, kontakata i neimplementiranih funkcija, ne iz dodatnog toka odobravanja sajta.
+
+## Dorade brenda — 2026-09-20
+
+GottaPlay logo dostavio je vlasnik sajta u ovoj konverzaciji. `assets/gottaplay-logo.png` je neizmenjena originalna datoteka; CSS filter prikazuje zlatnu verziju bez promene oblika. Nema tvrdnje da je logo stock ili AI-generisan. `assets/frame-gold.svg` je neizmenjeni projektni SVG iz `game/assets/ui/`, prikazan tehnikom nine-slice na oba glavna dugmeta. Vlasnik je zatražio najavu da uskoro planira nove jezike; konkretni jezici i datumi nisu obećani.

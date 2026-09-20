@@ -4,6 +4,8 @@ Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka im
 
 ## Sajt i predstavljanje igre — usvojeno 2026-09-20
 
+Dopuna po korisničkim komentarima: ukloniti Pause motion, glavna dugmad koriste ornamente iz igre, dodati dostavljeni GottaPlay logo uz dozvoljeno usklađivanje boje i englesku najavu uskoro planiranih novih jezika. Konkretni novi jezici i rokovi nisu odabrani.
+
 - Zvanično predstavljanje i budući društveni profili prvenstveno na engleskom; višejezičnost igre je prednost, ne zaseban nalog za svaki jezik.
 - Izdavač na sajtu: **GottaPlay**. Postojeći domen `gottaplay.net`, landing putanja `/wow/`; korisnik sam kasnije prenosi statički paket. Nije odobrena niti izvršena javna objava tokom izrade.
 - Korisnik traži atraktivan statički sajt, postojeće ilustracije/screenshotove igre, animacije i buduće društvene linkove; lokalni pregled po završetku. Izvor i uputstvo: `website/README.md`.
