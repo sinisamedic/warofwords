@@ -2,6 +2,11 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/admob-endless.**
 
+## Potvrda na telefonu — 2026-09-20
+
+- Korisnik je testirao 0.1.22 i potvrdio prikaz oglasa i dodelu nagrade. To potvrđuje osnovni native rewarded tok; nije posebna potvrda svih graničnih slučajeva (tri nastavka, zatvaranje bez nagrade, prekid mreže).
+- Sledeći predlog: rezervisati engleske profile igre na Instagramu, TikToku i YouTube-u, pripremiti kratke gameplay snimke i povezati ih sa javnim sajtom. Nalozi još nisu kreirani. Paralelno završiti Play verifikaciju, kontakte/sajt i produkcione AdMob/UMP korake iz `docs/admob.md`; sadašnji build i dalje koristi testne oglase.
+
 ## Ispravka rečnika / APK 0.1.22 — 2026-09-20
 
 - Potvrđena regresija u 0.1.21: Gradle pretvara pet `.txt.gz` asseta u `.txt`, a loader je tražio isključivo gzip. Sadržaji se bajt-po-bajt poklapaju sa raspakovanim izvornim rečnicima. Loader sada podržava oba oblika; liste reči i pravila igre nisu menjani.
