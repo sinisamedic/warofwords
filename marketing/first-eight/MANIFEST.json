@@ -1,13 +1,28 @@
 [
   {
+    "path": "01-audio-preview.mp3",
+    "bytes": 289875,
+    "sha256": "1aea56315f845afe9583a2b43f15c99d2a4dc1fba28e47c1c43c155fe9bb5e15"
+  },
+  {
+    "path": "AUDIO-QA.json",
+    "bytes": 6831,
+    "sha256": "c40f48d6be99b64fd1fde37407f93f74c9fc065daa18b368ed420f9d29a8eed3"
+  },
+  {
+    "path": "AUDIO.md",
+    "bytes": 2842,
+    "sha256": "78cc06e24d1433ff6e75edf911a2d9ebcc982aa2cbabc08616c128b52ce4a2f2"
+  },
+  {
     "path": "CONTENT-AND-SCHEDULE.md",
-    "bytes": 13560,
-    "sha256": "027d52c1e49cc5d5137b5a262d57cec4b76474e269ad9cd8a30348765704de67"
+    "bytes": 13761,
+    "sha256": "eddfdc8b875b90ffc10308f7fbfc910931c55942b4509e7bd2a10cf820219e64"
   },
   {
     "path": "index.html",
-    "bytes": 15513,
-    "sha256": "e3f0a49f7ebb901c64d417fe6afc8c9a9267404a58dc310b06be33a8a22c282e"
+    "bytes": 15770,
+    "sha256": "e7a7234cfe43bd8ff24d22b0d83659c78a6d628b37d54ac202d3f6def40360b2"
   },
   {
     "path": "overview.jpg",
@@ -21,8 +36,13 @@
   },
   {
     "path": "PROVENANCE.md",
-    "bytes": 5196,
-    "sha256": "7b3cd4ae633e2111e9a06940ff871fdc5de61bbec1eee3398d6d456d8afbafbc"
+    "bytes": 5369,
+    "sha256": "dd029296b9ae4571c80632a2cf4dbad5ff97fdd30596180c4e4011091c75de40"
+  },
+  {
+    "path": "PUBLISHED.md",
+    "bytes": 1831,
+    "sha256": "907c0c4e82cda6c87c2e1874278324bd1de8152679d115748a16577bd14c2373"
   },
   {
     "path": "SCREEN-TEXT.md",
@@ -45,6 +65,11 @@
     "sha256": "debabddbf14a2e40cddedfe9eee9d4b9615afbd32d1d528ca877ca730ad572a2"
   },
   {
+    "path": "01-meet-the-game/video-9x16-audio.mp4",
+    "bytes": 1681722,
+    "sha256": "ff4363eff2dced3880afadd6c42dab013783e1c4061bc151c2ea23924250811a"
+  },
+  {
     "path": "01-meet-the-game/video-9x16.mp4",
     "bytes": 1383646,
     "sha256": "8041b0811f2183cbb601d4cc61dcb0717af5d6e3f9c37ee7f9ddce8cebfc4620"
@@ -63,6 +88,11 @@
     "path": "02-one-real-move/preview.webm",
     "bytes": 367384,
     "sha256": "d222bade69f4635c42360437d2774d975d3884f26a7421e285d736810a731d0e"
+  },
+  {
+    "path": "02-one-real-move/video-9x16-audio.mp4",
+    "bytes": 1202726,
+    "sha256": "a7f834fa245ebe1df1c5aa4c57a6695a3be6f5c08daa9ecccf2cec972fad8218"
   },
   {
     "path": "02-one-real-move/video-9x16.mp4",
@@ -88,6 +118,11 @@
     "path": "03-find-five/preview.webm",
     "bytes": 183828,
     "sha256": "0dcd07796d2cd1ef04109e79f06101e3fdc73dc283ecc537b111d9117a4d20c4"
+  },
+  {
+    "path": "03-find-five/video-9x16-audio.mp4",
+    "bytes": 669386,
+    "sha256": "a1453df4d65524a5feff38eebbe1217b12a32d8b24c484bce898fea1c7ce5256"
   },
   {
     "path": "03-find-five/video-9x16.mp4",
@@ -120,6 +155,11 @@
     "sha256": "3bca6dcc4d059acee9fce1f4b3465371d13cd7167200736c260788f07ac2ec45"
   },
   {
+    "path": "04-choose-your-mode/video-9x16-audio.mp4",
+    "bytes": 1201483,
+    "sha256": "675350c95c545bd46718eb06bf039dc0105c7eae255806916942b541aa192e8d"
+  },
+  {
     "path": "04-choose-your-mode/video-9x16.mp4",
     "bytes": 826222,
     "sha256": "2ac7f93889abe0189a8e9e6c1671ff0e4d32505b7bb3b31c70c3512f1d662995"
@@ -145,6 +185,11 @@
     "sha256": "0ef572ab74034f09b3e7b1525e9b86372b8f6e191937c21cfe19d5222c5b6465"
   },
   {
+    "path": "05-read-the-colors/video-9x16-audio.mp4",
+    "bytes": 652719,
+    "sha256": "d3ffc4597ffaec9c4e3fa94d56012a3d4ae46621084b490dc4c4006abd767348"
+  },
+  {
     "path": "05-read-the-colors/video-9x16.mp4",
     "bytes": 354334,
     "sha256": "1e87965e3a3b955bf5798903c00e3904b074852b5b8b7fd9a8e684aabf0dc9a9"
@@ -163,6 +208,11 @@
     "path": "06-behind-the-hero/preview.webm",
     "bytes": 478568,
     "sha256": "f09012315ad4d570f98c78472edd3e12a8012d91a148aac2f112dc4014386781"
+  },
+  {
+    "path": "06-behind-the-hero/video-9x16-audio.mp4",
+    "bytes": 1854629,
+    "sha256": "1a14bccde8a8179d9eca523bd24459bf3a75d8f5fb4b48a9c9e0eb628419cdb1"
   },
   {
     "path": "06-behind-the-hero/video-9x16.mp4",
@@ -190,6 +240,11 @@
     "sha256": "e2411731efd4a2d81ea7e584fc272636d5a7a5760a9a025e6fcd01e89a529184"
   },
   {
+    "path": "07-find-six/video-9x16-audio.mp4",
+    "bytes": 658795,
+    "sha256": "640e714a735e88ad6bce3f75c82a169b95d7b3cd697045c4b07e58cd7312a349"
+  },
+  {
     "path": "07-find-six/video-9x16.mp4",
     "bytes": 357913,
     "sha256": "7138332432d043de357134217e3308b44695ee1b742e66632426995c44fc0388"
@@ -210,9 +265,19 @@
     "sha256": "2a704bb359fa3faef83c7a6646365277a6f7692f6c767a52baa00296aad60476"
   },
   {
+    "path": "08-pick-your-language/video-9x16-audio.mp4",
+    "bytes": 602148,
+    "sha256": "000c843b29118ccb78c5a633a5c6ab55980b78b5d486133a307b406c19fd83e7"
+  },
+  {
     "path": "08-pick-your-language/video-9x16.mp4",
     "bytes": 350555,
     "sha256": "530dc08a852217cc46d6617a58f60c122dd49a983f9804d9931eff0403c56e94"
+  },
+  {
+    "path": "source/add-audio.py",
+    "bytes": 3912,
+    "sha256": "c71078db1b8bfacb42939e40b990581879ac40bb26431c8c217245253d90ed85"
   },
   {
     "path": "source/board.png",
@@ -221,8 +286,8 @@
   },
   {
     "path": "source/build.py",
-    "bytes": 21793,
-    "sha256": "4f62674c6cb77f1675dc6ed12a6df56f4470c826f0565b908991079676a8e641"
+    "bytes": 22048,
+    "sha256": "660103973e13afa342aebd03071c0fdc878926cf7929163744a54c00099ce19f"
   },
   {
     "path": "source/capture-evidence.json",

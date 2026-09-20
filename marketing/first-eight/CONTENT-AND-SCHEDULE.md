@@ -1,6 +1,6 @@
 # GottaPlay — prvih osam objava
 
-Predlog za pregled, 2026-09-20. Ništa nije objavljeno niti zakazano. Svi tekstovi za publiku su na engleskom.
+Predlog za pregled, 2026-09-20. Objava 01 je javno objavljena u nemoj verziji; evidencija je u PUBLISHED.md. Zvučne verzije i objave 02–08 čekaju pregled. Svi tekstovi za publiku su na engleskom.
 
 ## Predlog ritma
 
@@ -8,7 +8,7 @@ Tri objave nedeljno: utorak, četvrtak, subota; poslednje dve utorak i četvrtak
 
 Instagram: @gotta.play_games. TikTok: @gottaplaygames. YouTube: @gottaplay_games.
 
-Za IG 01/02/06 koristiti Reel, za 03/04/05/07 karusel po numeraciji, za 08 jednu sliku. Sve objave imaju zaseban 1080×1920 MP4 za TikTok/Shorts/Reels i 1080×1350 PNG. Statične adaptacije su namerno mirne video-kartice; gameplay je samo u 01/02/06. Bez muzike, govora i zvučnih efekata: svi MP4 su namerno nemi i imaju ugrađen tekst.
+Za IG 01/02/06 koristiti Reel, za 03/04/05/07 karusel po numeraciji, za 08 jednu sliku. Sve objave imaju zaseban 1080×1920 MP4 za TikTok/Shorts/Reels i 1080×1350 PNG. Statične adaptacije su namerno mirne video-kartice; gameplay je samo u 01/02/06. Nove video-9x16-audio.mp4 verzije imaju muziku i gameplay efekte, bez govora; detalji i poreklo u AUDIO.md. Izvorne video-9x16.mp4 kopije ostaju neme.
 
 
 ## 01. Your next weapon is a word.
@@ -17,7 +17,7 @@ Za IG 01/02/06 koristiti Reel, za 03/04/05/07 karusel po numeraciji, za 08 jednu
 - **Hook:** Your next weapon is a word.
 - **Raspored:** 1. nedelja • utorak • 19:00 (predlog)
 - **Format:** Reel / Short, 12 s
-- **Fajlovi:** `01-meet-the-game/ig-*.png`, `01-meet-the-game/video-9x16.mp4`, `01-meet-the-game/cover-9x16.jpg`.
+- **Fajlovi:** `01-meet-the-game/ig-*.png`, `01-meet-the-game/video-9x16-audio.mp4`, `01-meet-the-game/cover-9x16.jpg`.
 
 **Instagram (Reel) — gotov opis:**
 
@@ -50,7 +50,7 @@ Your next weapon is a word. Link letters, charge abilities and face the next opp
 - **Hook:** Watch STONE become an attack.
 - **Raspored:** 1. nedelja • četvrtak • 19:00 (predlog)
 - **Format:** Reel / Short, 9 s
-- **Fajlovi:** `02-one-real-move/ig-*.png`, `02-one-real-move/video-9x16.mp4`, `02-one-real-move/cover-9x16.jpg`.
+- **Fajlovi:** `02-one-real-move/ig-*.png`, `02-one-real-move/video-9x16-audio.mp4`, `02-one-real-move/cover-9x16.jpg`.
 
 **Instagram (Reel) — gotov opis:**
 
@@ -83,7 +83,7 @@ One real move from the current War of Words development build: S → T → O →
 - **Hook:** Find a five-letter word.
 - **Raspored:** 1. nedelja • subota • 19:00 (predlog)
 - **Format:** Instagram karusel, 2 slajda; video 12 s
-- **Fajlovi:** `03-find-five/ig-*.png`, `03-find-five/video-9x16.mp4`, `03-find-five/cover-9x16.jpg`.
+- **Fajlovi:** `03-find-five/ig-*.png`, `03-find-five/video-9x16-audio.mp4`, `03-find-five/cover-9x16.jpg`.
 
 **Instagram (karusel) — gotov opis:**
 
@@ -116,7 +116,7 @@ Find a five-letter word. Neighboring tiles, diagonals allowed, no tile twice. Pa
 - **Hook:** What kind of word player are you?
 - **Raspored:** 2. nedelja • utorak • 19:00 (predlog)
 - **Format:** Instagram karusel, 3 slajda; video 15 s
-- **Fajlovi:** `04-choose-your-mode/ig-*.png`, `04-choose-your-mode/video-9x16.mp4`, `04-choose-your-mode/cover-9x16.jpg`.
+- **Fajlovi:** `04-choose-your-mode/ig-*.png`, `04-choose-your-mode/video-9x16-audio.mp4`, `04-choose-your-mode/cover-9x16.jpg`.
 
 **Instagram (karusel) — gotov opis:**
 
@@ -149,7 +149,7 @@ Three ways to play in the current War of Words development build. Campaign: prog
 - **Hook:** Read the colors, too.
 - **Raspored:** 2. nedelja • četvrtak • 19:00 (predlog)
 - **Format:** Instagram karusel, 2 slajda; video 12 s
-- **Fajlovi:** `05-read-the-colors/ig-*.png`, `05-read-the-colors/video-9x16.mp4`, `05-read-the-colors/cover-9x16.jpg`.
+- **Fajlovi:** `05-read-the-colors/ig-*.png`, `05-read-the-colors/video-9x16-audio.mp4`, `05-read-the-colors/cover-9x16.jpg`.
 
 **Instagram (karusel) — gotov opis:**
 
@@ -182,7 +182,7 @@ A word does more than deal damage in War of Words. The colors of its tiles charg
 - **Hook:** This hero moves in pieces.
 - **Raspored:** 2. nedelja • subota • 19:00 (predlog)
 - **Format:** Reel / Short, 12 s
-- **Fajlovi:** `06-behind-the-hero/ig-*.png`, `06-behind-the-hero/video-9x16.mp4`, `06-behind-the-hero/cover-9x16.jpg`.
+- **Fajlovi:** `06-behind-the-hero/ig-*.png`, `06-behind-the-hero/video-9x16-audio.mp4`, `06-behind-the-hero/cover-9x16.jpg`.
 
 **Instagram (Reel) — gotov opis:**
 
@@ -215,7 +215,7 @@ A small look behind War of Words: this character starts as separate illustrated 
 - **Hook:** Can you find six?
 - **Raspored:** 3. nedelja • utorak • 19:00 (predlog)
 - **Format:** Instagram karusel, 2 slajda; video 12 s
-- **Fajlovi:** `07-find-six/ig-*.png`, `07-find-six/video-9x16.mp4`, `07-find-six/cover-9x16.jpg`.
+- **Fajlovi:** `07-find-six/ig-*.png`, `07-find-six/video-9x16-audio.mp4`, `07-find-six/cover-9x16.jpg`.
 
 **Instagram (karusel) — gotov opis:**
 
@@ -248,7 +248,7 @@ Can you find a six-letter word? Neighboring tiles, diagonals allowed, no tile tw
 - **Hook:** Which language would you play in?
 - **Raspored:** 3. nedelja • četvrtak • 19:00 (predlog)
 - **Format:** Instagram slika; video 10 s
-- **Fajlovi:** `08-pick-your-language/ig-*.png`, `08-pick-your-language/video-9x16.mp4`, `08-pick-your-language/cover-9x16.jpg`.
+- **Fajlovi:** `08-pick-your-language/ig-*.png`, `08-pick-your-language/video-9x16-audio.mp4`, `08-pick-your-language/cover-9x16.jpg`.
 
 **Instagram (slika) — gotov opis:**
 

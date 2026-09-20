@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
 
+## Zvuk za GottaPlay objave — 2026-09-20
+
+- Na korisnički zahtev svih osam videa dobilo je zasebnu `video-9x16-audio.mp4` verziju: postojeća CC0 muzika i originalni efekti igre u gameplay klipovima 01/02/06. Nemi masteri su sačuvani.
+- Poreklo, reprodukcija i ograničenja: `marketing/first-eight/AUDIO.md`; merenja u `AUDIO-QA.json`. Svih osam potpuno dekodirano; SHA256 video toka identičan originalu. Izmereno −16,01 do −16,75 LUFS, true peak najviše −1,71 dBTP. Svi novi fajlovi ispod 10 MiB.
+- Zvučne verzije nisu javno objavljene; postojeće objave nisu menjane, brisane ili duplirane.
+- **Tačan sledeći korak:** korisnik preslušava prvi zvučni MP4 ili `01-audio-preview.mp3`, zatim potvrđuje miks i eventualnu ponovnu objavu. PNG karuseli su i dalje slike; njihove MP4 adaptacije imaju muziku.
+
 ## Prva GottaPlay objava — 2026-09-20
 
 - Korisnik je odobrio objavu 01 na sva tri profila. Instagram Reel, YouTube Shorts i TikTok video su potvrđeno javno objavljeni. TikTok je posle kratke moderacije prešao na „Everyone”.

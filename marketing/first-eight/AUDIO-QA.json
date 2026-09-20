@@ -1,0 +1,279 @@
+[
+  {
+    "id": "01",
+    "file": "01-meet-the-game/video-9x16-audio.mp4",
+    "music": "treasure-hunter.mp3",
+    "music_start": 0,
+    "events": [
+      {
+        "asset": "tap",
+        "seconds": 4.5,
+        "pitch": 1.035,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 5.0,
+        "pitch": 1.07,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 5.5,
+        "pitch": 1.105,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 6.0,
+        "pitch": 1.1400000000000001,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 6.5,
+        "pitch": 1.175,
+        "gain_db": -15
+      },
+      {
+        "asset": "word",
+        "seconds": 7,
+        "pitch": 1,
+        "gain_db": -9
+      },
+      {
+        "asset": "shot",
+        "seconds": 7,
+        "pitch": 1.13,
+        "gain_db": -9
+      },
+      {
+        "asset": "flight",
+        "seconds": 7,
+        "pitch": 1,
+        "gain_db": -12
+      },
+      {
+        "asset": "hit",
+        "seconds": 7.42,
+        "pitch": 1,
+        "gain_db": -9
+      }
+    ],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.08",
+    "true_peak_dbtp": "-1.85",
+    "video_sha256": "SHA256=36a55dd9f377becdda304327654ab140bd4800ce6411a61fc4ac4b8c50b44335",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 1681722
+  },
+  {
+    "id": "02",
+    "file": "02-one-real-move/video-9x16-audio.mp4",
+    "music": "treasure-hunter.mp3",
+    "music_start": 0,
+    "events": [
+      {
+        "asset": "tap",
+        "seconds": 1.5,
+        "pitch": 1.035,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 2.0,
+        "pitch": 1.07,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 2.5,
+        "pitch": 1.105,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 3.0,
+        "pitch": 1.1400000000000001,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 3.5,
+        "pitch": 1.175,
+        "gain_db": -15
+      },
+      {
+        "asset": "word",
+        "seconds": 4,
+        "pitch": 1,
+        "gain_db": -9
+      },
+      {
+        "asset": "shot",
+        "seconds": 4,
+        "pitch": 1.13,
+        "gain_db": -9
+      },
+      {
+        "asset": "flight",
+        "seconds": 4,
+        "pitch": 1,
+        "gain_db": -12
+      },
+      {
+        "asset": "hit",
+        "seconds": 4.42,
+        "pitch": 1,
+        "gain_db": -9
+      }
+    ],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.54",
+    "true_peak_dbtp": "-1.98",
+    "video_sha256": "SHA256=9d2de3816d81cddab2743ac19b395c06f982b52a9dc311fd21cbf0a4e3cfb392",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 1202726
+  },
+  {
+    "id": "03",
+    "file": "03-find-five/video-9x16-audio.mp4",
+    "music": "fantasy-orchestral-theme.mp3",
+    "music_start": 25,
+    "events": [],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.18",
+    "true_peak_dbtp": "-1.71",
+    "video_sha256": "SHA256=b3392c7d0736712833a187561d57fa95775e0492cec0608125d5bc2b009eb9a8",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 669386
+  },
+  {
+    "id": "04",
+    "file": "04-choose-your-mode/video-9x16-audio.mp4",
+    "music": "treasure-hunter.mp3",
+    "music_start": 0,
+    "events": [],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.03",
+    "true_peak_dbtp": "-3.79",
+    "video_sha256": "SHA256=cec865ac78969653bdba398e8a69b0347dd4aabe7b62372584839dd6cacd14ff",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 1201483
+  },
+  {
+    "id": "05",
+    "file": "05-read-the-colors/video-9x16-audio.mp4",
+    "music": "treasure-hunter.mp3",
+    "music_start": 0,
+    "events": [],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.01",
+    "true_peak_dbtp": "-3.97",
+    "video_sha256": "SHA256=36140b56fe0b46a11d0182717f526303e71cf33310b4ee28321965ee26d94c1d",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 652719
+  },
+  {
+    "id": "06",
+    "file": "06-behind-the-hero/video-9x16-audio.mp4",
+    "music": "fantasy-orchestral-theme.mp3",
+    "music_start": 25,
+    "events": [
+      {
+        "asset": "tap",
+        "seconds": 4.5,
+        "pitch": 1.035,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 5.0,
+        "pitch": 1.07,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 5.5,
+        "pitch": 1.105,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 6.0,
+        "pitch": 1.1400000000000001,
+        "gain_db": -15
+      },
+      {
+        "asset": "tap",
+        "seconds": 6.5,
+        "pitch": 1.175,
+        "gain_db": -15
+      },
+      {
+        "asset": "word",
+        "seconds": 7,
+        "pitch": 1,
+        "gain_db": -9
+      },
+      {
+        "asset": "shot",
+        "seconds": 7,
+        "pitch": 1.13,
+        "gain_db": -9
+      },
+      {
+        "asset": "flight",
+        "seconds": 7,
+        "pitch": 1,
+        "gain_db": -12
+      },
+      {
+        "asset": "hit",
+        "seconds": 7.42,
+        "pitch": 1,
+        "gain_db": -9
+      }
+    ],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.30",
+    "true_peak_dbtp": "-2.06",
+    "video_sha256": "SHA256=880c0e3b33b08b486093bbdbb6965354840d6bc2c8be4e6d9a38278a4a8863a7",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 1854629
+  },
+  {
+    "id": "07",
+    "file": "07-find-six/video-9x16-audio.mp4",
+    "music": "fantasy-orchestral-theme.mp3",
+    "music_start": 25,
+    "events": [],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.18",
+    "true_peak_dbtp": "-1.71",
+    "video_sha256": "SHA256=d1e6ad361d91fb892be668e89a23bf20fcd2ba792fe4b66a0be4b98362f01be4",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 658795
+  },
+  {
+    "id": "08",
+    "file": "08-pick-your-language/video-9x16-audio.mp4",
+    "music": "fantasy-orchestral-theme.mp3",
+    "music_start": 25,
+    "events": [],
+    "audio": "AAC 48 kHz stereo 192 kbps",
+    "integrated_lufs": "-16.75",
+    "true_peak_dbtp": "-1.90",
+    "video_sha256": "SHA256=a9b228ecd4aea3b512c08a6a1ff7c0c9e3ece699ab8939e8c60ec10fb1d82f6d",
+    "visual_stream_unchanged": true,
+    "decode": "PASS",
+    "bytes": 602148
+  }
+]

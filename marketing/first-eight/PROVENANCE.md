@@ -14,7 +14,7 @@ Paket za korisnički pregled. Nema objave, zakazivanja, novih naloga niti javnog
 - Paleta kompozicija: orange `#F27622`, navy `#202C46`, warm ivory `#F5F1E9`. Originalna zlatna/tirkizna grafika igre ostaje neizmenjena unutar snimaka.
 - Fontovi Lato Bold i Lora iz projekta; SIL OFL. Izvori, revizije i SHA u `game/assets/fonts/README.md`, pune licence u `game/licenses/Lato-OFL.txt` i `Lora-OFL.txt`.
 - Kompozicije, tekstovi i Python/GDScript alati: napravljeni za ovaj projekat. Nema novih stock fotografija, tuđih gameplay snimaka ili generisanih lažnih ekrana.
-- Zvuk: nema audio trake. Muzika iz igre nije preuzeta u paket. Nema obaveze dodavanja zvuka pre pregleda ili objave.
+- Izvorne video-9x16.mp4 kopije su neme. Na zahtev korisnika dodate su video-9x16-audio.mp4 verzije sa CC0 muzikom i originalnim efektima igre; detaljno poreklo, postupak i ograničenja u AUDIO.md.
 
 ## Formati i uredničke granice
 
@@ -34,7 +34,7 @@ Iz korena repoa; izvršne putanje uzeti iz lokalne konfiguracije, ne menjati zaj
 1. Pokrenuti Godot sa `--path game --resolution 1280x720 --fixed-fps 30 --script res://../marketing/first-eight/source/capture.gd --log-file <apsolutna-putanja-u-.local>`.
 2. Pokrenuti `source/verify-challenges.gd` istim Godotom sa `--headless --path game`.
 3. Python sa Pillow i imageio-ffmpeg: `marketing/first-eight/source/build.py`. FFmpeg može biti instaliran u `.local/social-python`; koristi se kao lokalni alat, ne redistribuira se.
-4. Otvoriti `index.html`, pregledati PNG i MP4. Dokumenti i galerija nastaju iz `posts.json`/izvora generatora. `SCREEN-TEXT.md` beleži tekstove i sekunde.
+4. Pokrenuti `source/add-audio.py` za zvučne verzije. Otvoriti `index.html`, pregledati PNG i MP4. Dokumenti i galerija nastaju iz `posts.json`/izvora generatora. `SCREEN-TEXT.md` beleži tekstove i sekunde.
 
 ## Ograničenja zabeležena tokom snimanja
 
