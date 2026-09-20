@@ -58,3 +58,5 @@ Ovo su implementirane web stranice i priprema za objavu, ne pravna potvrda niti 
 ## Dorade brenda — 2026-09-20
 
 GottaPlay logo dostavio je vlasnik sajta u ovoj konverzaciji. `assets/gottaplay-logo.png` je neizmenjena originalna datoteka; CSS filter prikazuje zlatnu verziju bez promene oblika. Nema tvrdnje da je logo stock ili AI-generisan. `assets/frame-gold.svg` je neizmenjeni projektni SVG iz `game/assets/ui/`, prikazan tehnikom nine-slice na oba glavna dugmeta. Vlasnik je zatražio najavu da uskoro planira nove jezike; konkretni jezici i datumi nisu obećani.
+
+Dopuna: prikaz logotipa sada koristi SVG filter nad originalnim PNG-om: gornji element je zlatan, dva donja svetlo tirkizna. U glavnom podnožju redosled je „A game by“, zatim logo neposredno ispred „GottaPlay“. Oblik i providnost originala ostaju očuvani.

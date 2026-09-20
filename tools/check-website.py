@@ -34,6 +34,12 @@ for path,page in pages.items():
         count+=1
 for css in root.rglob('*.css'):
     for link in re.findall(r'url\([\'"]?([^\)\'\"]+)',css.read_text(encoding='utf-8')):
+        if link.startswith('#'):
+            for path,page in pages.items():
+                uses_css=any((path.parent/urlsplit(ref).path).resolve() == css.resolve() for ref in page.links)
+                if uses_css and link[1:] not in page.ids:
+                    errors.append(f'{path}: missing CSS fragment {link}')
+            continue
         if not (css.parent/link).is_file(): errors.append(f'Missing CSS asset {link}')
 files=[p for p in root.rglob('*') if p.is_file()]
 large=[str(p.relative_to(root)) for p in files if p.stat().st_size>10*1024*1024]
