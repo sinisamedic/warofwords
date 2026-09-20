@@ -100,6 +100,11 @@ func rebuild() -> void:
 			var code: String=L.CODES[i]; var bw: float=(picker_rect.size.x-18)/2
 			var b:=button(L.NAMES[code],Rect2(picker_rect.position+Vector2(6+(i%2)*(bw+6),6+(i/2)*36),Vector2(bw,32)),func(): draft[picker]=code; picker=""; rebuild(),draft[picker]==code)
 			b.name="Language_"+code; b.pixels=15
+	if picker.is_empty() and preload("res://scripts/admob_backend.gd").privacy_required():
+		button("AD PRIVACY",Rect2(right.position.x+24,y+280,right.size.x-24,32),func():
+			preload("res://scripts/admob_backend.gd").show_privacy(func(error):
+				if error: status="Privacy form unavailable. Try again later."
+				rebuild()))
 	var hint:=label("Applies to new duels. Saved duels keep their dictionary.",Rect2(right.position.x+24,y+350,right.size.x-24,42),12); hint.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART; hint.size=Vector2(right.size.x-24,42); hint.modulate=Color("acb7bf")
 	var save_button:=button("SAVE",Rect2(size.x/2-112,y+398,224,38),apply_settings,false,1); save_button.pixels=24
 	button("BACK",Rect2(size.x/2+126,y+402,100,32),leave)

@@ -119,6 +119,8 @@ const SR := {
 "Could not save progress on this device":"Napredak nije sačuvan na ovom uređaju", "Old duel could not be restored. Start a new one.":"Stara borba ne može da se nastavi. Započni novu."
 }
 
+static var ad_catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/admob_translations.json"))
 static var catalog: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/translations.json"))
 static func translate(value: String, language: String) -> String:
+	if ad_catalog.get(language,{}).has(value): return ad_catalog[language][value]
 	return catalog.get(language,{}).get(value,SR.get(value,value) if language=="sr" else value)

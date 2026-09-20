@@ -1,5 +1,7 @@
 # War of Words
 
+**Razvojni APK 0.1.21 / code 22:** tri dobrovoljna AdMob nastavka u Beskraju, zbirni skor do konačnog završetka i testni oglasi. `exports/WarOfWords-0.1.21-android.apk`, isti potpis kao 0.1.20. Provere prolaze; test stvarnog oglasa na telefonu predstoji. [Detalji](docs/admob.md) i [stanje](STATUS.md). Niže su istorijske verzije.
+
 **Najnoviji lokalni APK: 0.1.17 / code 18**, `exports/WarOfWords-0.1.17-android.apk` — Beskraj reči, nova naslovna, detaljan poraz i globalna beta lista. Isti potpis kao 0.1.14–0.1.16; instalirati preko njih bez deinstalacije. Globalna lista je beta sa klijentski prijavljenim rezultatima. Provere i SHA256 u STATUS.md. Paket nije objavljen na Releases; niže su istorijske verzije.
 
 **Najnoviji lokalni APK 0.1.16 / code 17:** `exports/WarOfWords-0.1.16-android.apk` — odobrene proporcije i oštrina okvira. Instalirati preko 0.1.15 ili 0.1.14 bez deinstalacije (isti potpis). [Provere i SHA256](STATUS.md). Paket nije na Releases; niže su prethodne verzije.

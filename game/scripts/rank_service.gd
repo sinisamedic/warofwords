@@ -38,6 +38,7 @@ func enqueue(result: Dictionary) -> void:
 	host.save.save_game()
 	# A saved run is a draft. Only the explicit Send action may publish it.
 func send_run(run_id: String, entered_name: String) -> void:
+	if host.endless_continue_pending: return
 	if busy or not host.online_writes_enabled or sent_runs.has(run_id): return
 	if not valid_name(entered_name): message="Enter your nickname to send the result"; changed.emit(); return
 	var item: Dictionary={}

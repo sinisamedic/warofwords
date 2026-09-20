@@ -1,5 +1,7 @@
 # Beskraj: ručno slanje i lista svih partija
 
+**Dopuna 2026-09-20:** poraz više ne pravi nacrt dok igrač odlučuje o nastavku. Najviše tri nagrađena nastavka čuvaju zbirni skor. Konačan nacrt nastaje jednom, tek pri izboru ZAVRŠI POHOD ili nakon potrošena tri nastavka i narednog poraza. Sva pravila ručnog slanja ispod primenjuju se na taj konačni nacrt. Detalji u [admob.md](admob.md).
+
 Aktuelna pravila (2026-09-19) zamenjuju prethodni automatski tok. Poraz čuva partiju kao lokalni nacrt u `endless_outbox` sa jedinstvenim ID-em. Ni otvaranje ekrana, kucanje, čekanje, potvrda tastature, zatvaranje prozora ni otvaranje Rekorda ne šalju rezultat. Nema tajmera za pozadinsko slanje ili promenu imena. Stara zastavica `endless_name_dirty` više nema dejstvo.
 
 Ime je unapred popunjeno poslednjim zapamćenim nadimkom i može da se izmeni. Dugme POŠALJI jedino poziva `send_run` za upravo tu partiju i trenutno uneto ime. Tokom slanja prikazuje SLANJE, tek potvrda servera postavlja POSLATO i zaključava dugme. Greška vraća mogućnost izmene i ručnog ponovnog slanja istog ID-a. Slabiji rezultat se šalje normalno; nove partije uvek počinju kao neposlate. Ostali raniji nacrti ne šalju se zajedno sa novim rezultatom. Posle napuštanja prozora ostaju na disku; još nema posebnog pregleda/slanja starih nacrta.

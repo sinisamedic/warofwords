@@ -53,17 +53,22 @@ if ($LASTEXITCODE -ne 0) { throw 'Reward and daily refresh tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Daily challenge tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_refill.gd
 if ($LASTEXITCODE -ne 0) { throw 'Refill regression/benchmark failed.' }
+& $Godot --headless --path $project --script res://tests/test_rewarded_continue.gd
+if ($LASTEXITCODE -ne 0) { throw 'Rewarded continue tests failed.' }
 if ($TestOnly) { exit 0 }
+if (-not (Test-Path -LiteralPath (Join-Path $project 'android/build/build.gradle'))) {
+    & (Join-Path $PSScriptRoot 'prepare-android-gradle.ps1')
+}
 $template = Join-Path $repo '.local/templates/android_debug.apk'
 if (-not (Test-Path -LiteralPath $template)) {
     throw 'Missing Android template. See docs/android.md; extract the official 4.7.2 template into .local/templates/.'
 }
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
-$apk = Join-Path $outputDir 'WarOfWords-0.1.20-android.apk'
+$apk = Join-Path $outputDir 'WarOfWords-0.1.21-android.apk'
 if ($UnsignedCheck) {
     # Validate export without signing the artifact with this machine's new debug key.
-    $apk = Join-Path $repo '.local/WarOfWords-0.1.20-UNSIGNED-CHECK.apk'
+    $apk = Join-Path $repo '.local/WarOfWords-0.1.21-UNSIGNED-CHECK.apk'
     $presetPath = Join-Path $project 'export_presets.cfg'
     $presetBytes = [IO.File]::ReadAllBytes($presetPath)
     $presetText = [Text.Encoding]::UTF8.GetString($presetBytes)

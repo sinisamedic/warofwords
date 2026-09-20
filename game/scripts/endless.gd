@@ -15,6 +15,10 @@ static func word_score(tiles: int) -> int:
 static func key(language: String, adjacent: bool) -> String:
 	return language+("_adjacent" if adjacent else "_any")
 static func valid_meta(b: Dictionary) -> bool:
+	var continues=b.get("continues",0)
+	if not (continues is int or continues is float) or not is_finite(float(continues)) or float(int(continues))!=float(continues) or continues<0 or continues>3: return false
+	if not b.get("continue_pending",false) is bool: return false
+	if b.get("continue_pending",false) and (continues>=3 or b.get("checkpoint",false)): return false
 	for k in ["wave","score","run_words","run_seconds"]:
 		if not (b.get(k) is int or b.get(k) is float) or not is_finite(float(b[k])) or b[k]<0: return false
 	for k in ["wave","score","run_words"]:

@@ -1,5 +1,10 @@
 # War of Words — dizajn igre
 
+## Beskraj: nagrađeni nastavci — usvojeno 2026-09-20
+
+- Korisnik je odobrio AdMob integraciju i najviše tri nastavka po jednoj partiji. Nagrada vraća puno zdravlje; trenutni protivnik i bodovi ostaju. Bodovi se sabiraju kroz celu partiju, a rezultat se ne priprema za slanje na prvoj pogibiji. Konačan rezultat nastaje tek pri odustajanju ili nakon iscrpljena tri nastavka i narednog poraza; slanje je i dalje isključivo ručno.
+- Razvoj koristi Google testne oglase. Stvarna App/Rewarded ID podešavanja i otvorene produkcione stavke dokumentovani su u `docs/admob.md`. Oglasi su dobrovoljni i samo u Beskraju.
+
 Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
 ## Sajt i predstavljanje igre — usvojeno 2026-09-20

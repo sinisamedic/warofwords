@@ -14,9 +14,9 @@ func run() -> void:
 	g.rankings.queue_free(); var service=load("res://tests/mock_rank_service.gd").new(); service.host=g; g.add_child(service); g.rankings=service; g.online_writes_enabled=true
 	service.enqueue({"score":1400,"wave":3,"words":14,"seconds":80,"language":"sr","adjacent":true})
 	var old_id: String=service.current_run_id
-	await g.start_endless(); g.endless_score=140; g.word_count=3; g.duration=12; g.finish(false)
+	await g.start_endless(); g.endless_score=140; g.word_count=3; g.duration=12; g.finish(false); g.finalize_endless()
 	var run_id: String=service.current_run_id
-	g.finish(false); assert(g.save.data.endless_outbox.size()==2)
+	g.finish(false); g.finalize_endless(); assert(g.save.data.endless_outbox.size()==2)
 	g.open_rankings(true); await process_frame; await process_frame
 	var board=g.get_children().back()
 	while board.busy: await process_frame
@@ -57,7 +57,7 @@ func run() -> void:
 	assert(JSON.parse_string(FileAccess.get_file_as_string(g.daily_screen.profile_path)).nickname=="Novo ime")
 	print("PASS: touch Send sends only this lower-scoring run, failure stays editable, explicit retry uses same ID, success disables button")
 	board.leave(); await process_frame; assert(not Input.emulate_mouse_from_touch and not g.endless_board_open)
-	await g.start_endless(); g.endless_score=1; g.word_count=1; g.duration=5; g.finish(false)
+	await g.start_endless(); g.endless_score=1; g.word_count=1; g.duration=5; g.finish(false); g.finalize_endless()
 	g.open_rankings(true); await process_frame; await process_frame; board=g.get_children().back()
 	assert(not board.send_button.disabled and board.nickname.editable and board.nickname.text=="Novo ime")
 	board.nickname.text="Sledece ime"; board.nickname.text_changed.emit(board.nickname.text)

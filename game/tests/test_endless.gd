@@ -54,6 +54,8 @@ func run() -> void:
 	check(g.endless_wave==6 and not g.boost_used and g.save.data.selected_power==2,"boss allows new power with one fresh use")
 	g.power_up(); check(g.boost_used and g.surge,"existing overcharge works in arena")
 	g.hp=0; g.finish(false)
+	check(g.endless_continue_pending and g.save.data.endless_outbox.is_empty(),"defeat waits for continue decision without score draft")
+	g.finalize_endless()
 	check(g.save.data.endless.is_empty(),"defeat clears only run")
 	check(not g.endless_record().is_empty(),"record stored for run category")
 	check(g.save.data.battle==JSON.parse_string(JSON.stringify(campaign)),"campaign remains after arena defeat and JSON reload")

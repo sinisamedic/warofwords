@@ -1,6 +1,14 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-20. **Aktivna grana: codex/wow-landing-page.**
+Ažurirano: 2026-09-20. **Aktivna grana: codex/admob-endless.**
+
+## AdMob / tri nastavka — 2026-09-20
+
+- Najviše tri dobrovoljna nastavka u Beskraju. SDK reward pa dismiss vraćaju 100 HP i pauziranu borbu, uz istog protivnika i zbirni skor; nema bodova za revive. Poraz čuva odluku na disku bez nacrta za rang-listu. Jedan konačni nacrt nastaje pri odustajanju ili četvrtom porazu; POŠALJI je i dalje ručan.
+- Testni AdMob režim, Google demo rewarded ID; stvarni App/Ad unit ID su zabeleženi. Poing AdMob 5.1.0 / Android 4.7.2, pinovani izvori i AAR biblioteke, MIT. Gradle export i otvoreni produkcioni koraci u `docs/admob.md`.
+- 4.451 PASS linija punog test toka, bez funkcionalnih neuspeha; 42 nove provere nastavaka uključene. Renderi ponude u šest jezika u `.local/admob/render/`; vizuelno provereni srpski i nemački. Poznata ObjectDB upozorenja ranijih testova ostaju.
+- APK `exports/WarOfWords-0.1.21-android.apk`, code 22, 267.735.756 bajtova. Potpis v2 `429a2d1b…0abc` isti kao 0.1.20; 16 KiB poravnanje, API 24–36, ARM64/x86_64 i AdMob/UMP manifest potvrđeni. SHA256 `aa55426e28504ed1ce860d925aa7a112664b1e7f7411a6ae4cf7afdd2e3b69f5`.
+- **Sledeće:** instalirati preko 0.1.20 na telefonu i proveriti stvarni Google testni oglas, zatvaranje bez nagrade i tri nastavka. ADB nije imao povezan uređaj, pa native prikaz/callback nije potvrđen. Nema produkcionih oglasa, objave APK-a ili promene Supabase-a. Pre produkcije dovršiti UMP poruku, ciljane uzraste, Play/AdMob i web/Data safety stavke.
 
 ## Sajt izdvojen u zaseban repo — 2026-09-20
 

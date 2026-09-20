@@ -90,6 +90,13 @@ var attack_flash := 0.0
 var hero_flash := 0.0
 var fx = preload("res://scripts/combat_fx.gd").new()
 var result_delay := 0.0
+var rewarded: Node
+var endless_continues := 0
+var endless_continue_pending := false
+var endless_finalized := false
+var ad_audio_muted := false
+var ad_previous_music := false
+var ad_previous_sound := false
 var ready_flash: Array[float] = [0.0,0.0,0.0,0.0]
 var sparks: Array[Dictionary] = []
 var hp := 100
@@ -226,6 +233,10 @@ func _ready() -> void:
 	body.variation_opentype={TextServerManager.get_primary_interface().name_to_tag("wght"):600}
 	font=body
 	save.load_game()
+	rewarded=preload("res://scripts/rewarded_continue.gd").new()
+	add_child(rewarded)
+	rewarded.completed.connect(rewarded_finished)
+	rewarded.changed.connect(rewarded_changed)
 	lex = Lexicon.new(false, save.data.word_language)
 	lexicons[lex.language] = lex
 	mission = save.data.unlocked
@@ -385,7 +396,7 @@ func _process(delta: float) -> void:
 						overlay="endless_boss" if won else "endless_result"
 						if not won:
 							sfx.play("lose")
-							open_rankings(true)
+							show_endless_defeat()
 				elif not won or not show_pending_unlock():
 					overlay="result"
 					sfx.play("win" if won else "lose")
@@ -1077,6 +1088,7 @@ func draw_defeat_dialog() -> void:
 func draw_overlay() -> void:
 	buttons.clear()
 	draw_rect(Rect2(Vector2.ZERO,size),Color(0.02,0.06,0.10,0.86))
+	if overlay=="endless_continue": ModeUI.continue_offer(self); return
 	if overlay=="endless_boss": ModeUI.choices(self,true); return
 	if overlay=="endless_result": ModeUI.result(self); return
 	if overlay=="unlock":
@@ -1273,6 +1285,11 @@ func dispatch(id: String, value: int = -1) -> void:
 		"endless_entry":
 			if not save.data.endless.is_empty(): restore_battle(true)
 			else: change_screen("endless_prepare")
+		"rewarded_continue":
+			if endless_continue_pending and endless_continues<rewarded.MAX_CONTINUES: rewarded.request()
+		"endless_finish":
+			if rewarded.state!="showing":
+				rewarded.cancel(); finalize_endless(); open_rankings(true)
 		"endless_retry": change_screen("endless_prepare")
 		"endless_start": start_endless()
 		"endless_next":
@@ -1379,6 +1396,10 @@ func change_screen(target: String) -> void:
 	queue_redraw()
 
 func back() -> void:
+	if overlay=="endless_continue":
+		if rewarded.state!="showing":
+			rewarded.cancel(); finalize_endless(); open_rankings(true)
+		return
 	if overlay=="endless_boss": persist_battle(); change_screen("home"); return
 	if overlay=="endless_result": change_screen("home"); return
 	if screen=="daily": daily_screen.leave(); return
@@ -1596,12 +1617,12 @@ func finish(victory: bool) -> void:
 			endless_score+=100*endless_wave*(3 if endless_wave%5==0 else 1)
 			music.victory()
 		endless_checkpoint=won
-		update_endless_record()
-		if won: persist_battle()
+		if won:
+			update_endless_record(); persist_battle()
 		else:
-			save.data.endless={}
-			rankings.enqueue({"score":endless_score,"wave":endless_wave,"words":endless_words+word_count,"seconds":maxi(1,int(endless_seconds+duration)),"language":lex.language,"adjacent":lex.adjacent_only})
-			save.save_game()
+			endless_continue_pending=endless_continues<rewarded.MAX_CONTINUES
+			if endless_continue_pending: persist_battle()
+			else: finalize_endless()
 		return
 	var first: bool = not save.data.wins.has(str(mission))
 	reward=(120+mission*20 if first else 40+mission*5) if won else mini(25,word_count*2)
@@ -1626,7 +1647,7 @@ func finish(victory: bool) -> void:
 func persist_battle() -> void:
 	if preparing_battle: return
 	var campaign_snapshot: Dictionary=save.data.battle
-	if screen=="battle" and (not ended or (endless_mode and endless_checkpoint)) and lex.letters.size()==28:
+	if screen=="battle" and (not ended or (endless_mode and (endless_checkpoint or endless_continue_pending))) and lex.letters.size()==28:
 		save.data.battle={"adjacent_only":lex.adjacent_only,"dictionary_code":lex.language,"mission":mission,"hp":hp,"foe":foe_hp,"max":foe_max,"energy":energy,"shield":shield,"countdown":countdown,"freeze":freeze,"surge":surge,"boost_used":boost_used,"used":used,"words":word_count,"best":best_word,"duration":duration,"letters":lex.letters,"types":lex.types,"attacks":enemy_attacks,"power":save.data.selected_power}
 		save.data.battle.projectiles=fx.snapshot()
 		save.data.battle.foe_guard=foe_guard
@@ -1648,7 +1669,9 @@ func persist_battle() -> void:
 		# The saved campaign must not alias the next mode's live word/board arrays.
 		save.data.battle=save.data.battle.duplicate(true)
 		if endless_mode:
-			save.data.battle.merge({"mode":"endless","wave":endless_wave,"score":endless_score,"run_words":endless_words,"run_seconds":endless_seconds,"checkpoint":endless_checkpoint})
+			save.data.battle.merge({"mode":"endless","wave":endless_wave,"score":endless_score,"run_words":endless_words,"run_seconds":endless_seconds,"checkpoint":endless_checkpoint,"continues":endless_continues,"continue_pending":endless_continue_pending})
+			# Pending defeat restores only into its decision screen, never as a live duel.
+			if endless_continue_pending: save.data.battle.hp=1
 			# A completed wave is restored into the intermission, never as a live dead foe.
 			save.data.battle.foe=maxi(1,foe_hp)
 			save.data.endless=save.data.battle
@@ -1668,6 +1691,7 @@ func restore_battle(as_endless: bool = false) -> void:
 	if as_endless:
 		endless_wave=int(b.wave); endless_score=int(b.score)
 		endless_words=int(b.run_words); endless_seconds=float(b.run_seconds)
+		endless_continues=int(b.get("continues",0)); endless_continue_pending=b.get("continue_pending",false); endless_finalized=false
 	await select_dictionary(b.get("dictionary_code","en"))
 	lex.adjacent_only = b.get("adjacent_only",true)
 	lex.joker_enabled=true
@@ -1696,6 +1720,37 @@ func restore_battle(as_endless: bool = false) -> void:
 		if endless_wave%5==0: overlay="endless_boss"
 		else: overlay=""; result_delay=.1
 	preparing_battle=false
+	if as_endless and endless_continue_pending:
+		hp=0; ended=true; won=false; result_delay=0; hero.begin_defeat(); show_endless_defeat()
+
+func show_endless_defeat() -> void:
+	if endless_continue_pending: overlay="endless_continue"
+	else: overlay="endless_result"; open_rankings(true)
+	queue_redraw()
+
+func finalize_endless() -> void:
+	if not endless_mode or not ended or won or endless_finalized: return
+	endless_finalized=true; endless_continue_pending=false; overlay="endless_result"
+	update_endless_record()
+	save.data.endless={}
+	rankings.enqueue({"score":endless_score,"wave":endless_wave,"words":endless_words+word_count,"seconds":maxi(1,int(endless_seconds+duration)),"language":lex.language,"adjacent":lex.adjacent_only})
+
+func rewarded_changed() -> void:
+	if rewarded.state=="showing" and not ad_audio_muted:
+		ad_previous_music=music.enabled; ad_previous_sound=sfx.enabled; ad_audio_muted=true
+		music.set_enabled(false); sfx.enabled=false
+	elif rewarded.state!="showing" and ad_audio_muted:
+		ad_audio_muted=false; music.set_enabled(ad_previous_music); sfx.enabled=ad_previous_sound
+	queue_redraw()
+
+func rewarded_finished(granted: bool) -> void:
+	if not granted or screen!="battle" or not endless_mode or not endless_continue_pending or endless_finalized or endless_continues>=rewarded.MAX_CONTINUES: return
+	endless_continues+=1; endless_continue_pending=false
+	# No healing score is granted for the revive.
+	hp=100; ended=false; won=false; result_delay=0; overlay="pause"
+	countdown=interval(); fx.clear(); sparks.clear(); hero.reset_pose()
+	path.clear(); hint_path.clear(); touch_id=-1; dragging=false
+	persist_battle(); queue_redraw()
 
 func add_endless_score(amount: int) -> void:
 	if endless_mode and not ended and amount>0: endless_score+=amount
@@ -1706,6 +1761,8 @@ func heal_player(amount: int) -> void:
 	add_endless_score(actual)
 
 func start_endless() -> void:
+	rewarded.cancel(); endless_continues=0; endless_continue_pending=false; endless_finalized=false
+	rankings.current_run_id=""
 	endless_wave=1; endless_score=0; endless_words=0; endless_seconds=0
 	endless_checkpoint=false
 	mission=Endless.opponent(1)

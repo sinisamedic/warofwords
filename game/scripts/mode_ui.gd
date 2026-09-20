@@ -206,6 +206,23 @@ static func result(c) -> void:
 	c.action("GLOBAL TOP",Rect2(r.get_center().x-103,r.end.y-57,206,40),"endless_board")
 	c.action("TRY AGAIN",Rect2(r.end.x-211,r.end.y-57,189,40),"endless_retry",-1,true)
 
+static func continue_offer(c) -> void:
+	var w: float=minf(570,c.size.x-36)
+	var r:=Rect2((c.size.x-w)/2,(c.size.y-320)/2,w,320)
+	c.panel(r)
+	c.text("ONE MORE CHANCE",Rect2(r.position+Vector2(20,22),Vector2(w-40,38)),28,GOLD,true)
+	c.text(c.t("Score: %d") % c.endless_score,Rect2(r.position+Vector2(20,72),Vector2(w-40,26)),21,CREAM)
+	c.text("Watch an ad to revive with full health.",Rect2(r.position+Vector2(16,110),Vector2(w-32,26)),17,CREAM)
+	c.text("Your opponent and score stay unchanged.",Rect2(r.position+Vector2(16,138),Vector2(w-32,24)),16,CREAM)
+	c.text(c.t("Continues remaining: %d / 3") % (3-c.endless_continues),Rect2(r.position+Vector2(16,167),Vector2(w-32,24)),17,GOLD)
+	var status: String={"consent":"Checking ad privacy…","loading":"Loading ad…","showing":"Ad in progress…","unavailable":"Ad unavailable. Retry or finish the run.","skipped":"No reward received. You can try again."}.get(c.rewarded.state,"")
+	if not c.rewarded.supported(): status="Ads are available in the Android version."
+	c.text(status,Rect2(r.position+Vector2(12,199),Vector2(w-24,23)),14,CREAM)
+	if not c.rewarded.busy() and c.rewarded.supported():
+		c.action("WATCH AD & CONTINUE",Rect2(r.position+Vector2(w/2-170,233),Vector2(340,38)),"rewarded_continue",-1,true)
+	if c.rewarded.state!="showing":
+		c.action("FINISH RUN",Rect2(r.position+Vector2(w/2-125,279),Vector2(250,30)),"endless_finish")
+
 static func victory(c) -> void:
 	var progress: float=1-c.result_delay/c.DEFEAT_DURATION
 	var dy: float=0 if c.save.data.calm else -5*sin(progress*PI)

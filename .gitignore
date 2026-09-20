@@ -29,6 +29,9 @@ setup-probe/probe_runs/
 /build/
 /dist/
 /exports/
+/game/android/
+!/game/addons/admob/android/bin/
+!/game/addons/admob/android/bin/**
 *.apk
 *.aab
 *.ipa

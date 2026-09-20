@@ -1,5 +1,9 @@
 # Android — instalacija i razvoj
 
+**Razvojni APK 0.1.21 / code 22:** `exports/WarOfWords-0.1.21-android.apk`, AdMob testni oglasi i tri nastavka u Beskraju. Isti potpis kao 0.1.20; instalira se preko nje. Desktop provere i Android paket su provereni; stvarni test oglasa na telefonu još predstoji. [Integracija i produkcioni uslovi](admob.md).
+
+Od ove verzije potreban je **Gradle export**. Pre prvog build-a pokrenuti `tools/prepare-android-gradle.ps1 -TemplatesArchive <zvanicni-Godot-4.7.2-tpz>`; build skripta to automatski radi ako je arhiva u `.local/downloads/godot-templates.tpz`. Potrebni su SDK platform 36 i build-tools 36.1.0. Maven/Gradle keš i `game/android/` su lokalni. Na ovom računaru Java koristi Windows-ROOT trust store zbog postojeće HTTPS inspekcije (bez isključivanja TLS validacije). Prvi build preuzima zavisnosti. Ako Godot console wrapper ostane otvoren posle `[ DONE ] export`, završiti namenski Gradle daemon (`gradlew.bat --stop` uz isti GRADLE_USER_HOME).
+
 **Najnoviji lokalni APK: 0.1.20 / code 21**, `exports/WarOfWords-0.1.20-android.apk` — odobreni redizajn podešavanja i ikonica autora/licenci na naslovnoj. Isti potpis kao 0.1.19; instalirati preko nje. Provere i SHA256 u STATUS.md. Niže su istorijske verzije.
 
 **Najnoviji lokalni APK: 0.1.18 / code 19**, `exports/WarOfWords-0.1.18-android.apk` — Joker u Kampanji/Beskraju, novi Rekordi i poraz, slanje rezultata sa nadimkom, zajedničke jezičke liste. Isti potpis kao 0.1.14–0.1.17, instalirati preko njih. Provere i SHA256 u STATUS.md. Nije objavljen na Releases; niže su istorijske verzije.
