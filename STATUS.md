@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/admob-endless.**
 
+## Ispravka rečnika / APK 0.1.22 — 2026-09-20
+
+- Potvrđena regresija u 0.1.21: Gradle pretvara pet `.txt.gz` asseta u `.txt`, a loader je tražio isključivo gzip. Sadržaji se bajt-po-bajt poklapaju sa raspakovanim izvornim rečnicima. Loader sada podržava oba oblika; liste reči i pravila igre nisu menjani.
+- Build obavezno izvlači rečnike iz gotovog APK-a i kroz Godot proverava sve reči, generisanje table i validaciju poteza za šest jezika. Prošlo 4.451 postojećih + 24 provere konačnog APK-a. Dodatno potvrđena kompatibilnost sa rečnicima iz APK-a 0.1.20 i 0.1.21. Poznata ObjectDB upozorenja ranijih testova ostaju.
+- `exports/WarOfWords-0.1.22-android.apk`, code 23, 267.736.048 bajtova; SHA256 `dd2d367200cabecddb235837099d6b9fc2ab1db460e4c5cf052dc699b79666b9`. Isti potpis `429a2d1b…0abc`, 16 KiB poravnanje potvrđeno. Build završen exit 0.
+- **Sledeće:** instalirati 0.1.22 preko postojeće verzije bez deinstalacije i proveriti reči i testni rewarded oglas na telefonu. Testovi rade sa podacima iz APK-a na desktop Godot-u; fizički telefon nije testiran. Ostaje testni AdMob režim i najviše tri nastavka sa zbirnim skorom.
+
 ## AdMob / tri nastavka — 2026-09-20
 
 - Najviše tri dobrovoljna nastavka u Beskraju. SDK reward pa dismiss vraćaju 100 HP i pauziranu borbu, uz istog protivnika i zbirni skor; nema bodova za revive. Poraz čuva odluku na disku bez nacrta za rang-listu. Jedan konačni nacrt nastaje pri odustajanju ili četvrtom porazu; POŠALJI je i dalje ručan.

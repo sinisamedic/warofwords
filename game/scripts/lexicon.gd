@@ -45,15 +45,22 @@ func _init(load_now: bool = true, code: String = "en") -> void:
 			if adjacent(i,j): around.append(j)
 		neighbors.append(around)
 
-func load_dictionary() -> void:
+func load_dictionary(data_dir: String = "res://data") -> void:
 	var content: String
-	if language != "en":
-		var packed := FileAccess.get_file_as_bytes("res://data/"+("serbian" if language=="sr" else language)+".txt.gz")
-		content = packed.decompress_dynamic(32*1024*1024,FileAccess.COMPRESSION_GZIP).get_string_from_utf8()
+	var basename := "english" if language == "en" else ("serbian" if language == "sr" else language)
+	var plain_path := data_dir.path_join(basename + ".txt")
+	# Android Gradle packaging expands .gz assets and strips their suffix.
+	# Accept the plain packaged file as well as compressed source/legacy exports.
+	if FileAccess.file_exists(plain_path):
+		content = FileAccess.get_file_as_string(plain_path)
 	else:
-		content = FileAccess.get_file_as_string("res://data/english.txt")
+		var packed := FileAccess.get_file_as_bytes(plain_path + ".gz")
+		content = packed.decompress_dynamic(32*1024*1024,FileAccess.COMPRESSION_GZIP).get_string_from_utf8()
+	if content.is_empty():
+		push_error("Dictionary failed to load: " + plain_path)
 	words = content.replace("\r","").to_upper().split("\n",false)
 	words.sort()
+	prefixes.clear()
 	# A short prefix index + binary search avoids millions of Dictionary allocations.
 	for word in words:
 		for n in range(1,mini(3,word.length())+1): prefixes[word.left(n)] = true

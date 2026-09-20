@@ -17,6 +17,12 @@ Generisanje: Python sa `spylls==0.1.7` instaliranim u ignorisani `.local/diction
 
 Akcenti ostaju posebna slova. ß/ẞ → SS, œ/Œ → OE, æ/Æ → AE. SR digrafi LJ/NJ/DŽ ostaju jedna pločica. `languages.gd` definiše redosled, nazive i jezike za obnavljanje partija. `refill-words.json` sadrži poznate reči za dopunu; puna lista proverava unos igrača.
 
+## Android pakovanje — ispravka 0.1.22
+
+Gradle APK 0.1.21 raspakovao je pet `.txt.gz` rečnika u `assets/data/*.txt`, dok je stari loader tražio samo `.gz`. Zbog toga EN radi, a SR/DE/FR/ES/IT odbijaju reči. APK 0.1.20 ima originalne `.gz` putanje. Poređenjem bajtova potvrđeno je da sadržaj rečnika nije promenjen.
+
+Loader od 0.1.22 prihvata običan tekst i gzip. `tools/check-apk-dictionaries.ps1` izvlači svih šest rečnika iz gotovog APK-a, a Godot `test_packaged_dictionaries.gd` poredi sve učitane reči sa izvornim listama i proverava generisanje table i prihvatanje putanje. Provera je obavezan završni korak `tools/build-android.ps1`; samo desktop testovi ne otkrivaju promene putanja pri Android pakovanju.
+
 ## Prevodi
 
 `tools/translations.tsv` sadrži EN ključeve i DE/FR/ES/IT prevode. `tools/build-translations.py` proverava formatne parametre i ažurira `game/data/translations.json`; postojeći SR prevodi ostaju u katalogu. Tehnički nazivi i licence se ne prevode. Novi jezici imaju tekstualni zlatni natpis pobede nad bossom, dok EN/SR zadržavaju već usvojene ilustracije.
