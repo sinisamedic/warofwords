@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/wow-landing-page.**
 
+## Sajt izdvojen u zaseban repo — 2026-09-20
+
+- Novi privatni repo: https://github.com/sinisamedic/wow-website, grana `main`, početni commit `7bf5c29`. Push potvrđen poređenjem lokalnog i udaljenog SHA; radno stablo novog repo-a čisto.
+- Dalje izmene sajta raditi u zasebnom susednom folderu `../WoW Website/`. Ovdašnji `website/` ostaje istorijski snimak; sajt nije objavljen na hosting.
+- Provera izdvojenog sajta: 5 stranica, 101 lokalna referenca. Sledeće: nastaviti otvorene objavne stavke iz README-a novog repo-a.
+
 ## Dorade sajta po komentarima — 2026-09-20
 
 - Naknadna korekcija: logo odmah ispred reči GottaPlay, posle „A game by“. Dvobojni prikaz na svim stranicama: gornji deo zlatan, dva donja svetlo tirkizna; originalni PNG neizmenjen.
