@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-19. Radni naziv. Poslednja eksplicitna korisnička odluka ima prednost.
 
+## Sajt i predstavljanje igre — usvojeno 2026-09-20
+
+- Zvanično predstavljanje i budući društveni profili prvenstveno na engleskom; višejezičnost igre je prednost, ne zaseban nalog za svaki jezik.
+- Izdavač na sajtu: **GottaPlay**. Postojeći domen `gottaplay.net`, landing putanja `/wow/`; korisnik sam kasnije prenosi statički paket. Nije odobrena niti izvršena javna objava tokom izrade.
+- Korisnik traži atraktivan statički sajt, postojeće ilustracije/screenshotove igre, animacije i buduće društvene linkove; lokalni pregled po završetku. Izvor i uputstvo: `website/README.md`.
+- Postojeći Google Play nalog prolazi ponovnu verifikaciju. Email adrese `hello@gottaplay.net` i `privacy@gottaplay.net` još nisu potvrđene; podsetnik pokriva nalog i obe adrese. Ne predstavljati podatkovne zahteve kao operativne dok kontakt i proces nisu provereni.
+- Nagradni oglas za nastavak u Beskraju ostaje **predlog**. Jedan nastavak, procenat zdravlja i uticaj na globalnu listu nisu usvojena konačna pravila; reklamni SDK nije implementiran ovim sajtom.
+
+
 ## Dorade prema probi Beskraja — usvojeno 2026-09-19
 
 Korisnik traži vidljivije pokretne likove/portal/pesak na naslovnoj, kampanjski izgled izbora pojačanja, kratku proslavu uz muziku, rasterećen pogled na borce, talase prema maketi, manju poruku/opremu i uvučene zdravstvene trake. Implementirano: zasebni pokretni likovi Kampanje, rotirajuća alfa slika portala, pojačani dnevni efekti, kompaktne gornje score trake, grupisani talasi sa kvačicama/sjajem/ikonom bossa, sat prema maketi, zlatan obod health barova. Početna priprema koristi isti crtač kao kampanja. Victory muzička fraza koristi postojeći `win.wav`, pod podešavanjem muzike; kratka zlatna najava prati animaciju poraza protivnika. Reduced Motion umiruje kretanje.

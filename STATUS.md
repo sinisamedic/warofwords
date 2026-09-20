@@ -1,6 +1,15 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-19. **Aktivna grana: codex/endless-arena.**
+Ažurirano: 2026-09-20. **Aktivna grana: codex/wow-landing-page.**
+
+## WoW statički sajt — 2026-09-20
+
+- Napravljen engleski `website/wow/` za budući `gottaplay.net/wow/`: navy/gold dizajn, postojeće ilustracije i Godot renderi, animirani uvod/čestice sa Pause motion i reduced-motion podrškom, galerija sa uvećanjem, tri režima, oprema, šest jezika i FAQ. Instagram/TikTok/YouTube su vidljivo „Coming soon“ dok se ne unesu stvarni URL-ovi.
+- Zasebne javne HTML stranice privatnosti, podrške, brisanja podataka i uslova. Izdavač GottaPlay potvrđen. Email adrese vlasnik tek proverava; mailto je neaktivan uz jasno pre-release obaveštenje. Politika opisuje sadašnji Supabase online tok i odsustvo oglasnog SDK-a. Ne tvrdi da je buduća monetizacija već usklađena ili aktivna.
+- AdMob root datoteka pripremljena samo kao neaktivan `app-ads.txt.template`, bez izmišljenog publisher ID-a. Uputstvo u `website/README.md` razdvaja prenos `/wow/`, root `/app-ads.txt` i otvorene Google/app obaveze (kontakt, retention, deletion, target age, Data safety i budući UMP/SDK).
+- Lokalni pregled: `http://127.0.0.1:8765/wow/`. Nije bilo javne objave, izmene servera igre ili novog APK-a. Podsetnik na 72 h dopunjen proverom email adresa uz Google Play verifikaciju.
+- Statička provera: 5 stranica, 95 lokalnih referenci, CSS asseti i JS sintaksa prolaze. Paket sajta oko 2,75 MiB, svi pojedinačni fajlovi ispod 10 MiB. Browser provere: mobilni/desktop raspored, galerija i Escape, FAQ i stranica privatnosti; bez browser console grešaka. Doterana uska mobilna širina Arsenala i čitljivost policy tabele.
+- **Sledeći korak:** korisnički pregled lokalnog sajta. Pre javnog prenosa potvrditi mail adrese, nalog, AdMob zapis, podatkovni/deletion proces i konačnu verziju politike. Zatim uneti prave profile/Play link kada postoje. Nastaviti `codex/wow-landing-page`; prethodni izvor igre potiče sa `codex/endless-arena`.
 
 ## APK 0.1.20 — 2026-09-19
 
