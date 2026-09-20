@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
 
+## Scheduled za videe 02–08 — 2026-09-20
+
+- Korisnik izričito odobrio svih sedam zvučnih videa na Instagramu, TikToku i YouTube-u: 22, 24, 26, 29. septembar i 1, 3, 6. oktobar, u 19:00 Europe/Belgrade.
+- Kreiran i read-back proverom potvrđen ACTIVE thread Scheduled zadatak `gottaplay-objavi-videe-02-08`, naziv „GottaPlay — objavi videe 02–08”, vezan za ovaj razgovor. Recurrence završava posle termina 6. oktobra. Ovo je lokalno pokretanje objavljivanja, ne native zakazivanje na društvenim mrežama.
+- `marketing/first-eight/SCHEDULE.md` sadrži postupak; `SCHEDULE.json` sadrži 7 tačnih SHA256, engleske video-opise i 21 pending platformskih statusa. Za izazove koristi se video tekst sa pauziranjem umesto swipe. Svi video-fajlovi postoje; postupak objavljivanja na tri platforme već potvrđen objavom 01.
+- **Sledeće:** 22. septembra u 19:00 zadatak objavljuje video 02. Računar, Codex i prijave na naloge moraju biti dostupni; u slučaju blokade prijaviti korisniku, ne tvrditi uspeh. Ne pokretati Run now radi ranog objavljivanja. Evidentirati svaki stvarni ishod i link odmah, sprečiti duplikate.
+- Korisnik je rešio problem TikTok prijave. Nije posebno potvrdio brisanje stare TikTok objave, pa taj raniji status ostaje nepromenjen.
+
 ## Ponovna objava 01 sa zvukom — 2026-09-20
 
 - Korisnik je odobrio objavu zvučne verzije 01 i brisanje prethodne. Nova verzija potvrđeno javna na Instagramu, YouTube-u i TikToku; linkovi i dokazi u `marketing/first-eight/PUBLISHED.md`.

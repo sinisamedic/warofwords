@@ -379,3 +379,7 @@ Novi originalni SVG elementi u `game/assets/ui/settings/` generišu se skriptom 
 ### Zvuk u promotivnim objavama — 2026-09-20
 
 Korisnik traži muziku i/ili efekte jer su prve javne objave bez zvuka. Za pregled su pripremljene zvučne verzije svih osam videa sa postojećom CC0 muzikom i originalnim efektima igre. Naknadno je izričito odobrio ponovno objavljivanje prve objave sa ovim videom i brisanje prethodne. Nova verzija 01 je javna na sva tri profila; status uklanjanja prethodnih u `marketing/first-eight/PUBLISHED.md`. Ostalih sedam čeka pregled/odobrenje objave. Lokalni nemi masteri ostaju sačuvani.
+
+### Odobrenje objava 02–08 — 2026-09-20
+
+Korisnik je naknadno odobrio objavljivanje preostalih sedam zvučnih videa na sve tri mreže, utorkom/četvrtkom/subotom u 19:00 od 22. septembra do 6. oktobra. To zamenjuje prethodni status čekanja odobrenja. Svaki materijal ide kao video, uključujući Instagram Reels; za izazove opis koristi pauziranje umesto prevlačenja slajdova. Tačni sadržaji i raspored su u `marketing/first-eight/SCHEDULE.json` i `SCHEDULE.md`. Izvršavanje je podešeno kroz Scheduled ovog razgovora, sa zaštitom od duplikata i obaveznim evidentiranjem stvarnog ishoda.

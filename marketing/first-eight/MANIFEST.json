@@ -45,6 +45,16 @@
     "sha256": "350d3b3de8155c111ad7fa28f3f6264a70b26c1a5f2dae203f26ce3ed37ed302"
   },
   {
+    "path": "SCHEDULE.json",
+    "bytes": 10783,
+    "sha256": "5b9d6a07eb893c4e2d87c181a309b093d63adc0109943878a664f0101379f1e1"
+  },
+  {
+    "path": "SCHEDULE.md",
+    "bytes": 3935,
+    "sha256": "047095fae21369a7bb0e8b3f5951280324c3420745969f947070b6e8ee748836"
+  },
+  {
     "path": "SCREEN-TEXT.md",
     "bytes": 3361,
     "sha256": "2fc0a40afd3017a171b9dda1f0322c259a526283ac1177f6cbf4bf76cd2bdfac"
