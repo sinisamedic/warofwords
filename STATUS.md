@@ -4,9 +4,9 @@ Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
 
 ## Prva GottaPlay objava — 2026-09-20
 
-- Korisnik je odobrio objavu 01 na sva tri profila. Instagram Reel i YouTube Shorts su potvrđeno objavljeni; TikTok video je poslat za javnu objavu i trenutno je „Content under review” (privremeno Only me).
+- Korisnik je odobrio objavu 01 na sva tri profila. Instagram Reel, YouTube Shorts i TikTok video su potvrđeno javno objavljeni. TikTok je posle kratke moderacije prešao na „Everyone”.
 - Linkovi, tekstovi, oznake i dokaz ishoda: `marketing/first-eight/PUBLISHED.md`. Nema zakazivanja ni objave preostalih sedam.
-- **Sledeće:** proveriti završetak TikTok moderacije za postojeći ID `7687637766858984712`; ne praviti duplikat. Ostale objave čekaju korisnički pregled/nov nalog za objavu. Prethodni odeljak opisuje pripremu paketa pre ovog odobrenja.
+- **Sledeće:** korisnički pregled tri javne objave preko linkova u evidenciji. Ostale objave čekaju korisnički pregled/nov nalog za objavu. Prethodni odeljak opisuje pripremu paketa pre ovog odobrenja.
 
 ## GottaPlay — prvih osam objava za pregled, 2026-09-20
 
