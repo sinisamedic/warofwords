@@ -1,6 +1,15 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-20. **Aktivna grana: codex/admob-endless.**
+Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
+
+## GottaPlay — prvih osam objava za pregled, 2026-09-20
+
+- Paket u `marketing/first-eight/`: lokalna galerija `index.html`, engleski tekstovi za sve tri mreže, predlog ritma za tri nedelje, PNG 4:5 i MP4 9:16. Predstavljanje, stvarni potez, dva izazova, režimi, strategija energije, animacija heroja i jezici. Ništa nije objavljeno niti zakazano.
+- Potvrđeni profili po korisniku: TikTok `@gottaplaygames`, Instagram `@gotta.play_games`, YouTube `@gottaplay_games`; svetli logo na sva tri. Ovo zamenjuje raniju belešku da nalozi nisu kreirani. Paleta B iz susednog `WoW Website/brand/palette-b/`.
+- Novi stvarni Godot snimak aktuelnog izvora 0.1.22: normalna tutorijal tabla, automatizovan legalni STONE potez, 72 → 65 HP, bez nameštanja rezultata ili online upisa. Desktop render, ne fizički Android snimak. Oba odgovora izazova potvrđena aktuelnim rečnikom i pravilima. Poreklo, ograničenja i reprodukcija u `PROVENANCE.md`.
+- Predlog rasporeda nije usvojeni datum. Sajt `gottaplay.net/wow/` nije potvrđen kao javno objavljen. Ne najavljuje se dostupnost na Google Play-u niti rok izlaska. Video nema audio traku.
+- Provere paketa: osam MP4, svih 13 PNG slajdova, formati/trajanja i potpuno dekodiranje prolaze; pregledani slajdovi i početni/završni video kadrovi. Svi pojedinačni fajlovi ispod 2 MiB, običan Git bez novih LFS obrazaca. Ugrađeni browser pada pri video reprodukciji, pa galerija ima naslovne slike i download linkove za lokalni plejer; sama reprodukcija u njemu nije potvrđena. Godot lokalna log/certificate upozorenja dokumentovana su u poreklu.
+- **Tačan sledeći korak:** pregledati galeriju i dati izmene po brojevima 01–08; tek posle novog eksplicitnog naloga razmatrati objavu. Razvoj igre ostaje zasnovan na `61ae882` sa `codex/admob-endless`; ovaj paket ne menja runtime igre niti pravi APK.
 
 ## Potvrda na telefonu — 2026-09-20
 

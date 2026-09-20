@@ -1,0 +1,277 @@
+[
+  {
+    "path": "CONTENT-AND-SCHEDULE.md",
+    "bytes": 13560,
+    "sha256": "027d52c1e49cc5d5137b5a262d57cec4b76474e269ad9cd8a30348765704de67"
+  },
+  {
+    "path": "index.html",
+    "bytes": 15513,
+    "sha256": "e3f0a49f7ebb901c64d417fe6afc8c9a9267404a58dc310b06be33a8a22c282e"
+  },
+  {
+    "path": "overview.jpg",
+    "bytes": 451500,
+    "sha256": "c28e984f0e59c16b93332bf2db85c2a5ecbcb7a8e419adcad38677bf80fb7d73"
+  },
+  {
+    "path": "posts.json",
+    "bytes": 8332,
+    "sha256": "62e2e8366fb0bbe5b3d32a925ef12fcd98befa61d2320de2a587fa2766793379"
+  },
+  {
+    "path": "PROVENANCE.md",
+    "bytes": 5196,
+    "sha256": "7b3cd4ae633e2111e9a06940ff871fdc5de61bbec1eee3398d6d456d8afbafbc"
+  },
+  {
+    "path": "SCREEN-TEXT.md",
+    "bytes": 3361,
+    "sha256": "2fc0a40afd3017a171b9dda1f0322c259a526283ac1177f6cbf4bf76cd2bdfac"
+  },
+  {
+    "path": "01-meet-the-game/cover-9x16.jpg",
+    "bytes": 308308,
+    "sha256": "f80562e7241d27f1764964caee198c417a5ed93a5a368932327f2c6f3695b1f3"
+  },
+  {
+    "path": "01-meet-the-game/ig-01.png",
+    "bytes": 1220214,
+    "sha256": "6186857dbb59f64ef75ee40636369ec9e3e6852189283dfe2d0b9f459b9e31da"
+  },
+  {
+    "path": "01-meet-the-game/preview.webm",
+    "bytes": 468942,
+    "sha256": "debabddbf14a2e40cddedfe9eee9d4b9615afbd32d1d528ca877ca730ad572a2"
+  },
+  {
+    "path": "01-meet-the-game/video-9x16.mp4",
+    "bytes": 1383646,
+    "sha256": "8041b0811f2183cbb601d4cc61dcb0717af5d6e3f9c37ee7f9ddce8cebfc4620"
+  },
+  {
+    "path": "02-one-real-move/cover-9x16.jpg",
+    "bytes": 336725,
+    "sha256": "5490fa9ad83c9c6af922800a021822f7a5f546e124d7da4a9796d9c4d7b20b17"
+  },
+  {
+    "path": "02-one-real-move/ig-01.png",
+    "bytes": 1315973,
+    "sha256": "d29c1e72a48125db9234557b52235a0459a4f5324b98acb18454a92e4ce2bec7"
+  },
+  {
+    "path": "02-one-real-move/preview.webm",
+    "bytes": 367384,
+    "sha256": "d222bade69f4635c42360437d2774d975d3884f26a7421e285d736810a731d0e"
+  },
+  {
+    "path": "02-one-real-move/video-9x16.mp4",
+    "bytes": 981875,
+    "sha256": "108d12621c52f6a15d50bb60630e99f9acf909aa2013ed7b55745125bd6328ef"
+  },
+  {
+    "path": "03-find-five/cover-9x16.jpg",
+    "bytes": 189372,
+    "sha256": "9332b5e177bca99ae7436ff892340e22a01657caaf45c043dc663e91de1ed4c9"
+  },
+  {
+    "path": "03-find-five/ig-01.png",
+    "bytes": 821795,
+    "sha256": "7aa1211da7484f0b759dfb20204338bd1142bb4f6b8674364bd502505db034e9"
+  },
+  {
+    "path": "03-find-five/ig-02.png",
+    "bytes": 839381,
+    "sha256": "e6aff6e5084f11ff243b5859deb7b9fc4812421b6f427c9e257a0749cb97afa5"
+  },
+  {
+    "path": "03-find-five/preview.webm",
+    "bytes": 183828,
+    "sha256": "0dcd07796d2cd1ef04109e79f06101e3fdc73dc283ecc537b111d9117a4d20c4"
+  },
+  {
+    "path": "03-find-five/video-9x16.mp4",
+    "bytes": 368504,
+    "sha256": "412ad0ebddd56c9ad6b4e46a84c6d1dcdcbdadc19e8eaf57d8c968faad4bf83f"
+  },
+  {
+    "path": "04-choose-your-mode/cover-9x16.jpg",
+    "bytes": 237514,
+    "sha256": "a803a2dcc0184546b499d250ffb84635cfb982b3c313f7aaa4b96560e6d0cbfa"
+  },
+  {
+    "path": "04-choose-your-mode/ig-01.png",
+    "bytes": 1288761,
+    "sha256": "3266a6dbfaf2af7f434917eb2349c163d8245ac3f2e115928043d3f9859c8b49"
+  },
+  {
+    "path": "04-choose-your-mode/ig-02.png",
+    "bytes": 1109107,
+    "sha256": "1279b7407538a965e41c974140fdb8d38ec177ecd399fff5002de5979ec27dbc"
+  },
+  {
+    "path": "04-choose-your-mode/ig-03.png",
+    "bytes": 1256260,
+    "sha256": "66c5c73cf71093592730a03aed949656065abf5256a18cb68acfb9f46a3fbb2e"
+  },
+  {
+    "path": "04-choose-your-mode/preview.webm",
+    "bytes": 294330,
+    "sha256": "3bca6dcc4d059acee9fce1f4b3465371d13cd7167200736c260788f07ac2ec45"
+  },
+  {
+    "path": "04-choose-your-mode/video-9x16.mp4",
+    "bytes": 826222,
+    "sha256": "2ac7f93889abe0189a8e9e6c1671ff0e4d32505b7bb3b31c70c3512f1d662995"
+  },
+  {
+    "path": "05-read-the-colors/cover-9x16.jpg",
+    "bytes": 260327,
+    "sha256": "c4dc8cf1f89c319a195fbde44ac46c55859275074099e119c874b841e081ea7f"
+  },
+  {
+    "path": "05-read-the-colors/ig-01.png",
+    "bytes": 1307155,
+    "sha256": "31e2c640014ee71ff2bad9a75d906c98d0dda0ceb86ff23f1fd6163463ddcde2"
+  },
+  {
+    "path": "05-read-the-colors/ig-02.png",
+    "bytes": 70279,
+    "sha256": "ec7d4c043890e9c651ced1e196ed5b0fa9f657180cf5fccd1d4ba40e317dcdde"
+  },
+  {
+    "path": "05-read-the-colors/preview.webm",
+    "bytes": 154739,
+    "sha256": "0ef572ab74034f09b3e7b1525e9b86372b8f6e191937c21cfe19d5222c5b6465"
+  },
+  {
+    "path": "05-read-the-colors/video-9x16.mp4",
+    "bytes": 354334,
+    "sha256": "1e87965e3a3b955bf5798903c00e3904b074852b5b8b7fd9a8e684aabf0dc9a9"
+  },
+  {
+    "path": "06-behind-the-hero/cover-9x16.jpg",
+    "bytes": 124918,
+    "sha256": "e46e069fd225611b52429fcc2a32d995814827915f1f9c1f03aea0baa8d43a6c"
+  },
+  {
+    "path": "06-behind-the-hero/ig-01.png",
+    "bytes": 528671,
+    "sha256": "1d4965e199fd58cc94f715e59b4bbb3bc3f875df138cbfb835c91e83620bab51"
+  },
+  {
+    "path": "06-behind-the-hero/preview.webm",
+    "bytes": 478568,
+    "sha256": "f09012315ad4d570f98c78472edd3e12a8012d91a148aac2f112dc4014386781"
+  },
+  {
+    "path": "06-behind-the-hero/video-9x16.mp4",
+    "bytes": 1552770,
+    "sha256": "0a92948e628a949403835a78e6a95749260ac6c138baea571f6660d56871dd73"
+  },
+  {
+    "path": "07-find-six/cover-9x16.jpg",
+    "bytes": 188846,
+    "sha256": "7ed88de0877fbc8950b98890b2c896ff2271381cacccc4e158bf166b2bd89d1b"
+  },
+  {
+    "path": "07-find-six/ig-01.png",
+    "bytes": 822864,
+    "sha256": "1a4a4a1a7cf6a236ec920203c2cab6cf6c1bc3cec22ea26edd81c1ba6c8d117b"
+  },
+  {
+    "path": "07-find-six/ig-02.png",
+    "bytes": 826327,
+    "sha256": "9472fb948b74fb2c568fc61023a46bd2873d09d5142d4ed1c9553a17314ce8cf"
+  },
+  {
+    "path": "07-find-six/preview.webm",
+    "bytes": 176281,
+    "sha256": "e2411731efd4a2d81ea7e584fc272636d5a7a5760a9a025e6fcd01e89a529184"
+  },
+  {
+    "path": "07-find-six/video-9x16.mp4",
+    "bytes": 357913,
+    "sha256": "7138332432d043de357134217e3308b44695ee1b742e66632426995c44fc0388"
+  },
+  {
+    "path": "08-pick-your-language/cover-9x16.jpg",
+    "bytes": 197237,
+    "sha256": "02b8f96ff898cffa89fcddfbf89a2145ee5e493d0dab0612687d83bc9abf3394"
+  },
+  {
+    "path": "08-pick-your-language/ig-01.png",
+    "bytes": 713938,
+    "sha256": "404762097e2ed02a50afadf24f6b40187036a8472e72432d65a49390ca82ac32"
+  },
+  {
+    "path": "08-pick-your-language/preview.webm",
+    "bytes": 160460,
+    "sha256": "2a704bb359fa3faef83c7a6646365277a6f7692f6c767a52baa00296aad60476"
+  },
+  {
+    "path": "08-pick-your-language/video-9x16.mp4",
+    "bytes": 350555,
+    "sha256": "530dc08a852217cc46d6617a58f60c122dd49a983f9804d9931eff0403c56e94"
+  },
+  {
+    "path": "source/board.png",
+    "bytes": 1829668,
+    "sha256": "afadda42d5edcfba230eb1bdbe19eb6603bb714e13468921adc0c4a6bd3e45f9"
+  },
+  {
+    "path": "source/build.py",
+    "bytes": 21793,
+    "sha256": "4f62674c6cb77f1675dc6ed12a6df56f4470c826f0565b908991079676a8e641"
+  },
+  {
+    "path": "source/capture-evidence.json",
+    "bytes": 9002,
+    "sha256": "3b9179550eb388a36750534c116c4c629bf8596a4e0163e24e4e4838b2f0c3d7"
+  },
+  {
+    "path": "source/capture.gd",
+    "bytes": 2300,
+    "sha256": "015c837c7654ff1b147149672bda82b1ebb8afd5dc3e323dae5bf963444abe06"
+  },
+  {
+    "path": "source/home.png",
+    "bytes": 1725429,
+    "sha256": "b404c67fb57fe8b764c0953a7415c9d592246538ceea3d248bfc67dd2de1a570"
+  },
+  {
+    "path": "source/settings.png",
+    "bytes": 900047,
+    "sha256": "e0f5aa5fcb8fdfe30c5871b2a23846cc6d9be402ec6972235204758992b33868"
+  },
+  {
+    "path": "source/stone-impact.png",
+    "bytes": 1834326,
+    "sha256": "2bb96fa075f8f545feddf4475defa376702fdc967e614975ee7949ec15e1890a"
+  },
+  {
+    "path": "source/stone-selected.png",
+    "bytes": 1831669,
+    "sha256": "0777d193dbb0d5a27e0902c75d07d4c17ea9f342036455978ad5c36756b19b38"
+  },
+  {
+    "path": "source/symbol-dark.png",
+    "bytes": 16020,
+    "sha256": "1ea69d34442dbdedda71ff2e4bb8adff74ac1db8c58ed084e0c5e99aee3b5642"
+  },
+  {
+    "path": "source/symbol-light.png",
+    "bytes": 16031,
+    "sha256": "01f5f8430ffa4be70a0fc1284b3c9cd959086605b24a5ab472e24b59b8e7c2e1"
+  },
+  {
+    "path": "source/verify-challenges.gd",
+    "bytes": 564,
+    "sha256": "cc99c282ef35c6ec4558eb0e7de80f34fad39f81cd9efe12266bee3469485346"
+  },
+  {
+    "path": "source/verify-media.py",
+    "bytes": 3247,
+    "sha256": "bb45b9803189b0af562e2ff87736b03d34e88bfb042eb274d5ffba400a8c7aeb"
+  }
+]

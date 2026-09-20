@@ -1,5 +1,12 @@
 # War of Words — dizajn igre
 
+## GottaPlay profili i promotivni materijali — usvojeni okvir 2026-09-20
+
+- GottaPlay je zajednički brend sadašnjih i budućih igara. Prvih osam objava prvenstveno predstavlja War of Words. Komunikacija sa korisnikom je na srpskom, sadržaj za publiku na engleskom.
+- Korisnik potvrđuje TikTok `@gottaplaygames`, Instagram `@gotta.play_games`, YouTube `@gottaplay_games` i svetli logo na sva tri naloga; TikTok je završio lično. Paleta B: narandžasta/tamnoplava za svetlu, narandžasta/topla bela za tamnu pozadinu. Masteri su u susednom `WoW Website/brand/palette-b/`.
+- Vertikalni video 9:16, Instagram slike/karuseli 4:5. Gameplay mora prikazivati stvarnu igru; bez izmišljenih funkcija, rezultata ili reakcija publike. Samo materijali sa dokumentovanim poreklom. Android u razvoju/testiranju; bez potvrde nema datuma izlaska ili Google Play dostupnosti. Planirana adresa `gottaplay.net/wow/` nije dokaz objavljenog sajta.
+- `marketing/first-eight/` sadrži konkretan paket za pregled. Kreativna rešenja, redosled, ritam i tekstovi su **predlog**, ne odobrena javna kampanja. Nije odobreno objavljivanje niti zakazivanje.
+
 ## Beskraj: nagrađeni nastavci — usvojeno 2026-09-20
 
 - Korisnik je odobrio AdMob integraciju i najviše tri nastavka po jednoj partiji. Nagrada vraća puno zdravlje; trenutni protivnik i bodovi ostaju. Bodovi se sabiraju kroz celu partiju, a rezultat se ne priprema za slanje na prvoj pogibiji. Konačan rezultat nastaje tek pri odustajanju ili nakon iscrpljena tri nastavka i narednog poraza; slanje je i dalje isključivo ručno.
