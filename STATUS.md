@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
 
+## Ponovna objava 01 sa zvukom — 2026-09-20
+
+- Korisnik je odobrio objavu zvučne verzije 01 i brisanje prethodne. Nova verzija potvrđeno javna na Instagramu, YouTube-u i TikToku; linkovi i dokazi u `marketing/first-eight/PUBLISHED.md`.
+- Stara Instagram objava obrisana, profil ima samo novi Reel. TikTok web blokira Delete za commercial content i zahteva mobilnu aplikaciju; stara verzija još postoji.
+- Stara YouTube objava `Bvd6KkAlYR8` trajno obrisana posle dodatne korisničke potvrde; Shorts lista sadrži samo novi video.
+- **Sledeći korak:** staru TikTok objavu `7687637766858984712` ukloniti u mobilnoj aplikaciji. Preostalih sedam objava nije objavljeno niti zakazano.
+- Odeljci ispod čuvaju istoriju prethodnih faza; novi javni video je `01-meet-the-game/video-9x16-audio.mp4`.
+
 ## Zvuk za GottaPlay objave — 2026-09-20
 
 - Na korisnički zahtev svih osam videa dobilo je zasebnu `video-9x16-audio.mp4` verziju: postojeća CC0 muzika i originalni efekti igre u gameplay klipovima 01/02/06. Nemi masteri su sačuvani.

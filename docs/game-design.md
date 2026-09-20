@@ -378,4 +378,4 @@ Novi originalni SVG elementi u `game/assets/ui/settings/` generišu se skriptom 
 
 ### Zvuk u promotivnim objavama — 2026-09-20
 
-Korisnik traži muziku i/ili efekte jer su prve javne objave bez zvuka. Za pregled su pripremljene zvučne verzije svih osam videa sa postojećom CC0 muzikom i originalnim efektima igre. Konkretan miks ostaje predlog za slušni pregled. Nije odobreno brisanje ili dupliranje već objavljenih videa; neme verzije i evidencija njihove objave ostaju sačuvane. Detalji u `marketing/first-eight/AUDIO.md`.
+Korisnik traži muziku i/ili efekte jer su prve javne objave bez zvuka. Za pregled su pripremljene zvučne verzije svih osam videa sa postojećom CC0 muzikom i originalnim efektima igre. Naknadno je izričito odobrio ponovno objavljivanje prve objave sa ovim videom i brisanje prethodne. Nova verzija 01 je javna na sva tri profila; status uklanjanja prethodnih u `marketing/first-eight/PUBLISHED.md`. Ostalih sedam čeka pregled/odobrenje objave. Lokalni nemi masteri ostaju sačuvani.
