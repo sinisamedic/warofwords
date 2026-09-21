@@ -67,10 +67,10 @@ if (-not (Test-Path -LiteralPath $template)) {
 }
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
-$apk = Join-Path $outputDir 'WarOfWords-0.1.22-android.apk'
+$apk = Join-Path $outputDir 'WarOfWords-0.1.23-android.apk'
 if ($UnsignedCheck) {
     # Validate export without signing the artifact with this machine's new debug key.
-    $apk = Join-Path $repo '.local/WarOfWords-0.1.22-UNSIGNED-CHECK.apk'
+    $apk = Join-Path $repo '.local/WarOfWords-0.1.23-UNSIGNED-CHECK.apk'
     $presetPath = Join-Path $project 'export_presets.cfg'
     $presetBytes = [IO.File]::ReadAllBytes($presetPath)
     $presetText = [Text.Encoding]::UTF8.GetString($presetBytes)

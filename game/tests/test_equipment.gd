@@ -8,9 +8,11 @@ func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	g=load("res://main.tscn").instantiate(); g.save.path="res://../.local/equipment-test-save.json"; root.add_child(g)
 	while g.loading: await process_frame
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
 	g.save.path="res://../.local/equipment-test-save.json"
-	g.save.data=g.save.defaults(); g.save.data.tutorial=true; g.save.data.unlocked=11
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true; g.save.data.unlocked=11
 	check(g.Equipment.loadout(g.save.data)==["pulse","aegis","arc","mend"],"fresh install keeps the familiar starting equipment")
 	g.change_screen("arsenal"); g.arsenal_slot=1; g.arsenal_choice=1; g.dispatch("gear_equip")
 	check(g.Equipment.loadout(g.save.data)[1]=="aegis","locked Mirror cannot equip")
@@ -96,7 +98,7 @@ func run() -> void:
 	for pair in [[2,"bloom"],[3,"breach"],[5,"seal"],[7,"mirror"],[9,"reserve"]]:
 		check(g.Equipment.mission_reward(pair[0])==pair[1],"campaign preview matches real reward for encounter %d" % (pair[0]+1))
 	check(g.Equipment.mission_reward(0).is_empty(),"ordinary encounter does not promise equipment")
-	g.save.data=g.save.defaults(); g.save.data.unlocked=11; g.save.data.tutorial=true
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.unlocked=11; g.save.data.tutorial=true
 	g.mission=3; await g.start_battle(); g.best_tiles=7; g.finish(true)
 	check(g.save.data.pending_unlocks==["breach","lexicon"],"one victory queues both the level reward and the word achievement")
 	var coins_after_unlock: int=g.save.data.coins

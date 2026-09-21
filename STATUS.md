@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-21. **Aktivna grana: codex/age-aware-play.**
 
+## APK 0.1.23 — 2026-09-21
+
+- Napravljen `exports/WarOfWords-0.1.23-android.apk`, versionCode 24, novi paket `com.gottaplay.warofwords`. Instalira se kao zasebna aplikacija uz raniji `com.sinisamedic.warofwords`; ne preuzima automatski njegov napredak. Postojeći potpis zadržan (`429a2d1b…0abc`).
+- Sadrži tri uzrasne grupe, početni jezik uređaja, offline režim mlađih i G/PG razdvajanje oglasa. Testni oglasi ostaju uključeni. Nije Play izdanje.
+- Pun build/test tok završen exit 0: 4.485 PASS linija igre i 24 provere rečnika iz gotovog APK-a. Test opreme dobio eksplicitan adult profil za proveru cold-start nagrade, uz zatvaranje početnog uzrasnog modala. Potpis, 16 KiB poravnanje, API 24–36, ARM64/x86_64 potvrđeni. Poznata ObjectDB/resource upozorenja pri gašenju pojedinih testova ostaju.
+- SHA256 `9e019f74aa080a85186ac5a66fbc29a3c792c9b4c544e44e8d60141a2c957cbc`, 267.760.978 bajtova.
+- Sledeće: korisnički test na telefonu (početni jezik, izbor uzrasta, offline mlađi, rewarded za starije). ADB nije imao povezan uređaj; native tagovi i UMP nisu potvrđeni ovim build-om. Sajt/Play nisu objavljeni.
+
 ## Oglasi razdvojeni po uzrastu — 2026-09-21
 
 - Za 13–17 ostaju TFUA true i G; 18+ TFUA false i PG (G/PG sadržaj), prema plafonu Families mixed-audience aplikacije. Mlađi/nepoznati bez oglasa. Korisnik je tražio proširenje ponude za odrasle.

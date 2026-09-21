@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**Aktuelni razvojni APK 0.1.23 / code 24:** `exports/WarOfWords-0.1.23-android.apk`. Izbor uzrasta, jezik uređaja i razdvojeni oglasi (testni režim). Novi paket `com.gottaplay.warofwords`: zasebna aplikacija pored stare, bez automatskog prenosa napretka. Pun build, rečnici iz APK-a, potpis i poravnanje provereni; test na telefonu tek sledi. Detalji u STATUS.md; niže su istorijske beleške.
+
 **Razvojni APK 0.1.21 / code 22:** `exports/WarOfWords-0.1.21-android.apk`, AdMob testni oglasi i tri nastavka u Beskraju. Isti potpis kao 0.1.20; instalira se preko nje. Desktop provere i Android paket su provereni; stvarni test oglasa na telefonu još predstoji. [Integracija i produkcioni uslovi](admob.md).
 
 Od ove verzije potreban je **Gradle export**. Pre prvog build-a pokrenuti `tools/prepare-android-gradle.ps1 -TemplatesArchive <zvanicni-Godot-4.7.2-tpz>`; build skripta to automatski radi ako je arhiva u `.local/downloads/godot-templates.tpz`. Potrebni su SDK platform 36 i build-tools 36.1.0. Maven/Gradle keš i `game/android/` su lokalni. Na ovom računaru Java koristi Windows-ROOT trust store zbog postojeće HTTPS inspekcije (bez isključivanja TLS validacije). Prvi build preuzima zavisnosti. Ako Godot console wrapper ostane otvoren posle `[ DONE ] export`, završiti namenski Gradle daemon (`gradlew.bat --stop` uz isti GRADLE_USER_HOME).
