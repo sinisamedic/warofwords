@@ -38,7 +38,7 @@ static func home(c) -> void:
 	c.draw_texture_rect(preload("res://assets/ui/settings/question.svg"),Rect2(78,15,48,48),false)
 	c.buttons.append({"rect":Rect2(78,15,48,48),"id":"credits","value":-1,"enabled":true})
 	c.coin_counter(Rect2(c.size.x-179,16,159,46))
-	var names := ["CAMPAIGN","ENDLESS WORDS","DAILY CHALLENGE"]
+	var names := ["CAMPAIGN","ENDLESS WORDS","DAILY CHALLENGE" if c.online_allowed() else c.age_text("practice")]
 	var ids := ["campaign","endless_entry","daily"]
 	for i in 3:
 		var r := card_rect(c,i)
@@ -66,7 +66,7 @@ static func home(c) -> void:
 					c.draw_circle(at,1.8,Color("fff0a0"))
 		c.draw_line(Vector2(r.position.x+10,art.end.y),Vector2(r.end.x-10,art.end.y),GOLD,1)
 		c.text(names[i],Rect2(r.position.x+12,art.end.y+3,r.size.x-24,34),24,CREAM,true)
-		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best score: %d") % c.endless_record().get("score",0) if i==1 else c.t("A new challenge every day")
+		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best score: %d") % c.endless_record().get("score",0) if i==1 else c.t("A new challenge every day") if c.online_allowed() else c.age_text("records")
 		c.text(status,Rect2(r.position.x+12,art.end.y+37,r.size.x-24,24),17)
 		var resume: bool=not c.save.data.battle.is_empty() if i==0 else not c.save.data.endless.is_empty() if i==1 else false
 		c.action("CONTINUE DUEL" if resume and i==0 else "CONTINUE RUN" if resume else ["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],Rect2(r.position.x+10,r.end.y-52,r.size.x-20,42),"continue" if resume and i==0 else ids[i],-1,true)

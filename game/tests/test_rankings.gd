@@ -9,7 +9,9 @@ func touch(control: Control) -> void:
 func run() -> void:
 	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/rank-test.json"; root.add_child(g)
 	while g.loading: await process_frame
-	g.set_process(false); g.save.data=g.save.defaults(); g.save.data.tutorial=true
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
+	g.set_process(false); g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true
 	g.daily_screen.profile_path="res://../.local/rank-test-profile.json"; g.daily_screen.local_nickname="Zapamceno ime"
 	g.rankings.queue_free(); var service=load("res://tests/mock_rank_service.gd").new(); service.host=g; g.add_child(service); g.rankings=service; g.online_writes_enabled=true
 	service.enqueue({"score":1400,"wave":3,"words":14,"seconds":80,"language":"sr","adjacent":true})

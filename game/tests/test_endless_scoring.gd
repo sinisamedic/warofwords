@@ -9,8 +9,10 @@ func run() -> void:
 	create_timer(60).timeout.connect(func(): quit(2))
 	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/test-endless-scoring.json"; root.add_child(g)
 	while g.loading: await process_frame
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
-	g.save.data=g.save.defaults(); g.save.data.tutorial=true
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true
 	await g.start_endless(); g.foe_max=5000; g.foe_hp=5000; g.foe_guard=false
 	g.endless_score=0
 	g.lex.letters.assign(Array("STONESTREAMLINEPLANETCARDSEN".split("")))

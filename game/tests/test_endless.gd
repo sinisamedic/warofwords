@@ -9,8 +9,10 @@ func run() -> void:
 	create_timer(80).timeout.connect(func(): push_error("Endless test timeout"); quit(2))
 	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/test-endless.json"; root.add_child(g)
 	while g.loading: await process_frame
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
-	g.save.data=g.save.defaults(); g.save.data.tutorial=true
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true
 	for ch in "ČĆŠŽĐčćšžđ": check(g.font.has_char(ch.unicode_at(0)),"Lora glyph "+ch)
 	for w in 25:
 		var mission: int=g.Endless.opponent(w+1)

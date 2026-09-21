@@ -18,8 +18,10 @@ func check(ok: bool, label: String) -> void:
 func run() -> void:
 	g=load("res://main.tscn").instantiate(); g.save.path="res://../.local/ui-polish-test.json"; root.add_child(g)
 	while g.loading: await process_frame
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
-	g.save.data=g.save.defaults(); g.save.data.tutorial=true; g.save.data.unlocked=23
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true; g.save.data.unlocked=23
 	for mission in [2,3,5,7,9,12,14,16,19]:
 		g.mission=mission; g.change_screen("campaign")
 		var before: String=JSON.stringify(g.save.data)

@@ -1,6 +1,16 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-21. **Aktivna grana: codex/gottaplay-first-eight.**
+Ažurirano: 2026-09-21. **Aktivna grana: codex/age-aware-play.**
+
+## Pregled pravila po uzrastu — 2026-09-21
+
+- Implementiran neutralni izbor uzrasta bez preselektovanja, lokalno pamćenje grupe i navy/gold ekrani u šest jezika sa postojećim okvirima i ornamentima. Nepoznat/oštećen uzrast blokira oglase i mrežu. Stariji save traži izbor bez resetovanja napretka.
+- Mlađi od 13: Kampanja/Beskraj, lokalni rekordi i offline vežba; jasno objašnjenje na ekranu privatnosti, vežbe i rekorda. Bez HTTP zahteva (uključujući čitanje lista), oglasnog backend-a, upisa rezultata i nastavka posle poraza. Nema besplatnih nastavaka. Vežba sada čuva lokalni rekord. Stara pending defeat partija ne može zaobići ograničenje.
+- 13+: online tok ostaje; do tri nastavka isključivo po SDK nagradi pa zatvaranju oglasa. Za sve mlađe od 18 postavljen konzervativni TFUA u UMP/oglasnom zahtevu i rating G. Test ads ostaje uključen; native SDK ponašanje/produkcioni UMP tek proveriti u narednom Android paketu.
+- Devet test skripti (age, rewarded, rankings, languages, UI polish, game, endless, scoring, daily) uspešno, ukupno 4.225 PASS linija. Godot renderi 19 ekrana u `.local/age-render/`; popravljeno prelamanje dužih prevoda. Nema script grešaka u završnim proverenim logovima; poznato lokalno root-certificate upozorenje i ObjectDB upozorenja ranijih testova ostaju.
+- Pokrenut **desktop Godot pregled**, ne Android emulator: `game/tests/preview_age.gd`, izolovan save i blokirana mreža. F1 vraća izbor uzrasta; F2 prikazuje probni poraz u Beskraju. Nema novog APK/AAB-a niti pravih oglasa u desktop pregledu.
+- Sajt je ažuriran u zasebnom `../WoW Website/`: generator + četiri javne pomoćne stranice, `docs/play-declarations.md` kao interni nacrt. Provera 5 stranica / 97 referenci prolazi. Tekst razlikuje pripremanu verziju od postojećeg APK-a 0.1.22; sajt i Play deklaracije nisu objavljeni/poslati, backend nije menjan.
+- **Sledeće:** korisnički pregled ekrana i toka. Tek potom Android build/provera prenosa SDK age tagova, stvarnog oglasa, UMP i mrežne izolacije mlađih; pre produkcije ostaju javna politika, retention/deletion proces, Families/SDK/rečnici i konačan Data safety/IARC.
 
 ## Google Play unos — 2026-09-21
 

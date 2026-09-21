@@ -55,6 +55,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Daily challenge tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Refill regression/benchmark failed.' }
 & $Godot --headless --path $project --script res://tests/test_rewarded_continue.gd
 if ($LASTEXITCODE -ne 0) { throw 'Rewarded continue tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_age_policy.gd
+if ($LASTEXITCODE -ne 0) { throw 'Age access tests failed.' }
 if ($TestOnly) { exit 0 }
 if (-not (Test-Path -LiteralPath (Join-Path $project 'android/build/build.gradle'))) {
     & (Join-Path $PSScriptRoot 'prepare-android-gradle.ps1')

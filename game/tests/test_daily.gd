@@ -44,9 +44,11 @@ func run_tests() -> void:
 	file.store_string(JSON.stringify(fixtures)); file.close()
 	var game=load("res://main.tscn").instantiate(); root.add_child(game)
 	while game.loading: await process_frame
+	if is_instance_valid(game.age_screen): game.age_screen.kind="info"; game.age_screen.leave()
+	await process_frame
 	game.music.set_enabled(false); game.sfx.enabled=false
 	game.save.path="res://../.local/daily-campaign-test.json"
-	game.save.data=game.save.defaults(); game.save.data.tutorial=true
+	game.save.data=game.save.defaults(); game.save.data.age_group="adult"; game.save.data.tutorial=true
 	game.start_battle()
 	var original=game.save.data.duplicate(true)
 	var original_board: Array=game.lex.letters.duplicate()
@@ -101,7 +103,9 @@ func run_tests() -> void:
 	check(daily.mode=="confirm_leave","leaving asks before ending active play")
 	daily.deadline=Time.get_ticks_msec()-1; daily._process(0)
 	check(daily.mode=="result" and not daily.ranked,"practice finishes without upload")
-	check(game.save.data==original,"practice result leaves campaign untouched")
+	var without_practice: Dictionary=game.save.data.duplicate(true)
+	without_practice.practice_records=original.practice_records
+	check(without_practice==original and not game.save.data.practice_records.is_empty(),"practice record saved while campaign stays untouched")
 	daily.close_screen()
 	check(not Input.emulate_mouse_from_touch,"campaign touch handling restored after daily")
 	game.queue_free(); await process_frame; await create_timer(.2).timeout

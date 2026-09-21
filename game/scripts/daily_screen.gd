@@ -46,7 +46,7 @@ func tr_daily(en: String, sr: String) -> String:
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
-	service=Service.new(); add_child(service)
+	service=Service.new(); service.access_allowed=host.online_allowed; add_child(service)
 	ui=Control.new(); ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.mouse_filter=Control.MOUSE_FILTER_IGNORE; add_child(ui)
 	if FileAccess.file_exists(profile_path):
@@ -89,7 +89,11 @@ func rebuild() -> void:
 		ui.remove_child(child); child.queue_free()
 	nickname=null
 	button(tr_daily("BACK","NAZAD"),Rect2(22,16,100,46),leave)
-	if mode=="lobby":
+	if mode=="lobby" and not host.online_allowed():
+		button(language.to_upper(),Rect2(size.x/2-190,230,130,42),toggle_language)
+		button(tr_daily("Adjacent","Susedna") if adjacent else tr_daily("Any letters","Bilo koja"),Rect2(size.x/2-45,230,235,42),toggle_rule)
+		button(host.age_text("practice"),Rect2(size.x/2-210,337,420,48),start_practice)
+	elif mode=="lobby":
 		var w := size.x*.48-44
 		nickname=LineEdit.new(); nickname.text=local_nickname
 		nickname.placeholder_text=tr_daily("Nickname (3–20 characters)","Nadimak (3–20 znakova)")
@@ -115,7 +119,7 @@ func rebuild() -> void:
 		button(tr_daily("CLEAR","OBRIŠI"),Rect2(size.x/2-170,432,150,38),func(): selection.clear(); queue_redraw())
 		button(tr_daily("SUBMIT","POTVRDI"),Rect2(size.x/2+20,432,150,38),submit_word)
 	elif mode=="result":
-		button(tr_daily("LEADERBOARD","RANG-LISTA"),Rect2(size.x/2-230,374,220,48),show_lobby)
+		button(tr_daily("LEADERBOARD","RANG-LISTA") if host.online_allowed() else host.t("BACK"),Rect2(size.x/2-230,374,220,48),show_lobby)
 		if ranked and not bool(attempt.get("verified",false)) and not bool(attempt.get("expired",false)):
 			button(tr_daily("RETRY UPLOAD","PONOVI SLANJE"),Rect2(size.x/2+10,374,220,48),upload_result)
 		else:
@@ -153,6 +157,7 @@ func show_lobby() -> void:
 	if service.configured(): await refresh_leaderboard()
 
 func refresh_leaderboard() -> void:
+	if not host.online_allowed(): return
 	if requesting: return
 	requesting=true; status=tr_daily("Loading…","Učitavanje…"); rebuild()
 	var response: Dictionary=await service.call_api("leaderboard",{"language":language,"adjacent":adjacent})
@@ -182,6 +187,7 @@ func start_practice() -> void:
 	requesting=false; mode="running"; status=""; selection.clear(); rebuild()
 
 func start_ranked() -> void:
+	if not host.online_allowed(): return
 	if requesting: return
 	local_nickname=nickname.text.strip_edges()
 	var regex := RegEx.new(); regex.compile("^[\\p{L}\\p{N} _-]{3,20}$")
@@ -239,11 +245,16 @@ func submit_word() -> void:
 func finish_run() -> void:
 	if mode not in ["running","confirm_leave"]: return
 	mode="result"; selection.clear(); dragging=false; pointer=-1; save_pending()
+	if not ranked:
+		var key: String=host.Endless.key(language,adjacent)
+		host.save.data.practice_records[key]=maxi(rules.score,int(host.save.data.practice_records.get(key,0)))
+		host.save.save_game()
 	status=tr_daily("Practice only — not on the global list.","Vežba — rezultat ne ulazi na globalnu listu.")
 	rebuild()
 	if ranked: await upload_result()
 
 func upload_result() -> void:
+	if not host.online_allowed(): return
 	if requesting or not ranked: return
 	requesting=true; status=tr_daily("Verifying result…","Provera rezultata…"); rebuild()
 	# Allow for network clock estimation; server requires the entire 120-second window.
@@ -295,8 +306,13 @@ func _draw() -> void:
 	draw_texture_rect_region(BACKDROP,Rect2(Vector2.ZERO,size),source)
 	draw_rect(Rect2(Vector2.ZERO,size),Color(.015,.045,.085,.47))
 	Ornaments.plaque(self,Rect2(size.x/2-215,12,430,54))
-	label(tr_daily("DAILY CHALLENGE","DNEVNI IZAZOV"),Rect2(size.x/2-190,16,380,42),28,GOLD,true)
-	if mode=="lobby":
+	label(tr_daily("DAILY CHALLENGE","DNEVNI IZAZOV") if host.online_allowed() else host.age_text("practice"),Rect2(size.x/2-190,16,380,42),28,GOLD,true)
+	if mode=="lobby" and not host.online_allowed():
+		Ornaments.frame(self,Rect2(22,85,size.x-44,350),2)
+		label(host.age_text("records"),Rect2(48,101,size.x-96,32),23,GOLD,true)
+		label(host.age_text("offline_note"),Rect2(42,160,size.x-84,36),18)
+		label(host.age_text("no_services"),Rect2(42,193,size.x-84,30),16)
+	elif mode=="lobby":
 		Ornaments.frame(self,Rect2(22,85,size.x*.48-12,350),2)
 		Ornaments.frame(self,Rect2(size.x*.51,85,size.x*.49-22,350),2)
 		label(tr_daily("YOUR PROFILE","TVOJ PROFIL"),Rect2(38,87,size.x*.48-44,27),18,GOLD,true)

@@ -18,8 +18,10 @@ func run() -> void:
 		check(preload("res://scripts/localization.gd").translate("OPTIONS",code)!="OPTIONS" or code=="en",code+" translated settings")
 	var g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/languages-test.json"; root.add_child(g)
 	while g.loading: await process_frame
+	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
+	await process_frame
 	g.daily_screen.profile_path="res://../.local/languages-profile.json"
-	g.save.data=g.save.defaults(); g.save.data.ui_language="en"; g.save.data.tutorial=true
+	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.ui_language="en"; g.save.data.tutorial=true
 	g.change_screen("settings"); await process_frame
 	var s=g.settings_screen
 	s.draft.ui_language="fr"; s.draft.word_language="de"; s.nickname.text="Testeur"

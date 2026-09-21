@@ -1,5 +1,7 @@
 extends Node
 ## Only the public project URL/key belong in the build. Never a service-role key.
+var access_allowed: Callable
+func allowed() -> bool: return access_allowed.is_valid() and access_allowed.call()
 var config: Dictionary = {}
 var session: Dictionary = {}
 var session_path := "user://daily-session.json"
@@ -18,9 +20,10 @@ func _ready() -> void:
 	if session.get("project_url","")!=config.get("url",""): session={}
 
 func configured() -> bool:
-	return str(config.get("url","")).begins_with("https://") and str(config.get("publishable_key","")).begins_with("sb_publishable_")
+	return allowed() and str(config.get("url","")).begins_with("https://") and str(config.get("publishable_key","")).begins_with("sb_publishable_")
 
 func request_json(endpoint: String, payload: Dictionary, token := "") -> Dictionary:
+	if not allowed(): return {"error":"Online features are disabled for this age group"}
 	var http := HTTPRequest.new()
 	http.timeout=15; http.body_size_limit=1024*1024
 	add_child(http)
@@ -39,6 +42,7 @@ func request_json(endpoint: String, payload: Dictionary, token := "") -> Diction
 	return body
 
 func ensure_session() -> Dictionary:
+	if not allowed(): return {"error":"Online features are disabled for this age group"}
 	if authenticating:
 		await auth_finished
 		return auth_result.duplicate()
@@ -66,6 +70,7 @@ func authenticate() -> Dictionary:
 	return {}
 
 func call_api(action: String, payload: Dictionary) -> Dictionary:
+	if not allowed(): return {"error":"Online features are disabled for this age group"}
 	if busy: return {"error":"Please wait"}
 	busy=true
 	var auth := await ensure_session()

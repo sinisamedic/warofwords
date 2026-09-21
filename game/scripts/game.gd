@@ -1,5 +1,13 @@
 extends Control
 
+const AgePolicy = preload("res://scripts/age_policy.gd")
+var age_screen: Control
+func online_allowed() -> bool: return AgePolicy.online(save.data)
+func age_text(key: String) -> String: return AgePolicy.text(key,save.data.ui_language)
+func open_age_screen(kind := "info", result := false) -> void:
+	if is_instance_valid(age_screen): return
+	age_screen=preload("res://scripts/age_screen.gd").new(); age_screen.host=self; age_screen.kind=kind; age_screen.result_mode=result; add_child(age_screen)
+
 const Equipment = preload("res://scripts/equipment.gd")
 const Endless = preload("res://scripts/endless.gd")
 const ModeUI = preload("res://scripts/mode_ui.gd")
@@ -234,6 +242,8 @@ func _ready() -> void:
 	font=body
 	save.load_game()
 	rewarded=preload("res://scripts/rewarded_continue.gd").new()
+	rewarded.access_allowed=online_allowed
+	rewarded.is_minor=func(): return AgePolicy.minor(save.data)
 	add_child(rewarded)
 	rewarded.completed.connect(rewarded_finished)
 	rewarded.changed.connect(rewarded_changed)
@@ -307,7 +317,8 @@ func finish_loading() -> void:
 		rankings=preload("res://scripts/rank_service.gd").new(); rankings.host=self; add_child(rankings)
 	if OS.is_debug_build():
 		print("WarOfWords: ready")
-	if screen=="home": show_pending_unlock()
+	if not AgePolicy.known(save.data): open_age_screen("age")
+	elif screen=="home": show_pending_unlock()
 	queue_redraw()
 
 func select_dictionary(code: String) -> void:
@@ -1154,6 +1165,7 @@ func draw_overlay() -> void:
 			action("GOT IT",Rect2(middle-120,y,240,51),"resume",-1,true)
 
 func _input(event: InputEvent) -> void:
+	if is_instance_valid(age_screen): return
 	if is_instance_valid(settings_screen):
 		if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE: settings_screen.leave()
 		return
@@ -1396,6 +1408,7 @@ func change_screen(target: String) -> void:
 	queue_redraw()
 
 func back() -> void:
+	if is_instance_valid(age_screen): age_screen.leave(); return
 	if overlay=="endless_continue":
 		if rewarded.state!="showing":
 			rewarded.cancel(); finalize_endless(); open_rankings(true)
@@ -1620,7 +1633,7 @@ func finish(victory: bool) -> void:
 		if won:
 			update_endless_record(); persist_battle()
 		else:
-			endless_continue_pending=endless_continues<rewarded.MAX_CONTINUES
+			endless_continue_pending=online_allowed() and endless_continues<rewarded.MAX_CONTINUES
 			if endless_continue_pending: persist_battle()
 			else: finalize_endless()
 		return
@@ -1724,6 +1737,7 @@ func restore_battle(as_endless: bool = false) -> void:
 		hp=0; ended=true; won=false; result_delay=0; hero.begin_defeat(); show_endless_defeat()
 
 func show_endless_defeat() -> void:
+	if endless_continue_pending and not online_allowed(): finalize_endless()
 	if endless_continue_pending: overlay="endless_continue"
 	else: overlay="endless_result"; open_rankings(true)
 	queue_redraw()
@@ -1744,6 +1758,7 @@ func rewarded_changed() -> void:
 	queue_redraw()
 
 func rewarded_finished(granted: bool) -> void:
+	if not online_allowed(): return
 	if not granted or screen!="battle" or not endless_mode or not endless_continue_pending or endless_finalized or endless_continues>=rewarded.MAX_CONTINUES: return
 	endless_continues+=1; endless_continue_pending=false
 	# No healing score is granted for the revive.
@@ -1952,6 +1967,7 @@ func _qa_capture(file: String) -> void:
 	get_viewport().get_texture().get_image().save_png(file)
 
 func open_rankings(show_result: bool = false) -> void:
+	if not online_allowed(): open_age_screen("records",show_result); return
 	if endless_board_open: return
 	var board=preload("res://scripts/endless_board.gd").new()
 	board.host=self; board.result_mode=show_result

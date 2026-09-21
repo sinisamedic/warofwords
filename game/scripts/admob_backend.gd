@@ -5,6 +5,7 @@ signal reward
 signal closed
 signal failed
 var active := true
+var under_age_of_consent := true
 var test_ads := true
 var unit_id := ""
 var ad: RewardedAd
@@ -16,7 +17,9 @@ func begin(test: bool, id: String) -> void:
 	test_ads=test; unit_id=id
 	# Google's demo ad units do not monetize; live traffic always requires UMP.
 	if test_ads: initialize_ads(); return
-	UserMessagingPlatform.consent_information.update(ConsentRequestParameters.new(),consent_updated,consent_failed)
+	var params := ConsentRequestParameters.new()
+	params.tag_for_under_age_of_consent=under_age_of_consent
+	UserMessagingPlatform.consent_information.update(params,consent_updated,consent_failed)
 
 func consent_updated() -> void:
 	if not active: return
@@ -44,6 +47,11 @@ func consent_failed(_error) -> void:
 func initialize_ads() -> void:
 	if not active or initialized: return
 	initialized=true; phase.emit("loading")
+	var config := RequestConfiguration.new()
+	config.tag_for_child_directed_treatment=RequestConfiguration.TagForChildDirectedTreatment.FALSE
+	config.tag_for_under_age_of_consent=RequestConfiguration.TagForUnderAgeOfConsent.TRUE if under_age_of_consent else RequestConfiguration.TagForUnderAgeOfConsent.FALSE
+	config.max_ad_content_rating=RequestConfiguration.MAX_AD_CONTENT_RATING_G
+	MobileAds.set_request_configuration(config)
 	MobileAds.set_publisher_first_party_id_enabled(false)
 	var listener := OnInitializationCompleteListener.new()
 	listener.on_initialization_complete=load_ad

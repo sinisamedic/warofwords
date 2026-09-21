@@ -30,6 +30,7 @@ func call_rank_api(method: String, payload: Dictionary) -> Dictionary:
 		if not auth.has("error"): response=await service.request_json("/rest/v1/rpc/"+method,payload,str(service.session.access_token))
 	return response
 func enqueue(result: Dictionary) -> void:
+	if not host.online_allowed(): current_run_id=""; host.save.save_game(); return
 	var bytes := Crypto.new().generate_random_bytes(16).hex_encode()
 	var entry := result.duplicate(true)
 	entry.id=bytes.substr(0,8)+"-"+bytes.substr(8,4)+"-"+bytes.substr(12,4)+"-"+bytes.substr(16,4)+"-"+bytes.substr(20,12)
@@ -38,6 +39,7 @@ func enqueue(result: Dictionary) -> void:
 	host.save.save_game()
 	# A saved run is a draft. Only the explicit Send action may publish it.
 func send_run(run_id: String, entered_name: String) -> void:
+	if not host.online_allowed(): return
 	if host.endless_continue_pending: return
 	if busy or not host.online_writes_enabled or sent_runs.has(run_id): return
 	if not valid_name(entered_name): message="Enter your nickname to send the result"; changed.emit(); return

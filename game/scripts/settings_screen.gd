@@ -76,7 +76,7 @@ func rebuild() -> void:
 	if focused: nickname.grab_focus(); nickname.caret_column=caret
 	nickname.size=field.size
 	var pencil:=TextureRect.new(); pencil.expand_mode=TextureRect.EXPAND_IGNORE_SIZE; pencil.texture=PENCIL; pencil.position=field.position+Vector2(field.size.x-31,7); pencil.size=Vector2(18,21); pencil.mouse_filter=Control.MOUSE_FILTER_IGNORE; form.add_child(pencil)
-	label("Name on the leaderboard" if status.is_empty() else status,Rect2(field.position.x+6,y+138,field.size.x-6,24),12,not status.is_empty()).modulate=Color("acb7bf") if status.is_empty() else Color.WHITE
+	label(("Name on the leaderboard" if host.online_allowed() else host.age_text("records")) if status.is_empty() else status,Rect2(field.position.x+6,y+138,field.size.x-6,24),12,not status.is_empty()).modulate=Color("acb7bf") if status.is_empty() else Color.WHITE
 	heading("SOUND AND DISPLAY",left.position.x,y+169,left.size.x)
 	for i in 4:
 		var key: String=["music","sound","haptics","calm"][i]
@@ -100,7 +100,9 @@ func rebuild() -> void:
 			var code: String=L.CODES[i]; var bw: float=(picker_rect.size.x-18)/2
 			var b:=button(L.NAMES[code],Rect2(picker_rect.position+Vector2(6+(i%2)*(bw+6),6+(i/2)*36),Vector2(bw,32)),func(): draft[picker]=code; picker=""; rebuild(),draft[picker]==code)
 			b.name="Language_"+code; b.pixels=15
-	if picker.is_empty() and preload("res://scripts/admob_backend.gd").privacy_required():
+	if picker.is_empty():
+		button(host.age_text("privacy"),Rect2(right.position.x+24,y+315,right.size.x-24,30),func(): host.open_age_screen())
+	if picker.is_empty() and host.online_allowed() and preload("res://scripts/admob_backend.gd").privacy_required():
 		button("AD PRIVACY",Rect2(right.position.x+24,y+280,right.size.x-24,32),func():
 			preload("res://scripts/admob_backend.gd").show_privacy(func(error):
 				if error: status="Privacy form unavailable. Try again later."

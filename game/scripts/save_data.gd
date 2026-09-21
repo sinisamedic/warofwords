@@ -6,7 +6,7 @@ var path := "user://progress.json"
 var data: Dictionary = {}
 
 func defaults() -> Dictionary:
-	return {"version":1,"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"endless":{},"endless_outbox":[],"endless_name_dirty":false,"endless_pending":{},"endless_records":{},"total_words":0,"longest":"","dictionary":[]}
+	return {"version":1,"age_group":"","practice_records":{},"loadout":["pulse","aegis","arc","mend"],"artifact":"none","lexicon_earned":false,"pending_unlocks":[],"coins":180,"levels":[1,1,1,1],"wins":{},"unlocked":0,"selected_power":0,"sound":true,"music":true,"haptics":true,"calm":false,"adjacent_only":true,"ui_language":"en","word_language":"en","tutorial":false,"battle":{},"endless":{},"endless_outbox":[],"endless_name_dirty":false,"endless_pending":{},"endless_records":{},"total_words":0,"longest":"","dictionary":[]}
 
 func load_game() -> void:
 	data = defaults()
@@ -22,6 +22,7 @@ func load_game() -> void:
 			for key in data:
 				if parsed.has(key) and typeof(parsed[key]) == typeof(data[key]):
 					data[key] = parsed[key]
+			if not preload("res://scripts/age_policy.gd").known(data): data.age_group=""
 			# JSON represents integers as floats, so validate numeric fields separately.
 			data.coins = clampi(number(parsed.get("coins"),180),0,999999)
 			data.unlocked = clampi(number(parsed.get("unlocked"),0),0,Campaign.COUNT-1)
@@ -70,6 +71,9 @@ func load_game() -> void:
 				if not preload("res://scripts/languages.gd").record_key(key) or not record is Dictionary:
 					data.endless_records.erase(key); continue
 				data.endless_records[key]={"score":maxi(0,number(record.get("score"),0)),"wave":maxi(0,number(record.get("wave"),0))}
+			for key in data.practice_records.keys():
+				if not preload("res://scripts/languages.gd").record_key(key): data.practice_records.erase(key)
+				else: data.practice_records[key]=maxi(0,number(data.practice_records[key],0))
 			break
 
 func number(value: Variant, fallback: int) -> int:

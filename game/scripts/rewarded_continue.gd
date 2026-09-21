@@ -14,9 +14,12 @@ var token := 0
 var elapsed := 0.0
 var backend: Node
 var backend_factory: Callable
+var access_allowed: Callable
+var is_minor: Callable
+func allowed() -> bool: return access_allowed.is_valid() and access_allowed.call()
 
 func supported() -> bool:
-	return backend_factory.is_valid() or (OS.get_name()=="Android" and Engine.has_singleton("PoingGodotAdMobRewardedAd"))
+	return allowed() and (backend_factory.is_valid() or (OS.get_name()=="Android" and Engine.has_singleton("PoingGodotAdMobRewardedAd")))
 
 func busy() -> bool:
 	return state in ["consent","loading","showing"]
@@ -26,6 +29,7 @@ func request() -> void:
 	if not supported(): state="unavailable"; changed.emit(); return
 	token+=1; earned=false; state="consent"; elapsed=0
 	backend=backend_factory.call() if backend_factory.is_valid() else load("res://scripts/admob_backend.gd").new()
+	if not backend_factory.is_valid(): backend.under_age_of_consent=not is_minor.is_valid() or is_minor.call()
 	backend.phase.connect(_phase.bind(token))
 	backend.reward.connect(_reward.bind(token))
 	backend.closed.connect(_closed.bind(token))
@@ -43,7 +47,7 @@ func _reward(request_token: int) -> void:
 
 func _closed(request_token: int) -> void:
 	if request_token!=token or not busy(): return
-	var granted := earned
+	var granted := earned and allowed()
 	_cleanup(); state="idle" if granted else "skipped"; changed.emit(); completed.emit(granted)
 
 func _failed(request_token: int) -> void:
