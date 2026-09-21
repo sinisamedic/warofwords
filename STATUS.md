@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-21. **Aktivna grana: codex/age-aware-play.**
 
+## Oglasi razdvojeni po uzrastu — 2026-09-21
+
+- Za 13–17 ostaju TFUA true i G; 18+ TFUA false i PG (G/PG sadržaj), prema plafonu Families mixed-audience aplikacije. Mlađi/nepoznati bez oglasa. Korisnik je tražio proširenje ponude za odrasle.
+- Rewarded test prolazi; backend parser proveren. Lokalni nacrt politike i Play beleške usklađeni, sajt provera prolazi. Nije menjan AdMob nalog niti pravljen novi Android paket.
+- Sledeće: Android provera SDK tagova/oglasa i UMP; pre produkcije proveriti i AdMob podešavanja i konačnu ocenu sadržaja igre. Dostupnost oglasa nije garantovana.
+
 ## Pojednostavljen izbor uzrasta i početni jezik — 2026-09-21
 
 - Završni izbor u igri: Mlađi od 13 / 13–17 / 18+. Odrasli imaju TFUA false; teen grupa zadržava konzervativni tretman. Play Console ciljne kategorije ostaju zasebne.

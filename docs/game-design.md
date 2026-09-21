@@ -2,6 +2,8 @@
 
 ## Google Play — usvojeno 2026-09-21
 
+- Korisnik traži širu ponudu oglasa za odrasle: maksimalni sadržaj G za 13–17, PG za 18+ (plafon Families mixed-audience). Mlađi od 13/nepoznati i dalje bez oglasa. TFUA i UMP zaštita maloletnika ostaju; dostupnost oglasa nije garantovana.
+
 - Završna odluka korisnika: mlađi od 13 imaju samo lokalne rekorde i offline vežbu, uz dostupne Kampanju i Beskraj; nema oglasa niti nastavaka posle poraza, uključujući besplatne. Za 13+ ostaje najviše tri nastavka po pohodu samo nakon nagrađenog oglasa. Mlađi/nepoznat uzrast ne pristupaju online rang-listama ni pri čitanju. Ograničenja jasno prikazati u aplikaciji.
 - Neutralni početni izbor tri grupe: mlađi od 13, 13–17, 18+, bez podrazumevanog odgovora ili obećanja funkcija na izboru. Čuva se samo grupa lokalno; samoprijava nije provera identiteta. Novi ekrani koriste postojeće boje/ornamente i šest jezika. Korisnik traži igrivi pregled pre narednog Android build-a.
 - Na prvom pokretanju jezik interfejsa i reči prati jezik uređaja za en/sr/de/fr/es/it; za nepodržan jezik koristi se engleski. Sačuvan ručni izbor ima prednost. Ranije grupe 13–15 i 16–17 migriraju u 13–17, bez promene napretka.

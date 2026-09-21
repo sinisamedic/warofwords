@@ -50,7 +50,8 @@ func initialize_ads() -> void:
 	var config := RequestConfiguration.new()
 	config.tag_for_child_directed_treatment=RequestConfiguration.TagForChildDirectedTreatment.FALSE
 	config.tag_for_under_age_of_consent=RequestConfiguration.TagForUnderAgeOfConsent.TRUE if under_age_of_consent else RequestConfiguration.TagForUnderAgeOfConsent.FALSE
-	config.max_ad_content_rating=RequestConfiguration.MAX_AD_CONTENT_RATING_G
+	# Mixed-audience Families apps allow at most PG, including adult requests.
+	config.max_ad_content_rating=RequestConfiguration.MAX_AD_CONTENT_RATING_G if under_age_of_consent else RequestConfiguration.MAX_AD_CONTENT_RATING_PG
 	MobileAds.set_request_configuration(config)
 	MobileAds.set_publisher_first_party_id_enabled(false)
 	var listener := OnInitializationCompleteListener.new()
