@@ -1,5 +1,13 @@
 # War of Words — dizajn igre
 
+## Google Play — usvojeno 2026-09-21
+
+- Ciljna publika usvojena: **9+** (9–12, 13–15, 16–17 i 18+), ne konačna IARC ocena sadržaja. Families/oglasi i online obrada podataka još zahtevaju prilagođavanje i proveru pre objave. Ne tvrditi da je sadašnji build usklađen za decu.
+- Korisnik potvrđuje da rade `hello@gottaplay.net` i `privacy@gottaplay.net`; koristiti ih za javnu podršku i privatnost. WoW sajt još nije objavljen; dovršiti posebnu WoW politiku umesto oslanjanja na opštu politiku postojećeg sajta.
+- Korisnik potvrđuje verifikaciju naloga i odobrava dodavanje igre na Google Play. Preuzimanje je besplatno, uz prethodno dogovorene dobrovoljne nagrađene oglase.
+- Korisnik je odabrao Android package name `com.gottaplay.warofwords`; export preset je usklađen. Raniji APK-ovi koriste `com.sinisamedic.warofwords`. Novi paket je zasebna Android aplikacija i ne preuzima automatski lokalni napredak stare.
+- Korisnik je izričito odobrio Play App Signing uslove i obavezne izjave. Posle promene Google naloga prihvaćeni su uslovi i kreirana aplikacija (App ID `4974758326295707248`). Nema javne objave niti uploadovanog izdanja; kontakti, ciljna publika i ostale deklaracije tek slede.
+
 ## GottaPlay profili i promotivni materijali — usvojeni okvir 2026-09-20
 
 Dopuna 2026-09-20: korisnik je izričito odobrio javnu objavu **prve** pripremljene objave na Instagramu, TikToku i YouTube-u. Ovo zamenjuje prethodnu zabranu objavljivanja samo za objavu 01. Ostale objave i raspored nisu odobreni za objavljivanje/zakazivanje. Ishodi su u `marketing/first-eight/PUBLISHED.md`.

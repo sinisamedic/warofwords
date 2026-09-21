@@ -1,6 +1,15 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-20. **Aktivna grana: codex/gottaplay-first-eight.**
+Ažurirano: 2026-09-21. **Aktivna grana: codex/gottaplay-first-eight.**
+
+## Google Play unos — 2026-09-21
+
+- Usvojena publika **9+**, uz potvrđene email adrese podrške i privatnosti. `hello@gottaplay.net` sačuvan u Store listing contact details. WoW sajt/politika još nisu javni. Potrebno odlučiti o ponašanju igre za decu (oglasi i online rang-liste), implementirati i proveriti ga pre konačnih Families/Data safety izjava. Ranija stavka o nepotvrđenim kontaktima/publiki je time zamenjena.
+- Korisnik potvrđuje verifikaciju naloga i odobrava besplatnu igru, Play App Signing uslove i obavezne izjave. U obrascu uneti War of Words, en-US, Game, Free; korisnik promenio paket na `com.gottaplay.warofwords`, a Console potvrdio dostupnost. Developer Program Policies i US export laws označeni.
+- **Uspešno kreirano posle promene Google naloga:** sve tri odobrene izjave prihvaćene, potvrđena dostupnost paketa i otvoren Dashboard | War of Words. App ID `4974758326295707248`; Console: https://play.google.com/console/u/1/developers/7515618000131087582/app/4974758326295707248/app-dashboard . Ranija blokada Play App Signing dozvole rešena. Igra nije javno objavljena i nema uploadovanog izdanja.
+- Export preset usklađen sa novim paketom. Nije pravljen novi APK/AAB; raniji paketi i istorijske QA skripte i dalje se odnose na `com.sinisamedic.warofwords`. Nova aplikacija neće automatski naslediti njihov lokalni napredak.
+- Git fetch uspešan, pre izmene grana čista i poravnata sa upstream-om. Provera ove izmene: diff i tačan naziv paketa; engine testovi nisu potrebni za promenu identifikatora, konačan manifest proveriti pri narednom build-u.
+- **Sledeće:** 11 setup stavki je otvoreno (0/11). Potvrditi javne kontakte i politiku privatnosti i odabrati ciljnu publiku; zatim dovršiti listing, deklaracije i potpisani AAB sa novim paketom, uz AdMob/UMP proveru pre izdanja. Console obaveštenje potvrđuje uspešnu verifikaciju identiteta 21. septembra; postoji i starije upozorenje za payments account od 29. avgusta, čiji sadašnji status nije istražen.
 
 ## Scheduled za videe 02–08 — 2026-09-20
 
