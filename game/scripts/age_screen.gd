@@ -36,9 +36,9 @@ func rebuild() -> void:
 	label(words("title" if kind=="age" else "records" if kind=="records" else "privacy"),Rect2(x+95,y+24,w-190,40),27,true)
 	if kind=="age":
 		label(words("question"),Rect2(x+45,y+80,w-90,58),18)
-		var labels: Array=[words("under"),"13–15","16–17","18+"]
-		for i in 4:
-			button(labels[i],Rect2(x+65+(i%2)*(w-120)/2,y+151+(i/2)*57,(w-140)/2,46),func(): selected=i; rebuild(),selected==i).name="AgeChoice%d" % i
+		var labels: Array=[words("under"),"13–17","18+"]
+		for i in 3:
+			button(labels[i],Rect2(x+55+i*(w-100)/3,y+180,(w-130)/3,52),func(): selected=i; rebuild(),selected==i).name="AgeChoice%d" % i
 		label(words("error" if error else "local"),Rect2(x+60,y+271,w-120,52),15)
 		var confirm:=button(words("save"),Rect2(size.x/2-130,panel.end.y-73,260,46),confirm_age)
 		confirm.disabled=selected<0; confirm.modulate=Color(.5,.5,.5) if selected<0 else Color.WHITE; confirm.add_theme_color_override("font_disabled_color",Color.TRANSPARENT); confirm.name="ConfirmAge"
@@ -69,7 +69,7 @@ func record_name(key: String) -> String:
 	var language: String=preload("res://scripts/languages.gd").NAMES.get(parts[0],parts[0].to_upper())
 	return language+" / "+host.t("ADJACENT" if key.ends_with("adjacent") else "ANY LETTERS")
 func confirm_age() -> void:
-	if selected<0 or selected>3: return
+	if selected<0 or selected>2: return
 	var previous: String=host.save.data.get("age_group","")
 	host.save.data.age_group=host.AgePolicy.GROUPS[selected]
 	if not host.save.save_game(): host.save.data.age_group=previous; error=true; rebuild(); return

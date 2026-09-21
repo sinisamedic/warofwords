@@ -1,7 +1,7 @@
 extends RefCounted
-const GROUPS = ["under13", "13_15", "16_17", "adult"]
+const GROUPS = ["under13", "teen", "adult"]
 static func online(data: Dictionary) -> bool:
-	return data.get("age_group", "") in ["13_15", "16_17", "adult"]
+	return data.get("age_group", "") in ["teen", "adult"]
 static func known(data: Dictionary) -> bool:
 	return data.get("age_group", "") in GROUPS
 static func minor(data: Dictionary) -> bool:

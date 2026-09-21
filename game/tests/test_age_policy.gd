@@ -38,11 +38,21 @@ func run() -> void:
 	check(g.endless_continue_pending,"adult has continue offer")
 	g.save.data.age_group="under13"; g.save.save_game(); await g.restore_battle(true)
 	check(not g.endless_continue_pending and g.endless_finalized,"legacy pending defeat cannot bypass child rule")
-	for group in ["13_15","16_17","adult"]:
+	for group in ["teen","adult"]:
 		g.save.data.age_group=group; check(g.online_allowed(),"online permitted "+group)
 		check(g.AgePolicy.minor(g.save.data)==(group!="adult"),"conservative ad treatment "+group)
 	g.save.data.age_group="invalid"; g.save.save_game(); g.save.load_game()
 	check(g.save.data.age_group=="" and not g.online_allowed(),"invalid saved group fails closed")
+	var languages=load("res://scripts/languages.gd")
+	for locale in ["sr_RS","sr-Latn-RS","de_DE","fr_CA","es_MX","it_IT","en_US"]:
+		check(languages.device_language(locale)==locale.left(2),"device locale "+locale)
+	check(languages.device_language("ja_JP")=="en","unsupported locale falls back to English")
+	for old in ["13_15","16_17","adult"]:
+		g.save.data.age_group=old; g.save.data.ui_language="it"; g.save.data.word_language="de"; g.save.save_game(); g.save.load_game()
+		check(g.save.data.age_group==("adult" if old=="adult" else "teen") and g.online_allowed(),"legacy age migrates "+old)
+		check(g.save.data.ui_language=="it" and g.save.data.word_language=="de","saved languages preserved")
+	g.save.data.age_group="13plus"; g.save.save_game(); g.save.load_game()
+	check(g.save.data.age_group=="" and not g.online_allowed(),"ambiguous binary preview age requires fresh choice")
 	var isolated=load("res://scripts/daily_service.gd").new(); root.add_child(isolated)
 	check(not isolated.configured(),"unbound service fails closed")
 	isolated.queue_free(); g.queue_free(); await process_frame; await process_frame

@@ -3,7 +3,7 @@ var g
 func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/age-preview-progress.json"
-	var seed=load("res://scripts/save_data.gd").new(); seed.path=g.save.path; seed.data=seed.defaults(); seed.data.ui_language="sr"; seed.data.tutorial=true; seed.save_game()
+	var seed=load("res://scripts/save_data.gd").new(); seed.path=g.save.path; seed.data=seed.defaults(); seed.data.ui_language=load("res://scripts/languages.gd").device_language(OS.get_locale()); seed.data.word_language=seed.data.ui_language; seed.data.tutorial=true; seed.save_game()
 	root.add_child(g)
 	while g.loading: await process_frame
 	g.daily_screen.service.access_allowed=func(): return false

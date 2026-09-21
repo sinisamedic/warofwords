@@ -10,6 +10,8 @@ func defaults() -> Dictionary:
 
 func load_game() -> void:
 	data = defaults()
+	var device_language := preload("res://scripts/languages.gd").device_language(OS.get_locale())
+	data.ui_language=device_language; data.word_language=device_language
 	data.weapon = "pulse"
 	for file_path in [path,path+".bak"]:
 		if not FileAccess.file_exists(file_path):
@@ -22,6 +24,7 @@ func load_game() -> void:
 			for key in data:
 				if parsed.has(key) and typeof(parsed[key]) == typeof(data[key]):
 					data[key] = parsed[key]
+			if data.age_group in ["13_15","16_17"]: data.age_group="teen"
 			if not preload("res://scripts/age_policy.gd").known(data): data.age_group=""
 			# JSON represents integers as floats, so validate numeric fields separately.
 			data.coins = clampi(number(parsed.get("coins"),180),0,999999)

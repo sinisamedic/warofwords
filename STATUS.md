@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-21. **Aktivna grana: codex/age-aware-play.**
 
+## Pojednostavljen izbor uzrasta i početni jezik — 2026-09-21
+
+- Završni izbor u igri: Mlađi od 13 / 13–17 / 18+. Odrasli imaju TFUA false; teen grupa zadržava konzervativni tretman. Play Console ciljne kategorije ostaju zasebne.
+- Prvo pokretanje preuzima podržani jezik uređaja, inače engleski; čuva raniji izbor. Prethodne teen grupe migriraju bez resetovanja podataka.
+- Prošli age policy (34 PASS), rewarded continue i languages testovi. Ponovo renderovano 19 ekrana i vizuelno proveren srpski izbor. Bez novih script grešaka; ranija lokalna certificate/ObjectDB upozorenja ostaju.
+- Sledeće: korisnički pregled ažuriranog desktop Godot toka pre Android build-a. Sajt ostaje lokalno pripremljen, neobjavljen.
+
 ## Pregled pravila po uzrastu — 2026-09-21
 
 - Implementiran neutralni izbor uzrasta bez preselektovanja, lokalno pamćenje grupe i navy/gold ekrani u šest jezika sa postojećim okvirima i ornamentima. Nepoznat/oštećen uzrast blokira oglase i mrežu. Stariji save traži izbor bez resetovanja napretka.

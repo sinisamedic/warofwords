@@ -15,3 +15,7 @@ const STARTERS := {
 }
 static func record_key(key: String) -> bool:
 	return key.get_slice("_",0) in CODES and key.get_slice("_",1) in ["adjacent","any"]
+
+static func device_language(locale: String) -> String:
+	var code := locale.replace("-","_").get_slice("_",0).to_lower()
+	return code if code in CODES else "en"
