@@ -2,6 +2,8 @@
 
 2026-09-22. URL: https://gottaplay.net/wow/delete-data/
 
+**Rešeno istog dana:** nakon što je korisnik dodao Cloudflare pravila, ponovljen je svež Play Data safety tok. Checking URLs automatski je napredovao sa oba kanonska URL-a bez403; završni preview potvrđuje linkove. Publishing overview Quick checks dozvoljava slanje na review. Sadržaj novih pravila nije pregledan, pa tačan pojedinačni uzrok otklanjanja nije utvrđen. Tekst za podršku ispod ostaje istorija i nije poslat.
+
 Security → Analytics → Events potvrđuje Managed Challenge, Service Bot fight mode, ASN AS15169 Google LLC, GET, User-Agent Google odnosno GooglePlayConsole, tačna putanja `/wow/delete-data/`.
 
 Korisnik izričito odobrio isključivanje Bot Fight Mode; OFF potvrđen na Settings i ponovo učitanom Overview. Ostala bezbednosna podešavanja nisu menjana. Free Bot Fight Mode nema WAF/Page Rule izuzetak po putanji: https://developers.cloudflare.com/bots/get-started/bot-fight-mode/ .

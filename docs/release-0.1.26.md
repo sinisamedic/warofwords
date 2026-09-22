@@ -2,6 +2,14 @@
 
 2026-09-22, grana `codex/age-aware-play`.
 
+## Završni Play status
+
+Interni kanal `0.1.26 internal` objavljen 2026-09-22: Active / Available to internal testers, code27. Uključena samo lista `War of Words — internal` sa jednim odobrenim nalogom. Link: https://play.google.com/apps/internaltest/4701514081638778706 . Korisnička instalacija preko Play-a tek sledi; lokalni APK već proveren na telefonu. Ne brisati lokalne podatke radi eventualnog konflikta potpisa bez prethodnog dogovora.
+
+Sveža Google validacija oba kanonska privacy/deletion URL-a prolazi nakon korisnikovih Cloudflare pravila. Quick checks završeni uspešno. Produkcija nije poslata na review niti javno objavljena; Managed publishing OFF. Ranija čekanja ispod predstavljaju istoriju.
+
+## Implementacija i prethodne provere
+
 - Redovi liste propuštaju GUI događaje; ekran obrađuje touch drag uz zadržan press/release tok za emulaciju miša. Wheel ostaje ugrađeni Godot scroll. Separator od20px odvaja top10 od konteksta tekuće partije; automatski skrol uračunava separator. SQL već vraća top10 + dva prethodna reda + tekuću poslatu partiju bez dupliranja, bez promene servera.
 - `test_rankings.gd` proverava stvarne InputEventScreenTouch/ScreenDrag događaje u oba smera, wheel, visinu/separator, uređivanje nadimka i eksplicitno slanje/retry. Headless i desktop exit0, šest PASS grupa, bez script grešaka. Pregledani renderi vrha i sopstvenog reda1280×576. Headless ima postojeća root-certificate/ObjectDB upozorenja; desktop samo root-certificate upozorenje.
 - Oba exporta exit0; APK isti sertifikat429a2d1b…0abc, apksigner i16KiB zipalign prolaze;24 provere spakovanih rečnika prolaze. bundletool1.18.3 validate exit0, versionCode27. APK koristi demo oglase, Play preset produkcione kao0.1.25.

@@ -2,7 +2,15 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
-## Play/Cloudflare završna priprema — 2026-09-22
+## Interni Play test aktivan — 2026-09-22
+
+- Google URL provera sada prolazi: nakon korisnikovih dodatnih Cloudflare pravila, sveže učitan Data safety obrazac automatski je prošao Checking URLs sa oba kanonska URL-a do sledećeg koraka, bez403. Tačna pravila nisu pregledana; ne pripisivati uspeh neproverenoj pojedinačnoj izmeni. Quick checks završeni: promene mogu na review.
+- Objavljen interni test `0.1.26 internal`, AAB code27 iz postojeće biblioteke. Play prikazuje Active / Available to internal testers. Izabrana samo nova lista `War of Words — internal`, jedan korisnički odobren nalog; druge liste nisu uključene.
+- Link za prijavu: https://play.google.com/apps/internaltest/4701514081638778706 . Pre pregleda Google prikazuje privremeni naziv `com.gottaplay.warofwords (unreviewed)`. Propagacija instalacije može potrajati.
+- Produkcione promene nisu poslate na review i igra nije javno objavljena. Managed publishing ostaje OFF. Dva neblokirajuća upozorenja za mapping/native debug symbols ostaju.
+- **Sledeće:** korisnik pristupa internom testu i proverava instalaciju/pokretanje preko Play Store-a. Ako dođe do konflikta potpisa sa lokalnim APK-om, prvo istražiti očuvanje podataka; ne deinstalirati automatski. Play AAB koristi produkcione oglase; pre testiranja oglasa proveriti AdMob test-device podešavanje. Posle probe dogovoriti slanje produkcije na pregled, a nakon javne dostupnosti povezati AdMob listing.
+
+## Play/Cloudflare završna priprema — raniji nalaz 2026-09-22
 
 - APK0.1.26/code27 instaliran preko postojeće igre na Samsung S23 Ultra, verzija potvrđena i igra pokrenuta. Korisnik izričito potvrdio da score ekran sada dobro radi.
 - AAB0.1.26/code27 uploadovan, stari0.1.25 uklonjen samo iz nacrta (ostaje u biblioteci), novo izdanje sačuvano u Publishing overview. Korisnik odobrio sve zemlje: sačuvano176 zemalja/regiona + Rest of World, ukupno177. Validacija nema Errors, samo upozorenja za mapping/native debug symbols.
