@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Play/Cloudflare završna priprema — 2026-09-22
+
+- APK0.1.26/code27 instaliran preko postojeće igre na Samsung S23 Ultra, verzija potvrđena i igra pokrenuta. Korisnik izričito potvrdio da score ekran sada dobro radi.
+- AAB0.1.26/code27 uploadovan, stari0.1.25 uklonjen samo iz nacrta (ostaje u biblioteci), novo izdanje sačuvano u Publishing overview. Korisnik odobrio sve zemlje: sačuvano176 zemalja/regiona + Rest of World, ukupno177. Validacija nema Errors, samo upozorenja za mapping/native debug symbols.
+- Publishing overview:12 promena nije poslato na review; Quick checks pokrenuti automatski, rezultat još čeka. Managed publishing je OFF: slanje na review može voditi automatskoj objavi po odobrenju. Nije kliknut Submit. UI ne pokazuje obavezan12-testera/14-dana uslov; plan Play testiranja ostaje dogovor za kraj.
+- Cloudflare Security Events potvrđuje da Bot Fight Mode daje Managed Challenge Google/GooglePlayConsole GET zahtevu za `/wow/delete-data/` (AS15169 Google LLC). Korisnik izričito odobrio isključivanje samo Bot Fight Mode za ceo domen; OFF potvrđen i nakon ponovnog učitavanja. Ostala zaštita nije menjana.
+- Posle isključivanja, Play i dalje vraća403, a sveži događaji u16:38 i16:40 GMT+2 i dalje navode Bot fight mode; nije samo pretpostavljeni stari rezultat. Primer Ray `a3f2115879a01f6b`,16:40:57, GooglePlayConsole, kanonski URL. Propagacija ili problem Cloudflare podešavanja nisu razjašnjeni. GET sa ovog računara sa Google zaglavljem vraća200. Query parametri korišćeni samo za probu i vraćen kanonski URL.
+- **Sledeće:** proveriti nove Google zahteve nakon primene OFF i Quick checks; ako Bot Fight ostane aktivan u logu, koristiti `docs/cloudflare-play-url.md` za podršku (poruka nije poslata). Tek posle otklonjenog403 završni dogovor o Play probi/slanju na pregled. AdMob povezati sa javnim listingom nakon objave; način isplate rešava korisnik.
+
 ## Popravka liste rezultata — 0.1.26, 2026-09-22
 
 - Popravljen skrol liste posle partije: redovi propuštaju događaje, touch drag radi nezavisno od emulacije miša, a press/release ostaju u Godot toku za nadimak i dugmad. Zlatna crta odvaja top 10 od dva prethodna reda i tekuće poslate partije. Server već vraća taj skup bez dupliranja; server nije menjan.

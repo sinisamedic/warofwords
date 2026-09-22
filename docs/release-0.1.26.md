@@ -11,6 +11,6 @@
 | `exports/WarOfWords-0.1.26-android.apk` | 267816049 | `4f2d589e0c67b7e00304d0e5e5adf8d11ae55839c838b4317d1b6d9347e53735` |
 | `exports/WarOfWords-0.1.26-play.aab` | 152396830 | `c7c6adb767d9c0040e6d57dceb47c36413da55f718c4adffc35d6fd831dbe040` |
 
-Telefon trenutno vraća unauthorized; instalacija0.1.26 i fizička proba skrola nisu potvrđene. Play još sadrži samo sačuvani nacrt0.1.25/code26; ništa nije poslato na review ili objavljeno.
+APK0.1.26/code27 instaliran na Samsung S23 Ultra bez brisanja podataka; korisnik potvrdio da score ekran dobro radi. AAB0.1.26/code27 prihvaćen i sačuvan u Publishing overview; stari paket uklonjen iz nacrta. Svih177 zemalja/regiona sačuvano po izričitoj odluci korisnika. Nema blokirajućih grešaka izdanja; mapping/native-symbol upozorenja ostaju. Quick checks još traju. Nije poslato na review niti objavljeno; Managed publishing OFF znači da bi odobrene promene mogle automatski da se objave posle slanja.
 
 Naknadna provera0.1.25: korisnik potvrdio rewarded testni oglas i nastavak na Samsung S23 Ultra, save continues=1 i Android log bez script/fatal grešaka. Native UMP je pozvan; GDPR-not-required, zato EU dijalog nije testiran. Target audience i Data safety sačuvani nakon te provere. Nova privacy/deletion stranica javno dostupna. Play validator403 ostaje otvoren; GET/HEAD/Googlebot-UA GET sa lokalnog računara svi200, Cloudflare zaglavlja. To ne simulira Google IP niti identifikuje tačan Play User-Agent.
