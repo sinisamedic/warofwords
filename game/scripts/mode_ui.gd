@@ -73,7 +73,7 @@ static func home(c) -> void:
 		if resume:
 			var gap := 7.0
 			var half := (action_rect.size.x-gap)/2
-			c.action("OPEN MAP" if i==0 else "ENTER ARENA",Rect2(action_rect.position,Vector2(half,action_rect.size.y)),"campaign" if i==0 else "endless_new")
+			c.action("OPEN MAP" if i==0 else "BEGIN",Rect2(action_rect.position,Vector2(half,action_rect.size.y)),"campaign" if i==0 else "endless_new")
 			c.action("CONTINUE",Rect2(action_rect.position+Vector2(half+gap,0),Vector2(half,action_rect.size.y)),"continue" if i==0 else "endless_entry",-1,true)
 		else:
 			c.action(["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],action_rect,ids[i],-1,true)

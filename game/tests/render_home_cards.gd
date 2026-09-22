@@ -18,6 +18,7 @@ func run() -> void:
 		g.save.data.ui_language=lang
 		for continued in [false,true]:
 			g.save.data.battle={"preview":true} if continued else {}
+			g.save.data.endless={"preview":true} if continued else {}
 			g.change_screen("home"); await shot("home-"+lang+"-"+str(continued))
 		g.pressed_action="arsenal"; await shot("pressed-"+lang); g.pressed_action=""
 	g.queue_free(); await process_frame; await create_timer(.5).timeout; quit()

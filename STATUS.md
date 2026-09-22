@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Kandidat 0.1.28 spreman za interni Play test — 2026-09-22
+
+- Usko dugme za novu partiju Beskraja uz postojeći nastavak sada prikazuje `BEGIN`; dodati su kratki prevodi `POČNI / START / JOUER / INICIAR / INIZIA`. Puni natpis na širokom dugmetu nije menjan.
+- Kompletan testni tok prolazi bez neuspeha. Potpisani APK i Play AAB 0.1.28 / code 29 su napravljeni; manifest, potpis, 16 KiB poravnanje, 24 provere rečnika i `bundletool` validacija prolaze. Detalji i hash-evi su u `docs/release-0.1.28.md`.
+- Produkcijska prijava 0.1.26 nije menjana. Paralelne marketing izmene nisu deo ovog razvojnog commita.
+- **Sledeće:** postaviti 0.1.28 na isti interni Play kanal, sačekati propagaciju i proveriti natpis na telefonu.
+
 ## Promotivni video 02 objavljen — 2026-09-22
 
 - Zakazani video „Watch STONE become an attack.” sa zvukom javno objavljen na sva tri odobrena profila. Instagram: `DdmceurONps`; YouTube Shorts: `79nOvcgF2l4`; TikTok: `7688438613662600466`. Linkovi, vremena i dokazi u `marketing/first-eight/SCHEDULE.json` i `PUBLISHED.md`. SHA256 odgovara odobrenom fajlu; original 9:16 i zvuk sačuvani. TikTok moderacija završena, Everyone potvrđeno.
