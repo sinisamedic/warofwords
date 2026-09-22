@@ -2,7 +2,14 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
-## Interni Play test aktivan — 2026-09-22
+## Produkcija poslata na Google pregled — 2026-09-22
+
+- Korisnik potvrdio uspešnu instalaciju internog izdanja preko Play-a, prikaz oglasa označenog Test Ad i nastavak partije nakon oglasa. Pre instalacije sam je obrisao prethodni lokalni APK. Privremena ikonica tokom instalacije prijavljena, instalirana ikonica ispravna; uzrok privremene slike nije potvrđen.
+- Korisnik izričito odobrio slanje uz automatsku objavu po odobrenju. Poslato svih12 pripremljenih produkcionih promena:0.1.26/code27 full rollout,176 zemalja/regiona + Rest of World, listing i deklaracije.
+- Play Publishing overview potvrđuje **Changes in review / Your changes are now in review**, uz **Managed publishing off**. Igra još nije potvrđeno javno dostupna. Google u dijalogu navodi da pregled obično traje do7 dana, ali može duže.
+- **Sledeće:** sačekati odluku Google-a; ako traži izmene, postupiti po konkretnoj poruci. Nakon javne dostupnosti proveriti listing i povezati ga u AdMob-u. Nije postavljena automatizacija praćenja.
+
+## Interni Play test aktivan — ranije 2026-09-22
 
 - Google URL provera sada prolazi: nakon korisnikovih dodatnih Cloudflare pravila, sveže učitan Data safety obrazac automatski je prošao Checking URLs sa oba kanonska URL-a do sledećeg koraka, bez403. Tačna pravila nisu pregledana; ne pripisivati uspeh neproverenoj pojedinačnoj izmeni. Quick checks završeni: promene mogu na review.
 - Objavljen interni test `0.1.26 internal`, AAB code27 iz postojeće biblioteke. Play prikazuje Active / Available to internal testers. Izabrana samo nova lista `War of Words — internal`, jedan korisnički odobren nalog; druge liste nisu uključene.

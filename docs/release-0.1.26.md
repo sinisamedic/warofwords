@@ -4,6 +4,8 @@
 
 ## Završni Play status
 
+**Produkcija poslata na pregled 2026-09-22.** Nakon potvrđene korisničke instalacije preko Play-a i uspešnog rewarded nastavka, korisnik odobrio automatsku objavu po Google odobrenju. Svih12 promena poslato, Publishing overview potvrđuje Changes in review;0.1.26 full rollout i sve zemlje. Managed publishing OFF. Javna dostupnost još nije potvrđena. Sledeće: Google odluka, zatim provera javnog listinga i AdMob povezivanje. Raniji statusi ispod su istorija.
+
 Interni kanal `0.1.26 internal` objavljen 2026-09-22: Active / Available to internal testers, code27. Uključena samo lista `War of Words — internal` sa jednim odobrenim nalogom. Link: https://play.google.com/apps/internaltest/4701514081638778706 . Korisnička instalacija preko Play-a tek sledi; lokalni APK već proveren na telefonu. Ne brisati lokalne podatke radi eventualnog konflikta potpisa bez prethodnog dogovora.
 
 Sveža Google validacija oba kanonska privacy/deletion URL-a prolazi nakon korisnikovih Cloudflare pravila. Quick checks završeni uspešno. Produkcija nije poslata na review niti javno objavljena; Managed publishing OFF. Ranija čekanja ispod predstavljaju istoriju.
