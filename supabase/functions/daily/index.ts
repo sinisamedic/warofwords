@@ -54,6 +54,16 @@ Deno.serve(async(request:Request)=>{
     raw+=decoder.decode();
     let input; try { input=JSON.parse(raw); } catch { return respond({error:'Invalid request'},400); }
     if(!input||typeof input!=='object') return respond({error:'Invalid request'},400);
+    if(input.action==='delete_profile') {
+      if(input.confirm!=='DELETE_MY_PROFILE') return respond({error:'Explicit confirmation required'},400);
+      // Identity comes only from the verified bearer token, never from the payload.
+      // All player-owned game tables reference auth.users with ON DELETE CASCADE.
+      const removal=await fetch(`${url}/auth/v1/admin/users/${encodeURIComponent(user.id)}`,{
+        method:'DELETE',headers:serverHeaders,body:JSON.stringify({should_soft_delete:false})
+      });
+      if(!removal.ok) return respond({error:'Deletion unavailable. Please try again.'},503);
+      return respond({deleted:true});
+    }
     if(!['en','de','fr','es','it','sr'].includes(input.language)||typeof input.adjacent!=='boolean'||!['daily-v1',VERSION].includes(input.version)) return respond({error:'Unsupported rules'},400);
     const versioned=input.version===VERSION;
     const versionArgs=versioned?{p_version:input.version}:{};

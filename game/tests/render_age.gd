@@ -9,8 +9,8 @@ func run():
 	if not is_instance_valid(g.age_screen): g.open_age_screen("age")
 	for lang in ["sr","en","de","fr","es","it"]:
 		g.save.data.ui_language=lang
-		for kind in ["age","info","records"]:
-			g.save.data.age_group="under13"; g.age_screen.kind=kind; g.age_screen.rebuild()
+		for kind in ["age","info","records","delete_confirm"]:
+			g.save.data.age_group="adult" if kind in ["info","delete_confirm"] else "under13"; g.age_screen.kind=kind; g.age_screen.rebuild()
 			await process_frame; await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://../.local/age-render/"+kind+"-"+lang+".png")
 	g.age_screen.leave(); await process_frame

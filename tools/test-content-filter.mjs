@@ -21,3 +21,8 @@ for(const [code,[bad,good]] of Object.entries(examples)) {
   console.log(`PASS ${code}: shared list, server rejection, ordinary move and legacy replay`);
 }
 assert.equal(contentAllowed('STONE','unknown'),false);
+const drugExamples={en:'HEROIN',sr:'HEROIN',de:'KOKAIN',fr:'COCAÏNE',es:'COCAÍNA',it:'EROINA'};
+for(const [code,word] of Object.entries(drugExamples)) {
+  assert.equal(contentAllowed(word,code),false,`${code}: drug reference rejected`);
+}
+console.log('PASS drug references excluded in all six languages');

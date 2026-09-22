@@ -2,6 +2,13 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Kandidat 0.1.25 i Play deklaracije — 2026-09-22
+
+- Implementirani brisanje sopstvenog online profila, šest prevoda i javni privacy/deletion linkovi; server objavljen i probni profil uspešno obrisan. Proširen filter na 13.730 reči. Pun Godot tok 4.564 PASS, namenski Node/live testovi prolaze.
+- APK sa demo oglasima i Play AAB sa produkcionom jedinicom napravljeni; UMP sada važi za oba preseta. Potpis/16 KiB/APK rečnici/bundletool/manifest provereni. **Native Android provera čeka povezan telefon; AAB je kandidat, nema rollout-a.** Tačni artefakti/hash-evi i ograničenja: `docs/release-0.1.25.md`.
+- IARC Completed (PEGI7 / ESRB10+ / USK12, više u pojedinim regionima); Advertising ID sačuvan. Data safety sačuvan kao nacrt, zavisi od Target audience. Korisnik je odobrio pravnu izjavu **nakon provere na telefonu**; ne potvrđivati je pre toga.
+- Ažurirane četiri stranice u susednom website repo-u i ZIP `exports/WoW-policy-update-2026-09-22.zip`. Javna objava još nije potvrđena. Play je prijavio403 za deletion URL, običan browser radi; ne pretpostavljati da je uzrok otklonjen.
+- **Sledeće:** Android USB provera → Target audience/Data safety finalizacija; potvrda objave policy ZIP-a i Google pristupa. Na kraju objasniti i pripremiti obavezno testiranje. Nema uploadovanog paketa, review-a ili objave igre.
 ## Filter i AI deklaracija završeni — 0.1.24, 2026-09-22
 
 - Korisnik je odobrio oba prethodna pitanja: filter rečnika i AI oznake za Play materijale. Ranija čekanja ispod su time rešena.

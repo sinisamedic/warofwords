@@ -15,8 +15,7 @@ var initialized := false
 
 func begin(test: bool, id: String) -> void:
 	test_ads=test; unit_id=id
-	# Google's demo ad units do not monetize; live traffic always requires UMP.
-	if test_ads: initialize_ads(); return
+	# Debug builds use Google's demo unit but exercise the same consent flow.
 	var params := ConsentRequestParameters.new()
 	params.tag_for_under_age_of_consent=under_age_of_consent
 	UserMessagingPlatform.consent_information.update(params,consent_updated,consent_failed)

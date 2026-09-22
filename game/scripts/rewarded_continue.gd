@@ -36,7 +36,8 @@ func request() -> void:
 	backend.failed.connect(_failed.bind(token))
 	add_child(backend)
 	changed.emit()
-	backend.begin(TEST_ADS,TEST_UNIT_ID if TEST_ADS else UNIT_ID)
+	var test_mode := TEST_ADS and not OS.has_feature("live_ads")
+	backend.begin(test_mode,TEST_UNIT_ID if test_mode else UNIT_ID)
 
 func _phase(value: String, request_token: int) -> void:
 	if request_token!=token or not busy(): return

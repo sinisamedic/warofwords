@@ -84,3 +84,18 @@ func call_api(action: String, payload: Dictionary) -> Dictionary:
 		if not auth.has("error"): result=await request_json("/functions/v1/daily",body,str(session.access_token))
 	busy=false
 	return result
+
+func delete_profile() -> Dictionary:
+	if not allowed(): return {"error":"Online features are disabled for this age group"}
+	if busy or authenticating: return {"error":"Please wait"}
+	# Do not create an online identity just to delete it.
+	if session.is_empty(): return {"deleted":true}
+	busy=true
+	var auth := await ensure_session()
+	if auth.has("error"): busy=false; return auth
+	var result := await request_json("/functions/v1/daily",{"action":"delete_profile","confirm":"DELETE_MY_PROFILE"},str(session.access_token))
+	if result.get("deleted",false):
+		session.clear()
+		if FileAccess.file_exists(session_path): DirAccess.remove_absolute(session_path)
+	busy=false
+	return result

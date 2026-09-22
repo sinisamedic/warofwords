@@ -10,6 +10,12 @@ var form: Control
 var panel: Rect2
 var old_touch := false
 var error := false
+var deleting := false
+var delete_status := ""
+var privacy_copy: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/privacy-copy.json"))
+func privacy_text(key: String) -> String:
+	var index := ["en","sr","de","fr","es","it"].find(host.save.data.ui_language)
+	return privacy_copy[key][maxi(index,0)]
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	z_index=200; mouse_filter=Control.MOUSE_FILTER_STOP
@@ -34,7 +40,14 @@ func rebuild() -> void:
 	panel=Rect2((size.x-w)/2,18,w,size.y-36)
 	var x: float=panel.position.x; var y: float=panel.position.y
 	label(words("title" if kind=="age" else "records" if kind=="records" else "privacy"),Rect2(x+95,y+24,w-190,40),27,true)
-	if kind=="age":
+	if kind=="delete_confirm":
+		label(privacy_text("confirm"),Rect2(x+50,y+88,w-100,155),19)
+		if not delete_status.is_empty(): label(privacy_text(delete_status),Rect2(x+55,y+247,w-110,68),16)
+		var accept:=button(privacy_text("working" if deleting else "yes"),Rect2(size.x/2-230,panel.end.y-83,280,44),delete_online)
+		accept.disabled=deleting
+		var cancel:=button(privacy_text("cancel"),Rect2(size.x/2+65,panel.end.y-83,170,44),func(): kind="info"; delete_status=""; rebuild())
+		cancel.disabled=deleting
+	elif kind=="age":
 		label(words("question"),Rect2(x+45,y+80,w-90,58),18)
 		var labels: Array=[words("under"),"13–17","18+"]
 		for i in 3:
@@ -61,9 +74,31 @@ func rebuild() -> void:
 			var sc:=ScrollContainer.new(); sc.position=Vector2(x+55,y+203); sc.size=Vector2(w-110,panel.size.y-294); sc.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED; form.add_child(sc)
 			var content:=Label.new(); content.text="\n".join(lines) if not lines.is_empty() else words("empty"); content.add_theme_font_override("font",host.font); content.add_theme_font_size_override("font_size",18); content.add_theme_color_override("font_color",host.CREAM); content.size_flags_horizontal=Control.SIZE_EXPAND_FILL; content.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; sc.add_child(content)
 		else:
-			label(words("local"),Rect2(x+60,y+220,w-120,60),16)
+			label(privacy_text("done") if delete_status=="done" else words("local"),Rect2(x+60,y+186,w-120,52),16)
+			button(privacy_text("policy"),Rect2(x+55,y+249,w-110,34),func(): OS.shell_open("https://gottaplay.net/wow/privacy/"))
+			button(privacy_text("web"),Rect2(x+55,y+290,w-110,34),func(): OS.shell_open("https://gottaplay.net/wow/delete-data/"))
+			if host.online_allowed(): button(privacy_text("delete"),Rect2(x+55,y+331,w-110,34),func(): kind="delete_confirm"; delete_status=""; rebuild())
 		button(host.t("GOT IT"),Rect2(size.x/2-130,panel.end.y-70,260,44),leave)
 	queue_redraw()
+
+func delete_online() -> void:
+	if deleting: return
+	if host.rankings.busy:
+		delete_status="failed"; rebuild(); return
+	deleting=true; delete_status=""; rebuild()
+	var result: Dictionary = await host.daily_screen.service.delete_profile()
+	deleting=false
+	if result.get("deleted",false):
+		host.save.data.endless_outbox.clear()
+		host.save.save_game()
+		host.rankings.sent_runs.clear()
+		host.daily_screen.pending.clear()
+		host.daily_screen.leaderboard.clear()
+		host.daily_screen.attempt.clear()
+		if FileAccess.file_exists(host.daily_screen.pending_path): DirAccess.remove_absolute(host.daily_screen.pending_path)
+		kind="info"; delete_status="done"
+	else: delete_status="failed"
+	rebuild()
 func record_name(key: String) -> String:
 	var parts:=key.split("_")
 	var language: String=preload("res://scripts/languages.gd").NAMES.get(parts[0],parts[0].to_upper())
@@ -75,7 +110,7 @@ func confirm_age() -> void:
 	if not host.save.save_game(): host.save.data.age_group=previous; error=true; rebuild(); return
 	kind="info"; rebuild()
 func leave() -> void:
-	if kind=="age": return
+	if kind=="age" or deleting: return
 	if result_mode: host.change_screen("home")
 	host.age_screen=null; queue_free()
 func _exit_tree() -> void: Input.emulate_mouse_from_touch=old_touch

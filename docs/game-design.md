@@ -399,3 +399,6 @@ Korisnik je naknadno odobrio objavljivanje preostalih sedam zvučnih videa na sv
 ## Odobreno 2026-09-22: filter sadržaja rečnika
 
 Za pripremu publike 9+ korisnik je odobrio filtriranje neprikladnih reči u svih šest jezika, za sve uzraste: generisanje/dopuna, hintovi, validacija poteza i serverski dnevni izazov koriste isti spisak. Detalji i ograničenja su u [content-filter.md](content-filter.md). To ne predstavlja konačnu IARC ocenu. Odobreno je i označavanje Play materijala kao sadržaja sa AI grafikom; screenshotovi ostaju stvarni renderi igre.
+
+## Priprema 0.1.25 — 2026-09-22
+U okviru odobrenog završetka Play pripreme dodati su brisanje sopstvenog online profila uz potvrdu, lokalno očuvanje napretka i javni privacy/deletion linkovi. Vizuelni stil ostaje navy/gold sa postojećim ornamentima. Play kandidat koristi produkcionu rewarded jedinicu, APK demo jedinicu; oba prolaze UMP. Izjava o dečjoj usklađenosti odobrena je samo nakon Android provere. Detalji: [release-0.1.25.md](release-0.1.25.md).
