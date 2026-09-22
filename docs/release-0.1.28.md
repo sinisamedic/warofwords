@@ -19,3 +19,10 @@ Datum: 2026-09-22.
 - Telefon nije povezan preko ADB-a. Ručna proba na uređaju sledi kroz interni Play kanal.
 
 Produkcijska prijava 0.1.26 nije menjana.
+
+## Play stanje
+
+- Interno izdanje `0.1.28 internal` objavljeno je 2026-09-22 u 21:27. Play prikazuje **Active / Available to internal testers**, code 29.
+- Play procenjuje novu instalaciju na 126 MB i ažuriranje sa 0.1.27 na 541 KB.
+- Nema grešaka; ostaju poznata neblokirajuća upozorenja za deobfuscation fajl i native debug symbols.
+- Produkcijska prijava 0.1.26 nije menjana.

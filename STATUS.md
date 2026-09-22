@@ -2,12 +2,13 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
-## Kandidat 0.1.28 spreman za interni Play test — 2026-09-22
+## Interni Play test 0.1.28 aktivan — 2026-09-22
 
 - Usko dugme za novu partiju Beskraja uz postojeći nastavak sada prikazuje `BEGIN`; dodati su kratki prevodi `POČNI / START / JOUER / INICIAR / INIZIA`. Puni natpis na širokom dugmetu nije menjan.
 - Kompletan testni tok prolazi bez neuspeha. Potpisani APK i Play AAB 0.1.28 / code 29 su napravljeni; manifest, potpis, 16 KiB poravnanje, 24 provere rečnika i `bundletool` validacija prolaze. Detalji i hash-evi su u `docs/release-0.1.28.md`.
-- Produkcijska prijava 0.1.26 nije menjana. Paralelne marketing izmene nisu deo ovog razvojnog commita.
-- **Sledeće:** postaviti 0.1.28 na isti interni Play kanal, sačekati propagaciju i proveriti natpis na telefonu.
+- AAB je objavljen kao `0.1.28 internal`; Play prikazuje **Active / Available to internal testers**, code 29, izdanje od 2026-09-22 u 21:27. Nova instalacija je procenjena na 126 MB, a ažuriranje sa 0.1.27 na 541 KB. Ostaju samo poznata upozorenja za deobfuscation fajl i native debug symbols.
+- Produkcijska prijava 0.1.26 nije menjana.
+- **Sledeće:** sačekati propagaciju i proveriti natpis na telefonu preko postojećeg internog Play linka.
 
 ## Promotivni video 02 objavljen — 2026-09-22
 
