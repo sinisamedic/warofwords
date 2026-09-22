@@ -1,12 +1,26 @@
 extends SceneTree
 var g
 func _initialize() -> void: call_deferred("run")
+func shot(filename: String) -> void:
+	if not "--screenshots" in OS.get_cmdline_user_args(): return
+	await process_frame; await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png("res://../.local/"+filename+".png")
 func touch(control: Control) -> void:
 	var event := InputEventScreenTouch.new()
 	event.index=0; event.position=root.get_final_transform()*control.get_global_transform_with_canvas()*(control.size/2); event.pressed=true
 	Input.parse_input_event(event); await process_frame
 	event=event.duplicate(); event.pressed=false; Input.parse_input_event(event); await process_frame
+func drag_list(board: Control, distance: float) -> void:
+	var transform: Transform2D=root.get_final_transform()*board.get_global_transform_with_canvas()
+	var start: Vector2=board.list_rect.get_center()
+	var press := InputEventScreenTouch.new(); press.index=0; press.pressed=true; press.position=transform*start
+	Input.parse_input_event(press); await process_frame
+	var drag := InputEventScreenDrag.new(); drag.index=0; drag.position=transform*(start+Vector2(0,distance)); drag.relative=transform.basis_xform(Vector2(0,distance))
+	Input.parse_input_event(drag); await process_frame
+	press=press.duplicate(); press.pressed=false; press.position=drag.position
+	Input.parse_input_event(press); await process_frame
 func run() -> void:
+	root.size=Vector2i(1280,576)
 	g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/rank-test.json"; root.add_child(g)
 	while g.loading: await process_frame
 	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
@@ -24,6 +38,25 @@ func run() -> void:
 	while board.busy: await process_frame
 	await process_frame; await process_frame; await process_frame
 	assert(board.scroll.scroll_vertical>0 or board.scroll.size.y>=board.rows_view.custom_minimum_size.y)
+	assert(board.rows_view.has_divider() and board.rows_view.row_y(10)==420)
+	assert(board.rows_view.rows[10].position==24 and board.rows_view.rows[12].current)
+	await shot("rank-scroll-current")
+	board.scroll.scroll_vertical=0; await process_frame
+	await drag_list(board,-110)
+	assert(board.scroll.scroll_vertical>=100)
+	await drag_list(board,110)
+	assert(board.scroll.scroll_vertical==0)
+	await shot("rank-scroll-top")
+	var wheel := InputEventMouseButton.new(); wheel.button_index=MOUSE_BUTTON_WHEEL_DOWN; wheel.pressed=true
+	wheel.position=root.get_final_transform()*board.get_global_transform_with_canvas()*board.list_rect.get_center()
+	Input.parse_input_event(wheel); await process_frame
+	wheel=wheel.duplicate(); wheel.pressed=false; Input.parse_input_event(wheel); await process_frame
+	assert(board.scroll.scroll_vertical>0)
+	print("PASS: result list touch scroll in both directions and mouse wheel; top 10 divider and current run context")
+	var all_rows: Array=board.rows_view.rows.duplicate(true)
+	board.rows_view.set_rows(all_rows.slice(0,10)); await process_frame
+	assert(not board.rows_view.has_divider() and board.rows_view.custom_minimum_size.y==400)
+	board.rows_view.set_rows(all_rows); await process_frame
 	assert(service.calls.is_empty() and not board.send_button.disabled and board.nickname.editable)
 	assert(board.nickname.text=="Zapamceno ime")
 	assert(Input.emulate_mouse_from_touch)

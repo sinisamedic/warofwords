@@ -1,5 +1,9 @@
 # War of Words — dizajn igre
 
+## Lista rezultata — usvojeno 2026-09-22
+
+- Posle Beskraja lista mora da podržava prevlačenje prstom i skrol točkićem. Prikazuje top 10; kada tekuća poslata partija nije među njima, ispod zlatne razdelne crte prikazuje dva prethodna reda i sopstveni istaknuti rezultat sa globalnom pozicijom. Preklop sa top10 se ne duplira. Zvaničan plasman postoji tek nakon eksplicitnog slanja rezultata; čuvanje lokalnog nacrta ne objavljuje ga.
+
 ## Google Play — usvojeno 2026-09-21
 
 - Korisnik traži širu ponudu oglasa za odrasle: maksimalni sadržaj G za 13–17, PG za 18+ (plafon Families mixed-audience). Mlađi od 13/nepoznati i dalje bez oglasa. TFUA i UMP zaštita maloletnika ostaju; dostupnost oglasa nije garantovana.

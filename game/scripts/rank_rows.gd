@@ -3,10 +3,27 @@ const O=preload("res://scripts/ornaments.gd")
 var host
 var rows: Array=[]
 var daily := false
+var separate_current := false
+const ROW_HEIGHT := 40
+const DIVIDER_HEIGHT := 20
+func _ready() -> void:
+	# Painted rows have no actions; gestures belong to the ScrollContainer.
+	mouse_filter=Control.MOUSE_FILTER_IGNORE
+func has_divider() -> bool:
+	return separate_current and rows.size()>10
+func row_y(index: int) -> int:
+	return index*ROW_HEIGHT+(DIVIDER_HEIGHT if has_divider() and index>=10 else 0)
+func set_rows(value: Array) -> void:
+	rows=value
+	custom_minimum_size.y=rows.size()*ROW_HEIGHT+(DIVIDER_HEIGHT if has_divider() else 0)
+	queue_redraw()
 func _draw() -> void:
+	if has_divider():
+		var y := 10*ROW_HEIGHT+DIVIDER_HEIGHT/2
+		draw_line(Vector2(8,y),Vector2(size.x-8,y),Color("cba85c"),1,true)
 	for i in rows.size():
 		var row: Dictionary=rows[i]
-		var r := Rect2(0,i*40,size.x,36)
+		var r := Rect2(0,row_y(i),size.x,36)
 		var own: bool=row.get("own",false)
 		if row.get("current",false):
 			draw_rect(r.grow(1),Color("f3c569"))

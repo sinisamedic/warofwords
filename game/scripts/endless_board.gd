@@ -22,6 +22,9 @@ var name_dirty := false
 var busy := false
 var cached_rows: Array=[]
 var cached_category := ""
+var scroll_touch := -1
+var scroll_touch_y := 0.0
+var scroll_touch_start := 0
 func local_text(en: String,sr: String) -> String: return sr if host.save.data.ui_language=="sr" else host.t(en)
 func _ready() -> void:
 	previous_touch_emulation=Input.emulate_mouse_from_touch
@@ -90,8 +93,9 @@ func rebuild() -> void:
 	label(local_text("WORDS","REČI") if mode=="daily" else local_text("WAVE","TALAS"),Rect2(list_rect.end.x-48,header_y,48,18),11)
 	scroll=ScrollContainer.new(); scroll.position=list_rect.position; scroll.size=list_rect.size; scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED; form.add_child(scroll)
 	rows_view=preload("res://scripts/rank_rows.gd").new(); rows_view.host=host; rows_view.daily=mode=="daily"; rows_view.size_flags_horizontal=Control.SIZE_EXPAND_FILL; scroll.add_child(rows_view)
+	rows_view.separate_current=result_mode
 	if cached_category==mode+str(adjacent):
-		rows_view.rows=cached_rows; rows_view.custom_minimum_size.y=cached_rows.size()*40
+		rows_view.set_rows(cached_rows)
 	empty=label("",Rect2(list_rect.position+Vector2(12,24),Vector2(list_rect.size.x-24,80)),17); empty.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	empty.gui_input.connect(retry_input)
 	queue_redraw()
@@ -128,13 +132,13 @@ func refresh() -> void:
 	if token!=request_id:
 		refresh(); return
 	if response.has("error"):
-		rows_view.rows=[]; rows_view.custom_minimum_size.y=0; rows_view.queue_redraw()
+		rows_view.set_rows([])
 		empty.text=local_text("No connection. Your result stays saved.\nTap here to retry.","Nema veze sa serverom. Rezultat ostaje sačuvan.\nDodirni ovde za ponovni pokušaj.")
 		empty.mouse_filter=Control.MOUSE_FILTER_STOP
 		return
 	empty.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	empty.text=local_text("No results yet. Be the first!","Još nema rezultata. Budi prvi!") if response.get("rows",[]).is_empty() else ""
-	rows_view.rows=response.get("rows",[]); rows_view.custom_minimum_size.y=rows_view.rows.size()*40; rows_view.queue_redraw()
+	rows_view.set_rows(response.get("rows",[]))
 	if result_mode:
 		for i in rows_view.rows.size():
 			if rows_view.rows[i].get("current",false) and i>=10:
@@ -144,7 +148,7 @@ func refresh() -> void:
 func scroll_to_current(index: int, token: int) -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if request_id==token: scroll.scroll_vertical=maxi(0,(index-2)*40)
+	if request_id==token: scroll.scroll_vertical=maxi(0,rows_view.row_y(maxi(0,index-2))-20)
 func save_name() -> void:
 	if not result_mode or not name_dirty: return
 	if host.rankings.remember_nickname(nickname.text): name_dirty=false
@@ -176,6 +180,18 @@ func leave() -> void:
 func _exit_tree() -> void:
 	Input.emulate_mouse_from_touch=previous_touch_emulation
 func _input(event: InputEvent) -> void:
+	# Handle real touch directly, independent of mouse emulation and platform
+	# touchscreen detection. Leave wheel and scrollbar dragging to Godot.
+	if event is InputEventScreenTouch:
+		var p: Vector2=get_global_transform_with_canvas().affine_inverse()*event.position
+		if event.pressed and scroll_touch==-1 and list_rect.has_point(p) and not rows_view.rows.is_empty():
+			scroll_touch=event.index; scroll_touch_y=p.y; scroll_touch_start=scroll.scroll_vertical
+		elif not event.pressed and event.index==scroll_touch:
+			scroll_touch=-1
+	elif event is InputEventScreenDrag and event.index==scroll_touch:
+		var p: Vector2=get_global_transform_with_canvas().affine_inverse()*event.position
+		scroll.scroll_vertical=scroll_touch_start+roundi(scroll_touch_y-p.y)
+		get_viewport().set_input_as_handled()
 	if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE:
 		get_viewport().set_input_as_handled(); leave()
 		if result_mode: host.change_screen("home")

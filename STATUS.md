@@ -2,6 +2,15 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Popravka liste rezultata — 0.1.26, 2026-09-22
+
+- Popravljen skrol liste posle partije: redovi propuštaju događaje, touch drag radi nezavisno od emulacije miša, a press/release ostaju u Godot toku za nadimak i dugmad. Zlatna crta odvaja top 10 od dva prethodna reda i tekuće poslate partije. Server već vraća taj skup bez dupliranja; server nije menjan.
+- Headless i desktop Godot regresija prolaze: oba smera dodira, točkić, separator, top-10 bez separatora, nadimak, slanje/retry i kategorije. Vizuelno provereni vrh i sopstveni plasman na1280×576. APK/AAB0.1.26/code27 napravljeni; potpis,16KiB,24 provere rečnika i bundletool uspešni. Detalji: `docs/release-0.1.26.md`.
+- Prethodni APK0.1.25 na Samsung S23 Ultra: korisnik potvrdio testni rewarded oglas i nastavak; save potvrđuje continues=1, Android log bez script/fatal grešaka. UMP pozvan i vratio GDPR-not-required; EU dijalog i svi uzrasti nisu zasebno testirani na telefonu.
+- Target audience i Data safety sačuvani nakon odobrene provere. Javne privacy/deletion stranice potvrđene sa novim tekstom. AAB0.1.25/code26 prihvaćen i sačuvan u produkcionom **nacrtu**, bez review-a/rollout-a; treba ga zameniti tek proverenim novim paketom.
+- Play deletion validator još prijavljuje403. curl GET,HEAD i GET sa Googlebot User-Agent-om sa ovog računara vraćaju200 preko Cloudflare-a. To nije zahtev sa Google IP-a niti dokaz da je problem rešen. Potrebni Cloudflare/hosting logovi konkretnog Google zahteva; zaštita sajta nije menjana.
+- **Sledeće:** ADB ponovo unauthorized; potvrditi USB debugging i instalirati0.1.26 bez brisanja podataka, pa korisnička proba skrola. Potom zameniti Play nacrt, rešiti Google pristup deletion URL-u i sa korisnikom proći testiranje/distribuciju. Stariji odeljci ispod su istorija.
+
 ## Kandidat 0.1.25 i Play deklaracije — 2026-09-22
 
 - Implementirani brisanje sopstvenog online profila, šest prevoda i javni privacy/deletion linkovi; server objavljen i probni profil uspešno obrisan. Proširen filter na 13.730 reči. Pun Godot tok 4.564 PASS, namenski Node/live testovi prolaze.
