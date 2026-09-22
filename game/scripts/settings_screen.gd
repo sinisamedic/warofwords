@@ -107,7 +107,7 @@ func rebuild() -> void:
 			preload("res://scripts/admob_backend.gd").show_privacy(func(error):
 				if error: status="Privacy form unavailable. Try again later."
 				rebuild()))
-	var hint:=label("Applies to new duels. Saved duels keep their dictionary.",Rect2(right.position.x+24,y+350,right.size.x-24,42),12); hint.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART; hint.size=Vector2(right.size.x-24,42); hint.modulate=Color("acb7bf")
+	var hint:=label("Changing word language removes saved duels and runs.",Rect2(right.position.x+24,y+350,right.size.x-24,42),12); hint.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART; hint.size=Vector2(right.size.x-24,42); hint.modulate=Color("acb7bf")
 	var save_button:=button("SAVE",Rect2(size.x/2-112,y+398,224,38),apply_settings,false,1); save_button.pixels=24
 	button("BACK",Rect2(size.x/2+126,y+402,100,32),leave)
 	queue_redraw()
@@ -138,9 +138,11 @@ func apply_settings() -> void:
 	if not name_value.is_empty() and not host.rankings.remember_nickname(name_value): status="Name could not be saved"; rebuild(); return
 	var old: Dictionary=host.save.data.duplicate(true)
 	for key in ["ui_language","word_language","music","sound","haptics","calm","adjacent_only"]: host.save.data[key]=draft[key]
+	if old.word_language!=draft.word_language:
+		host.save.data.battle={}
+		host.save.data.endless={}
 	if not host.save.save_game(): host.save.data=old; status="Could not save progress on this device"; rebuild(); return
 	host.sfx.enabled=draft.sound; host.music.set_enabled(draft.music)
-	# Unfinished battles keep their own dictionary and connection rule.
 	leave()
 func leave() -> void:
 	host.settings_screen=null; Input.emulate_mouse_from_touch=previous_touch; queue_free(); host.change_screen("home")

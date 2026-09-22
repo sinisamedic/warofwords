@@ -77,6 +77,7 @@ var screen := "home"
 var previous := "home"
 var selected := 0
 var mission := 0
+var campaign_mission := 0
 var chapter := 0
 var overlay := ""
 var buttons: Array[Dictionary] = []
@@ -250,6 +251,7 @@ func _ready() -> void:
 	lex = Lexicon.new(false, save.data.word_language)
 	lexicons[lex.language] = lex
 	mission = save.data.unlocked
+	campaign_mission = mission
 	chapter = mission / 4
 	sfx = Sound.new()
 	add_child(sfx)
@@ -683,7 +685,7 @@ func settle_campaign(target: int) -> void:
 		campaign_background_time=0
 		campaign_background_direction=signf(next-chapter)
 		campaign_offset+=(next-chapter)*campaign_span()
-		chapter=next; mission=chapter*4
+		chapter=next; mission=chapter*4; campaign_mission=mission
 	campaign_slide_from=campaign_offset; campaign_slide_time=0
 	if save.data.calm:
 		campaign_offset=0
@@ -1297,6 +1299,7 @@ func dispatch(id: String, value: int = -1) -> void:
 		"endless_entry":
 			if not save.data.endless.is_empty(): restore_battle(true)
 			else: change_screen("endless_prepare")
+		"endless_new": change_screen("endless_prepare")
 		"rewarded_continue":
 			if endless_continue_pending and endless_continues<rewarded.MAX_CONTINUES: rewarded.request()
 		"endless_finish":
@@ -1332,7 +1335,9 @@ func dispatch(id: String, value: int = -1) -> void:
 					selected=arsenal_slot
 				save.save_game(); sfx.play("upgrade")
 		"artifact_clear": save.data.artifact="none"; save.save_game()
-		"mission": mission=value
+		"mission":
+			mission=value
+			campaign_mission=mission
 		"chapter":
 			settle_campaign(value)
 		"journal_page": journal_page=clampi(value,0,maxi(0,(save.data.dictionary.size()-1)/20))
@@ -1372,7 +1377,11 @@ func dispatch(id: String, value: int = -1) -> void:
 		"ui_language":
 			save.data.ui_language = ["en","sr"][value]; save.save_game()
 		"word_language":
-			save.data.word_language = ["en","sr"][value]; save.save_game()
+			var code: String=["en","sr"][value]
+			if save.data.word_language!=code:
+				save.data.battle={}
+				save.data.endless={}
+			save.data.word_language=code; save.save_game()
 			await select_dictionary(save.data.word_language)
 		"link_rule":
 			save.data.adjacent_only = value == 0
@@ -1398,7 +1407,10 @@ func change_screen(target: String) -> void:
 	if campaign_track!=null: campaign_track.visible=false
 	hero_recoil=0; enemy_recoil=0; page_gesture=false
 	notice_time=0
-	if target=="campaign": chapter=mission/4
+	if target=="campaign":
+		if endless_mode: mission=campaign_mission
+		else: campaign_mission=clampi(mission,0,Campaign.COUNT-1)
+		chapter=campaign_mission/4
 	if target=="settings" and not is_instance_valid(settings_screen):
 		settings_screen=preload("res://scripts/settings_screen.gd").new(); settings_screen.host=self; add_child(settings_screen)
 	if target=="battle" and not ended: hero.reset_pose()
@@ -1445,6 +1457,7 @@ func upgrade() -> void:
 func start_battle(as_endless: bool = false, save_initial: bool = true) -> void:
 	if mission>save.data.unlocked and not as_endless:
 		return
+	if not as_endless: campaign_mission=mission
 	preparing_battle=true
 	endless_mode=as_endless
 	await select_dictionary(save.data.word_language)
@@ -1710,6 +1723,7 @@ func restore_battle(as_endless: bool = false) -> void:
 	lex.joker_enabled=true
 	change_screen("battle")
 	mission=int(b.mission); hp=int(b.hp); foe_hp=int(b.foe); foe_max=int(b.max)
+	if not as_endless: campaign_mission=mission
 	foe_guard=b.get("foe_guard",false)
 	battle_loadout=b.get("loadout",[b.get("weapon","pulse"),"aegis","arc","mend"]).duplicate()
 	battle_weapon=battle_loadout[0]

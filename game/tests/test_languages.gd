@@ -16,12 +16,14 @@ func run() -> void:
 		lex.generate(); check(lex.letters.size()==28 and not lex.solutions.is_empty(),code+" playable board")
 		for letter in lex.letters: check(lex.valid_tile(letter),code+" valid tile "+letter)
 		check(preload("res://scripts/localization.gd").translate("OPTIONS",code)!="OPTIONS" or code=="en",code+" translated settings")
+		check(preload("res://scripts/localization.gd").translate("Changing word language removes saved duels and runs.",code)!="Changing word language removes saved duels and runs." or code=="en",code+" translated save warning")
 	var g=load("res://main.tscn").instantiate(); g.online_writes_enabled=false; g.save.path="res://../.local/languages-test.json"; root.add_child(g)
 	while g.loading: await process_frame
 	if is_instance_valid(g.age_screen): g.age_screen.kind="info"; g.age_screen.leave()
 	await process_frame
 	g.daily_screen.profile_path="res://../.local/languages-profile.json"
 	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.ui_language="en"; g.save.data.tutorial=true
+	g.save.data.battle={"saved":true}; g.save.data.endless={"saved":true}
 	g.change_screen("settings"); await process_frame
 	var s=g.settings_screen
 	s.draft.ui_language="fr"; s.draft.word_language="de"; s.nickname.text="Testeur"
@@ -29,12 +31,17 @@ func run() -> void:
 	check(s.form.has_node("Language_sr"),"all six native language choices")
 	s.apply_settings(); await process_frame
 	check(g.save.data.ui_language=="fr" and g.save.data.word_language=="de","independent languages saved")
+	check(g.save.data.battle.is_empty() and g.save.data.endless.is_empty(),"word-language change clears both resumable modes")
 	check(g.rankings.nickname()=="Testeur","shared nickname saved locally")
 	check(g.save.data.endless_outbox.is_empty(),"settings never publishes scores")
+	g.save.data.battle={"keep":true}; g.save.data.endless={"keep":true}
 	g.change_screen("settings"); await process_frame
-	g.settings_screen.draft.ui_language="it"; g.settings_screen.leave(); await process_frame
-	check(g.save.data.ui_language=="fr","Back discards draft")
+	g.settings_screen.draft.ui_language="it"; g.settings_screen.apply_settings(); await process_frame
+	check(not g.save.data.battle.is_empty() and not g.save.data.endless.is_empty(),"other settings preserve resumable modes")
+	g.change_screen("settings"); await process_frame
+	g.settings_screen.draft.ui_language="sr"; g.settings_screen.leave(); await process_frame
+	check(g.save.data.ui_language=="it","Back discards draft")
 	var save=preload("res://scripts/save_data.gd").new(); save.path=g.save.path; save.load_game()
-	check(save.data.ui_language=="fr" and save.data.word_language=="de","language preferences survive restart")
+	check(save.data.ui_language=="it" and save.data.word_language=="de","language preferences survive restart")
 	g.queue_free(); await process_frame
 	quit(1 if failures else 0)

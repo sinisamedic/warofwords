@@ -13,6 +13,7 @@ func run() -> void:
 	await process_frame
 	g.set_process(false); g.sfx.enabled=false; g.music.set_enabled(false)
 	g.save.data=g.save.defaults(); g.save.data.age_group="adult"; g.save.data.tutorial=true
+	g.mission=0; g.campaign_mission=0
 	for ch in "ČĆŠŽĐčćšžđ": check(g.font.has_char(ch.unicode_at(0)),"Lora glyph "+ch)
 	for w in 25:
 		var mission: int=g.Endless.opponent(w+1)
@@ -41,6 +42,10 @@ func run() -> void:
 	g.finish(true); g.result_delay=.01; g._process(.02)
 	check(g.endless_wave==3 and not g.ended,"victory animation automatically advances ordinary wave")
 	g.persist_battle(); var saved: Dictionary=g.save.data.endless.duplicate(true)
+	g.change_screen("home"); g.change_screen("campaign")
+	check(g.mission==0 and g.chapter==0,"endless opponent never leaks into campaign selection")
+	g.change_screen("home"); g.dispatch("endless_new")
+	check(g.screen=="endless_prepare" and g.save.data.endless==saved,"new-run route keeps old run until start is confirmed")
 	g.change_screen("home"); await g.restore_battle(true)
 	check(g.overlay=="pause" and g.hp==61 and g.endless_score==saved.score,"resume restores active run paused")
 	check(g.save.data.battle==campaign,"resume keeps campaign snapshot intact")

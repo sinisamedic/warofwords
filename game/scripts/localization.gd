@@ -101,6 +101,7 @@ const SR := {
 "YOU":"TI", "WARDEN":"ČUVAR", "SENTINEL":"STRAŽAR", "READY":"SPREMNO", "FROZEN  %.1fs":"ZAUSTAVLJEN  %.1f s", "INCOMING  %.1fs":"NAPAD ZA  %.1f s", "Next attack  %ds":"Napad za  %d s",
 "SOUND":"ZVUK", "HAPTICS":"VIBRACIJA", "REDUCED MOTION":"MANJE ANIMACIJA", "ON":"DA", "OFF":"NE", "HOW TO PLAY":"KAKO SE IGRA", "CREDITS":"AUTORI I LICENCE",
 "INTERFACE LANGUAGE":"JEZIK MENIJA", "WORD DICTIONARY":"REČNIK ZA IGRU", "Applies to new duels. Saved duels keep their dictionary.":"Važi za nove borbe. Sačuvana borba zadržava svoj rečnik.", "Offline dictionaries  •  v0.1.1":"Rečnici bez interneta  •  v0.1.1",
+"Changing word language removes saved duels and runs.":"Promena jezika reči briše sačuvane borbe i pohode.",
 "%d words found   •   Best: %s":"Pronađeno reči: %d   •   Najduža: %s", "Your discoveries will appear here after a duel.":"Pronađene reči pojaviće se ovde posle borbe.", "PAGE %d":"STRANA %d",
 "PAUSED":"PAUZA", "Your duel is safely paused.":"Borba je pauzirana.", "Progress is saved on this device.":"Napredak je sačuvan na ovom uređaju.",
 "WORDS BECOME POWER":"REČI POSTAJU SNAGA", "Link neighboring letters, including diagonals.":"Spajaj susedna slova, uključujući dijagonale.",

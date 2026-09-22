@@ -1,5 +1,11 @@
 # War of Words — dizajn igre
 
+## Nastavak ili nova partija i promena rečnika — usvojeno 2026-09-22
+
+- Kada postoji sačuvana Kampanja ili Beskraj, naslovna eksplicitno nudi i ulazak u novu partiju i nastavak. Ulazak u mapu/arenu ne briše stari nastavak; on se zamenjuje tek kada igrač potvrdi početak nove borbe ili pohoda.
+- Promena jezika rečnika briše sačuvani nastavak Kampanje i Beskraja, pa sledeća partija počinje sa novim rečnikom. Promena jezika interfejsa, zvuka, prikaza ili pravila povezivanja ne briše nastavke.
+- Kampanja pamti sopstveni izabrani nivo. Protivnik iz Beskraja ne sme da promeni označeni kampanjski nivo pri povratku na mapu.
+
 ## Lista rezultata — usvojeno 2026-09-22
 
 - Posle Beskraja lista mora da podržava prevlačenje prstom i skrol točkićem. Prikazuje top 10; kada tekuća poslata partija nije među njima, ispod zlatne razdelne crte prikazuje dva prethodna reda i sopstveni istaknuti rezultat sa globalnom pozicijom. Preklop sa top10 se ne duplira. Zvaničan plasman postoji tek nakon eksplicitnog slanja rezultata; čuvanje lokalnog nacrta ne objavljuje ga.
@@ -249,7 +255,7 @@ Sledeće odluke doneti na osnovu stvarnog testa telefona: tempo čitanja pod pri
 - Options je dostupan iz glavnog menija i pauze. Zvuk, vibracija, manje animacija, jezik menija i rečnik su trajna nezavisna podešavanja.
 - Srpski za test je latinica (implementacioni izbor): č/ć/š/đ/ž i LJ/NJ/DŽ na jednoj pločici. Najmanje 3 korišćene pločice; bonus i šteta broje pločice, ne Unicode znakove. Početna srpska reč je KAMEN.
 - Srpski Hunspell/LibreOffice izvor pod MPL-2.0, 1.740.276 oblika od 3–12 slova srpske abecede. Izvor, tačna revizija, filtriranje i licence: game/data/README.md. Rečnik je probni pravopisni resurs, ne konačna turnirska lista.
-- Promena rečnika važi za nove borbe. Sačuvana borba nosi svoj kod rečnika; borbe iz 0.1.0 podrazumevaju engleski. Novčići, misije i unapređenja ostaju zajednički.
+- Istorijska odluka za 0.1.1 bila je da sačuvana borba zadrži svoj rečnik. Zamenjena je odlukom od 2026-09-22: promena jezika rečnika sada briše nastavke Kampanje i Beskraja. Novčići, misije i unapređenja ostaju zajednički.
 - Verzija 0.1.1 / Android versionCode 2 koristi isti paket i potpis za nadogradnju 0.1.0. Monetizacija nije uvedena.
 
 ## Dorade posle fizičkog testa 0.1.1 — usvojeno 2026-09-17
@@ -384,7 +390,7 @@ Za Beskraj se čuva i rangira svaka poslata partija iste osobe. Prikaz: top 10, 
 
 Korisnik odobrio novi ekran sa igračem/zvukom levo, jezicima desno i dugmetom Sačuvaj. Dodaju se nemački, francuski, španski i italijanski; srpski mora biti poslednji: EN, DE, FR, ES, IT, SR. Jezik interfejsa i jezik rečnika biraju se nezavisno kroz mrežu 2×3. Poslednje ime za liste može da se unese ovde i kasnije izmeni pre slanja partije. Podešavanja imena ne objavljuju rezultat niti preimenuju istoriju.
 
-Izbor rečnika i povezivanja važi za nove borbe; sačuvani duel ostaje obnovljiv sa svojim pravilima. Novi jezici podržani su u sva tri režima, a globalne liste ostaju objedinjene. Joker ostaje samo za Kampanju/Beskraj. Akcenti se čuvaju na pločicama; nemačko ß se piše SS, francuske ligature OE/AE. Ove konvencije su implementacione odluke prve verzije za probu, podesive posle korisničke povratne informacije.
+Izbor povezivanja važi za nove borbe i ne briše sačuvani duel. Ranije pravilo da se sačuvani duel obnavlja posle promene rečnika zamenjeno je odlukom od 2026-09-22: promena jezika rečnika briše nastavke Kampanje i Beskraja. Novi jezici podržani su u sva tri režima, a globalne liste ostaju objedinjene. Joker ostaje samo za Kampanju/Beskraj. Akcenti se čuvaju na pločicama; nemačko ß se piše SS, francuske ligature OE/AE. Ove konvencije su implementacione odluke prve verzije za probu, podesive posle korisničke povratne informacije.
 
 ### Vizuelna korekcija podešavanja — usvojeno 2026-09-19
 

@@ -2,6 +2,14 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Ispravke nastavka, jezika i izbora kampanje — izvor proveren 2026-09-22
+
+- Kada postoji sačuvana partija, kartice Kampanje i Beskraja sada imaju odvojene izbore za novu partiju i nastavak. Ulazak u mapu/arenu ne briše stari nastavak; on se zamenjuje tek pokretanjem nove borbe/pohoda.
+- Promena jezika rečnika briše oba nastavka (Kampanja i Beskraj), dok promena jezika interfejsa i ostalih podešavanja ne briše partiju. Upozorenje na ekranu Podešavanja prevedeno je na svih šest jezika.
+- Kampanja sada zasebno pamti izabrani nivo, pa protivnik Beskraja više ne ostavlja lažni sjaj na sledećem/zaključanom nivou kampanje.
+- Kompletan `tools/build-android.ps1 -TestOnly` tok završen je sa izlazom 0, uključujući nove regresije za sva tri prijavljena slučaja. U sandbox-u ostaju poznata upozorenja za Windows CA/log putanju i završna ObjectDB upozorenja pojedinih postojećih testova; nema neuspeha testova.
+- **Nije napravljen novi APK/AAB. Sledeće:** vizuelno i na telefonu proveriti podeljena dugmad na naslovnoj, zatim po dogovoru napraviti izdanje posle 0.1.26.
+
 ## Produkcija poslata na Google pregled — 2026-09-22
 
 - Korisnik potvrdio uspešnu instalaciju internog izdanja preko Play-a, prikaz oglasa označenog Test Ad i nastavak partije nakon oglasa. Pre instalacije sam je obrisao prethodni lokalni APK. Privremena ikonica tokom instalacije prijavljena, instalirana ikonica ispravna; uzrok privremene slike nije potvrđen.

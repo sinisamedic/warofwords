@@ -69,7 +69,14 @@ static func home(c) -> void:
 		var status: String=c.t("%d / 24 levels") % c.save.data.wins.size() if i==0 else c.t("Best score: %d") % c.endless_record().get("score",0) if i==1 else c.t("A new challenge every day") if c.online_allowed() else c.age_text("records")
 		c.text(status,Rect2(r.position.x+12,art.end.y+37,r.size.x-24,24),17)
 		var resume: bool=not c.save.data.battle.is_empty() if i==0 else not c.save.data.endless.is_empty() if i==1 else false
-		c.action("CONTINUE DUEL" if resume and i==0 else "CONTINUE RUN" if resume else ["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],Rect2(r.position.x+10,r.end.y-52,r.size.x-20,42),"continue" if resume and i==0 else ids[i],-1,true)
+		var action_rect := Rect2(r.position.x+10,r.end.y-52,r.size.x-20,42)
+		if resume:
+			var gap := 7.0
+			var half := (action_rect.size.x-gap)/2
+			c.action("OPEN MAP" if i==0 else "ENTER ARENA",Rect2(action_rect.position,Vector2(half,action_rect.size.y)),"campaign" if i==0 else "endless_new")
+			c.action("CONTINUE",Rect2(action_rect.position+Vector2(half+gap,0),Vector2(half,action_rect.size.y)),"continue" if i==0 else "endless_entry",-1,true)
+		else:
+			c.action(["OPEN MAP","ENTER ARENA","PLAY CHALLENGE"][i],action_rect,ids[i],-1,true)
 		# The artwork and label are also useful touch targets.
 		c.buttons.append({"rect":Rect2(r.position,r.size-Vector2(0,57)),"id":ids[i],"value":-1,"enabled":true})
 	fit(c,c.title_emblem,Rect2(c.size.x/2-192,0,384,146))

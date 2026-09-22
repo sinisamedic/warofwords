@@ -143,8 +143,10 @@ func run_tests() -> void:
 	scene.change_screen("settings")
 	scene.dispatch("ui_language",1)
 	check(scene.t("OPTIONS")=="PODEŠAVANJA" and scene.lex.language=="en","UI language does not change dictionary")
+	scene.save.data.endless={"saved":true}
 	var sr_started := Time.get_ticks_msec()
 	await scene.dispatch("word_language",1)
+	check(scene.save.data.battle.is_empty() and scene.save.data.endless.is_empty(),"dictionary change removes both continue saves")
 	print("Serbian load: %d ms; %d entries" % [Time.get_ticks_msec()-sr_started,scene.lex.words.size()])
 	var exclusions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/blocked-words.json"))
 	check(scene.lex.words.size()+exclusions.sr.size()==1740276,"licensed Serbian inflections minus content exclusions loaded")
@@ -187,7 +189,7 @@ func run_tests() -> void:
 	check(scene.lex.language=="sr" and scene.overlay=="pause" and scene.used.has("DŽEP"),"Serbian duel resumes paused with same dictionary")
 	scene.change_screen("home"); scene.save.data.battle=old_duel
 	await scene.restore_battle()
-	check(scene.lex.language=="en" and scene.save.data.word_language=="sr" and scene.save.data.ui_language=="sr","old English duel keeps dictionary despite Serbian settings")
+	check(scene.lex.language=="en" and scene.save.data.word_language=="sr" and scene.save.data.ui_language=="sr","legacy snapshot remains self-describing when loaded directly")
 	scene.persist_battle(); persistence.load_game()
 	check(persistence.data.word_language=="sr" and persistence.data.ui_language=="sr","both language settings persist")
 	var invalid: Dictionary = old_duel.duplicate(true)
@@ -459,7 +461,10 @@ func run_tests() -> void:
 		var tile: Rect2=scene.settings_toggle_rect(i)
 		check(tile.size.y>=90 and tile.size.x>=150,"settings icon has large touch target %d" % i)
 		for j in range(i+1,4): check(not tile.intersects(scene.settings_toggle_rect(j)),"settings touch targets do not overlap %d/%d" % [i,j])
-	scene.change_screen("home")
+	scene.save.data.battle={"preview":true}; scene.save.data.endless={"preview":true}
+	scene.change_screen("home"); scene.queue_redraw(); await process_frame; await process_frame
+	check(scene.buttons.any(func(b): return b.id=="campaign") and scene.buttons.any(func(b): return b.id=="continue"),"saved campaign offers map and continue")
+	check(scene.buttons.any(func(b): return b.id=="endless_new") and scene.buttons.any(func(b): return b.id=="endless_entry"),"saved endless run offers new entry and continue")
 	check(not scene.home_hero.visible and not scene.hero.visible,"home uses three separate mode illustrations")
 	scene.change_screen("battle")
 	check(scene.hero.visible and not scene.home_hero.visible,"articulated hero is used only in battle")
