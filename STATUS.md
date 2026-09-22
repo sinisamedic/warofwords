@@ -2,13 +2,16 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
-## Ispravke nastavka, jezika i izbora kampanje — izvor proveren 2026-09-22
+## Kandidat 0.1.27 spreman za interni Play test — 2026-09-22
 
 - Kada postoji sačuvana partija, kartice Kampanje i Beskraja sada imaju odvojene izbore za novu partiju i nastavak. Ulazak u mapu/arenu ne briše stari nastavak; on se zamenjuje tek pokretanjem nove borbe/pohoda.
 - Promena jezika rečnika briše oba nastavka (Kampanja i Beskraj), dok promena jezika interfejsa i ostalih podešavanja ne briše partiju. Upozorenje na ekranu Podešavanja prevedeno je na svih šest jezika.
 - Kampanja sada zasebno pamti izabrani nivo, pa protivnik Beskraja više ne ostavlja lažni sjaj na sledećem/zaključanom nivou kampanje.
 - Kompletan `tools/build-android.ps1 -TestOnly` tok završen je sa izlazom 0, uključujući nove regresije za sva tri prijavljena slučaja. U sandbox-u ostaju poznata upozorenja za Windows CA/log putanju i završna ObjectDB upozorenja pojedinih postojećih testova; nema neuspeha testova.
-- **Nije napravljen novi APK/AAB. Sledeće:** vizuelno i na telefonu proveriti podeljena dugmad na naslovnoj, zatim po dogovoru napraviti izdanje posle 0.1.26.
+- Napravljeni su potpisani APK i Play AAB 0.1.27 / code 28. Potpis, 16 KiB poravnanje, 24 provere rečnika i `bundletool` validacija prolaze. Hash-evi i detalji su u `docs/release-0.1.27.md`.
+- AAB 0.1.27 je uploadovan u novi nacrt internog Play izdanja `0.1.27 internal`. Play ga je prihvatio kao code 28 bez grešaka; ostaju samo poznata upozorenja za deobfuscation fajl i native debug symbols. Završno `Save and publish` još nije potvrđeno.
+- Telefon nije povezan preko ADB-a, pa ručna proba tri ispravke još nije urađena. Produkcija 0.1.26 je već na Google pregledu; ne zamenjivati je pre uspešne probe 0.1.27.
+- **Sledeće:** objaviti pripremljeni interni nacrt, instalirati 0.1.27 preko Play Store-a i ručno proveriti sva tri prijavljena toka. Tek zatim, uz korisničku potvrdu, poslati 0.1.27 kao novu produkcionu promenu.
 
 ## Produkcija poslata na Google pregled — 2026-09-22
 
