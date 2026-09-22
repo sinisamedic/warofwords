@@ -29,3 +29,19 @@ Stanje provereno 2026-09-20 oko 15:22 UTC:
 Instagram: sačuvan 9:16 odnos, uključen AI label zbog porekla ilustracije. TikTok: Now / Everyone, promocija sopstvenog brenda „Your brand”, AI-generated oznaka; komentari uključeni. YouTube: izabran GottaPlay kanal, Public, sadržaj ove opšte promotivne objave označen „not made for kids”; to nije nova odluka o ciljnom uzrastu same igre. Nema plaćene promocije, dodatne muzike ili zakazivanja.
 
 TikTok moderacija je završena tokom završne provere. Sve tri objave su potvrđene; ne praviti duplikate. Ostalih sedam objava ostaju predlozi za pregled. Galerija i prvobitni raspored čuvaju istorijski paket pre objave; ovaj fajl je merodavan za status objave 01.
+
+- Objava 02 / instagram / 2026-09-22T21:05:21.9729816+02:00 / **submitted** /  — Share kliknut jednom, UI Sharing. Ceka potvrdu; ne ponavljati upload.
+
+- Objava 02 / instagram / 2026-09-22T21:06:25.2725199+02:00 / **public** / https://www.instagram.com/gotta.play_games/reel/DdmceurONps/ — Your reel has been shared; osvezen profil prikazuje novu objavu 02 i ukupno 2 posts. Original 9:16, Sound on, AI label ukljucen.
+
+- Objava 02 / youtube / 2026-09-22T21:06:25.3140680+02:00 / **draft** / https://youtube.com/shorts/79nOvcgF2l4 — Uploadovan tacan zvucni MP4, detalji uneti, obrada u toku. Nastaviti ovaj upload; ne praviti novi.
+
+- Objava 02 / youtube / 2026-09-22T21:07:10.4450304+02:00 / **submitted** / https://youtube.com/shorts/79nOvcgF2l4 — Public izabran, provere No issues found, Publish kliknut jednom. Ceka potvrdu.
+
+- Objava 02 / youtube / 2026-09-22T21:07:31.2421016+02:00 / **public** / https://youtube.com/shorts/79nOvcgF2l4 — UI Video published, Published Sep 22 2026. Public i No issues found potvrđeni pre objave.
+
+- Objava 02 / tiktok / 2026-09-22T21:08:53.2997767+02:00 / **submitted** /  — Post kliknut jednom; Now/Everyone, Your brand i AI oznaka potvrđeni. Ugrađen Original sound, 9 sekundi. Čeka potvrdu.
+
+- Objava 02 / tiktok / 2026-09-22T21:09:22.3080440+02:00 / **under_review** / https://www.tiktok.com/@gottaplaygames/video/7688438613662600466 — Studio prikazuje novi 00:09 video, Content under review i privremeno Only me. Nije potvrđena javna objava.
+
+- Objava 02 / tiktok / 2026-09-22T21:10:57.7110217+02:00 / **public** / https://www.tiktok.com/@gottaplaygames/video/7688438613662600466 — Posle osvežavanja Studio prikazuje Everyone, Sep 22 9:08 PM, bez Content under review. Javna objava potvrđena.

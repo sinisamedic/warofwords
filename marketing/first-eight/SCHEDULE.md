@@ -4,6 +4,8 @@ Korisnik je 2026-09-20 izričito odobrio raspored ispod na sve tri mreže, sa zv
 
 Automatizacija kreirana i proverena: `gottaplay-objavi-videe-02-08`, „GottaPlay — objavi videe 02–08”, ACTIVE, thread `01a0bf34-8fc2-7aa3-9d48-2674ac548c78`. Raspored ističe 6. oktobra nakon poslednjeg termina. Automatizacija je podešavanje ove desktop aplikacije; sam Git push ne prenosi je automatski na drugi računar.
 
+Korekcija 2026-09-22: prvi heartbeat stigao je u 19:02 UTC, odnosno 21:02 lokalno, iako je odobren termin 19:00 lokalno. U ovom izvršavanju scheduler je protumačio sat kao UTC. Postojeća automatizacija je ažurirana na 17:00 UTC, što odgovara 19:00 Europe/Belgrade za sve preostale datume kampanje; ACTIVE i novo pravilo provereni čitanjem sačuvanog podešavanja. Sledeći očekivani termin je 24. septembar 17:00 UTC / 19:00 lokalno. Tačan uzrok prvog kašnjenja nije zasebno potvrđen scheduler logom; naredno izvršavanje treba proveriti.
+
 | Datum 2026. | Vreme u Srbiji | Video |
 |---|---|---|
 | 22. septembar | 19:00 | 02 — Watch STONE become an attack. |

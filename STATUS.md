@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Promotivni video 02 objavljen — 2026-09-22
+
+- Zakazani video „Watch STONE become an attack.” sa zvukom javno objavljen na sva tri odobrena profila. Instagram: `DdmceurONps`; YouTube Shorts: `79nOvcgF2l4`; TikTok: `7688438613662600466`. Linkovi, vremena i dokazi u `marketing/first-eight/SCHEDULE.json` i `PUBLISHED.md`. SHA256 odgovara odobrenom fajlu; original 9:16 i zvuk sačuvani. TikTok moderacija završena, Everyone potvrđeno.
+- Heartbeat je stigao 19:02 UTC / 21:02 lokalno, umesto planiranog 19:00 lokalno. Postojeći Scheduled zadatak ažuriran na sat 17 radi kompenzacije primećenog UTC pomaka; ACTIVE i izmena potvrđeni čitanjem podešavanja. Raspored datuma i sadržaj ostaju isti; ne praviti novu automatizaciju.
+- **Sledeće za promociju:** 24. septembra video 03 na sve tri mreže. Proveriti da sledeće pokretanje odgovara 19:00 lokalno; uzrok prvog kašnjenja nije potvrđen scheduler logom. Ne ponavljati 01/02. Razvojne izmene drugog aktivnog rada nisu deo ovog promotivnog izvršavanja.
+
 ## Interni Play test 0.1.27 aktivan — 2026-09-22
 
 - Kada postoji sačuvana partija, kartice Kampanje i Beskraja sada imaju odvojene izbore za novu partiju i nastavak. Ulazak u mapu/arenu ne briše stari nastavak; on se zamenjuje tek pokretanjem nove borbe/pohoda.
