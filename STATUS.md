@@ -1,6 +1,16 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-21. **Aktivna grana: codex/age-aware-play.**
+Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
+
+## Priprema Play izdanja — 2026-09-22
+
+- Korisnik je potvrdio da APK 0.1.23 radi na telefonu i da je objavio sajt. WoW politika je javno dostupna na `https://gottaplay.net/wow/privacy/`; stariji odeljci ispod su istorija.
+- Play: sačuvani sajt, privacy URL, app access bez prijave, oglasi Yes, Government No, Financial features None i Health None. IARC uslovi prihvaćeni uz izričitu potvrdu korisnika; kontakt hello@gottaplay.net. Delimičan IARC upitnik sačuvan, konačna ocena nije poslata.
+- Listing: engleski opis, ikona, feature graphic i četiri snimka igre uneti i sačuvani kao nacrt. AI deklaracija nije završena: automatska provera blokirala označavanje svih slika bez potvrđenog porekla. Naknadno pronađena dokumentacija ImageGen porekla u `game/assets/launcher/README.md` i `game/assets/art/README.md`; snimci su stvarni Godot renderi sa tom grafikom. Završiti odgovarajuću deklaraciju pre slanja.
+- AdMob: nalog odobren za oglase; objavljene GDPR poruke (en/sr/de/fr/es/it, sa odbijanjem) i US privacy poruka. App-level maksimalni sadržaj PG sačuvan; SDK i dalje G za 13–17 / PG za 18+. `app-ads.txt` javno vraća odgovarajući publisher zapis. Aplikacija još nije povezana sa javnim Play listingom. Payments upozorenje traži korisnikov način isplate u AdSense-u, nije menjano.
+- Napravljen potpisani release AAB `exports/WarOfWords-0.1.23-play.aab`, 152.352.218 bajtova, SHA256 `f0c3ec3714eaed848376b02dd375faf3d409d4214ea80ed58d5df6ae9fc95fc7`. Novi preset Android Play. Export exit 0, jarsigner potvrđuje potpis uz upozorenja za self-signed sertifikat/timestamp/ZIP redosled. Bundletool validacija još nije urađena. Test oglasi ostaju uključeni; ovo nije konačni produkcioni paket niti je uploadovan.
+- **Blokada za 9+:** sva šest rečnika sadrže jake psovke. Korisniku poslato pitanje da li da uvedemo filter kroz generisanje, hintove i prihvatanje poteza; odgovor još čeka. Ne davati netačnu IARC izjavu niti smatrati AAB spremnim za objavu.
+- **Sledeće:** odgovor o filteru → implementacija/provere → konačan IARC/Target audience/Data safety i politika retention/deletion → native UMP/proizvodni oglasi → finalni AAB. Tester/closed-testing korak ostaviti za kraj po nalogu korisnika. Nema slanja na review, rollout-a ili pokretanja testiranja.
 
 ## APK 0.1.23 — 2026-09-21
 
