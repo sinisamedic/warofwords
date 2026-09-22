@@ -146,7 +146,8 @@ func run_tests() -> void:
 	var sr_started := Time.get_ticks_msec()
 	await scene.dispatch("word_language",1)
 	print("Serbian load: %d ms; %d entries" % [Time.get_ticks_msec()-sr_started,scene.lex.words.size()])
-	check(scene.lex.words.size()==1740276,"complete licensed Serbian inflections loaded")
+	var exclusions: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/blocked-words.json"))
+	check(scene.lex.words.size()+exclusions.sr.size()==1740276,"licensed Serbian inflections minus content exclusions loaded")
 	for word in ["REČ","REČI","ŠTIT","ŠTITA","LJUBAV","NJEGA","DŽEP","KUĆA","KUĆE","ĐAK","ŽIVOT"]:
 		check(scene.lex.contains(word),"Serbian dictionary: "+word)
 	check(not scene.lex.contains("EXTRAORDINARY") and not scene.lex.contains("KUCAAA"),"Serbian rejects foreign or invalid words")

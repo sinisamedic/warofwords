@@ -396,3 +396,6 @@ Korisnik traži muziku i/ili efekte jer su prve javne objave bez zvuka. Za pregl
 ### Odobrenje objava 02–08 — 2026-09-20
 
 Korisnik je naknadno odobrio objavljivanje preostalih sedam zvučnih videa na sve tri mreže, utorkom/četvrtkom/subotom u 19:00 od 22. septembra do 6. oktobra. To zamenjuje prethodni status čekanja odobrenja. Svaki materijal ide kao video, uključujući Instagram Reels; za izazove opis koristi pauziranje umesto prevlačenja slajdova. Tačni sadržaji i raspored su u `marketing/first-eight/SCHEDULE.json` i `SCHEDULE.md`. Izvršavanje je podešeno kroz Scheduled ovog razgovora, sa zaštitom od duplikata i obaveznim evidentiranjem stvarnog ishoda.
+## Odobreno 2026-09-22: filter sadržaja rečnika
+
+Za pripremu publike 9+ korisnik je odobrio filtriranje neprikladnih reči u svih šest jezika, za sve uzraste: generisanje/dopuna, hintovi, validacija poteza i serverski dnevni izazov koriste isti spisak. Detalji i ograničenja su u [content-filter.md](content-filter.md). To ne predstavlja konačnu IARC ocenu. Odobreno je i označavanje Play materijala kao sadržaja sa AI grafikom; screenshotovi ostaju stvarni renderi igre.

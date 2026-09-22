@@ -9,4 +9,4 @@ Nacrt en-US listinga u Play Console za `com.gottaplay.warofwords`. Nije objavlje
 
 Snimci imaju 1280×720, prikazuju postojeće ekrane igre i sadrže projektnu AI grafiku. Nisu snimci fizičkog Android telefona. Svi fajlovi su ispod 2 MiB; običan Git, bez novih LFS obrazaca. Primenjuju se uslovi izvora navedeni u art dokumentaciji; ne tvrdi se posebna stock licenca.
 
-Play AI asset deklaracija ostaje nedovršena. Opisi i šest PNG fajlova su sačuvani kao nacrt; ništa nije poslato na review.
+Korisnik je 2026-09-22 odobrio AI asset deklaraciju za svih šest materijala. Oznake su sačuvane, listing ima status **Ready to send for review**. Ništa nije poslato na review niti javno objavljeno.

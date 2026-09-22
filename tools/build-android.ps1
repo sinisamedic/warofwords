@@ -45,6 +45,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Endless scoring tests failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Joker tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_languages.gd
 if ($LASTEXITCODE -ne 0) { throw 'Language and settings tests failed.' }
+& $Godot --headless --path $project --script res://tests/test_content_filter.gd
+if ($LASTEXITCODE -ne 0) { throw 'Content filter tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_rankings.gd
 if ($LASTEXITCODE -ne 0) { throw 'Ranking queue tests failed.' }
 & $Godot --headless --path $project --script res://tests/test_ui_polish.gd
@@ -67,10 +69,10 @@ if (-not (Test-Path -LiteralPath $template)) {
 }
 $outputDir = Join-Path $repo 'exports'
 New-Item -ItemType Directory -Force $outputDir | Out-Null
-$apk = Join-Path $outputDir 'WarOfWords-0.1.23-android.apk'
+$apk = Join-Path $outputDir 'WarOfWords-0.1.24-android.apk'
 if ($UnsignedCheck) {
     # Validate export without signing the artifact with this machine's new debug key.
-    $apk = Join-Path $repo '.local/WarOfWords-0.1.23-UNSIGNED-CHECK.apk'
+    $apk = Join-Path $repo '.local/WarOfWords-0.1.24-UNSIGNED-CHECK.apk'
     $presetPath = Join-Path $project 'export_presets.cfg'
     $presetBytes = [IO.File]::ReadAllBytes($presetPath)
     $presetText = [Text.Encoding]::UTF8.GetString($presetBytes)

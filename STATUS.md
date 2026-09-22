@@ -2,6 +2,17 @@
 
 Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
 
+## Filter i AI deklaracija završeni — 0.1.24, 2026-09-22
+
+- Korisnik je odobrio oba prethodna pitanja: filter rečnika i AI oznake za Play materijale. Ranija čekanja ispod su time rešena.
+- Filter 12.791 oblika u šest jezika primenjuje se pre Godot indeksa: potezi, hintovi, džoker, dopuna i početne reči. Istovetan spisak objavljen u postojećoj Supabase funkciji `daily`; pre izmene potvrđeno da je živi kod odgovarao prethodnom izvoru, lokalna rezervna kopija u `.local/`. Podaci, autentikacija, hash pinovi rečnika i prava pristupa nisu menjani. Ograničenja i održavanje: `docs/content-filter.md`.
+- Play: svih šest slika označeno kao sadržaj sa AI grafikom uz korisničku potvrdu, listing sačuvan i potvrđen **Ready to send for review**. Nije poslat na review. IARC delimičan upitnik sačuvan; konačna ocena, Target audience i Data safety ostaju nedovršeni.
+- Lokalno prošao pun test tok sa 4.551 PASS linijom pre poslednjih dopuna spiska. Završni namenski filter test: 75 PASS, uključujući obične reči koje imaju slične podniske. Node filter, daily replay/parity, 139 multilingual i service provere prolaze. Stvarni server test: EN 30 / SR 55, ponovljeni submit ne prepisuje rezultat, liste rade i pristup bez sesije/direktno tabelama je odbijen; završna objava ponovo smoke-testirana postojećim QA rezultatima.
+- Novi **APK 0.1.24 / code 25**, `exports/WarOfWords-0.1.24-android.apk`, 267.807.326 bajtova, SHA256 `90f708a85cb5445849f5f0612a76d80d6ca2e748edbb504a63312909f95b6786`. Potpis isti kao 0.1.23, potvrđen apksigner; 16 KiB zipalign prolazi. 24 provere rečnika iz finalnog APK-a prolaze; proverava se i spakovani filter.
+- Novi **potpisani release AAB**, `exports/WarOfWords-0.1.24-play.aab`, 152.388.823 bajtova, SHA256 `28a5dfaf246797795212b47c02d530156c81b85a3746b8d1d8fb1b146d5a212c`. Google bundletool 1.18.3 validate exit 0; manifest potvrđuje paket `com.gottaplay.warofwords`, code 25/version 0.1.24, min24/target36, bez debuggable zastavice. Jarsigner: jar verified uz očekivana self-signed/timestamp upozorenja. Filter u APK-u i AAB install-time asset pack-u identičan završnom izvoru. Exporti exit 0.
+- **Testni oglasi ostaju uključeni.** Nije uploadovan paket na Play, pokrenut track, niti objavljena igra. Nije urađen novi korisnički test na telefonu/emulatoru. Prethodna Godot certificate/ObjectDB upozorenja ostaju; početni sandbox build nije mogao da pristupi Gradle kešu, završni export van sandbox-a je uspeo.
+- **Tačan sledeći korak:** završiti pregled IARC/Target audience/Data safety, uskladiti javnu politiku retention/deletion i moderaciju korisničkih nadimaka; proveriti native UMP i produkcioni oglasni tok pre promene test režima. Zatim konačni Play paket. Tester/closed-testing uslov ostaje za kraj po korisnikovom nalogu.
+
 ## Priprema Play izdanja — 2026-09-22
 
 - Korisnik je potvrdio da APK 0.1.23 radi na telefonu i da je objavio sajt. WoW politika je javno dostupna na `https://gottaplay.net/wow/privacy/`; stariji odeljci ispod su istorija.

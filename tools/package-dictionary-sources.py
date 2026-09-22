@@ -3,6 +3,7 @@ from pathlib import Path
 import zipfile
 root=Path(__file__).resolve().parent.parent
 files=[]
+files.extend([root/'tools/build-content-filter.py',root/'tools/content-filter-rules.json'])
 for language in ['de','fr','es','it']:
     files.extend(p for p in (root/'tools/dictionaries'/language).iterdir() if p.is_file())
 files.extend([root/'tools/build-extra-dictionaries.py',root/'tools/dictionaries/EXTRA-PROVENANCE.md',root/'game/licenses/Serbian-MPL-2.0.txt'])

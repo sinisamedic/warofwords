@@ -1,3 +1,4 @@
+import { contentAllowed } from './content-filter.mjs';
 // Portable daily-v2 rules, with frozen v1 replay support for existing clients.
 export const VERSION = 'daily-v2';
 export const DURATION_MS = 120000;
@@ -60,7 +61,7 @@ export class DailyRules {
     if(!Number.isInteger(ms)||ms<0||ms>=DURATION_MS||this.moves.length>=MAX_MOVES) return false;
     if(this.moves.length&&ms<this.moves.at(-1).ms+250) return false;
     const word=this.wordAt(path);
-    if(!word||!contains(word)) return false;
+    if(!word||!contentAllowed(word,this.language)||!contains(word)) return false;
     this.used.add(word); this.score+=path.length*10+Math.max(0,path.length-4)*5;
     this.moves.push({path:[...path],ms});
     for(const i of path) this.letters[i]=this.randomLetter();

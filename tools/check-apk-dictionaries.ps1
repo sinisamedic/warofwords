@@ -9,6 +9,9 @@ $target = Join-Path $repo ('.local/apk-dictionaries/' + [guid]::NewGuid().ToStri
 New-Item -ItemType Directory -Force $target | Out-Null
 $zip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path -LiteralPath $Apk).Path)
 try {
+    $filterEntry = $zip.GetEntry('assets/data/blocked-words.json')
+    if ($null -eq $filterEntry) { throw 'APK missing content filter' }
+    [IO.Compression.ZipFileExtensions]::ExtractToFile($filterEntry, (Join-Path $target 'blocked-words.json'))
     foreach ($name in @('english', 'serbian', 'de', 'fr', 'es', 'it')) {
         $found = $false
         foreach ($suffix in @('.txt', '.txt.gz')) {

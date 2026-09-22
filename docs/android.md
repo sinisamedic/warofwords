@@ -1,5 +1,7 @@
 # Android — instalacija i razvoj
 
+**0.1.24 / code 25:** novi APK i potpisani AAB sa filterom rečnika za svih šest jezika. Testni oglasi ostaju uključeni. APK potpis/poravnanje i 24 provere spakovanih rečnika prolaze; AAB prolazi Google bundletool 1.18.3 validaciju. Detalji, hash-evi i preostali produkcioni uslovi u STATUS.md. `Android Play` preset izvozi release AAB; Android preset ostaje razvojni APK. Telefon nije ponovo testiran posle 0.1.23.
+
 **Aktuelni razvojni APK 0.1.23 / code 24:** `exports/WarOfWords-0.1.23-android.apk`. Izbor uzrasta, jezik uređaja i razdvojeni oglasi (testni režim). Novi paket `com.gottaplay.warofwords`: zasebna aplikacija pored stare, bez automatskog prenosa napretka. Pun build, rečnici iz APK-a, potpis i poravnanje provereni; test na telefonu tek sledi. Detalji u STATUS.md; niže su istorijske beleške.
 
 **Razvojni APK 0.1.21 / code 22:** `exports/WarOfWords-0.1.21-android.apk`, AdMob testni oglasi i tri nastavka u Beskraju. Isti potpis kao 0.1.20; instalira se preko nje. Desktop provere i Android paket su provereni; stvarni test oglasa na telefonu još predstoji. [Integracija i produkcioni uslovi](admob.md).

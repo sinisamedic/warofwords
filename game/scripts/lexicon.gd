@@ -58,7 +58,19 @@ func load_dictionary(data_dir: String = "res://data") -> void:
 		content = packed.decompress_dynamic(32*1024*1024,FileAccess.COMPRESSION_GZIP).get_string_from_utf8()
 	if content.is_empty():
 		push_error("Dictionary failed to load: " + plain_path)
-	words = content.replace("\r","").to_upper().split("\n",false)
+	# Exclude before indexing: validation, hints, joker expansion and refill all
+	# use this same vocabulary, regardless of age or network state.
+	var policy = JSON.parse_string(FileAccess.get_file_as_string(data_dir.path_join("blocked-words.json")))
+	words.clear()
+	if not policy is Dictionary or not policy.has(language):
+		push_error("Missing content filter for " + language)
+		prefixes.clear()
+		refill_candidates.clear()
+		return
+	var blocked: Dictionary = {}
+	for word in policy[language]: blocked[word] = true
+	for word in content.replace("\r","").to_upper().split("\n",false):
+		if not blocked.has(word): words.append(word)
 	words.sort()
 	prefixes.clear()
 	# A short prefix index + binary search avoids millions of Dictionary allocations.
