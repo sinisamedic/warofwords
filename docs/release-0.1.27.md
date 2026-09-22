@@ -23,6 +23,6 @@ Produkcijska prijava 0.1.26 bila je na Google pregledu u trenutku pripreme ovog 
 
 ## Play stanje
 
-- AAB je uploadovan u nacrt internog izdanja `0.1.27 internal`; Play ga je prepoznao kao code 28 / 0.1.27 i nije prijavio greške.
+- AAB je objavljen kao interno izdanje `0.1.27 internal`; Play ga je prepoznao kao code 28 / 0.1.27 i nije prijavio greške.
 - Prikazana su dva neblokirajuća upozorenja: nedostaju deobfuscation fajl i simboli za izvorni kod. Ista upozorenja su postojala i za prethodni paket.
-- Završno `Save and publish` nije potvrđeno u trenutku ove beleške. Produkciona prijava nije menjana.
+- Interni kanal prikazuje **Active / Available to internal testers**, sa vremenom izdanja 2026-09-22 u 20:58. Produkciona prijava 0.1.26 nije menjana.
