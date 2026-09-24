@@ -47,16 +47,22 @@
       "youtube_description": "Find a five-letter word. Neighboring tiles, diagonals allowed, no tile twice. Pause and comment before the answer!\n\n#WordChallenge #WordPuzzle #WarOfWords #GottaPlay #Shorts",
       "platforms": {
         "instagram": {
-          "status": "pending",
-          "url": null
+          "status": "public",
+          "url": "https://www.instagram.com/gotta.play_games/reel/DdrYSFQB5s1/",
+          "updated_at": "2026-09-24T19:05:41.153806+02:00",
+          "evidence": "UI Your reel has been shared; profil gotta.play_games ima 3 objave, novi permalink sa tacnim Find a five-letter word opisom."
         },
         "tiktok": {
-          "status": "pending",
-          "url": null
+          "status": "public",
+          "url": "https://www.tiktok.com/@gottaplaygames/video/7689149460517211399",
+          "updated_at": "2026-09-24T19:08:33.9425016+02:00",
+          "evidence": "Posle osvezavanja Studio Content prikazuje Everyone, Sep 24 7:07 PM, 00:12 i tacan opis, bez Content under review. Javna objava potvrdena."
         },
         "youtube": {
-          "status": "pending",
-          "url": null
+          "status": "public",
+          "url": "https://youtube.com/shorts/QNivdCyNuQw",
+          "updated_at": "2026-09-24T19:06:43.2334014+02:00",
+          "evidence": "YouTube Studio dijalog Video published, Find a five-letter word., Published Sep 24 2026, isti video link. Public potvrden pri objavljivanju, copyright No issues found."
         }
       }
     },

@@ -41,18 +41,18 @@
   },
   {
     "path": "PUBLISHED.md",
-    "bytes": 4881,
-    "sha256": "b65fc68843e926dac3393ee37848ef5241bfea4831cd6cec7314d13bc51aa7e8"
+    "bytes": 6933,
+    "sha256": "1a42811f3b2c141d8ea72fd8e18a25e5afddb1a46fc04b9d19954f5b3229f8e1"
   },
   {
     "path": "SCHEDULE.json",
-    "bytes": 11533,
-    "sha256": "65b3d2a59193a788a03b7bfc30de0c10327e079b76236830c612f0444da1ac9a"
+    "bytes": 12381,
+    "sha256": "9463d3542712d8afe718c151c60c5755a67763d206c829e8a89dc06335d111b9"
   },
   {
     "path": "SCHEDULE.md",
-    "bytes": 4485,
-    "sha256": "f480f79d7776af6143d8f4b0912c09c349faed5c5f854b25225d9b82a11e8bb4"
+    "bytes": 4647,
+    "sha256": "7e37250e462d2be8de378d453157a9676b5bc690e00f8fb4e3833cbf75e06cb9"
   },
   {
     "path": "SCREEN-TEXT.md",

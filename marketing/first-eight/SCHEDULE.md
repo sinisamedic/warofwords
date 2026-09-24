@@ -6,6 +6,8 @@ Automatizacija kreirana i proverena: `gottaplay-objavi-videe-02-08`, „GottaPla
 
 Korekcija 2026-09-22: prvi heartbeat stigao je u 19:02 UTC, odnosno 21:02 lokalno, iako je odobren termin 19:00 lokalno. U ovom izvršavanju scheduler je protumačio sat kao UTC. Postojeća automatizacija je ažurirana na 17:00 UTC, što odgovara 19:00 Europe/Belgrade za sve preostale datume kampanje; ACTIVE i novo pravilo provereni čitanjem sačuvanog podešavanja. Sledeći očekivani termin je 24. septembar 17:00 UTC / 19:00 lokalno. Tačan uzrok prvog kašnjenja nije zasebno potvrđen scheduler logom; naredno izvršavanje treba proveriti.
 
+Provera 2026-09-24: heartbeat je stigao u 17:00:40 UTC / 19:00:40 lokalno; korekcija sata daje odobren početak rada u 19:00. Nije kreirana nova automatizacija.
+
 | Datum 2026. | Vreme u Srbiji | Video |
 |---|---|---|
 | 22. septembar | 19:00 | 02 — Watch STONE become an attack. |

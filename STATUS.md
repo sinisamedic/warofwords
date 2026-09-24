@@ -1,6 +1,13 @@
 # Trenutno stanje
 
-Ažurirano: 2026-09-22. **Aktivna grana: codex/age-aware-play.**
+Ažurirano: 2026-09-24. **Aktivna grana: codex/age-aware-play.**
+
+## Promotivni video 03 objavljen — 2026-09-24
+
+- Odobreni zvučni video „Find a five-letter word.” javno objavljen na sve tri mreže: Instagram `DdrYSFQB5s1`, YouTube Shorts `QNivdCyNuQw`, TikTok `7689149460517211399`. TikTok provera završena, Everyone potvrđeno. Detalji, vremena i dokazi u `marketing/first-eight/SCHEDULE.json` i `PUBLISHED.md`.
+- SHA256 odgovara odobrenom fajlu. Original 9:16, puna dužina i ugrađeni zvuk sačuvani; korišćeni odobreni engleski opisi i prethodno usvojene oznake. YouTube copyright provera bez prijavljenih problema.
+- Heartbeat je stigao 17:00:40 UTC / 19:00:40 lokalno, što potvrđuje da korekcija sata daje odobren termin. Git fetch uspešan; rad započet na čistoj grani jednakoj upstream-u.
+- **Sledeće za promociju:** 26. septembra u 19:00 video 04 na sve tri mreže. Ne ponavljati 01–03. Razvojni sledeći korak ostaje test 0.1.28 naveden ispod.
 
 ## Interni Play test 0.1.28 aktivan — 2026-09-22
 

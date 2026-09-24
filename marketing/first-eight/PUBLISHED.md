@@ -45,3 +45,19 @@ TikTok moderacija je završena tokom završne provere. Sve tri objave su potvrđ
 - Objava 02 / tiktok / 2026-09-22T21:09:22.3080440+02:00 / **under_review** / https://www.tiktok.com/@gottaplaygames/video/7688438613662600466 — Studio prikazuje novi 00:09 video, Content under review i privremeno Only me. Nije potvrđena javna objava.
 
 - Objava 02 / tiktok / 2026-09-22T21:10:57.7110217+02:00 / **public** / https://www.tiktok.com/@gottaplaygames/video/7688438613662600466 — Posle osvežavanja Studio prikazuje Everyone, Sep 22 9:08 PM, bez Content under review. Javna objava potvrđena.
+
+- Objava 03 / instagram / 2026-09-24T19:04:43.4907269+02:00 / **submitted** /  — Kliknut Share jednom; UI Sharing. Original 9:16, 12 s, Sound on, AI label ukljucen, Facebook iskljucen. Ceka se potvrda i permalink.
+
+- Objava 03 / instagram / 2026-09-24T19:05:41.1538060+02:00 / **public** / https://www.instagram.com/gotta.play_games/reel/DdrYSFQB5s1/ — UI Your reel has been shared; profil gotta.play_games ima 3 objave, novi permalink sa tacnim Find a five-letter word opisom.
+
+- Objava 03 / youtube / 2026-09-24T19:05:41.1754904+02:00 / **draft** / https://youtube.com/shorts/QNivdCyNuQw — Upload complete, Saved as private; isti odobreni MP4. Draft kreiran, objavljivanje jos nije izvrseno.
+
+- Objava 03 / youtube / 2026-09-24T19:06:29.6546735+02:00 / **submitted** / https://youtube.com/shorts/QNivdCyNuQw — Kliknut Publish jednom posle Copyright No issues found; Public izabran, odobren naslov/opis, nije namenjeno deci. Ceka se Video published potvrda.
+
+- Objava 03 / youtube / 2026-09-24T19:06:43.2334014+02:00 / **public** / https://youtube.com/shorts/QNivdCyNuQw — YouTube Studio dijalog Video published, Find a five-letter word., Published Sep 24 2026, isti video link. Public potvrden pri objavljivanju, copyright No issues found.
+
+- Objava 03 / tiktok / 2026-09-24T19:07:09.0492296+02:00 / **submitted** /  — Post kliknut jednom; 12 s, Original sound, Everyone, Now, Your brand i AI-generated ukljuceni, tacan odobren opis. Ceka se ishod platforme.
+
+- Objava 03 / tiktok / 2026-09-24T19:07:24.6525400+02:00 / **under_review** / https://www.tiktok.com/@gottaplaygames/video/7689149460517211399 — Studio Content prikazuje novi video 00:12 sa tacnim opisom i ID; Content under review / Only me privremeno. Nije jos potvrdena javna objava.
+
+- Objava 03 / tiktok / 2026-09-24T19:08:33.9425016+02:00 / **public** / https://www.tiktok.com/@gottaplaygames/video/7689149460517211399 — Posle osvezavanja Studio Content prikazuje Everyone, Sep 24 7:07 PM, 00:12 i tacan opis, bez Content under review. Javna objava potvrdena.
