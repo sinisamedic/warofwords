@@ -2,6 +2,12 @@
 
 Ažurirano: 2026-09-24. **Aktivna grana: codex/age-aware-play.**
 
+## Supabase read-only aktivnost — 2026-09-24
+
+- Aktivna Codex automatizacija `war-of-words-supabase-aktivnost` na svakih šest dana u 09:00 lokalno pokreće `node --use-system-ca tools/capture-daily-leaderboard.mjs`. Uspešan prolaz ostaje tih; korisnik dobija obaveštenje samo pri neuspehu.
+- Skripta osvežava isključivo postojeću anonimnu QA sesiju kada je token istekao, zatim poziva postojeći `daily` leaderboard endpoint. Ne započinje pokušaj, ne šalje rezultat i ne menja bazu. Današnja stvarna provera prošla je sa read-only odgovorom (trenutno 0 redova u izabranoj dnevnoj kategoriji).
+- Supabase dokumentacija ne garantuje da je jedan zahtev na šest dana dovoljan za sprečavanje automatske pauze; navodi da se procenjuje dovoljna korisnička aktivnost tokom sedam dana. Ako stigne upozorenje o pauzi, povećati učestalost umesto dodavanja upisa u bazu.
+
 ## Promotivni video 03 objavljen — 2026-09-24
 
 - Odobreni zvučni video „Find a five-letter word.” javno objavljen na sve tri mreže: Instagram `DdrYSFQB5s1`, YouTube Shorts `QNivdCyNuQw`, TikTok `7689149460517211399`. TikTok provera završena, Everyone potvrđeno. Detalji, vremena i dokazi u `marketing/first-eight/SCHEDULE.json` i `PUBLISHED.md`.
